@@ -79,7 +79,7 @@ Phase 1:  [PATCH 1/1] PGS encoder + composition states    ← DONE (2cc882f669),
 Phase 2a: [PATCH 1/2] OkLab move + Quantizer API          ← DONE (8e60ec654f, 8d7abb5328)
 Phase 2b: [PATCH 1/2] Palette mapping extraction           ← DONE (3326aa9602, 557d01153a)
 Phase 3:  [PATCH 1/2] Text-to-bitmap + rect splitting     ← DONE (0b803170ab, 9c953175c6), AMEND PENDING
-Phase 3a: [PATCH 1/1] Text-to-bitmap: animation pipeline  ← palette animation, fade detection
+Phase 3a: [PATCH 1/1] Text-to-bitmap: universal animation ← format-agnostic fade/motion/transform
 Phase 4:  [PATCH 1/1] DVD subtitle consolidation           ← first consumer of shared API
 Phase 5:  [PATCH 1/4] Median Cut + ELBG + GIF cleanup      ← complete unification
 ```
@@ -95,7 +95,7 @@ palette-only Normal Display Sets to produce fade effects.
 ```
 Phase 1 (encoder + composition states) ← DONE
                         │
-Phase 3 (text-to-bitmap)  ──→ Phase 3a (fade detection, palette animation)
+Phase 3 (text-to-bitmap)  ──→ Phase 3a (universal animation pipeline)
 ```
 
 Phases 2a, 2b, 4, 5 are unaffected by animation work.
@@ -191,10 +191,11 @@ FATE tests pending (font rendering is platform-dependent; structural test needed
 split into 2 composition objects when gap > 32 rows. Implemented in
 `convert_text_to_bitmap()`, needs FATE coverage.
 
-**Amendment (Phase 3a):** Animation-aware conversion — detect `\fad`,
-`\t(\alpha)`, `\move` in ASS events, render base frame + palette variants,
-emit multiple Display Sets per event. Encoder composition states (Phase 1) done.
-See PHASE3.md for full details.
+**Amendment (Phase 3a):** Universal animation pipeline — multi-timepoint
+rendering via `init_event()`/`sample()` API, format-agnostic change
+classification (ALPHA/POSITION/CONTENT), and optimal PGS Display Set
+encoding per change type. Handles fades, motion, and complex transforms
+without parsing format-specific tags. See PHASE3.md for full details.
 
 ### Phase 4: DVD subtitle consolidation (after Phase 2)
 
@@ -452,13 +453,13 @@ Phase 3a builds the animation-aware conversion layer on top.
 - palette_version: increment within epoch
 - See PHASE1.md for encoder specification
 
-**Phase 3a — Animation-aware text-to-bitmap:**
-- Detect `\fad(in,out)` in ASS override tags
-- Render base RGBA at peak visibility, quantize once
-- Generate palette variants (same indices, modified alpha per step)
-- Emit Epoch Start + N Normal (PDS-only) Display Sets per event
-- Detect `\move` for position animation (PCS coordinate updates)
-- Budget animation steps against decoder model constraints
+**Phase 3a — Universal subtitle animation:**
+- Multi-timepoint rendering via `init_event()` + `sample()` API
+- Every-frame scan gated by format hint (SUBTITLE_ASS with `{`)
+- Classify changes: ALPHA (fade), POSITION (motion), CONTENT (complex)
+- ALPHA: quantize peak frame, palette-only Normal DS chain
+- POSITION: quantize once, position-only Normal DS chain
+- CONTENT: independent quantization per frame, Epoch Start each
 - See PHASE3.md for full animation pipeline specification
 
 **Decoder model constants (from patents, validated by hardware testing):**
@@ -545,6 +546,9 @@ Upgrades to OkLab perceptual distance, adds dithering (critical at 4 colors).
 | 2a | `libavutil/tests/quantize.c` | libavutil |
 | 2b | `libavutil/palettemap.c` | libavutil |
 | 3 | `libavfilter/subtitle_render.{h,c}` | libavfilter |
+| 3a | `fftools/ffmpeg_subtitle_animation.c` | fftools |
+| 3a | `tests/api/api-pgs-fade-test.c` | tests |
+| 3a | `tests/api/api-pgs-animation-util-test.c` | tests |
 | 5 | `libavutil/mediancut.c` | libavutil |
 
 ### Modified files
@@ -557,6 +561,10 @@ Upgrades to OkLab perceptual distance, adds dithering (critical at 4 colors).
 | 2a | `libavfilter/{Makefile,vf_palettegen.c,vf_paletteuse.c}` | DONE |
 | 2b | `libavfilter/vf_paletteuse.c` | Use `av_palette_apply()` |
 | 3 | `libavfilter/Makefile`, `fftools/ffmpeg_enc.c` | Rendering + orchestration |
+| 3a | `libavfilter/subtitle_render.{h,c}` | Add init_event + sample API |
+| 3a | `libavcodec/pgssubenc.c` | palette_version ordering fix |
+| 3a | `fftools/ffmpeg_enc.c` | Animation dispatch + orchestration |
+| 3a | `tests/api/Makefile`, `tests/fate/api.mak` | FATE test targets |
 | 4 | `libavcodec/dvdsubenc.c` | Use shared quantizer |
 | 5 | `libavutil/{quantize.c,quantize.h}` | Add algorithms |
 | 5 | `libavfilter/{vf_palettegen.c,vf_elbg.c}`, `libavcodec/gif.c` | Use shared API |
@@ -580,14 +588,13 @@ Committed `3326aa9602` (extract) and `557d01153a` (refactor filter).
 Committed `0b803170ab` (render utility) and `9c953175c6` (fftools orchestration).
 Rect splitting implemented, uncommitted.
 
-### Phase 3a: Animation-aware conversion (NEXT)
-1. Parse `\fad` from ASS override tags in fftools
-2. Render base frame at peak visibility
-3. Generate palette variants (alpha-modified copies)
-4. Emit Epoch Start + N Normal (PDS-only) Display Sets
-5. Detect `\move` for position animation
-6. Budget animation steps against decoder model
-7. FATE test: SRT with fade → PGS, verify multiple Display Sets
+### Phase 3a: Universal animation pipeline (DONE, uncommitted)
+1. Extend render API: `init_event()` + `sample()` for multi-timepoint rendering
+2. Create `ffmpeg_subtitle_animation.c`: classify changes, alpha scaling
+3. Every-frame scan with format-hint gating in `do_subtitle_out_animated()`
+4. Two-pass encode: scan for peak alpha + classify, then emit optimal DS chain
+5. PGS encoder `palette_version` ordering fix
+6. FATE tests: encoder state machine (6 tests) + animation utility tests
 
 ### Phase 4: DVD subtitle consolidation
 8. Replace dvdsubenc.c with shared API calls
@@ -615,6 +622,7 @@ make -j$(nproc) && make fate  # no behavior change
 ./ffprobe -v error -show_streams /tmp/t2b.sup | grep hdmv_pgs
 
 # Phase 3a (animation pipeline)
+FATE_SAMPLES=/tmp/fate-samples make fate-api-pgs-fade fate-api-pgs-animation-util
 ./ffmpeg -i test_fade.ass -c:s pgssub -s 1920x1080 /tmp/fade.sup
 ./ffprobe -v error -show_packets /tmp/fade.sup  # verify multiple display sets
 

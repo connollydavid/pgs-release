@@ -1,10 +1,10 @@
 # Phase 3: Text-to-Bitmap Subtitle Conversion
 
-## Status: DONE (core), IN PROGRESS (rect splitting + fade animation)
+## Status: DONE (core + rect splitting + animation), uncommitted amendments pending
 
 Core text-to-bitmap committed as `0b803170ab` (renderer) + `9c953175c6`
-(fftools orchestration). Rect splitting implemented but uncommitted.
-Fade animation (Phase 3a) in progress — encoder composition states done in Phase 1.
+(fftools orchestration). Rect splitting and universal animation pipeline
+implemented but uncommitted. Encoder composition states done in Phase 1.
 
 ## Context
 
@@ -168,6 +168,28 @@ int avfilter_subtitle_render_frame(AVSubtitleRenderContext *ctx,
                                     int64_t start_ms, int64_t duration_ms,
                                     uint8_t **rgba, int *linesize,
                                     int *x, int *y, int *w, int *h);
+
+/**
+ * Set up a subtitle event for multi-timepoint rendering.
+ * Clears previous events and adds the given text. After calling this,
+ * use avfilter_subtitle_render_sample() at one or more timestamps.
+ */
+int avfilter_subtitle_render_init_event(AVSubtitleRenderContext *ctx,
+                                         const char *text,
+                                         int64_t start_ms,
+                                         int64_t duration_ms);
+
+/**
+ * Render a snapshot of the current event at a specific time.
+ * Must be called after init_event(). Can be called multiple times
+ * at different timestamps to sample animation frames.
+ * @param detect_change  0=identical, 1=changed, 2=unknown (first call)
+ */
+int avfilter_subtitle_render_sample(AVSubtitleRenderContext *ctx,
+                                     int64_t render_time_ms,
+                                     uint8_t **rgba, int *linesize,
+                                     int *x, int *y, int *w, int *h,
+                                     int *detect_change);
 ```
 
 ### New: `libavfilter/subtitle_render.c`
@@ -197,13 +219,15 @@ Follows vf_subtitles.c `init()` pattern (lines 135-161).
 **`avfilter_subtitle_render_add_font()`:**
 - `ass_add_font(library, name, data, size)`
 
-**`avfilter_subtitle_render_frame()`:**
+**`avfilter_subtitle_render_init_event()`:**
 1. `ass_flush_events(track)` (clear previous events)
 2. `ass_process_chunk(track, text, strlen(text), start_ms, duration_ms)`
-3. `ass_render_frame(renderer, track, start_ms, &detect_change)`
-4. Walk `ASS_Image` linked list → compute bounding box
-5. Allocate RGBA canvas (bounding box size, transparent)
-6. Composite each ASS_Image span:
+
+**`avfilter_subtitle_render_sample()`:**
+1. `ass_render_frame(renderer, track, render_time_ms, &detect_change)`
+2. Walk `ASS_Image` linked list → compute bounding box
+3. Allocate RGBA canvas (bounding box size, transparent)
+4. Composite each ASS_Image span:
    ```c
    for (ASS_Image *img = images; img; img = img->next) {
        // img->bitmap is an alpha mask
@@ -211,8 +235,12 @@ Follows vf_subtitles.c `init()` pattern (lines 135-161).
        // Alpha-composite mask * color onto RGBA canvas
    }
    ```
-7. Set output x, y, w, h (bounding box position/size)
-8. Return 0
+5. Set output x, y, w, h (bounding box position/size)
+6. Return 0
+
+**`avfilter_subtitle_render_frame()`:**
+Thin wrapper — calls `init_event()` then `sample()` at start_ms.
+Convenience function for static (non-animated) subtitle rendering.
 
 Key difference from vf_subtitles.c `overlay_ass_image()` (line 218):
 that function blends onto an existing video frame via `ff_blend_mask()`.
@@ -433,16 +461,16 @@ Three functions added to `fftools/ffmpeg_enc.c`:
 
 Status: implemented, builds, uncommitted. Needs FATE test coverage.
 
-## Animation Support (requires Phase 1 amendment)
+## Animation Support
 
 ### Problem
 
-ASS subtitle effects like `\fad` (fade), `\t(\alpha)` (alpha transition),
-and `\move` (position animation) currently produce a single static bitmap
-per event. The PGS spec supports animation effects through:
+Text subtitle effects (fades, motion, transforms) produce a single static
+bitmap per event in the basic pipeline. The PGS spec supports animation
+through:
 
 - **Palette animation**: One bitmap (ODS) + chain of palette updates (PDS)
-  with modified alpha/color values (NORMAL composition, palette_update_flag)
+  with modified alpha values (NORMAL composition, palette_update_flag)
 - **Position animation**: One bitmap (ODS) + chain of PCS coordinate
   updates (NORMAL composition, no ODS retransmission)
 
@@ -451,32 +479,28 @@ These techniques are specified in:
 - US8638861B2 (Sony) — segment timing, PDS versioning
 - US7620297B2 (Panasonic) — decoder model, object buffer persistence
 
-### Approach
+### Approach: Format-Agnostic Multi-Timepoint Rendering
 
-Animation is a two-layer problem:
+Rather than parsing format-specific tags, render each event at every
+frame interval and observe what changes in the RGBA output. Classify
+changes to determine the optimal PGS encoding:
 
-**Layer 1: Encoder state machine (Phase 1 amendment)**
-The PGS encoder must support composition states beyond Epoch Start:
-- NORMAL Display Sets with palette_update_flag for PDS-only updates
-- NORMAL Display Sets referencing previously-decoded objects
-- Acquisition Point Display Sets for seek support
-- Decoder model timing (DTS computation from buffer model)
-- See PHASE1.md "Amendment Plan" section for full details.
+- **Alpha-only changes** (fades) → palette-only Normal Display Sets
+- **Position-only changes** (motion) → position-only Normal Display Sets
+- **Content changes** (transforms, karaoke) → new Epoch Start per frame
 
-**Layer 2: Animation-aware conversion (Phase 3 extension)**
-The text-to-bitmap layer detects animation in ASS events and produces
-multiple Display Sets per event:
+The animation-aware conversion runs in `fftools/ffmpeg_enc.c` via
+`do_subtitle_out_animated()`, gated by format hint (only SUBTITLE_ASS
+with override tags triggers the scan). Static subtitles (SRT, ASS
+without `{`) use the fast single-render path with zero overhead.
 
-1. **Fade detection**: Parse `\fad(in,out)` from ASS override tags
-2. **Render base frame**: Full RGBA at peak visibility
-3. **Generate palette variants**: Same bitmap indices, different alpha
-   values in palette entries for each fade step
-4. **Emit Display Sets**: Epoch Start (full ODS + PDS), then NORMAL
-   (PDS-only) at each animation step
+### Encoder state machine (Phase 1)
 
-The animation-aware conversion runs in `fftools/ffmpeg_enc.c` and calls
-the PGS encoder multiple times per ASS event (once for the base frame
-as Epoch Start, then once per animation step as Normal).
+The PGS encoder composition state machine provides the foundation:
+- Automatic state detection (Epoch Start, Normal, palette_update)
+- palette_update_flag for PDS-only Display Sets
+- palette_version tracking and incrementing
+- Object reuse across Normal Display Sets
 
 ### Decoder model budgeting
 
@@ -488,134 +512,216 @@ exceeding buffer constraints.
 
 Position animation requires PCS + WDS + END (~30-50 bytes), even smaller.
 
-The main constraint is the initial ODS transfer. For a 1920×200 subtitle
-bitmap (~380 KB decoded, ~20-50 KB RLE), the object decode time is:
-```
-⌈200 × 1920 × 90000 / 16000000⌉ ≈ 2160 ticks ≈ 24 ms
-```
+## Phase 3a: Universal Subtitle Animation
 
-This must complete before the first PCS PTS, setting the minimum lead
-time for the Epoch Start Display Set.
+### Status: DONE (uncommitted)
 
-### Dependencies on Phase 1
+### Key Insight
 
-Animation requires these Phase 1 encoder changes (detailed in PHASE1.md):
-- Composition state field (currently hardcoded to 0x80)
-- palette_update_flag support
-- palette_version incrementing
-- Object version tracking and reuse
-- DTS computation from decoder model
-- Acquisition Point generation
+Rather than parsing format-specific tags (`\fad`, `\move`, `\t`), render
+the subtitle event at multiple timepoints and observe what changed in the
+RGBA output. Frame-to-frame comparison classifies changes for optimal PGS
+encoding. This handles ALL animation types in ALL text subtitle formats
+without parsing any tags.
 
-## Phase 3a: Fade Animation Implementation
+The PGS encoder's composition state machine (Phase 1) already supports
+three Display Set types for changed frames:
 
-### Status: IN PROGRESS
+| Change type | PGS encoding | Segments |
+|-------------|-------------|----------|
+| New/full change | Epoch Start (0x80) | PCS + WDS + PDS + ODS + END |
+| Palette only | Normal + palette_update | PCS + PDS + END |
+| Position only | Normal | PCS + END |
 
-### Approach
+### Render API Extension
 
-Strip `\fad(in,out)` from ASS text before rendering so libass produces a
-full-opacity bitmap. Quantize once to get a base palette + indices. For each
-fade step, scale palette alpha and call the encoder. The encoder's composition
-state machine (Phase 1) automatically emits Epoch Start for the first call and
-Normal+palette_update for subsequent calls — no encoder changes needed.
+Split `avfilter_subtitle_render_frame()` into two functions for
+multi-timepoint rendering:
 
-### Utility Functions (`fftools/ffmpeg_subtitle_fade.c`)
+- `init_event()` — flush events, add text to track (call once per event)
+- `sample()` — render at a specific timestamp (call N times)
 
-Extracted to a separate file for testability via FFmpeg's `.c` inclusion
-pattern (same as `libavutil/tests/parseutils.c` including `parseutils.c`).
-All functions are `static` — private in production, accessible to tests
-via `#include`.
+`render_frame()` becomes a thin wrapper calling both. Both have
+`#if !CONFIG_LIBASS` stubs matching the existing pattern.
+
+### Animation Detection: Every-Frame Scan + Format Hint
+
+Scan every frame interval within the event duration. Gate by format:
+
+1. **SUBTITLE_TEXT** (SRT, WebVTT): animation structurally impossible.
+   Render once, quantize, single encode. Zero overhead.
+2. **SUBTITLE_ASS without `{`**: no override tags, no animation.
+   Same fast path as SUBTITLE_TEXT.
+3. **SUBTITLE_ASS with `{...}`**: every-frame scan via `init_event`/`sample`.
+
+Frame interval: `frame_ms = 1000 * framerate.den / framerate.num`,
+fallback to 42ms (~24fps) if framerate unset.
+
+Cost: `ass_render_frame()` with cached glyphs: ~0.03ms per call.
+A 3-second event at 24fps: 72 calls = ~2ms. Static frames
+(detect_change=0) are skipped instantly. Acceptable for offline
+PGS encoding.
+
+### Change Classification (`fftools/ffmpeg_subtitle_animation.c`)
+
+Given two RGBA frames with bounding boxes, classify the change:
 
 ```c
-// Strip \fad(in,out) from ASS text, return durations
-static void parse_and_strip_fad(char *ass_text,
-                                 int *fade_in_ms, int *fade_out_ms);
+enum SubtitleChangeType {
+    SUB_CHANGE_NONE,       /* Identical frames */
+    SUB_CHANGE_POSITION,   /* Same content, different x/y (motion) */
+    SUB_CHANGE_ALPHA,      /* Same RGB, different alpha (fades) */
+    SUB_CHANGE_CONTENT,    /* Different bitmap (complex animation) */
+};
+```
+
+Algorithm:
+1. Dimensions differ → **CONTENT**
+2. Pixel data identical, position differs → **POSITION**
+3. Pixel data identical, position same → **NONE**
+4. For all pixels where alpha>0 in either frame: if RGB matches
+   but alpha differs → **ALPHA**
+5. Otherwise → **CONTENT**
+
+Combined changes (alpha + position) → **CONTENT** (PGS can't combine
+palette_update and position update in one Normal DS).
+
+### Utility Functions
+
+Extracted to `fftools/ffmpeg_subtitle_animation.c` for testability via
+FFmpeg's `.c` inclusion pattern. All functions are `static` — private in
+production, accessible to tests via `#include`.
+
+```c
+// Compute sum of alpha values across RGBA buffer
+static int64_t rgba_alpha_sum(const uint8_t *rgba, int w, int h, int linesize);
+
+// Classify change between two RGBA frames
+static enum SubtitleChangeType classify_subtitle_change(
+    const uint8_t *rgba0, int x0, int y0, int w0, int h0, int ls0,
+    const uint8_t *rgba1, int x1, int y1, int w1, int h1, int ls1);
 
 // Scale palette alpha by percentage (0-100)
 static void scale_palette_alpha(const uint32_t *src, uint32_t *dst,
                                 int nb_colors, int alpha_pct);
-
-// Frame-rate-aware step count computation
-static int compute_fade_steps(int fade_in_ms, int fade_out_ms,
-                               int duration_ms, AVRational framerate,
-                               int *in_steps, int *out_steps);
 ```
 
-### Step Count: Frame-Rate Aware, No Artificial Cap
+### Animation Loop (`do_subtitle_out_animated()`)
 
-Step interval derived from `enc_ctx->framerate`, NOT hardcoded:
-- `frame_ms = 1000 * framerate.den / framerate.num`
-- Falls back to 24fps if framerate unset
-- One palette update per video frame for smooth animation
-- Minimum 2 steps per fade region
+Two-pass architecture for the animation path:
 
-No artificial cap on step count. `palette_version` is a byte (0-255) — the
-"8 palettes per epoch" spec limit refers to palette **ID slots** (0-7), not
-version increments. We use a single palette ID (0), so 255 versions are
-available. This matches SUPer's approach.
+**Pass 1 (scan):** Render every frame, classify changes, find peak alpha
+frame, record animated timestamps. Per-event classification uses worst-case
+change type across ALL frames — if ANY frame is CONTENT, the whole event
+uses the CONTENT path.
 
-| Rate | Frame interval | 300ms fade | 1000ms fade |
-|------|---------------|------------|-------------|
-| 23.976 | 41.7ms | 7 steps | 24 steps |
-| 25.000 | 40.0ms | 7 steps | 25 steps |
-| 29.970 | 33.4ms | 9 steps | 30 steps |
-| 59.940 | 16.7ms | 18 steps | 60 steps |
+**Pass 2 (encode):** Based on event-level classification:
 
-Safety clamp at 254 total steps (Epoch Start uses version 0). Only triggers
-for extreme cases like 10+ second fades at 60fps.
+- **ALPHA (fade):** Re-render peak frame, quantize as reference palette.
+  Epoch Start with SCALED palette (first frame's alpha ratio vs peak).
+  Subsequent frames get palette-only Normal Display Sets.
+- **POSITION (motion):** Quantize first frame (all frames share same
+  bitmap). Epoch Start at first position, then position-only Normal DS.
+- **CONTENT (complex animation):** Each frame quantized independently.
+  Epoch Start per frame.
+
+Reference frame selection for ALPHA: the peak-opacity frame gives best
+palette quality (quantizing at low alpha wastes precision). The Epoch Start
+uses reference INDICES (peak bitmap shape) but SCALED PALETTE (first
+frame's alpha), preventing a flash on fade-in.
 
 ### Fade Timing Model
 
 ```
 \fad(300,500) on event 1.0s → 4.0s (24fps):
 
-1.000s  Epoch Start: alpha=0%     ← loads ODS invisibly
-1.042s  Normal PDS:  alpha=14%
-1.083s  Normal PDS:  alpha=29%
+Pass 1 (scan ~2ms):
+  Render 72 frames. detect_change=1 for ~7 fade-in + ~12 fade-out.
+  Peak found around 1.333s (alpha_sum is maximum).
+  Event classified as ALPHA (all changes are alpha-only).
+
+Pass 2 (encode):
+  Quantize peak frame → ref_palette + ref_indices
+  1.000s  Epoch Start: ref indices + scaled palette (alpha≈0%)
+  1.042s  Normal PDS: alpha≈14%
   ...
-1.292s  Normal PDS:  alpha=100%   ← peak
-        ... peak period, no packets ...
-3.500s  Normal PDS:  alpha=83%
+  1.292s  Normal PDS: alpha≈100%   ← matches peak palette
+  (static frames skipped)
+  3.500s  Normal PDS: alpha≈80%
   ...
-3.958s  Normal PDS:  alpha=8%
-4.000s  Clear (num_rects=0)       ← removes from decoder
+  3.958s  Normal PDS: alpha≈8%
+  4.000s  Clear (num_rects=0)      ← existing pipeline handles this
 ```
 
-- **Fade-in** starts at alpha=0% (Epoch Start must load ODS before palette updates)
-- **Fade-out** ends at the fade boundary, NOT at alpha=0%. Clear packet handles removal.
-- **Clear packet** already emitted by existing subtitle pipeline. No change needed.
+For `\move(100,200,300,400)`:
+```
+Pass 1: all frames differ in position, classified POSITION
+Pass 2:
+  1.000s  Epoch Start at (100,200)
+  1.042s  Normal: position (103,203)
+  ...
+  4.000s  Clear
+```
+
+### palette_version Safety
+
+Alpha-only steps increment palette_version (byte, 0-255). If steps
+exceed 254 within an epoch, emit an Epoch Start to reset the counter.
+`palette_version` is a byte (0-255) — the "8 palettes per epoch"
+spec limit refers to palette **ID slots** (0-7), not version
+increments. We use a single palette ID (0), so 255 versions are
+available. This matches SUPer's approach.
 
 ### Rect Splitting Interaction
 
-Skip rect splitting when fade detected. Two independently-quantized rects have
-separate palettes — a single PDS update can't fade both. Animated events are
-always single-rect.
+Skip rect splitting when animation is detected. Two independently-quantized
+rects have separate palettes — a single PDS can't update both.
+Animated events use single-rect encoding.
 
-### Scope
+### Animation Coverage
 
-- `\fad(in,out)` only (2-argument). Covers vast majority of ASS files.
-- No `\fade(...)` (7-argument), `\move`, `\t(\alpha)`. Future work.
-- No encoder changes. No subtitle_render API changes.
+All animation is handled by observing renderer output — no tag parsing:
+
+| Animation type | Examples | Classification | PGS path |
+|---------------|---------|---------------|----------|
+| Uniform alpha fade | `\fad(in,out)`, `\fade(...)`, `\t(\alpha...)` | ALPHA | Palette-only Normal DS |
+| Linear motion | `\move(x1,y1,x2,y2)` | POSITION | Position-only Normal DS |
+| Bitmap transform | `\t(\fscx)`, `\t(\frz)`, `\t(\bord)` | CONTENT | Epoch Start per frame |
+| Color change | `\t(\1c&H...)`, `\t(\3c&H...)` | CONTENT | Epoch Start per frame |
+| Karaoke | `\k`, `\K`, `\ko` | CONTENT | Epoch Start per frame |
+| Fade + move | `\fad(300,0)\move(...)` | CONTENT | Epoch Start per frame |
+| No animation | SRT, `{\pos(...)}`, `{\b1}` | NONE | Single Epoch Start |
+
+### Encoder Bug Fix (`libavcodec/pgssubenc.c`)
+
+Fixed palette_version ordering: version must be incremented BEFORE writing
+segments, not after. Without this fix, the first palette update would
+repeat version 0, confusing hardware decoders.
 
 ### FATE Tests
 
-1. **Encoder state machine** (`tests/api/api-pgs-fade-test.c`): construct
-   AVSubtitle structs, call encoder with different palettes/positions/clears,
-   verify composition_state, palette_update_flag, palette_version in output.
-2. **`\fad` parsing** (`tests/fate/pgs-fade-test.c`): edge cases via `.c`
-   inclusion of `ffmpeg_subtitle_fade.c`.
-3. **Step computation** (same test file): frame rate variants, clamping, minimums.
+1. **Encoder state machine** (`tests/api/api-pgs-fade-test.c`, 6 tests):
+   Construct AVSubtitle structs, call encoder with different palettes,
+   positions, and clears. Verifies composition_state, palette_update_flag,
+   palette_version, and num_composition_objects in output segments.
+2. **Animation utilities** (`tests/api/api-pgs-animation-util-test.c`):
+   Unit tests for `classify_subtitle_change()` (identical, position,
+   alpha, content, null, transparent pixels), `compute_alpha_ratio()`,
+   and `scale_palette_alpha()` via `.c` inclusion.
 
 ### Files
 
 | File | Change |
 |------|--------|
-| `fftools/ffmpeg_subtitle_fade.c` | NEW — utility functions |
-| `fftools/ffmpeg_enc.c` | `#include` fade utils, animation loop, wiring |
-| `tests/api/api-pgs-fade-test.c` | NEW — encoder state machine test |
-| `tests/fate/pgs-fade-test.c` | NEW — fade utility unit tests |
-| `tests/api/Makefile` | Add api-pgs-fade-test |
-| `tests/fate/subtitles.mak` | Add FATE targets |
+| `libavfilter/subtitle_render.h` | Add `init_event()` + `sample()` declarations |
+| `libavfilter/subtitle_render.c` | Split `render_frame()` into init + sample |
+| `fftools/ffmpeg_subtitle_animation.c` | NEW — classify + alpha utilities |
+| `fftools/ffmpeg_enc.c` | Animation orchestration, dispatch, render context helper |
+| `libavcodec/pgssubenc.c` | palette_version ordering fix |
+| `tests/api/api-pgs-fade-test.c` | NEW — encoder state machine test (6 tests) |
+| `tests/api/api-pgs-animation-util-test.c` | NEW — animation utility tests |
+| `tests/api/Makefile` | Add test programs |
+| `tests/fate/api.mak` | Add FATE targets |
 
 ## Dependencies
 
