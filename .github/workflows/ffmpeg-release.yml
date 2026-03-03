@@ -55,20 +55,18 @@ jobs:
         with:
           submodules: recursive
 
-      # ── Linux: system packages ─────────────────────────────────────────────
+      # ── Linux: build tools only (deps built from source below) ───────────────
       - name: Install Linux dependencies
         if: matrix.os == 'linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            nasm pkg-config \
-            libass-dev libfreetype6-dev libharfbuzz-dev libfribidi-dev
+          sudo apt-get install -y nasm pkg-config cmake ninja-build
 
-      # ── macOS arm64: native Homebrew ───────────────────────────────────────
+      # ── macOS arm64: build tools only (deps built from source below) ───────
       - name: Install macOS arm64 dependencies
         if: matrix.os == 'macos' && !matrix.macos_target
         run: |
-          brew install pkg-config nasm libass
+          brew install pkg-config nasm ninja
 
       # ── Windows arm64: llvm-mingw ──────────────────────────────────────────
       - name: Install llvm-mingw
@@ -103,11 +101,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y nasm pkg-config cmake ninja-build
 
-      # ── macOS x86_64 + Windows: build full dep chain from source ──────────
+      # ── All targets: build full dep chain from source ─────────────────────
       # zlib → freetype2 → fribidi → harfbuzz → libass
-      # PKG_CONFIG_LIBDIR isolates the sysroot so host packages don't leak in.
+      # Sysroot contains only .a files; host packages never leak in.
       - name: Build dependencies from source
-        if: matrix.macos_target || matrix.os == 'windows'
         env:
           CROSS:        ${{ matrix.cross }}
           MACOS_TARGET: ${{ matrix.macos_target }}
@@ -127,7 +124,8 @@ jobs:
             AUTOCONF_HOST=""           # native host, target via compiler flags
             CMAKE_SYSTEM_NAME="Darwin"
             CMAKE_PROCESSOR="x86_64"
-          else
+          elif [ -n "$CROSS" ]; then
+            # Windows cross-compile
             CC="$CROSS-gcc"
             CXX="$CROSS-g++"
             AR="$CROSS-ar"
@@ -139,6 +137,16 @@ jobs:
               CMAKE_SYSTEM_NAME="Windows"
             fi
             CMAKE_PROCESSOR="$ARCH"
+          else
+            # Native build (Linux or macOS arm64)
+            CC="cc"
+            CXX="c++"
+            AR="ar"
+            RANLIB="ranlib"
+            STRIP="strip"
+            AUTOCONF_HOST=""
+            CMAKE_SYSTEM_NAME="$(uname -s)"
+            CMAKE_PROCESSOR="$(uname -m)"
           fi
 
           export CC CXX AR RANLIB STRIP
@@ -357,6 +365,17 @@ jobs:
             --enable-filter=acopy
           )
 
+          # Native build with sysroot (Linux or macOS arm64)
+          if [ "${{ matrix.os }}" != "windows" ] && [ -z "${{ matrix.macos_target }}" ]; then
+            FLAGS+=(
+              --pkg-config-flags=--static
+              --extra-cflags="-I$PREFIX/include"
+              --extra-ldflags="-L$PREFIX/lib"
+            )
+            export PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig"
+            export PKG_CONFIG_PATH=""
+          fi
+
           # Cross-compile: Windows
           if [ "${{ matrix.os }}" = "windows" ]; then
             ARCH=$(echo "${{ matrix.cross }}" | cut -d- -f1)
@@ -367,7 +386,7 @@ jobs:
               --pkg-config=pkg-config
               --pkg-config-flags=--static
               --extra-cflags="-I$PREFIX/include"
-              --extra-ldflags="-L$PREFIX/lib"
+              --extra-ldflags="-L$PREFIX/lib -static-libgcc"
             )
             export PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig"
             export PKG_CONFIG_PATH=""
