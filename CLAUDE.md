@@ -113,6 +113,16 @@ Before any decision or body of work that changes design, architecture, or approa
 2. Commit and push those docs before writing code
 This ensures the record reflects intent, not reconstruction. Skip only for trivial fixes with no design content.
 
+### Static Builds (MUST)
+When producing release binaries, link third-party dependencies statically wherever the host OS allows:
+- Build all deps (zlib, freetype, fribidi, harfbuzz, libass, etc.) from source as `.a` files into an isolated sysroot
+- Never use system or Homebrew shared libraries for release builds — they will not be present on the user's machine
+- Use `--disable-shared --enable-static` for autoconf deps; `-DBUILD_SHARED_LIBS=OFF` for CMake deps
+- Isolate pkg-config with `PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig"` and `PKG_CONFIG_PATH=""`
+- Pass `--pkg-config-flags=--static` and `--extra-cflags/ldflags` pointing at the sysroot to the top-level build
+- On Windows/mingw, add `-static-libgcc` to avoid pulling in `libgcc_s.dll`
+- Only platform-mandated dynamic libs are acceptable (glibc on Linux, libSystem.dylib on macOS, kernel DLLs on Windows)
+
 ### FFmpeg Extraction Patterns
 - **Two-patch structure:** Patch 1 creates new files (FATE trivially passes), Patch 2 refactors consumer (FATE must be bit-for-bit).
 - **API boundary validation:** When moving code from a filter (with AVOption validation) into a library API, the library must validate its own inputs. AVOption constraints don't follow the code. Any parameter feeding shifts, array indices, or division needs bounds checking at the API boundary.
