@@ -83,7 +83,7 @@ jobs:
                   print(a['browser_download_url'])
                   break
           ")
-          curl -fsSL -o llvm-mingw.tar.xz "$URL"
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o llvm-mingw.tar.xz "$URL"
           tar xf llvm-mingw.tar.xz
           echo "$PWD/$(ls -d llvm-mingw-*/)/bin" >> "$GITHUB_PATH"
 
@@ -185,7 +185,7 @@ jobs:
           AUTOCONF_FLAGS="$AUTOCONF_HOST --prefix=$PREFIX --enable-static --disable-shared"
 
           # ── zlib ──────────────────────────────────────────────────────────
-          curl -fsSL -o zlib.tar.gz \
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o zlib.tar.gz \
             https://github.com/madler/zlib/releases/download/v1.3.1/zlib-1.3.1.tar.gz
           tar xf zlib.tar.gz
           cd zlib-1.3.1
@@ -197,7 +197,7 @@ jobs:
           cd ..
 
           # ── freetype2 (full: with zlib, without harfbuzz initially) ───────
-          curl -fsSL -o ft.tar.xz \
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o ft.tar.xz \
             https://download.savannah.gnu.org/releases/freetype/freetype-2.13.3.tar.xz
           tar xf ft.tar.xz
           cd freetype-2.13.3
@@ -212,7 +212,7 @@ jobs:
           cd ..
 
           # ── fribidi (BiDi algorithm for RTL languages) ────────────────────
-          curl -fsSL -o fribidi.tar.xz \
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o fribidi.tar.xz \
             https://github.com/fribidi/fribidi/releases/download/v1.0.16/fribidi-1.0.16.tar.xz
           tar xf fribidi.tar.xz
           cd fribidi-1.0.16
@@ -223,7 +223,7 @@ jobs:
 
           # ── harfbuzz (OpenType shaping: Arabic, Devanagari, CJK, etc.) ────
           # Uses CMake (autotools removed in 3.x)
-          curl -fsSL -o hb.tar.xz \
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o hb.tar.xz \
             https://github.com/harfbuzz/harfbuzz/releases/download/10.2.0/harfbuzz-10.2.0.tar.xz
           tar xf hb.tar.xz
           # Windows: harfbuzz.cc amalgamation exceeds default COFF section limit
