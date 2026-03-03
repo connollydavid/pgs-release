@@ -24,9 +24,11 @@ jobs:
             os: linux
             ext: ""
 
+          # macOS x86_64: cross-compile on the M1 runner (macos-13 retired)
           - target: macos-x86_64
-            runner: macos-13
+            runner: macos-14
             os: macos
+            macos_target: x86_64-apple-macos10.14
             ext: ""
 
           - target: macos-arm64
@@ -53,7 +55,7 @@ jobs:
         with:
           submodules: recursive
 
-      # ── Linux ────────────────────────────────────────────────────────────
+      # ── Linux: system packages ─────────────────────────────────────────────
       - name: Install Linux dependencies
         if: matrix.os == 'linux'
         run: |
@@ -62,81 +64,194 @@ jobs:
             nasm pkg-config \
             libass-dev libfreetype6-dev libharfbuzz-dev libfribidi-dev
 
-      # ── macOS ────────────────────────────────────────────────────────────
-      - name: Install macOS dependencies
-        if: matrix.os == 'macos'
+      # ── macOS arm64: native Homebrew ───────────────────────────────────────
+      - name: Install macOS arm64 dependencies
+        if: matrix.os == 'macos' && !matrix.macos_target
         run: |
-          brew install pkg-config libass
+          brew install pkg-config nasm libass
 
-      # ── Windows: llvm-mingw (arm64) ──────────────────────────────────────
+      # ── Windows arm64: llvm-mingw ──────────────────────────────────────────
       - name: Install llvm-mingw
         if: matrix.llvm_mingw
         run: |
-          VERSION=$(curl -fsSL https://api.github.com/repos/mstorsjo/llvm-mingw/releases/latest \
-            | grep '"tag_name"' | sed 's/.*"tag_name": "\(.*\)".*/\1/')
-          curl -fsSL -o llvm-mingw.tar.xz \
-            "https://github.com/mstorsjo/llvm-mingw/releases/download/${VERSION}/llvm-mingw-${VERSION}-ucrt-ubuntu-20.04-x86_64.tar.xz"
+          # Find the Ubuntu x86_64 host package from the latest release
+          URL=$(curl -fsSL https://api.github.com/repos/mstorsjo/llvm-mingw/releases/latest | \
+            python3 -c "
+          import sys, json
+          data = json.load(sys.stdin)
+          for a in data['assets']:
+              n = a['name']
+              if n.endswith('.tar.xz') and 'ucrt' in n and 'x86_64.tar.xz' in n and 'ubuntu' in n:
+                  print(a['browser_download_url'])
+                  break
+          ")
+          curl -fsSL -o llvm-mingw.tar.xz "$URL"
           tar xf llvm-mingw.tar.xz
           echo "$PWD/$(ls -d llvm-mingw-*/)/bin" >> "$GITHUB_PATH"
 
-      # ── Windows: mingw-w64 (x86_64) ─────────────────────────────────────
+      # ── Windows x86_64: mingw-w64 ─────────────────────────────────────────
       - name: Install mingw-w64
         if: matrix.os == 'windows' && !matrix.llvm_mingw
         run: |
           sudo apt-get update
-          sudo apt-get install -y nasm mingw-w64 pkg-config
+          sudo apt-get install -y nasm mingw-w64 pkg-config cmake ninja-build
 
-      # ── Windows: build libass and dependencies from submodule ────────────
-      - name: Build Windows dependencies
-        if: matrix.os == 'windows'
+      # ── Windows arm64: build tools ────────────────────────────────────────
+      - name: Install build tools for llvm-mingw
+        if: matrix.llvm_mingw
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nasm pkg-config cmake ninja-build
+
+      # ── macOS x86_64 + Windows: build full dep chain from source ──────────
+      # zlib → freetype2 → fribidi → harfbuzz → libass
+      # PKG_CONFIG_LIBDIR isolates the sysroot so host packages don't leak in.
+      - name: Build dependencies from source
+        if: matrix.macos_target || matrix.os == 'windows'
         env:
-          CROSS: ${{ matrix.cross }}
-          PREFIX: ${{ github.workspace }}/sysroot
+          CROSS:        ${{ matrix.cross }}
+          MACOS_TARGET: ${{ matrix.macos_target }}
+          PREFIX:       ${{ github.workspace }}/sysroot
         run: |
           set -e
           mkdir -p "$PREFIX"
 
-          # freetype (no zlib/bzip2/png to keep it simple)
+          # ── Compiler / flag setup ──────────────────────────────────────────
+          if [ -n "$MACOS_TARGET" ]; then
+            # macOS x86_64 cross-compile on M1
+            CC="clang -target $MACOS_TARGET"
+            CXX="clang++ -target $MACOS_TARGET"
+            AR="ar"
+            RANLIB="ranlib"
+            STRIP="strip"
+            AUTOCONF_HOST=""           # native host, target via compiler flags
+            CMAKE_SYSTEM_NAME="Darwin"
+            CMAKE_PROCESSOR="x86_64"
+          else
+            CC="$CROSS-gcc"
+            CXX="$CROSS-g++"
+            AR="$CROSS-ar"
+            RANLIB="$CROSS-ranlib"
+            STRIP="$CROSS-strip"
+            AUTOCONF_HOST="--host=$CROSS"
+            ARCH=$(echo "$CROSS" | cut -d- -f1)
+            if [[ "$CROSS" == *mingw* ]]; then
+              CMAKE_SYSTEM_NAME="Windows"
+            fi
+            CMAKE_PROCESSOR="$ARCH"
+          fi
+
+          export CC CXX AR RANLIB STRIP
+          export PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig"
+          export PKG_CONFIG_PATH=""
+
+          # ── CMake toolchain file ───────────────────────────────────────────
+          cat > /tmp/cross.cmake << EOF
+          set(CMAKE_SYSTEM_NAME ${CMAKE_SYSTEM_NAME:-$(uname -s)})
+          set(CMAKE_SYSTEM_PROCESSOR $CMAKE_PROCESSOR)
+          set(CMAKE_C_COMPILER "$CC")
+          set(CMAKE_CXX_COMPILER "$CXX")
+          set(CMAKE_AR "$AR")
+          set(CMAKE_RANLIB "$RANLIB")
+          set(CMAKE_FIND_ROOT_PATH "$PREFIX")
+          set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+          set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+          set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+          EOF
+
+          AUTOCONF_FLAGS="$AUTOCONF_HOST --prefix=$PREFIX --enable-static --disable-shared"
+
+          # ── zlib ──────────────────────────────────────────────────────────
+          curl -fsSL -o zlib.tar.gz \
+            https://github.com/madler/zlib/releases/download/v1.3.1/zlib-1.3.1.tar.gz
+          tar xf zlib.tar.gz
+          cd zlib-1.3.1
+          # zlib uses a non-autoconf configure; set CC explicitly
+          CC="$CC" AR="$AR" RANLIB="$RANLIB" \
+          CFLAGS="-O2" \
+          ./configure --prefix="$PREFIX" --static
+          make -j$(nproc) install
+          cd ..
+
+          # ── freetype2 (full: with zlib, without harfbuzz initially) ───────
           curl -fsSL -o ft.tar.xz \
             https://download.savannah.gnu.org/releases/freetype/freetype-2.13.3.tar.xz
           tar xf ft.tar.xz
           cd freetype-2.13.3
-          ./configure --host="$CROSS" --prefix="$PREFIX" \
-            --enable-static --disable-shared \
-            --without-bzip2 --without-png --without-zlib --with-harfbuzz=no \
-            CFLAGS="-O2"
+          CFLAGS="-O2 -I$PREFIX/include" \
+          LDFLAGS="-L$PREFIX/lib" \
+          ./configure $AUTOCONF_FLAGS \
+            --with-zlib=yes \
+            --without-bzip2 \
+            --without-png \
+            --with-harfbuzz=no
           make -j$(nproc) install
           cd ..
 
-          # fribidi
+          # ── fribidi (BiDi algorithm for RTL languages) ────────────────────
           curl -fsSL -o fribidi.tar.xz \
             https://github.com/fribidi/fribidi/releases/download/v1.0.16/fribidi-1.0.16.tar.xz
           tar xf fribidi.tar.xz
           cd fribidi-1.0.16
-          ./configure --host="$CROSS" --prefix="$PREFIX" \
-            --enable-static --disable-shared --disable-docs \
-            CFLAGS="-O2"
+          CFLAGS="-O2" \
+          ./configure $AUTOCONF_FLAGS --disable-docs
           make -j$(nproc) install
           cd ..
 
-          # libass from pinned submodule (0.17.4)
+          # ── harfbuzz (OpenType shaping: Arabic, Devanagari, CJK, etc.) ────
+          # Uses CMake (autotools removed in 3.x)
+          curl -fsSL -o hb.tar.xz \
+            https://github.com/harfbuzz/harfbuzz/releases/download/10.2.0/harfbuzz-10.2.0.tar.xz
+          tar xf hb.tar.xz
+          cmake -S harfbuzz-10.2.0 -B hb-build \
+            -DCMAKE_TOOLCHAIN_FILE=/tmp/cross.cmake \
+            -DCMAKE_INSTALL_PREFIX="$PREFIX" \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DHB_HAVE_FREETYPE=ON \
+            -DHB_HAVE_GLIB=OFF \
+            -DHB_HAVE_ICU=OFF \
+            -DHB_HAVE_GRAPHITE2=OFF \
+            -DHB_BUILD_SUBSET=OFF \
+            -DHB_BUILD_TESTS=OFF \
+            -DHB_BUILD_DOCS=OFF \
+            -DCMAKE_PREFIX_PATH="$PREFIX" \
+            -DCMAKE_FIND_ROOT_PATH="$PREFIX" \
+            -GNinja
+          ninja -C hb-build install
+
+          # ── freetype2 rebuild with harfbuzz (color glyphs, OTL features) ──
+          rm -rf freetype-2.13.3/build
+          cd freetype-2.13.3
+          make distclean || true
+          CFLAGS="-O2 -I$PREFIX/include" \
+          LDFLAGS="-L$PREFIX/lib" \
+          PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig" \
+          ./configure $AUTOCONF_FLAGS \
+            --with-zlib=yes \
+            --without-bzip2 \
+            --without-png \
+            --with-harfbuzz=yes
+          make -j$(nproc) install
+          cd ..
+
+          # ── libass (pinned 0.17.4 from submodule) ─────────────────────────
           cd libass
           ./autogen.sh
-          PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig" \
-          ./configure --host="$CROSS" --prefix="$PREFIX" \
-            --enable-static --disable-shared \
-            --disable-fontconfig --disable-require-system-font-provider \
-            CFLAGS="-O2"
+          CFLAGS="-O2" \
+          PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig" \
+          PKG_CONFIG_PATH="" \
+          ./configure $AUTOCONF_FLAGS \
+            --disable-fontconfig \
+            --disable-require-system-font-provider
           make -j$(nproc) install
           cd ..
 
-      # ── Build FFmpeg ─────────────────────────────────────────────────────
+      # ── Build FFmpeg ───────────────────────────────────────────────────────
       - name: Configure FFmpeg
         working-directory: ffmpeg
         env:
           PREFIX: ${{ github.workspace }}/sysroot
         run: |
-          # Common flags: minimal subtitle-focused build
           FLAGS=(
             --disable-everything
             --enable-libass
@@ -149,7 +264,6 @@ jobs:
             --enable-ffprobe
             --disable-ffplay
 
-            # Protocols
             --enable-protocol=file,pipe
 
             # Subtitle decoders
@@ -175,7 +289,7 @@ jobs:
             --enable-encoder=mov_text
             --enable-encoder=dvbsub
 
-            # Container muxers (for subtitle output and -c copy)
+            # Container muxers (subtitle output + -c copy)
             --enable-muxer=matroska
             --enable-muxer=mp4
             --enable-muxer=mov
@@ -197,7 +311,7 @@ jobs:
             --enable-demuxer=webvtt
             --enable-demuxer=avi
 
-            # Parsers: bitstream framing for -c:v copy and -c:a copy
+            # Parsers: bitstream framing for -c:v copy, -c:a copy
             --enable-parser=h264
             --enable-parser=hevc
             --enable-parser=av1
@@ -209,7 +323,7 @@ jobs:
             --enable-parser=vorbis
             --enable-parser=opus
 
-            # Bitstream filters: container remuxing (e.g. mp4→mkv)
+            # Bitstream filters: container remuxing (e.g. mp4 → mkv)
             --enable-bsf=h264_mp4toannexb
             --enable-bsf=hevc_mp4toannexb
             --enable-bsf=aac_adtstoasc
@@ -223,7 +337,7 @@ jobs:
             --enable-filter=acopy
           )
 
-          # Cross-compilation flags for Windows
+          # Cross-compile: Windows
           if [ "${{ matrix.os }}" = "windows" ]; then
             ARCH=$(echo "${{ matrix.cross }}" | cut -d- -f1)
             FLAGS+=(
@@ -235,6 +349,23 @@ jobs:
               --extra-cflags="-I$PREFIX/include"
               --extra-ldflags="-L$PREFIX/lib"
             )
+            export PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig"
+            export PKG_CONFIG_PATH=""
+          fi
+
+          # Cross-compile: macOS x86_64 on M1 runner
+          if [ -n "${{ matrix.macos_target }}" ]; then
+            TARGET="${{ matrix.macos_target }}"
+            FLAGS+=(
+              --cc="clang -target $TARGET"
+              --cxx="clang++ -target $TARGET"
+              --arch=x86_64
+              --extra-cflags="-target $TARGET -I$PREFIX/include"
+              --extra-ldflags="-target $TARGET -L$PREFIX/lib"
+              --pkg-config-flags=--static
+            )
+            export PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig"
+            export PKG_CONFIG_PATH=""
           fi
 
           ./configure "${FLAGS[@]}"
@@ -255,7 +386,7 @@ jobs:
           name: ffmpeg-${{ matrix.target }}
           path: dist/
 
-  # ── Package and attach to GitHub release ──────────────────────────────────
+  # ── Attach to GitHub release ───────────────────────────────────────────────
   release:
     name: Attach to release
     needs: build
@@ -281,7 +412,6 @@ jobs:
             cd ..
           done
           cd ..
-          ls -lh ffmpeg-*.{tar.gz,zip} 2>/dev/null || ls -lh ffmpeg-*
 
       - name: Upload to release
         uses: softprops/action-gh-release@v2
