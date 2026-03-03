@@ -121,7 +121,7 @@ jobs:
             AR="ar"
             RANLIB="ranlib"
             STRIP="strip"
-            AUTOCONF_HOST=""           # native host, target via compiler flags
+            AUTOCONF_HOST="--host=x86_64-apple-darwin"  # tell autoconf the target arch
             CMAKE_SYSTEM_NAME="Darwin"
             CMAKE_PROCESSOR="x86_64"
           elif [ -n "$CROSS" ]; then
