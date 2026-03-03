@@ -386,6 +386,8 @@ jobs:
               --pkg-config-flags=--static
               --extra-cflags="-I$PREFIX/include"
               --extra-ldflags="-L$PREFIX/lib -static-libgcc"
+              --enable-w32threads
+              --disable-pthreads
             )
             export PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig"
             export PKG_CONFIG_PATH=""
