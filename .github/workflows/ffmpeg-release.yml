@@ -60,7 +60,7 @@ jobs:
         if: matrix.os == 'linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y nasm pkg-config cmake ninja-build
+          sudo apt-get install -y nasm pkg-config cmake ninja-build autoconf automake libtool
 
       # ── macOS: build tools (both arm64 native and x86_64 cross-compile) ──────
       - name: Install macOS dependencies
@@ -99,7 +99,7 @@ jobs:
         if: matrix.llvm_mingw
         run: |
           sudo apt-get update
-          sudo apt-get install -y nasm pkg-config cmake ninja-build
+          sudo apt-get install -y nasm pkg-config cmake ninja-build autoconf automake libtool
 
       # ── All targets: build full dep chain from source ─────────────────────
       # zlib → freetype2 → fribidi → harfbuzz → libass
@@ -197,10 +197,11 @@ jobs:
           cd ..
 
           # ── freetype2 (full: with zlib, without harfbuzz initially) ───────
-          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o ft.tar.xz \
-            https://download.savannah.gnu.org/releases/freetype/freetype-2.13.3.tar.xz
-          tar xf ft.tar.xz
-          cd freetype-2.13.3
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o ft.tar.gz \
+            https://github.com/freetype/freetype/archive/refs/tags/VER-2-13-3.tar.gz
+          tar xf ft.tar.gz
+          cd freetype-VER-2-13-3
+          autoreconf -fiv
           CFLAGS="-O2 -I$PREFIX/include" \
           LDFLAGS="-L$PREFIX/lib" \
           ./configure $AUTOCONF_FLAGS \
@@ -248,8 +249,8 @@ jobs:
           ninja -C hb-build install
 
           # ── freetype2 rebuild with harfbuzz (color glyphs, OTL features) ──
-          rm -rf freetype-2.13.3/build
-          cd freetype-2.13.3
+          rm -rf freetype-VER-2-13-3/build
+          cd freetype-VER-2-13-3
           make distclean || true
           CFLAGS="-O2 -I$PREFIX/include" \
           LDFLAGS="-L$PREFIX/lib" \
