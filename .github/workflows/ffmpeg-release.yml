@@ -62,11 +62,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y nasm pkg-config cmake ninja-build
 
-      # ── macOS arm64: build tools only (deps built from source below) ───────
-      - name: Install macOS arm64 dependencies
-        if: matrix.os == 'macos' && !matrix.macos_target
+      # ── macOS: build tools (both arm64 native and x86_64 cross-compile) ──────
+      - name: Install macOS dependencies
+        if: matrix.os == 'macos'
         run: |
-          brew install pkg-config nasm ninja
+          brew install pkg-config nasm ninja autoconf automake libtool
 
       # ── Windows arm64: llvm-mingw ──────────────────────────────────────────
       - name: Install llvm-mingw
