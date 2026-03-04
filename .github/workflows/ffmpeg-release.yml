@@ -425,7 +425,7 @@ jobs:
           # Windows: bundle libwinpthread-1.dll — it is required at runtime
           # and cannot be statically linked due to how the dep chain is built.
           if [ "${{ matrix.os }}" = "windows" ] && [ -z "${{ matrix.llvm_mingw }}" ]; then
-            DLL=$(find /usr -name 'libwinpthread-1.dll' 2>/dev/null | head -1)
+            DLL=$(find /usr/x86_64-w64-mingw32 -name 'libwinpthread-1.dll' 2>/dev/null | head -1)
             cp "$DLL" dist/
           fi
 
