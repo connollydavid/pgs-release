@@ -93,6 +93,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y nasm mingw-w64 pkg-config cmake ninja-build
+          # Remove the DLL import library so the linker is forced to use
+          # libwinpthread.a. The posix-model GCC adds -lwinpthread via its
+          # internal link spec; without the .dll.a it resolves statically.
+          sudo rm /usr/x86_64-w64-mingw32/lib/libwinpthread.dll.a
 
       # ── Windows arm64: build tools ────────────────────────────────────────
       - name: Install build tools for llvm-mingw
