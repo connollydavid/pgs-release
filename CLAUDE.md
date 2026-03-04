@@ -120,8 +120,16 @@ When producing release binaries, link third-party dependencies statically wherev
 - Use `--disable-shared --enable-static` for autoconf deps; `-DBUILD_SHARED_LIBS=OFF` for CMake deps
 - Isolate pkg-config with `PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig"` and `PKG_CONFIG_PATH=""`
 - Pass `--pkg-config-flags=--static` and `--extra-cflags/ldflags` pointing at the sysroot to the top-level build
-- On Windows/mingw, add `-static-libgcc` to avoid pulling in `libgcc_s.dll`
+- On Windows/mingw: add `-static-libgcc` and seed `$PREFIX/lib/` with `libwinpthread.a` so every `-lwinpthread` reference from pkg-config resolves to the static copy before the system DLL import library is found
+- On Linux: add `-static-libgcc -static-libstdc++` to avoid pulling in `libgcc_s.so` and `libstdc++.so` (harfbuzz brings C++ object files into the final link)
 - Only platform-mandated dynamic libs are acceptable (glibc on Linux, libSystem.dylib on macOS, kernel DLLs on Windows)
+
+### Release Versioning
+FFmpeg release tags follow the format `n{ffmpeg-version}-{base-commit}-pgs.{N}`:
+- `n8.0-aa483bc4-pgs.1` — first stable release for this FFmpeg base
+- Increment `.pgsN` for each new release on the same FFmpeg base (build config fixes, new patches)
+- Do not reuse an existing tag for a retry — delete with `--cleanup-tag` and increment N
+- Only bump the tag after a confirmed stable build (all 6 targets green, artifacts verified)
 
 ### FFmpeg Extraction Patterns
 - **Two-patch structure:** Patch 1 creates new files (FATE trivially passes), Patch 2 refactors consumer (FATE must be bit-for-bit).
