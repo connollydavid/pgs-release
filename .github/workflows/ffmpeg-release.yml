@@ -93,13 +93,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y nasm mingw-w64 pkg-config cmake ninja-build
-          # Switch to win32 threading model. Ubuntu's posix-model libgcc.a has
-          # libwinpthread-1.dll in its import table regardless of -static-libgcc.
-          # The win32-model libgcc has no winpthread reference at all.
-          sudo update-alternatives --set x86_64-w64-mingw32-gcc \
-            /usr/bin/x86_64-w64-mingw32-gcc-win32
-          sudo update-alternatives --set x86_64-w64-mingw32-g++ \
-            /usr/bin/x86_64-w64-mingw32-g++-win32
 
       # ── Windows arm64: build tools ────────────────────────────────────────
       - name: Install build tools for llvm-mingw
@@ -398,7 +391,6 @@ jobs:
               --pkg-config-flags=--static
               --extra-cflags="-I$PREFIX/include"
               --extra-ldflags="-L$PREFIX/lib -static-libgcc"
-              --disable-pthreads
             )
             export PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig"
             export PKG_CONFIG_PATH=""
@@ -430,6 +422,11 @@ jobs:
           mkdir -p dist
           cp ffmpeg/ffmpeg${{ matrix.ext }}  dist/
           cp ffmpeg/ffprobe${{ matrix.ext }} dist/
+          # Windows: bundle libwinpthread-1.dll — it is required at runtime
+          # and cannot be statically linked due to how the dep chain is built.
+          if [ "${{ matrix.os }}" = "windows" ] && [ -z "${{ matrix.llvm_mingw }}" ]; then
+            cp /usr/x86_64-w64-mingw32/bin/libwinpthread-1.dll dist/
+          fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
