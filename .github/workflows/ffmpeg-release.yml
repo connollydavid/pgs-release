@@ -189,7 +189,7 @@ jobs:
           # -lwinpthread in Libs.private. Placing libwinpthread.a in $PREFIX/lib
           # (the first -L path) means every -lwinpthread in the final link
           # resolves to the static copy, not the DLL import library.
-          if [ -n "$CROSS" ]; then
+          if [ -n "$CROSS" ] && [ -f "/usr/$CROSS/lib/libwinpthread.a" ]; then
             cp "/usr/$CROSS/lib/libwinpthread.a" "$PREFIX/lib/"
           fi
 
