@@ -80,7 +80,7 @@ Phase 2a: [PATCH 1/2] OkLab move + Quantizer API          ← DONE (8e60ec654f, 
 Phase 2b: [PATCH 1/2] Palette mapping extraction           ← DONE (3326aa9602, 557d01153a)
 Phase 3:  [PATCH 1/2] Text-to-bitmap + rect splitting     ← DONE
 Phase 3a: [PATCH 1/1] Text-to-bitmap: universal animation ← DONE
-Phase 4:  [PATCH 1/1] DVD subtitle consolidation           ← first consumer of shared API
+Phase 4:  [PATCH 1/1] DVD subtitle consolidation           ← NULL RESULT, skipped
 Phase 5:  [PATCH 1/4] Median Cut + ELBG + GIF cleanup      ← complete unification
 ```
 
@@ -197,13 +197,18 @@ classification (ALPHA/POSITION/CONTENT), and optimal PGS Display Set
 encoding per change type. Handles fades, motion, and complex transforms
 without parsing format-specific tags. See PHASE3.md for full details.
 
-### Phase 4: DVD subtitle consolidation (after Phase 2)
+### Phase 4: DVD subtitle consolidation — NULL RESULT, skipped
 
-```
-[PATCH 1/1] lavc/dvdsubenc: use libavutil quantizer and palette mapping
-```
+Investigation found that OkLab perceptual distance produces **worse**
+color selections than `dvdsubenc.c`'s existing sRGB distance for DVD's
+sparse 16-color global palette. 35.66% divergence rate, but OkLab
+frequently maps chromatic colors to wrong-hue achromatic entries (e.g.
+gray→teal, skin tone→gray, yellow→green). OkLab's chroma compression
+requires palette density to work well; 16 colors is too sparse.
 
-Single patch replacing ~130 lines of ad-hoc code with shared API calls.
+DVD uses palette **mapping** (select from fixed 16), not palette
+**generation** — the shared quantizer API (`av_quantize_*`) is the
+wrong tool entirely. See [PHASE4.md](PHASE4.md) for full data.
 
 ### Phase 5: Algorithm integration + GIF cleanup (after Phase 2)
 
@@ -496,12 +501,9 @@ ffmpeg -i movie.mkv -map 0:s -c:s pgssub -s 1920x1080 output.sup
 
 ---
 
-## Phase 4 Detail: DVD Subtitle Consolidation
+## Phase 4 Detail: DVD Subtitle Consolidation — NULL RESULT
 
-Replace `dvdsubenc.c`'s ad-hoc color matching with shared quantizer API.
-Replaces ~130 LOC (`color_distance`, `count_colors`, `select_palette`,
-`build_color_map`) with `av_quantize_generate_palette()` + `av_palette_apply()`.
-Upgrades to OkLab perceptual distance, adds dithering (critical at 4 colors).
+Investigated and rejected. See [PHASE4.md](PHASE4.md) for full analysis.
 
 ---
 
@@ -527,7 +529,7 @@ Upgrades to OkLab perceptual distance, adds dithering (critical at 4 colors).
 
 | Location | Current code | Replacement | Phase |
 |----------|-------------|-------------|-------|
-| `dvdsubenc.c:100-235` | color_distance, count_colors, select_palette, build_color_map | `av_quantize_*` + `av_palette_apply()` | 4 |
+| `dvdsubenc.c:100-235` | color_distance, count_colors, select_palette, build_color_map | ~~`av_quantize_*` + `av_palette_apply()`~~ NULL RESULT — existing sRGB distance is better for sparse 16-color palette | ~~4~~ |
 | `gif.c:67-97` | shrink_palette, remap_frame_to_palette | `av_palette_apply()` | 5 |
 | `vf_palettegen.c:319-392` | get_palette_frame (median cut) | `AV_QUANTIZE_MEDIAN_CUT` | 5 |
 | `vf_elbg.c` + `elbg.{h,c}` | ELBG vector quantizer | `AV_QUANTIZE_ELBG` | 5 |
@@ -566,7 +568,7 @@ Upgrades to OkLab perceptual distance, adds dithering (critical at 4 colors).
 | 3a | `libavcodec/pgssubenc.c` | palette_version ordering fix |
 | 3a | `fftools/ffmpeg_enc.c` | Animation dispatch + orchestration |
 | 3a | `tests/api/Makefile`, `tests/fate/api.mak` | FATE test targets |
-| 4 | `libavcodec/dvdsubenc.c` | Use shared quantizer |
+| ~~4~~ | ~~`libavcodec/dvdsubenc.c`~~ | ~~Use shared quantizer~~ NULL RESULT |
 | 5 | `libavutil/{quantize.c,quantize.h}` | Add algorithms |
 | 5 | `libavfilter/{vf_palettegen.c,vf_elbg.c}`, `libavcodec/gif.c` | Use shared API |
 
@@ -590,9 +592,9 @@ All committed on `pgs-series` branch, reorganized into 4 independent
 submission series (A: PGS encoder, B: quantization, C: renderer,
 D: text-to-bitmap). See plan file for series details.
 
-### Phase 4: DVD subtitle consolidation
-8. Replace dvdsubenc.c with shared API calls
-9. Verify `make fate`
+### Phase 4: NULL RESULT — skipped
+Investigation found OkLab distance worse than sRGB for DVD's sparse
+palette. See PHASE4.md.
 
 ### Phase 5: Algorithm integration + GIF
 10. Add Median Cut + ELBG algorithms, refactor palettegen + elbg + gif
@@ -631,6 +633,7 @@ make -j$(nproc) && make fate  # all quantizers unified
 | Phase 1 + 1a | [PHASE1.md](PHASE1.md) | Retrospective + amendment plan |
 | Phase 2a + 2b | [PHASE2.md](PHASE2.md) | Retrospective (complete) |
 | Phase 3 + 3a | [PHASE3.md](PHASE3.md) | Retrospective + animation plan |
+| Phase 4 | [PHASE4.md](PHASE4.md) | Null result — OkLab worse than sRGB for DVD |
 
 ## References
 
