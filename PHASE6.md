@@ -1,6 +1,6 @@
 # Phase 6: GIF Encoder RGBA Quantization
 
-## Status: IN PROGRESS
+## Status: DONE
 
 ## Goal
 
@@ -10,8 +10,8 @@ filter pipeline.
 
 ## Patches
 
-1. `lavc/gif: add RGBA input with built-in quantization` (pending)
-   - Add `AV_PIX_FMT_RGB32` to accepted pixel formats
+1. `lavc/gif: add RGBA input with built-in quantization` (d215fe732d)
+   - Add `AV_PIX_FMT_RGBA` to accepted pixel formats
    - When input is RGBA, quantize each frame via `av_quantize_*`
    - Map pixels via `ff_palette_map_apply()` with dithering
    - Add `quantize_method` option (elbg/mediancut/neuquant, default mediancut)

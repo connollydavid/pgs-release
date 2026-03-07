@@ -257,9 +257,9 @@ footer a { color: var(--fg2); }
   <h1>Text-to-Bitmap Subtitle Conversion for FFmpeg</h1>
   <p>FFmpeg can transcode between virtually any audio and video format. Subtitles are the exception. Converting text subtitles (SRT, ASS, WebVTT) to bitmap format (PGS, DVB, DVD, XSUB) has been broken for over a decade.</p>
   <div class="error-msg">"Subtitle encoding currently only possible from text to text or bitmap to bitmap"</div>
-  <p>This is <a href="https://trac.ffmpeg.org/ticket/3819">FFmpeg bug #3819</a>. It blocks 72 subtitle conversion pairs. This repository contains 18 patches that fix it.</p>
+  <p>This is <a href="https://trac.ffmpeg.org/ticket/3819">FFmpeg bug #3819</a>. It blocks 72 subtitle conversion pairs. This repository contains 19 patches that fix it.</p>
   <div class="stats">
-    <div><span class="stat-num">18</span><span class="stat-label">Patches</span></div>
+    <div><span class="stat-num">19</span><span class="stat-label">Patches</span></div>
     <div><span class="stat-num">7</span><span class="stat-label">Tests</span></div>
     <div><span class="stat-num">72</span><span class="stat-label">Pairs unlocked</span></div>
   </div>
@@ -324,6 +324,18 @@ footer a { color: var(--fg2); }
     <ul>
       <li>Text-to-bitmap pipeline: render, quantize, encode</li>
       <li>Rect splitting, animation detection, event coalescing</li>
+    </ul>
+  </div>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-letter">E</span>
+      <span class="series-title">GIF Encoder</span>
+      <span class="series-count">&middot; 1 patch</span>
+    </div>
+    <ul>
+      <li>Direct RGBA-to-GIF encoding via <code>av_quantize_*</code> and <code>ff_palette_map_apply</code></li>
+      <li>Configurable quantizer (Median Cut default) and dithering (Floyd-Steinberg default)</li>
     </ul>
   </div>
 </section>

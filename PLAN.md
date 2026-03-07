@@ -82,10 +82,10 @@ Phase 3:  [PATCH 1/2] Text-to-bitmap + rect splitting     ← DONE
 Phase 3a: [PATCH 1/1] Text-to-bitmap: universal animation ← DONE
 Phase 4:  [PATCH 1/2] Region-weighted quantization          ← DONE (fd72cd4d83, b4ed0c4e82)
 Phase 5:  [PATCH 1/5] Median Cut + ELBG algorithm integration  ← DONE
-Phase 6:  [PATCH 1/2] GIF encoder RGBA quantization          ← direct RGBA→GIF encoding
+Phase 6:  [PATCH 1/1] GIF encoder RGBA quantization          ← DONE (d215fe732d)
 ```
 
-Total: ~18 patches across 8 submissions. Each phase is independent.
+Total: ~19 patches across 8 submissions. Each phase is independent.
 
 ### Phase dependency for animation
 
@@ -552,16 +552,15 @@ ffmpeg -i input.mp4 -vf "split[a][b];[a]palettegen[p];[b][p]paletteuse" out.gif
 ffmpeg -i input.mp4 -c:v gif out.gif
 ```
 
-**Patch 1: RGBA input with quantization**
-- Add `AV_PIX_FMT_RGB32` to accepted pixel formats
+**Single patch** (originally planned as two, but `ff_palette_map_apply()`
+does both mapping and dithering in one call -- splitting would create
+a non-dithered intermediate with terrible quality):
+- Add `AV_PIX_FMT_RGBA` to accepted pixel formats
 - When input is RGBA, use `av_quantize_generate_palette()` for palette
-- Use `av_quantize_apply()` for nearest-neighbor index mapping
-- Add `quantizer` encoder option (neuquant/mediancut, default mediancut)
-
-**Patch 2: Dithering support**
-- Route RGBA mapping through `ff_palette_map_apply()` instead of `av_quantize_apply()`
-- Add `dither` encoder option exposing the 9 dithering modes from palettemap
-- Default to Floyd-Steinberg for quality
+- Use `ff_palette_map_apply()` for dithered index mapping
+- Add `quantize_method` option (elbg/mediancut/neuquant, default mediancut)
+- Add `dither` option (9 modes from palettemap, default floyd_steinberg)
+- Per-frame palette, transparency via reserved slot 255
 
 **Trade-offs vs filter pipeline:**
 - Per-frame palette (no cross-frame optimization) — acceptable for most use cases
@@ -661,10 +660,9 @@ D: text-to-bitmap). See plan file for series details.
 12. Wrap ELBG as `AV_QUANTIZE_ELBG`
 13. Verify `make fate`
 
-### Phase 6: GIF encoder RGBA quantization
-14. Add RGBA input with built-in quantization to GIF encoder
-15. Add dithering support via `ff_palette_map_apply()`
-16. Verify `make fate`
+### Phase 6: GIF encoder RGBA quantization ← DONE
+14. Add RGBA input with built-in quantization + dithering to GIF encoder ← DONE (d215fe732d)
+15. Verify `make fate` ← DONE
 
 ## Verification
 
