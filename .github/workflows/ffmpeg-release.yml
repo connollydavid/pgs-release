@@ -184,10 +184,25 @@ jobs:
 
           AUTOCONF_FLAGS="$AUTOCONF_HOST --prefix=$PREFIX --enable-static --disable-shared"
 
-          # ── zlib ──────────────────────────────────────────────────────────
-          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o zlib.tar.gz \
-            https://github.com/madler/zlib/releases/download/v1.3.1/zlib-1.3.1.tar.gz
+          # ── Download pinned dependency sources from our deps release ─────
+          DEPS_URL="https://github.com/${{ github.repository }}/releases/download/deps-v1"
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o zlib.tar.gz    "$DEPS_URL/zlib-1.3.1.tar.gz" &
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o ft.tar.gz      "$DEPS_URL/freetype-VER-2-13-3.tar.gz" &
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o libpng.tar.gz  "$DEPS_URL/libpng-1.6.55.tar.gz" &
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o fribidi.tar.xz "$DEPS_URL/fribidi-1.0.16.tar.xz" &
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o gr2.tar.gz    "$DEPS_URL/graphite2-1.3.14.tar.gz" &
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o icu.tgz       "$DEPS_URL/icu4c-78.2-sources.tgz" &
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o hb.tar.xz      "$DEPS_URL/harfbuzz-10.2.0.tar.xz" &
+          wait
           tar xf zlib.tar.gz
+          tar xf libpng.tar.gz
+          tar xf ft.tar.gz
+          tar xf fribidi.tar.xz
+          tar xf gr2.tar.gz
+          tar xf icu.tgz
+          tar xf hb.tar.xz
+
+          # ── zlib ──────────────────────────────────────────────────────────
           cd zlib-1.3.1
           # zlib uses a non-autoconf configure; set CC explicitly
           CC="$CC" AR="$AR" RANLIB="$RANLIB" \
@@ -196,37 +211,66 @@ jobs:
           make -j$(nproc) install
           cd ..
 
-          # ── freetype2 (full: with zlib, without harfbuzz initially) ───────
-          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o ft.tar.gz \
-            https://github.com/freetype/freetype/archive/refs/tags/VER-2-13-3.tar.gz
-          tar xf ft.tar.gz
+          # ── libpng (needed for color emoji glyphs in FreeType) ────────────
+          cmake -S libpng-1.6.55 -B png-build \
+            -DCMAKE_TOOLCHAIN_FILE=/tmp/cross.cmake \
+            -DCMAKE_INSTALL_PREFIX="$PREFIX" \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DPNG_TESTS=OFF \
+            -DPNG_TOOLS=OFF \
+            -GNinja
+          ninja -C png-build install
+
+          # ── freetype2 (full: with zlib+png, without harfbuzz initially) ──
           cmake -S freetype-VER-2-13-3 -B ft-build \
             -DCMAKE_TOOLCHAIN_FILE=/tmp/cross.cmake \
             -DCMAKE_INSTALL_PREFIX="$PREFIX" \
             -DBUILD_SHARED_LIBS=OFF \
             -DFT_REQUIRE_ZLIB=ON \
             -DFT_DISABLE_BZIP2=ON \
-            -DFT_DISABLE_PNG=ON \
+            -DFT_REQUIRE_PNG=ON \
             -DFT_DISABLE_HARFBUZZ=ON \
             -DFT_DISABLE_BROTLI=ON \
             -GNinja
           ninja -C ft-build install
 
           # ── fribidi (BiDi algorithm for RTL languages) ────────────────────
-          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o fribidi.tar.xz \
-            https://github.com/fribidi/fribidi/releases/download/v1.0.16/fribidi-1.0.16.tar.xz
-          tar xf fribidi.tar.xz
           cd fribidi-1.0.16
           CFLAGS="-O2" \
           ./configure $AUTOCONF_FLAGS --disable-docs
           make -j$(nproc) install
           cd ..
 
+          # ── graphite2 (SIL minority script rendering) ──────────────────
+          cmake -S graphite-1.3.14 -B gr2-build \
+            -DCMAKE_TOOLCHAIN_FILE=/tmp/cross.cmake \
+            -DCMAKE_INSTALL_PREFIX="$PREFIX" \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DGRAPHITE2_TESTS=OFF \
+            -GNinja
+          ninja -C gr2-build install
+
+          # ── ICU (Unicode normalization for harfbuzz) ────────────────────
+          # ICU cross-compile requires a native build first
+          if [ -n "$CROSS" ] || [ -n "$MACOS_TARGET" ]; then
+            mkdir -p icu-native-build && cd icu-native-build
+            CC=cc CXX=c++ ../icu/source/configure \
+              --disable-shared --enable-static --disable-tests \
+              --disable-samples --disable-extras --disable-icuio
+            make -j$(nproc)
+            cd ..
+            ICU_CROSS_BUILD="--with-cross-build=$PWD/icu-native-build"
+          else
+            ICU_CROSS_BUILD=""
+          fi
+          mkdir -p icu-build && cd icu-build
+          ../icu/source/configure $AUTOCONF_FLAGS \
+            --disable-tests --disable-samples --disable-extras \
+            --disable-icuio $ICU_CROSS_BUILD
+          make -j$(nproc) install
+          cd ..
+
           # ── harfbuzz (OpenType shaping: Arabic, Devanagari, CJK, etc.) ────
-          # Uses CMake (autotools removed in 3.x)
-          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors -o hb.tar.xz \
-            https://github.com/harfbuzz/harfbuzz/releases/download/10.2.0/harfbuzz-10.2.0.tar.xz
-          tar xf hb.tar.xz
           # Windows: harfbuzz.cc amalgamation exceeds default COFF section limit
           HB_EXTRA=()
           [[ "${CROSS:-}" == *mingw* ]] && HB_EXTRA+=(-DCMAKE_CXX_FLAGS=-Wa,-mbig-obj)
@@ -238,8 +282,8 @@ jobs:
             -DBUILD_SHARED_LIBS=OFF \
             -DHB_HAVE_FREETYPE=ON \
             -DHB_HAVE_GLIB=OFF \
-            -DHB_HAVE_ICU=OFF \
-            -DHB_HAVE_GRAPHITE2=OFF \
+            -DHB_HAVE_ICU=ON \
+            -DHB_HAVE_GRAPHITE2=ON \
             -DHB_BUILD_SUBSET=OFF \
             -DHB_BUILD_TESTS=OFF \
             -DHB_BUILD_DOCS=OFF \
@@ -255,7 +299,7 @@ jobs:
             -DBUILD_SHARED_LIBS=OFF \
             -DFT_REQUIRE_ZLIB=ON \
             -DFT_DISABLE_BZIP2=ON \
-            -DFT_DISABLE_PNG=ON \
+            -DFT_REQUIRE_PNG=ON \
             -DFT_REQUIRE_HARFBUZZ=ON \
             -DFT_DISABLE_BROTLI=ON \
             -GNinja
