@@ -81,10 +81,11 @@ Phase 2b: [PATCH 1/2] Palette mapping extraction           ← DONE (3326aa9602,
 Phase 3:  [PATCH 1/2] Text-to-bitmap + rect splitting     ← DONE
 Phase 3a: [PATCH 1/1] Text-to-bitmap: universal animation ← DONE
 Phase 4:  [PATCH 1/2] Region-weighted quantization          ← DONE (fd72cd4d83, b4ed0c4e82)
-Phase 5:  [PATCH 1/4] Median Cut + ELBG + GIF cleanup      ← complete unification
+Phase 5:  [PATCH 1/3] Median Cut + ELBG algorithm integration ← algorithm unification
+Phase 6:  [PATCH 1/2] GIF encoder RGBA quantization          ← direct RGBA→GIF encoding
 ```
 
-Total: ~16 patches across 7 submissions. Each phase is independent.
+Total: ~18 patches across 8 submissions. Each phase is independent.
 
 ### Phase dependency for animation
 
@@ -211,14 +212,27 @@ gets fair palette representation. Quality validation uses HyAB distance
 (Abasi et al. 2020) — Euclidean OkLab gives misleading results for
 sparse per-region palette coverage. See PHASE4.md for full design.
 
-### Phase 5: Algorithm integration + GIF cleanup (after Phase 2)
+### Phase 5: Algorithm integration (after Phase 2)
 
 ```
-[PATCH 1/4] libavutil: add Median Cut quantizer algorithm
-[PATCH 2/4] lavfi/vf_palettegen: use libavutil quantizer API
-[PATCH 3/4] libavutil: add ELBG quantizer algorithm
-[PATCH 4/4] lavc/gif: use libavutil palette mapping
+[PATCH 1/3] libavutil: add Median Cut quantizer algorithm
+[PATCH 2/3] lavfi/vf_palettegen: use libavutil quantizer API
+[PATCH 3/3] libavutil: add ELBG quantizer algorithm
 ```
+
+### Phase 6: GIF encoder RGBA quantization (after Phase 5)
+
+```
+[PATCH 1/2] lavc/gif: add RGBA input with built-in quantization
+[PATCH 2/2] lavc/gif: add dithering support via palette mapping
+```
+
+Accepts `AV_PIX_FMT_RGB32` input directly, using `av_quantize_*` for
+palette generation and `ff_palette_map_apply()` for dithered mapping.
+Simplifies GIF encoding from a complex filter pipeline to a single
+encoder call. The `palettegen`+`paletteuse` pipeline remains available
+for power users who need cross-frame palette analysis or specific
+dithering tuning.
 
 ### Patch discipline
 
@@ -516,11 +530,42 @@ See [PHASE4.md](PHASE4.md) for full design and implementation notes.
 
 ---
 
-## Phase 5 Detail: Algorithm Integration + GIF
+## Phase 5 Detail: Algorithm Integration
 
 - Wrap Median Cut from `vf_palettegen.c` as `AV_QUANTIZE_MEDIAN_CUT`
 - Wrap ELBG from `libavcodec/elbg.{h,c}` as `AV_QUANTIZE_ELBG`
-- Replace `gif.c` palette code with shared API
+- Refactor `vf_palettegen.c` to use shared quantizer API
+
+## Phase 6 Detail: GIF Encoder RGBA Quantization
+
+Add `AV_PIX_FMT_RGB32` support to the GIF encoder so users can encode
+GIF directly from RGBA without the `palettegen`+`paletteuse` filter
+pipeline:
+
+```bash
+# Before (complex filter chain)
+ffmpeg -i input.mp4 -vf "split[a][b];[a]palettegen[p];[b][p]paletteuse" out.gif
+
+# After (direct encoding)
+ffmpeg -i input.mp4 -c:v gif out.gif
+```
+
+**Patch 1: RGBA input with quantization**
+- Add `AV_PIX_FMT_RGB32` to accepted pixel formats
+- When input is RGBA, use `av_quantize_generate_palette()` for palette
+- Use `av_quantize_apply()` for nearest-neighbor index mapping
+- Add `quantizer` encoder option (neuquant/mediancut, default mediancut)
+
+**Patch 2: Dithering support**
+- Route RGBA mapping through `ff_palette_map_apply()` instead of `av_quantize_apply()`
+- Add `dither` encoder option exposing the 9 dithering modes from palettemap
+- Default to Floyd-Steinberg for quality
+
+**Trade-offs vs filter pipeline:**
+- Per-frame palette (no cross-frame optimization) — acceptable for most use cases
+- No `stats_mode=diff_frames` equivalent — animated GIFs with changing content may use more bandwidth
+- Dithering quality equivalent to paletteuse when using same mode
+- Global palette option: cache first frame's palette for subsequent frames (optional enhancement)
 
 ---
 
@@ -539,9 +584,9 @@ See [PHASE4.md](PHASE4.md) for full design and implementation notes.
 | Location | Current code | Replacement | Phase |
 |----------|-------------|-------------|-------|
 | `libavutil/quantize.{h,c}` | single-buffer quantization only | `av_quantize_add_region()` for multi-event | 4 |
-| `gif.c:67-97` | shrink_palette, remap_frame_to_palette | `av_palette_apply()` | 5 |
 | `vf_palettegen.c:319-392` | get_palette_frame (median cut) | `AV_QUANTIZE_MEDIAN_CUT` | 5 |
 | `vf_elbg.c` + `elbg.{h,c}` | ELBG vector quantizer | `AV_QUANTIZE_ELBG` | 5 |
+| `gif.c` | PAL8 only, no built-in quantization | RGBA via `av_quantize_*` + `ff_palette_map_apply()` | 6 |
 
 ---
 
@@ -608,9 +653,16 @@ D: text-to-bitmap). See plan file for series details.
 10. ~~Add HyAB distance for quality validation~~ — dropped, SSE sufficient (76% improvement)
 11. Verify `make fate` ← DONE
 
-### Phase 5: Algorithm integration + GIF
-10. Add Median Cut + ELBG algorithms, refactor palettegen + elbg + gif
-11. Verify `make fate`
+### Phase 5: Algorithm integration
+10. Extract Median Cut from vf_palettegen as `AV_QUANTIZE_MEDIAN_CUT`
+11. Refactor vf_palettegen to use shared quantizer API
+12. Wrap ELBG as `AV_QUANTIZE_ELBG`
+13. Verify `make fate`
+
+### Phase 6: GIF encoder RGBA quantization
+14. Add RGBA input with built-in quantization to GIF encoder
+15. Add dithering support via `ff_palette_map_apply()`
+16. Verify `make fate`
 
 ## Verification
 
@@ -639,8 +691,12 @@ make -j$(nproc) && make fate
 # Karaoke test: overlapping events with different color profiles
 ./ffmpeg -i karaoke_test.ass -c:s pgssub -s 1920x1080 /tmp/karaoke.sup
 
-# Phase 5
+# Phase 5 (algorithm integration)
 make -j$(nproc) && make fate  # all quantizers unified
+
+# Phase 6 (GIF RGBA quantization)
+make -j$(nproc) && make fate
+./ffmpeg -i input.mp4 -c:v gif -quantizer mediancut -dither floyd_steinberg /tmp/test.gif
 ```
 
 ## Detailed Phase Documentation
@@ -650,7 +706,9 @@ make -j$(nproc) && make fate  # all quantizers unified
 | Phase 1 + 1a | [PHASE1.md](PHASE1.md) | Retrospective + amendment plan |
 | Phase 2a + 2b | [PHASE2.md](PHASE2.md) | Retrospective (complete) |
 | Phase 3 + 3a | [PHASE3.md](PHASE3.md) | Retrospective + animation plan |
-| Phase 4 | [PHASE4.md](PHASE4.md) | Region-weighted quantization + HyAB |
+| Phase 4 | [PHASE4.md](PHASE4.md) | Region-weighted quantization |
+| Phase 5 | [PHASE5.md](PHASE5.md) | Algorithm integration |
+| Phase 6 | [PHASE6.md](PHASE6.md) | GIF encoder RGBA quantization |
 
 ## References
 
