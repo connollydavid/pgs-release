@@ -80,7 +80,7 @@ Phase 2a: [PATCH 1/2] OkLab move + Quantizer API          ← DONE (8e60ec654f, 
 Phase 2b: [PATCH 1/2] Palette mapping extraction           ← DONE (3326aa9602, 557d01153a)
 Phase 3:  [PATCH 1/2] Text-to-bitmap + rect splitting     ← DONE
 Phase 3a: [PATCH 1/1] Text-to-bitmap: universal animation ← DONE
-Phase 4:  [PATCH 1/1] Region-weighted quantization          ← karaoke palette quality
+Phase 4:  [PATCH 1/2] Region-weighted quantization          ← DONE (fd72cd4d83, b4ed0c4e82)
 Phase 5:  [PATCH 1/4] Median Cut + ELBG + GIF cleanup      ← complete unification
 ```
 
@@ -509,12 +509,10 @@ multi-event palette generation. When overlapping events contribute to a
 single PGS Display Set, equal-weight sampling ensures each event's
 colors get fair palette representation regardless of pixel count.
 
-Includes HyAB distance metric (Abasi et al. 2020) for quality
-validation — Euclidean OkLab underweights chroma for sparse per-region
-palette coverage, producing wrong-hue nearest-neighbor matches.
+HyAB distance metric was considered but dropped — SSE proved sufficient
+to demonstrate the 76% karaoke quality improvement unambiguously.
 
-See [PHASE4.md](PHASE4.md) for full design, distance metric analysis,
-and API specification.
+See [PHASE4.md](PHASE4.md) for full design and implementation notes.
 
 ---
 
@@ -604,11 +602,11 @@ All committed on `pgs-series` branch, reorganized into 4 independent
 submission series (A: PGS encoder, B: quantization, C: renderer,
 D: text-to-bitmap). See plan file for series details.
 
-### Phase 4: Region-weighted quantization
-8. Add `av_quantize_add_region()` to quantizer API
-9. Use `add_region()` in coalescing path for multi-event frames
-10. Add HyAB distance for quality validation
-11. Verify `make fate`
+### Phase 4: Region-weighted quantization ← DONE
+8. Add `av_quantize_add_region()` to quantizer API ← DONE
+9. Use `add_region()` in coalescing path for multi-event frames ← DONE
+10. ~~Add HyAB distance for quality validation~~ — dropped, SSE sufficient (76% improvement)
+11. Verify `make fate` ← DONE
 
 ### Phase 5: Algorithm integration + GIF
 10. Add Median Cut + ELBG algorithms, refactor palettegen + elbg + gif
