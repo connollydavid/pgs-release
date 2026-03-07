@@ -243,14 +243,13 @@ jobs:
 
           # ── graphite2 (SIL script rendering) ──────────────────────────
           # graphite2 has no option to skip tests; patch CMakeLists.txt
-          # BSD sed (macOS) needs -i '', GNU sed needs -i
-          if [ "$(uname)" = "Darwin" ]; then
-            sed -i '' '/add_subdirectory(tests)/d; /add_subdirectory(gr2fonttest)/d' \
-              graphite-1.3.14/CMakeLists.txt
-          else
-            sed -i '/add_subdirectory(tests)/d; /add_subdirectory(gr2fonttest)/d' \
-              graphite-1.3.14/CMakeLists.txt
-          fi
+          # Strip all test infrastructure from graphite2
+          SED_I=(sed -i)
+          [ "$(uname)" = "Darwin" ] && SED_I=(sed -i '')
+          "${SED_I[@]}" '/add_subdirectory(tests)/d; /add_subdirectory(gr2fonttest)/d; /enable_testing/d' \
+            graphite-1.3.14/CMakeLists.txt
+          "${SED_I[@]}" '/nolib_test/d' \
+            graphite-1.3.14/src/CMakeLists.txt
           cmake -S graphite-1.3.14 -B gr2-build \
             -DCMAKE_TOOLCHAIN_FILE=/tmp/cross.cmake \
             -DCMAKE_INSTALL_PREFIX="$PREFIX" \
@@ -278,6 +277,12 @@ jobs:
             $ICU_COMMON $ICU_CROSS
           make -j$(nproc) install
           cd ..
+          # ICU static builds use 's' prefix (libsicuuc.a); create
+          # standard-name symlinks so CMake FindICU can find them
+          for lib in "$PREFIX"/lib/libsicu*.a; do
+            [ -f "$lib" ] || continue
+            ln -sf "$(basename "$lib")" "${lib/libsicu/libicu}"
+          done
 
           # ── harfbuzz (OpenType shaping: Arabic, Devanagari, CJK, etc.) ────
           # Windows: harfbuzz.cc amalgamation exceeds default COFF section limit
