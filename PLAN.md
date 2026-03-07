@@ -80,7 +80,7 @@ Phase 2a: [PATCH 1/2] OkLab move + Quantizer API          ← DONE (8e60ec654f, 
 Phase 2b: [PATCH 1/2] Palette mapping extraction           ← DONE (3326aa9602, 557d01153a)
 Phase 3:  [PATCH 1/2] Text-to-bitmap + rect splitting     ← DONE
 Phase 3a: [PATCH 1/1] Text-to-bitmap: universal animation ← DONE
-Phase 4:  [PATCH 1/1] DVD subtitle consolidation           ← NULL RESULT, skipped
+Phase 4:  [PATCH 1/1] Region-weighted quantization          ← karaoke palette quality
 Phase 5:  [PATCH 1/4] Median Cut + ELBG + GIF cleanup      ← complete unification
 ```
 
@@ -98,7 +98,8 @@ Phase 1 (encoder + composition states) ← DONE
 Phase 3 (text-to-bitmap)  ──→ Phase 3a (universal animation pipeline)
 ```
 
-Phases 2a, 2b, 4, 5 are unaffected by animation work.
+Phases 2a, 2b, 5 are unaffected by animation work. Phase 4 (region-weighted
+quantization) improves karaoke quality specifically during animation.
 
 ### Phase 0: RFC email (before any patches)
 
@@ -197,18 +198,18 @@ classification (ALPHA/POSITION/CONTENT), and optimal PGS Display Set
 encoding per change type. Handles fades, motion, and complex transforms
 without parsing format-specific tags. See PHASE3.md for full details.
 
-### Phase 4: DVD subtitle consolidation — NULL RESULT, skipped
+### Phase 4: Region-weighted quantization (after Phase 3)
 
-Investigation found that OkLab perceptual distance produces **worse**
-color selections than `dvdsubenc.c`'s existing sRGB distance for DVD's
-sparse 16-color global palette. 35.66% divergence rate, but OkLab
-frequently maps chromatic colors to wrong-hue achromatic entries (e.g.
-gray→teal, skin tone→gray, yellow→green). OkLab's chroma compression
-requires palette density to work well; 16 colors is too sparse.
+```
+[PATCH 1/1] lavu/quantize: add region-weighted palette generation
+```
 
-DVD uses palette **mapping** (select from fixed 16), not palette
-**generation** — the shared quantizer API (`av_quantize_*`) is the
-wrong tool entirely. See [PHASE4.md](PHASE4.md) for full data.
+When overlapping subtitle events have radically different color profiles
+(karaoke + dialogue), NeuQuant allocates palette entries by pixel count,
+starving the smaller event. Region-weighted sampling ensures each event
+gets fair palette representation. Quality validation uses HyAB distance
+(Abasi et al. 2020) — Euclidean OkLab gives misleading results for
+sparse per-region palette coverage. See PHASE4.md for full design.
 
 ### Phase 5: Algorithm integration + GIF cleanup (after Phase 2)
 
@@ -501,9 +502,19 @@ ffmpeg -i movie.mkv -map 0:s -c:s pgssub -s 1920x1080 output.sup
 
 ---
 
-## Phase 4 Detail: DVD Subtitle Consolidation — NULL RESULT
+## Phase 4 Detail: Region-Weighted Quantization
 
-Investigated and rejected. See [PHASE4.md](PHASE4.md) for full analysis.
+Extends `av_quantize_*` API with `av_quantize_add_region()` for
+multi-event palette generation. When overlapping events contribute to a
+single PGS Display Set, equal-weight sampling ensures each event's
+colors get fair palette representation regardless of pixel count.
+
+Includes HyAB distance metric (Abasi et al. 2020) for quality
+validation — Euclidean OkLab underweights chroma for sparse per-region
+palette coverage, producing wrong-hue nearest-neighbor matches.
+
+See [PHASE4.md](PHASE4.md) for full design, distance metric analysis,
+and API specification.
 
 ---
 
@@ -529,7 +540,7 @@ Investigated and rejected. See [PHASE4.md](PHASE4.md) for full analysis.
 
 | Location | Current code | Replacement | Phase |
 |----------|-------------|-------------|-------|
-| `dvdsubenc.c:100-235` | color_distance, count_colors, select_palette, build_color_map | ~~`av_quantize_*` + `av_palette_apply()`~~ NULL RESULT — existing sRGB distance is better for sparse 16-color palette | ~~4~~ |
+| `libavutil/quantize.{h,c}` | single-buffer quantization only | `av_quantize_add_region()` for multi-event | 4 |
 | `gif.c:67-97` | shrink_palette, remap_frame_to_palette | `av_palette_apply()` | 5 |
 | `vf_palettegen.c:319-392` | get_palette_frame (median cut) | `AV_QUANTIZE_MEDIAN_CUT` | 5 |
 | `vf_elbg.c` + `elbg.{h,c}` | ELBG vector quantizer | `AV_QUANTIZE_ELBG` | 5 |
@@ -568,7 +579,8 @@ Investigated and rejected. See [PHASE4.md](PHASE4.md) for full analysis.
 | 3a | `libavcodec/pgssubenc.c` | palette_version ordering fix |
 | 3a | `fftools/ffmpeg_enc.c` | Animation dispatch + orchestration |
 | 3a | `tests/api/Makefile`, `tests/fate/api.mak` | FATE test targets |
-| ~~4~~ | ~~`libavcodec/dvdsubenc.c`~~ | ~~Use shared quantizer~~ NULL RESULT |
+| 4 | `libavutil/quantize.{h,c}` | Add `av_quantize_add_region()` |
+| 4 | `fftools/ffmpeg_enc.c` | Use `add_region()` in coalescing path |
 | 5 | `libavutil/{quantize.c,quantize.h}` | Add algorithms |
 | 5 | `libavfilter/{vf_palettegen.c,vf_elbg.c}`, `libavcodec/gif.c` | Use shared API |
 
@@ -592,9 +604,11 @@ All committed on `pgs-series` branch, reorganized into 4 independent
 submission series (A: PGS encoder, B: quantization, C: renderer,
 D: text-to-bitmap). See plan file for series details.
 
-### Phase 4: NULL RESULT — skipped
-Investigation found OkLab distance worse than sRGB for DVD's sparse
-palette. See PHASE4.md.
+### Phase 4: Region-weighted quantization
+8. Add `av_quantize_add_region()` to quantizer API
+9. Use `add_region()` in coalescing path for multi-event frames
+10. Add HyAB distance for quality validation
+11. Verify `make fate`
 
 ### Phase 5: Algorithm integration + GIF
 10. Add Median Cut + ELBG algorithms, refactor palettegen + elbg + gif
@@ -622,7 +636,12 @@ FATE_SAMPLES=/tmp/fate-samples make fate-api-pgs-fade fate-api-pgs-animation-uti
 ./ffmpeg -i test_fade.ass -c:s pgssub -s 1920x1080 /tmp/fade.sup
 ./ffprobe -v error -show_packets /tmp/fade.sup  # verify multiple display sets
 
-# Phase 4-5
+# Phase 4 (region-weighted quantization)
+make -j$(nproc) && make fate
+# Karaoke test: overlapping events with different color profiles
+./ffmpeg -i karaoke_test.ass -c:s pgssub -s 1920x1080 /tmp/karaoke.sup
+
+# Phase 5
 make -j$(nproc) && make fate  # all quantizers unified
 ```
 
@@ -633,7 +652,7 @@ make -j$(nproc) && make fate  # all quantizers unified
 | Phase 1 + 1a | [PHASE1.md](PHASE1.md) | Retrospective + amendment plan |
 | Phase 2a + 2b | [PHASE2.md](PHASE2.md) | Retrospective (complete) |
 | Phase 3 + 3a | [PHASE3.md](PHASE3.md) | Retrospective + animation plan |
-| Phase 4 | [PHASE4.md](PHASE4.md) | Null result — OkLab worse than sRGB for DVD |
+| Phase 4 | [PHASE4.md](PHASE4.md) | Region-weighted quantization + HyAB |
 
 ## References
 
