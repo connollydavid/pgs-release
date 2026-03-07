@@ -243,8 +243,14 @@ jobs:
 
           # ── graphite2 (SIL script rendering) ──────────────────────────
           # graphite2 has no option to skip tests; patch CMakeLists.txt
-          sed -i '/add_subdirectory(tests)/d; /add_subdirectory(gr2fonttest)/d' \
-            graphite-1.3.14/CMakeLists.txt
+          # BSD sed (macOS) needs -i '', GNU sed needs -i
+          if [ "$(uname)" = "Darwin" ]; then
+            sed -i '' '/add_subdirectory(tests)/d; /add_subdirectory(gr2fonttest)/d' \
+              graphite-1.3.14/CMakeLists.txt
+          else
+            sed -i '/add_subdirectory(tests)/d; /add_subdirectory(gr2fonttest)/d' \
+              graphite-1.3.14/CMakeLists.txt
+          fi
           cmake -S graphite-1.3.14 -B gr2-build \
             -DCMAKE_TOOLCHAIN_FILE=/tmp/cross.cmake \
             -DCMAKE_INSTALL_PREFIX="$PREFIX" \
@@ -255,22 +261,21 @@ jobs:
           ninja -C gr2-build install
 
           # ── ICU (Unicode normalization for harfbuzz) ────────────────────
+          ICU_COMMON="--disable-tests --disable-samples --disable-extras --disable-icuio"
           # ICU cross-compile requires a native build first
           if [ -n "$CROSS" ] || [ -n "$MACOS_TARGET" ]; then
             mkdir -p icu-native-build && cd icu-native-build
             CC=cc CXX=c++ ../icu/source/configure \
-              --disable-shared --enable-static --disable-tests \
-              --disable-samples --disable-extras --disable-icuio
+              --disable-shared --enable-static $ICU_COMMON
             make -j$(nproc)
             cd ..
-            ICU_CROSS_BUILD="--with-cross-build=$PWD/icu-native-build"
+            ICU_CROSS="--with-cross-build=$PWD/icu-native-build --disable-tools"
           else
-            ICU_CROSS_BUILD=""
+            ICU_CROSS=""
           fi
           mkdir -p icu-build && cd icu-build
           ../icu/source/configure $AUTOCONF_FLAGS \
-            --disable-tests --disable-samples --disable-extras \
-            --disable-icuio $ICU_CROSS_BUILD
+            $ICU_COMMON $ICU_CROSS
           make -j$(nproc) install
           cd ..
 
