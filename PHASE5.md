@@ -4,8 +4,8 @@
 
 ## Goal
 
-Extract Median Cut quantization algorithm into the shared `av_quantize_*`
-API, then refactor `vf_palettegen` to use it.
+Extract Median Cut and ELBG quantization algorithms into the shared
+`av_quantize_*` API, then refactor `vf_palettegen` to use it.
 
 ## Patches
 
@@ -23,24 +23,18 @@ API, then refactor `vf_palettegen` to use it.
    - Filter retains AVFilter boilerplate, stats_mode, reserve_transparent
    - All three modes verified: full/diff/single
 
-## ELBG — Dropped
+3. `lavu: move ELBG algorithm from libavcodec to libavutil` (552b923ffe)
+   - ELBG has zero libavcodec dependencies (only uses libavutil types)
+   - Moved elbg.{h,c} to libavutil, updated include guard
+   - Updated 5 consumers: cinepakenc, a64multienc, msvideo1enc, roqvideoenc, vf_elbg
+   - Updated both Makefiles, removed empty libavfilter dependencies section
 
-ELBG was originally planned as Patch 3 but was dropped:
-
-- **Architectural blocker:** ELBG is `avpriv_` in libavcodec. Wrapping it in
-  libavutil's quantize.c creates a wrong-direction dependency (libavutil→libavcodec).
-  The only clean fix is moving elbg.{h,c} to libavutil, which touches 4 upstream
-  encoders (cinepakenc, a64multienc, roqvideoenc, msvideo1enc) — a large
-  cross-cutting refactor.
-
-- **Poor fit:** ELBG is a general-purpose N-dimensional vector quantizer operating
-  on int arrays. Wrapping it as a color quantizer (RGBA→int vectors→codebook→palette)
-  adds complexity for marginal value when NeuQuant and Median Cut are purpose-built
-  for the task.
-
-- **Not needed:** Our PGS use case is well-served by the existing two algorithms.
-  If upstream wants ELBG in the quantize API later, the right approach is a separate
-  series moving elbg to libavutil first.
+4. `lavu: add ELBG quantizer algorithm` (eff80d0f46)
+   - Added AV_QUANTIZE_ELBG wrapping avpriv_elbg_do as color quantizer
+   - RGBA pixels → 4D int vectors → ELBG codebook → palette conversion
+   - Sorted AVQuantizeAlgorithm enum alphabetically with author/date citations
+   - Quality maps to ELBG steps: 1-10→1, 11-20→2, 21-30→3
+   - Added FATE test (4 color clusters), bumped lavu 60.28→60.29
 
 ## Design Decisions
 
@@ -76,3 +70,18 @@ void ff_mediancut_reset(ctx);               // reset for reuse
 
 `ff_mediancut_learn()` was refactored to be a convenience wrapper
 calling reset → add_color loop → build_palette.
+
+### ELBG move rationale
+
+ELBG was in libavcodec with `avpriv_` prefix but had zero libavcodec
+dependencies — only libavutil types (AVLFG, av_malloc, av_assert).
+Moving to libavutil corrects the dependency direction and enables
+wrapping in the quantize API without cross-library violations.
+
+### ELBG as color quantizer
+
+ELBG is a general N-dimensional vector quantizer. Wrapping it for
+RGBA color quantization converts pixels to 4D int vectors (R,G,B,A),
+runs ELBG to find codebook entries, then converts back to palette.
+Nearest-neighbor mapping uses simple squared Euclidean distance in
+RGBA space.
