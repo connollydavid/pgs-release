@@ -121,115 +121,104 @@ Fixed in C4: `(int64_t)canvas_w * canvas_h > INT_MAX / 4` check.
 
 ## E. STYLE -- Lines over 80 characters
 
-### E1. Our new code (must fix)
+### E1. Our new code -- DONE
 
-- [ ] `pgssubenc.c:553-558` -- AVOption lines (5 lines)
-- [ ] `quantize.h:52` -- enum comment
-- [ ] `palettemap.h:142` -- function declaration
-- [ ] `palettemap.c:106,109,114` -- function calls
-- [ ] `subtitle_render.h:72,168` -- Doxygen lines
-- [ ] `gif.c:558` -- error message
-- [ ] `ffmpeg_enc.c:938,1061,1131,1174` -- function calls
+All wrapped: AVOption entries, enum comments, function declarations,
+Doxygen lines, function calls in ffmpeg_enc.c, gif.c, pgssubenc.c,
+palettemap.c/h, subtitle_render.h, quantize.h.
 
-### E2. Verbatim upstream copies (judgment call)
+### E2. Verbatim upstream copies (skip)
 
-Lines in `palettemap.c` (dithering code, 95-110 chars) and `palette.c`
-(lookup tables, OkLab conversion) are verbatim copies from
-`vf_paletteuse.c`. Reformatting would make the extraction diff
-unverifiable. Note in commit message that these are kept verbatim.
+Lines in `palettemap.c` dithering code are verbatim from
+`vf_paletteuse.c`. Reformatting would break extraction diff.
 
-### E3. Test files (should fix)
+### E3. Test files -- DONE
 
-Multiple lines >80 in all 5 API test files and `quantize.c` test.
+All test files wrapped: fade, timing, coalesce, quantize tests.
 
 ---
 
 ## F. STYLE -- Other
 
-### F1. Hardcoded 256 instead of AVPALETTE_COUNT
+### F1. Hardcoded 256 instead of AVPALETTE_COUNT -- DONE
 
-**pgssubenc.c:** Lines 59, 195, 232, 313 use `256` where
-`AVPALETTE_COUNT` should be used.
+Fixed: `prev_palette[256]` and 3x `FFMIN(..., 256)` in pgssubenc.c
+now use `AVPALETTE_COUNT`.
 
-### F2. Missing spaces in operators
+### F2. Missing spaces in operators (skip)
 
-**palettemap.c:74:** `{.srgb=srgb}` -- use `.srgb = srgb`
-**palettemap.c:134:** `color>>24` -- use `color >> 24`
+**palettemap.c:** `{.srgb=srgb}` and `color>>24` are verbatim from
+`vf_paletteuse.c`. Fixing would break extraction diff verifiability.
 
-### F3. Include order
+### F3. Include order -- DONE
 
-**palettemap.c:32:** Own header `palettemap.h` should be first include,
-not last.
+Fixed: `palettemap.h` is now first include in `palettemap.c`.
 
-### F4. Internal structs exposed in header
+### F4. Internal structs exposed in header (skip)
 
-**palettemap.h:45-67:** `color_info`, `color_node`, `cached_color`,
-`cache_node` are implementation details leaked into the header solely
-for `ff_palette_map_get_nodes()`. Consider making return type opaque.
+Design concern. Making `color_node` opaque would require a larger
+refactor of `ff_palette_map_get_nodes()`. Defer to reviewer feedback.
 
-### F5. Unused include
+### F5. Unused include -- DONE
 
-**palettemap.h:30:** `#include "pixfmt.h"` is not used in the header.
+Fixed: removed `#include "pixfmt.h"` from `palettemap.h`.
 
-### F6. Doxygen `[in]/[out]` inconsistency
+### F6. Doxygen `[in]/[out]` inconsistency -- DONE
 
-**palettemap.h:** `ff_palette_map_init` uses plain `@param`,
-`ff_palette_map_get_palette` uses `@param[in]`. Pick one style.
+Fixed: standardized to plain `@param` throughout `palettemap.h`.
 
-### F7. Const-casts without comment
+### F7. Const-casts without comment -- DONE
 
-**subtitle_render.c:104,117,136,149:** Cast away `const` for libass API
-calls. Add brief comment: `/* libass API takes non-const but does not modify */`
+Fixed: added `/* libass API takes non-const but does not modify */`
+comment before the first libass cast in `subtitle_render.c`.
 
-### F8. Missing libass log callback
+### F8. Missing libass log callback (skip)
 
-**subtitle_render.c:54:** `ass_library_init()` without
-`ass_set_message_cb()`. libass messages bypass `av_log`. Compare
-`vf_subtitles.c` which sets a callback.
+Functional change, not a style fix. libass log integration could be
+a follow-up patch if reviewers request it.
 
-### F9. Alphabetical ordering in Makefile
+### F9. Alphabetical ordering in Makefile -- DONE
 
-**libavutil/Makefile:169:** `mediancut.o` should appear before `mem.o`,
-not after `murmur3.o`.
+Fixed: `mediancut.o` moved before `mem.o` in `libavutil/Makefile`.
 
-### F10. `av_assert0` in library code
+### F10. `av_assert0` in library code (skip)
 
-**mediancut.c:184-185:** `av_assert0(box->len >= 1)` will abort the
-process. Library code should return errors, not assert.
+False positive: caller loop bounds guarantee `box->len >= 1` and
+`new_box->len >= 1`. The assert is defensive and can never fire.
+`av_assert0` is widely used in FFmpeg library code for invariants.
 
-### F11. Missing `const` qualifier
+### F11. Missing `const` qualifier -- DONE
 
-**neuquant.c:140:** `int32_t *n = ctx->network[i]` in `contest()` --
-never modified, should be `const int32_t *n`.
+Fixed: `const int32_t *n` in `contest()` in `neuquant.c`.
 
-### F12. Missing Doxygen on internal functions
+### F12. Missing Doxygen on internal functions (skip)
 
-**neuquant.h:** No Doxygen on `ff_neuquant_*` functions. Contrast
-`mediancut.h` which documents them.
+Low priority. `neuquant.h` functions are internal (`ff_` prefix)
+and have clear signatures. Not worth the churn.
 
 ---
 
 ## G. COMMIT MESSAGE ISSUES
 
-### G1. Inconsistent trailer ordering
+### G1. Inconsistent trailer ordering -- DONE (in A4)
 
-Commits 936eea48 and 260e5d61 have `Co-Authored-By` before
-`Signed-off-by`. Convention is `Signed-off-by` first.
+Fixed during A4: all 19 commits now have Signed-off-by before
+Co-Authored-By.
 
-### G2. Missing ticket references
+### G2. Missing ticket references (defer)
 
 Commits 8-11 (fftools animation/coalescing) relate to #3819 but have
-no `Ref:` trailer. Commits 6-7 correctly reference it.
+no `Ref:` trailer. Low risk -- can add during final submission rebase.
 
-### G3. Body lines slightly over 72 characters
+### G3. Body lines slightly over 72 characters (defer)
 
-Commits 71d11a909b and 5bf6e8c8db have 1-2 lines at 73-74 chars.
+1-2 lines at 73-74 chars in 2 commits. Cosmetic, unlikely to be
+flagged. Can fix during final submission rebase.
 
-### G4. Misleading "Extract" wording
+### G4. Misleading "Extract" wording (defer)
 
-Commit 7af2968f says "Extract the Median Cut quantization algorithm"
-but it creates a new implementation; the extraction happens in the
-next commit (ee118f62). Reword to "Add" or "Implement".
+Median Cut commit says "Extract" but it implements. Can reword during
+final submission rebase.
 
 ---
 
@@ -283,14 +272,34 @@ Add a comment explaining this pattern.
 
 ---
 
-## Fix Priority Order
+## Fix Summary
 
-1. **A1-A4:** Non-ASCII + Signed-off-by (automated sweep, then rebase)
-2. **B1-B4:** Memory leaks and dangling pointer (security-adjacent)
-3. **C1-C6:** Integer overflow guards
-4. **D1-D5:** API boundary validation
-5. **B5-B6:** ELBG clamp + Median Cut count
-6. **E1,E3:** Line length in our code
-7. **F1-F12:** Style nits
-8. **G1-G4:** Commit message cleanup (during final rebase)
-9. **H1-H7:** Design items (address or document in commit messages)
+| Category | Total | Fixed | Skipped | Deferred |
+|----------|-------|-------|---------|----------|
+| A. Critical | 4 | 4 | 0 | 0 |
+| B. Bugs | 6 | 6 | 0 | 0 |
+| C. Security | 6 | 6 | 0 | 0 |
+| D. API boundary | 5 | 5 | 0 | 0 |
+| E. Line length | 3 | 2 | 1 | 0 |
+| F. Style | 12 | 7 | 5 | 0 |
+| G. Commit msgs | 4 | 1 | 0 | 3 |
+| H. Design | 7 | 0 | 0 | 7 |
+| **Total** | **47** | **31** | **6** | **10** |
+
+**Skipped items** (with rationale):
+- E2: Verbatim upstream copy -- reformatting breaks diff verification
+- F2: Verbatim upstream copy -- same rationale as E2
+- F4: Design concern -- opaque structs require larger refactor
+- F8: Feature request -- libass log callback is functional, not style
+- F10: False positive -- assert invariant guaranteed by caller bounds
+- F12: Low priority -- internal `ff_` functions, clear signatures
+
+**Deferred items** (for final submission rebase):
+- G2-G4: Commit message tweaks (ticket refs, line wrap, wording)
+- H1-H7: Design concerns (document in commit messages or address
+  if reviewers raise them)
+
+All fixes applied in-place to the originating commit via
+`git rebase --exec`. No fix-up commits. 19 commits on `pgs-series`,
+all with consistent `Signed-off-by: David Connolly <david@connol.ly>`.
+Build clean, FATE tests pass (quantize, gifenc-rgba).
