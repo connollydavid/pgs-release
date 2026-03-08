@@ -384,19 +384,29 @@ jobs:
             -GNinja
           ninja -C lept-build install
 
-          # Remove all CMake package configs from the sysroot before
-          # building Tesseract.  The installed configs (libtiff, leptonica,
-          # etc.) export transitive targets (ZLIB::ZLIB, JPEG::JPEG,
-          # CMath::CMath) that fail to resolve during Tesseract's configure.
-          # Tesseract falls back to pkg-config which handles the deps
-          # correctly via Requires.private, and FFmpeg itself only uses
-          # pkg-config.
-          rm -rf "$PREFIX"/lib/cmake
-
           # ── Tesseract (OCR engine) ──────────────────────────────────────
+          # Leptonica/libtiff CMake configs export transitive targets
+          # (ZLIB::ZLIB, JPEG::JPEG, CMath::CMath) that aren't pre-defined
+          # when Tesseract runs find_package(Leptonica).  Pre-define them.
+          cat > /tmp/pre-find-deps.cmake << 'PREOF'
+          find_package(ZLIB QUIET)
+          find_package(JPEG QUIET)
+          find_package(TIFF QUIET)
+          if(NOT TARGET CMath::CMath)
+            find_library(_CMATH_LIB NAMES m)
+            if(_CMATH_LIB)
+              add_library(CMath::CMath INTERFACE IMPORTED)
+              set_target_properties(CMath::CMath PROPERTIES
+                INTERFACE_LINK_LIBRARIES "${_CMATH_LIB}")
+            else()
+              add_library(CMath::CMath INTERFACE IMPORTED)
+            endif()
+          endif()
+          PREOF
           cmake -S tesseract-5.5.2 -B tess-build \
             -DCMAKE_TOOLCHAIN_FILE=/tmp/cross.cmake \
             -DCMAKE_INSTALL_PREFIX="$PREFIX" \
+            -DCMAKE_PROJECT_INCLUDE=/tmp/pre-find-deps.cmake \
             -DBUILD_SHARED_LIBS=OFF \
             -DSW_BUILD=OFF \
             -DBUILD_TRAINING_TOOLS=OFF \
