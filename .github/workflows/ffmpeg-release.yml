@@ -60,13 +60,13 @@ jobs:
         if: matrix.os == 'linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y nasm pkg-config cmake ninja-build autoconf automake libtool
+          sudo apt-get install -y nasm pkg-config cmake meson ninja-build autoconf automake libtool
 
       # ── macOS: build tools (both arm64 native and x86_64 cross-compile) ──────
       - name: Install macOS dependencies
         if: matrix.os == 'macos'
         run: |
-          brew install pkg-config nasm ninja autoconf automake libtool
+          brew install pkg-config nasm ninja meson autoconf automake libtool coreutils
 
       # ── Windows arm64: llvm-mingw ──────────────────────────────────────────
       - name: Install llvm-mingw
@@ -92,14 +92,14 @@ jobs:
         if: matrix.os == 'windows' && !matrix.llvm_mingw
         run: |
           sudo apt-get update
-          sudo apt-get install -y nasm mingw-w64 pkg-config cmake ninja-build
+          sudo apt-get install -y nasm mingw-w64 pkg-config cmake meson ninja-build
 
       # ── Windows arm64: build tools ────────────────────────────────────────
       - name: Install build tools for llvm-mingw
         if: matrix.llvm_mingw
         run: |
           sudo apt-get update
-          sudo apt-get install -y nasm pkg-config cmake ninja-build autoconf automake libtool
+          sudo apt-get install -y nasm pkg-config cmake meson ninja-build autoconf automake libtool
 
       # ── All targets: build full dep chain from source ─────────────────────
       # zlib → freetype2 → fribidi → harfbuzz → libass
@@ -285,25 +285,53 @@ jobs:
           done
 
           # ── harfbuzz (OpenType shaping: Arabic, Devanagari, CJK, etc.) ────
-          HB_EXTRA=()
-          # Windows: amalgamation needs -mbig-obj; graphite2 static needs define
-          [[ "${CROSS:-}" == *mingw* ]] && HB_EXTRA+=("-DCMAKE_CXX_FLAGS=-Wa,-mbig-obj -DGRAPHITE2_STATIC")
+          HB_ARGS=(
+            --prefix="$PREFIX"
+            --default-library=static
+            --pkg-config-path="$PREFIX/lib/pkgconfig"
+            -Dfreetype=enabled
+            -Dglib=disabled
+            -Dicu=enabled
+            -Dgraphite2=enabled
+            -Dicu_builtin=true
+            -Dtests=disabled
+            -Ddocs=disabled
+          )
+          # Cross-compile: generate meson cross file
+          if [ -n "$CROSS" ] || [ -n "$MACOS_TARGET" ]; then
+            if [ -n "$MACOS_TARGET" ]; then
+              HB_CC="/tmp/cc-wrap"
+              HB_CXX="/tmp/cxx-wrap"
+              HB_SYSTEM="darwin"
+              HB_CPU="x86_64"
+            else
+              HB_CC="$CC"
+              HB_CXX="$CXX"
+              ARCH=$(echo "$CROSS" | cut -d- -f1)
+              HB_CPU="$ARCH"
+              [[ "$CROSS" == *mingw* ]] && HB_SYSTEM="windows" || HB_SYSTEM="linux"
+            fi
+            cat > /tmp/hb-cross.ini << CROSSEOF
+          [binaries]
+          c = '$HB_CC'
+          cpp = '$HB_CXX'
+          ar = '$AR'
+          strip = '$STRIP'
+          pkg-config = 'pkg-config'
 
-          cmake -S harfbuzz-10.2.0 -B hb-build \
-            -DCMAKE_TOOLCHAIN_FILE=/tmp/cross.cmake \
-            "${HB_EXTRA[@]}" \
-            -DCMAKE_INSTALL_PREFIX="$PREFIX" \
-            -DBUILD_SHARED_LIBS=OFF \
-            -DHB_HAVE_FREETYPE=ON \
-            -DHB_HAVE_GLIB=OFF \
-            -DHB_HAVE_ICU=ON \
-            -DHB_HAVE_GRAPHITE2=ON \
-            -DHB_BUILD_SUBSET=OFF \
-            -DHB_BUILD_TESTS=OFF \
-            -DHB_BUILD_DOCS=OFF \
-            -DCMAKE_PREFIX_PATH="$PREFIX" \
-            -DCMAKE_FIND_ROOT_PATH="$PREFIX" \
-            -GNinja
+          [host_machine]
+          system = '$HB_SYSTEM'
+          cpu_family = '$HB_CPU'
+          cpu = '$HB_CPU'
+          endian = 'little'
+          CROSSEOF
+            HB_ARGS+=(--cross-file=/tmp/hb-cross.ini)
+          fi
+          # Windows static graphite2: suppress dllimport decorations
+          if [[ "${CROSS:-}" == *mingw* ]]; then
+            HB_ARGS+=(-Dcpp_args='-Wa,-mbig-obj -DGRAPHITE2_STATIC')
+          fi
+          meson setup hb-build harfbuzz-10.2.0 "${HB_ARGS[@]}"
           ninja -C hb-build install
 
           # ── freetype2 rebuild with harfbuzz (color glyphs, OTL features) ──
