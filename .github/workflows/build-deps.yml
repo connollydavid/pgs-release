@@ -240,16 +240,19 @@ jobs:
           ninja -C tiff-build install
           # Patch libtiff's CMake config: replace target references with
           # plain library flags so downstream find_package(TIFF) doesn't
-          # require pre-defined ZLIB::ZLIB, JPEG::JPEG, CMath::CMath targets
+          # require pre-defined ZLIB::ZLIB, JPEG::JPEG, CMath::CMath targets.
+          # Note: libtiff 4.7.0 uses "Tiff" capitalization, not "TIFF".
           SED_I=(sed -i)
           [ "$(uname)" = "Darwin" ] && SED_I=(sed -i '')
-          for f in "$PREFIX"/lib/cmake/tiff/TIFFTargets*.cmake; do
+          for f in "$PREFIX"/lib/cmake/tiff/*Targets*.cmake; do
             [ -f "$f" ] || continue
             "${SED_I[@]}" \
-              -e 's/\$<LINK_ONLY:ZLIB::ZLIB>/-lz/g' \
-              -e 's/\$<LINK_ONLY:JPEG::JPEG>/-ljpeg/g' \
-              -e 's/\$<LINK_ONLY:CMath::CMath>/-lm/g' \
+              -e 's/\\\$<LINK_ONLY:ZLIB::ZLIB>/-lz/g' \
+              -e 's/\\\$<LINK_ONLY:Deflate::Deflate>/-lz/g' \
+              -e 's/\\\$<LINK_ONLY:JPEG::JPEG>/-ljpeg/g' \
+              -e 's/\\\$<LINK_ONLY:CMath::CMath>/-lm/g' \
               -e 's/ZLIB::ZLIB/-lz/g' \
+              -e 's/Deflate::Deflate/-lz/g' \
               -e 's/JPEG::JPEG/-ljpeg/g' \
               -e 's/CMath::CMath/-lm/g' \
               "$f"
