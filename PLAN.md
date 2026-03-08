@@ -6,12 +6,14 @@ FFmpeg has no PGS subtitle encoder (ticket #6843) and no way to convert
 text subtitles to bitmap format (ticket #3819). This blocks 72 subtitle
 conversion pairs (18 text decoders × 4 bitmap encoders).
 
-We build five things in phases:
+We build seven things in phases:
 1. PGS encoder (self-contained, no dependencies on the rest)
 2. Generic color quantization API (pure utility in libavutil)
 3. Text-to-bitmap conversion (rendering in libavfilter, orchestrated by fftools)
 4. DVD subtitle encoder consolidation (first consumer of shared API)
 5. Median Cut + ELBG algorithm integration + GIF cleanup (complete unification)
+6. GIF encoder RGBA quantization (direct RGBA-to-GIF without filter pipeline)
+7. OCR bitmap-to-text conversion (reverse of Phase 3, via Tesseract)
 
 ## Upstream Acceptance Intelligence
 
@@ -608,6 +610,7 @@ a non-dithered intermediate with terrible quality):
 | 3a | `tests/api/api-pgs-fade-test.c` | tests |
 | 3a | `tests/api/api-pgs-animation-util-test.c` | tests |
 | 5 | `libavutil/mediancut.c` | libavutil |
+| 7 | `libavfilter/subtitle_ocr.{h,c}` | libavfilter |
 
 ### Modified files
 
@@ -627,6 +630,10 @@ a non-dithered intermediate with terrible quality):
 | 4 | `fftools/ffmpeg_enc.c` | Use `add_region()` in coalescing path |
 | 5 | `libavutil/{quantize.c,quantize.h}` | Add algorithms |
 | 5 | `libavfilter/{vf_palettegen.c,vf_elbg.c}`, `libavcodec/gif.c` | Use shared API |
+| 7 | `libavfilter/{Makefile,version.h}`, `doc/APIchanges` | OCR API additions |
+| 7 | `fftools/ffmpeg_enc.c` | convert_bitmap_to_text + dedup |
+| 7 | `fftools/ffmpeg_mux_init.c` | Lift bitmap-to-text gate |
+| 7 | `tests/api/Makefile` | OCR test target |
 
 ---
 
@@ -663,6 +670,35 @@ D: text-to-bitmap). See plan file for series details.
 ### Phase 6: GIF encoder RGBA quantization ← DONE
 14. Add RGBA input with built-in quantization + dithering to GIF encoder ← DONE (d215fe732d)
 15. Verify `make fate` ← DONE
+
+### Phase 7: OCR bitmap-to-text subtitle conversion ← IN PROGRESS
+Reverse of Phase 3: bitmap subtitles (PGS, DVB, DVD, XSUB) to text
+(ASS, SRT, WebVTT, MOV text) via Tesseract OCR. Unlocks 16 conversion
+pairs (4 bitmap decoders x 4 text encoders).
+
+**Design decisions:**
+- Symmetric to Phase 3: library in libavfilter, orchestration in fftools
+- `subtitle_ocr.{h,c}` mirrors `subtitle_render.{h,c}` API pattern
+- Gated on `CONFIG_LIBTESSERACT` (stubs when unavailable)
+- Buffered bitmap dedup: palette-only changes (PGS fades) skip OCR
+- Min-duration filtering (200ms) discards stray fade frames
+- Position mapping: bitmap (x,y) to `\an`/`\pos`/`\move` tags
+- NOT added to release builds (Tesseract + training data too heavy)
+
+**Two-patch structure (matching Phase 3):**
+1. `lavfi: add bitmap subtitle OCR utility` — subtitle_ocr.{h,c}, API test
+2. `fftools: auto-convert bitmap subtitles to text via OCR` — dedup, positioning
+
+**Status:**
+- [x] Patch 1: Library API (subtitle_ocr.h/c, Makefile, version, APIchanges)
+- [x] Patch 1: API unit test (api-subtitle-ocr-test.c)
+- [x] Patch 2: convert_bitmap_to_text() with bitmap dedup
+- [x] Patch 2: Buffered dedup with EOS flush
+- [x] Patch 2: Bitmap-to-text gate lifted in ffmpeg_mux_init.c
+- [x] Clean build (no warnings)
+- [ ] Integration test with --enable-libtesseract
+- [ ] FATE tests
+- [ ] Commits
 
 ## Verification
 
@@ -709,6 +745,7 @@ make -j$(nproc) && make fate
 | Phase 4 | [PHASE4.md](PHASE4.md) | Region-weighted quantization |
 | Phase 5 | [PHASE5.md](PHASE5.md) | Algorithm integration |
 | Phase 6 | [PHASE6.md](PHASE6.md) | GIF encoder RGBA quantization |
+| Phase 7 | (inline above) | OCR bitmap-to-text conversion |
 
 ## References
 
