@@ -174,7 +174,7 @@ jobs:
           set(CMAKE_AR "$AR")
           set(CMAKE_RANLIB "$RANLIB")
           set(CMAKE_FIND_ROOT_PATH "$PREFIX")
-          set(CMAKE_PROJECT_INCLUDE "/tmp/pre-find-deps.cmake")
+          set(CMAKE_PROJECT_TOP_LEVEL_INCLUDES "/tmp/pre-find-deps.cmake")
           EOF
 
           # Restrict library/include search to sysroot only when cross-compiling;
