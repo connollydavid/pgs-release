@@ -391,9 +391,14 @@ jobs:
             tesseract-5.5.2/src/api/baseapi.cpp \
             tesseract-5.5.2/src/ccutil/ccutil.cpp
           # Remove CLI executable build: we only need the static library.
-          # This also avoids the Windows -lWs2_32 case-sensitivity link
-          # failure (MinGW has libws2_32.a but Tesseract links -lWs2_32).
-          "${SED_I[@]}" '/^add_executable(tesseract/,/^# ###/{ /^# ###/b; d; }' \
+          # Also fix Ws2_32 case: MinGW has libws2_32.a (lowercase) but
+          # Tesseract references Ws2_32 (mixed case). Lowercase it, remove
+          # the exe target, and remove its install() line.
+          "${SED_I[@]}" \
+            -e 's/Ws2_32/ws2_32/g' \
+            -e '/^add_executable(tesseract/d' \
+            -e '/^target_link_libraries(tesseract/d' \
+            -e '/^install(TARGETS tesseract /d' \
             tesseract-5.5.2/CMakeLists.txt
           cmake -S tesseract-5.5.2 -B tess-build \
             -DCMAKE_TOOLCHAIN_FILE=/tmp/cross.cmake \
