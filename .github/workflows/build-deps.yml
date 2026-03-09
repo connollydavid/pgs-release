@@ -370,9 +370,14 @@ jobs:
           done
 
           # ── Tesseract (OCR engine) ──────────────────────────────────────
+          # LEPT_TIFF_RESULT=0: Tesseract probes Leptonica TIFF support via
+          # try_run(), which fails under our toolchain file (CMake thinks
+          # cross-compiling). Leptonica has no TIFF, so result is always 0.
           cmake -S tesseract-5.5.2 -B tess-build \
             -DCMAKE_TOOLCHAIN_FILE=/tmp/cross.cmake \
             -DCMAKE_INSTALL_PREFIX="$PREFIX" \
+            -DLEPT_TIFF_RESULT=0 \
+            -DLEPT_TIFF_RESULT__TRYRUN_OUTPUT= \
             -DCMAKE_CXX_FLAGS="-D_USE_MATH_DEFINES" \
             -DBUILD_SHARED_LIBS=OFF \
             -DSW_BUILD=OFF \
@@ -381,6 +386,7 @@ jobs:
             -DDISABLE_CURL=ON \
             -DOPENMP_BUILD=OFF \
             -DGRAPHICS_DISABLED=ON \
+            -DBUILD_TESTS=OFF \
             -GNinja
           ninja -C tess-build install
 
