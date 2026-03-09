@@ -344,6 +344,11 @@ jobs:
           # Leptonica with minimal deps: only zlib and libpng.
           # Tesseract uses Leptonica for in-memory Pix operations only;
           # JPEG/TIFF/GIF file I/O is not needed for subtitle OCR.
+          #
+          # Fix MINGW suffix bug: Leptonica unconditionally sets a versioned
+          # .dll suffix on MINGW, even for static builds. Guard it.
+          "${SED_I[@]}" 's/^if(MINGW)$/if(MINGW AND BUILD_SHARED_LIBS)/' \
+            leptonica-1.87.0/src/CMakeLists.txt
           cmake -S leptonica-1.87.0 -B lept-build \
             -DCMAKE_TOOLCHAIN_FILE=/tmp/cross.cmake \
             -DCMAKE_INSTALL_PREFIX="$PREFIX" \
@@ -358,8 +363,6 @@ jobs:
             -GNinja
           ninja -C lept-build install
           # Patch Leptonica's CMake config to resolve transitive targets
-          SED_I=(sed -i)
-          [ "$(uname)" = "Darwin" ] && SED_I=(sed -i '')
           for f in "$PREFIX"/lib/cmake/leptonica/LeptonicaTargets*.cmake; do
             [ -f "$f" ] || continue
             "${SED_I[@]}" \
@@ -373,6 +376,25 @@ jobs:
           # LEPT_TIFF_RESULT=0: Tesseract probes Leptonica TIFF support via
           # try_run(), which fails under our toolchain file (CMake thinks
           # cross-compiling). Leptonica has no TIFF, so result is always 0.
+          #
+          # ghc::filesystem polyfill: Tesseract 5.5.2 uses std::filesystem
+          # unconditionally, but it's unavailable on macOS <10.15. Install
+          # the ghc::filesystem header-only polyfill and patch the two
+          # source files that use std::filesystem.
+          GHC_FS_URL="https://raw.githubusercontent.com/gulrak/filesystem/v1.5.14/include/ghc/filesystem.hpp"
+          mkdir -p "$PREFIX/include/ghc"
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors \
+            -o "$PREFIX/include/ghc/filesystem.hpp" "$GHC_FS_URL"
+          "${SED_I[@]}" \
+            -e 's|#include <filesystem>|#include <ghc/filesystem.hpp>|' \
+            -e 's|std::filesystem|ghc::filesystem|g' \
+            tesseract-5.5.2/src/api/baseapi.cpp \
+            tesseract-5.5.2/src/ccutil/ccutil.cpp
+          # Remove CLI executable build: we only need the static library.
+          # This also avoids the Windows -lWs2_32 case-sensitivity link
+          # failure (MinGW has libws2_32.a but Tesseract links -lWs2_32).
+          "${SED_I[@]}" '/^add_executable(tesseract/,/^# ###/{ /^# ###/b; d; }' \
+            tesseract-5.5.2/CMakeLists.txt
           cmake -S tesseract-5.5.2 -B tess-build \
             -DCMAKE_TOOLCHAIN_FILE=/tmp/cross.cmake \
             -DCMAKE_INSTALL_PREFIX="$PREFIX" \
