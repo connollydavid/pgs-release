@@ -424,6 +424,7 @@ jobs:
             -DCMAKE_TOOLCHAIN_FILE=/tmp/cross.cmake \
             -DCMAKE_INSTALL_PREFIX="$PREFIX" \
             $TESS_EXTRA_FLAGS \
+            -DCMAKE_CXX_FLAGS="-D_USE_MATH_DEFINES" \
             -DBUILD_SHARED_LIBS=OFF \
             -DSW_BUILD=OFF \
             -DBUILD_TRAINING_TOOLS=OFF \
