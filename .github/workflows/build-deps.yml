@@ -362,6 +362,12 @@ jobs:
             -DBUILD_PROG=OFF \
             -GNinja
           ninja -C lept-build install
+          # Fix config-suffixed .pc file: CMake's file(GENERATE) appends
+          # the build config (e.g. _Release) on multi-config generators
+          # and cross-compile toolchains. Rename to plain lept.pc.
+          for f in "$PREFIX"/lib/pkgconfig/lept_*.pc; do
+            [ -f "$f" ] && mv "$f" "$PREFIX/lib/pkgconfig/lept.pc"
+          done
           # Patch Leptonica's CMake config to resolve transitive targets
           for f in "$PREFIX"/lib/cmake/leptonica/LeptonicaTargets*.cmake; do
             [ -f "$f" ] || continue
