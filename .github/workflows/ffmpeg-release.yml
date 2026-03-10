@@ -269,11 +269,12 @@ jobs:
           mkdir -p dist
           cp ffmpeg/ffmpeg${{ matrix.ext }}  dist/
           cp ffmpeg/ffprobe${{ matrix.ext }} dist/
+          cp ffmpeg/COPYING.LGPLv2.1 dist/LICENSE
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ffmpeg-${{ matrix.target }}
+          name: ${{ matrix.target }}
           path: dist/
 
   # ── Attach to GitHub release ───────────────────────────────────────────────
@@ -302,7 +303,8 @@ jobs:
 
       - name: Package
         run: |
-          for dir in artifacts/ffmpeg-*/; do
+          TAG="${{ github.event.release.tag_name }}"
+          for dir in artifacts/*/; do
             target=$(basename "$dir")
 
             # -eng bundle: binaries + eng tessdata
@@ -311,11 +313,11 @@ jobs:
             cp tessdata-eng/* "pkg-${target}-eng/tessdata/"
 
             if [[ "$target" == *windows* ]]; then
-              (cd "pkg-${target}-eng" && zip "../ffmpeg-${target}-eng.zip" -r .)
-              (cd "$dir" && zip "../../ffmpeg-${target}.zip" *)
+              (cd "pkg-${target}-eng" && zip "../${TAG}-${target}-eng.zip" -r .)
+              (cd "$dir" && zip "../../${TAG}-${target}.zip" *)
             else
-              tar czf "ffmpeg-${target}-eng.tar.gz" -C "pkg-${target}-eng" .
-              tar czf "ffmpeg-${target}.tar.gz" -C "$dir" .
+              tar czf "${TAG}-${target}-eng.tar.gz" -C "pkg-${target}-eng" .
+              tar czf "${TAG}-${target}.tar.gz" -C "$dir" .
             fi
           done
 
@@ -323,5 +325,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            ffmpeg-*.tar.gz
-            ffmpeg-*.zip
+            n*.tar.gz
+            n*.zip
