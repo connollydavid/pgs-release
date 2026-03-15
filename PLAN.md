@@ -671,10 +671,10 @@ D: text-to-bitmap). See plan file for series details.
 14. Add RGBA input with built-in quantization + dithering to GIF encoder ← DONE (d215fe732d)
 15. Verify `make fate` ← DONE
 
-### Phase 7: OCR bitmap-to-text subtitle conversion ← IN PROGRESS
+### Phase 7: OCR bitmap-to-text subtitle conversion ← DONE
 Reverse of Phase 3: bitmap subtitles (PGS, DVB, DVD, XSUB) to text
-(ASS, SRT, WebVTT, MOV text) via Tesseract OCR. Unlocks 16 conversion
-pairs (4 bitmap decoders x 4 text encoders).
+(ASS, SRT, WebVTT, MOV text) via Tesseract OCR. Unlocks 24 conversion
+pairs (4 bitmap decoders x 6 text encoders).
 
 **Design decisions:**
 - Symmetric to Phase 3: library in libavfilter, orchestration in fftools
@@ -683,7 +683,6 @@ pairs (4 bitmap decoders x 4 text encoders).
 - Buffered bitmap dedup: palette-only changes (PGS fades) skip OCR
 - Min-duration filtering (200ms) discards stray fade frames
 - Position mapping: bitmap (x,y) to `\an`/`\pos`/`\move` tags
-- NOT added to release builds (Tesseract + training data too heavy)
 
 **Two-patch structure (matching Phase 3):**
 1. `lavfi: add bitmap subtitle OCR utility` — subtitle_ocr.{h,c}, API test
@@ -696,9 +695,10 @@ pairs (4 bitmap decoders x 4 text encoders).
 - [x] Patch 2: Buffered dedup with EOS flush
 - [x] Patch 2: Bitmap-to-text gate lifted in ffmpeg_mux_init.c
 - [x] Clean build (no warnings)
-- [ ] Integration test with --enable-libtesseract
-- [ ] FATE tests
-- [ ] Commits
+- [x] FATE roundtrip test (sub-ocr-roundtrip, gated on CONFIG_LIBTESSERACT)
+- [x] Commits on pgs-series and pgs-series-8.0.1
+- [x] Language coverage: 105/114 pass (92%), documented in PHASE7.md
+- [x] Release builds with Tesseract (CI, `-eng` variant with tessdata)
 
 ## Verification
 

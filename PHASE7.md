@@ -1,10 +1,12 @@
 # Phase 7: OCR Bitmap-to-Text Subtitle Conversion
 
-## Status: In Progress
+## Status: Done
 
-Implementation complete in ffmpeg submodule (2 commits on `pgs-series`).
-Language testing at 105/114 (92%). CI integration (Tesseract static
-builds) in progress. FATE tests and dedup CLI options not yet implemented.
+Implementation complete. 2 commits on both `pgs-series` (master) and
+`pgs-series-8.0.1` (stable). Language testing at 105/114 (92%). FATE
+roundtrip test included (gated on `CONFIG_LIBTESSERACT`). Release
+builds ship Tesseract statically in the `-eng` variant. Tessdata for
+124 languages available from the tessdata-v1 release.
 
 ## Context
 
