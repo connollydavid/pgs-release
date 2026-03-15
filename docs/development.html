@@ -387,18 +387,15 @@ footer a { color: var(--fg2); }
   <div class="series">
     <div class="series-header">
       <span class="series-letter"><a href="https://github.com/slartibardfast/FFmpeg/tree/history/pgs-v3">v3</a></span>
-      <span class="series-title">Upstream review rework</span>
+      <span class="series-title">Structural refinement</span>
       <span class="series-count">&middot; 14 patches</span>
     </div>
     <ul>
-      <li>End-to-end upstream suitability audit: 8 critical issues, 10 significant, all resolved</li>
-      <li>Renderer and OCR stay in libavfilter as internal <code>ff_sub_render_*</code> / <code>ff_sub_ocr_*</code> &mdash; no public API commitment, no version bumps</li>
-      <li>Orchestration moved to fftools: <code>ffmpeg_enc_sub.c</code> (text-to-bitmap), <code>ffmpeg_dec_sub.c</code> (bitmap-to-text), following the sub2video precedent</li>
-      <li>Eliminated <code>#include .c</code> pattern &mdash; animation utilities in proper <code>ffmpeg_sub_util.h</code> header</li>
-      <li>ABI-safe enum ordering (<code>AV_QUANTIZE_NEUQUANT</code>, <code>MEDIAN_CUT</code>, <code>ELBG</code>, <code>NB</code>)</li>
-      <li>FF-prefixed palettemap structs (<code>FFColorInfo</code>, <code>FFColorNode</code>, etc.)</li>
-      <li>ELBG move split from Median Cut for independent review</li>
-      <li>No private header imports from fftools, no unrelated cosmetic changes</li>
+      <li>Reorganised with an eye toward potential upstream submission &mdash; still evolving</li>
+      <li>Library/orchestration split: thin wrappers in libavfilter (<code>ff_sub_render_*</code>, <code>ff_sub_ocr_*</code>), conversion pipeline in fftools</li>
+      <li>Cleaner file structure: <code>ffmpeg_enc_sub.c</code>, <code>ffmpeg_dec_sub.c</code>, <code>ffmpeg_sub_util.h</code></li>
+      <li>ABI-safe enum ordering, FF-prefixed internal structs, no <code>#include .c</code> pattern</li>
+      <li>Reduced from 17 to 14 patches with better logical grouping</li>
     </ul>
   </div>
 </section>
