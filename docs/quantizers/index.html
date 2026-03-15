@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Color Quantization: Algorithm Comparison</title>
+<title>Quantizer Comparison &mdash; FFmpeg Subtitle Tools</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -215,27 +215,6 @@ section li::before {
   flex-shrink: 0;
 }
 
-/* Patch list */
-.patch-list {
-  counter-reset: patch;
-  list-style: none;
-  padding: 0;
-}
-.patch-list li {
-  padding-left: 2rem;
-  position: relative;
-  margin-bottom: 0.75rem;
-}
-.patch-list li::before {
-  counter-increment: patch;
-  content: counter(patch) ".";
-  position: absolute;
-  left: 0;
-  color: var(--fg3);
-  font-weight: 500;
-  font-size: 0.85rem;
-}
-
 /* Takeaway box */
 .takeaway {
   background: var(--card-bg);
@@ -248,20 +227,16 @@ section li::before {
   color: var(--fg);
 }
 
-/* Usage */
-pre.usage {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 1rem 1.25rem;
-  font-family: "SF Mono", "Fira Code", monospace;
-  font-size: 0.78rem;
-  color: var(--fg2);
-  line-height: 1.7;
-  overflow-x: auto;
-  margin: 1rem 0;
+/* Links */
+.links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
-pre.usage .comment { color: var(--fg3); }
+.links a {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
 
 footer {
   padding: 2.5rem 0;
@@ -277,8 +252,9 @@ footer a { color: var(--fg2); }
 <div class="container">
 
 <header>
+  <p style="margin-bottom:1rem"><a href="../">&larr; FFmpeg Subtitle Tools</a></p>
   <h1>Color Quantization: Three Algorithms, One API</h1>
-  <p>Phase 5 of the <a href="../">FFmpeg subtitle patch series</a> integrates three color quantization algorithms into a single <code>av_quantize_*</code> API. This page presents hard data comparing their quality and performance on representative subtitle images.</p>
+  <p>Three color quantization algorithms integrated into a single <code>av_quantize_*</code> API. Quality and performance data on representative subtitle images.</p>
   <p>All measurements from a 128&times;64 test image with <code>quality=10</code>. PSNR computed per-pixel in sRGB against the original, averaged over RGB channels.</p>
 </header>
 
@@ -416,11 +392,10 @@ footer a { color: var(--fg2); }
 
 <section>
   <h2>Links</h2>
-  <div style="display:flex; gap:1.5rem; flex-wrap:wrap">
-    <a href="../" style="font-size:0.9rem; font-weight:500">Project overview</a>
-    <a href="https://github.com/slartibardfast/FFmpeg/tree/pgs-series" style="font-size:0.9rem; font-weight:500">Patches</a>
-    <a href="../color-distance/" style="font-size:0.9rem; font-weight:500">Color distance metrics</a>
-    <a href="https://trac.ffmpeg.org/ticket/3819" style="font-size:0.9rem; font-weight:500">Bug #3819</a>
+  <div class="links">
+    <a href="../">FFmpeg Subtitle Tools</a>
+    <a href="../color-distance/">Color distance metrics</a>
+    <a href="https://github.com/slartibardfast/FFmpeg/tree/pgs-series">Patches</a>
   </div>
 </section>
 

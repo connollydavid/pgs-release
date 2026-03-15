@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OCR Language Coverage</title>
+<title>OCR Language Coverage &mdash; FFmpeg Subtitle Tools</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -35,6 +35,7 @@
   }
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 body {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: var(--bg);
@@ -220,6 +221,7 @@ footer a { color: var(--fg2); }
 <div class="container">
 
 <header>
+  <p style="margin-bottom:1rem"><a href="../">&larr; FFmpeg Subtitle Tools</a></p>
   <h1>OCR Language Coverage</h1>
   <p>Roundtrip test results for bitmap-to-text subtitle conversion. Each language is rendered to PGS via libass, then OCR'd back to text via Tesseract. Input text is UDHR Article 1.</p>
   <div class="stats">
@@ -375,9 +377,7 @@ footer a { color: var(--fg2); }
 </section>
 
 <footer>
-  <a href="../">Back</a> &middot;
   Tested with Tesseract 5.x, tessdata from <a href="https://github.com/tesseract-ocr/tessdata">tesseract-ocr/tessdata</a>.
-  Developed with assistance from <a href="https://claude.ai">Claude</a> (Anthropic).
 </footer>
 
 </div>

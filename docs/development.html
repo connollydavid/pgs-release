@@ -73,33 +73,6 @@ header p {
   font-size: 0.95rem;
   margin-bottom: 0.75rem;
 }
-.error-msg {
-  color: var(--fg3);
-  font-style: italic;
-  font-size: 0.9rem;
-  margin: 1.25rem 0;
-}
-.stats {
-  display: flex;
-  gap: 2.5rem;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
-}
-.stat-num {
-  font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  display: block;
-}
-.stat-label {
-  font-size: 0.75rem;
-  color: var(--fg3);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 500;
-}
-
 /* Sections */
 section {
   padding: 2.5rem 0;
@@ -185,24 +158,6 @@ section li::before {
   color: var(--fg);
 }
 
-/* Animation */
-.demo {
-  margin: 1.5rem 0;
-}
-.demo img {
-  max-width: 100%;
-  border-radius: 4px;
-  border: 1px solid var(--border);
-}
-.demo pre {
-  margin-top: 1rem;
-  font-family: "SF Mono", "Fira Code", monospace;
-  font-size: 0.78rem;
-  color: var(--fg2);
-  line-height: 1.6;
-  overflow-x: auto;
-}
-
 /* FATE */
 .fate-list {
   display: grid;
@@ -226,53 +181,6 @@ section li::before {
   font-family: "SF Mono", "Fira Code", monospace;
   font-size: 0.78rem;
   color: var(--fg);
-}
-
-/* Downloads */
-.download-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-  margin: 1.25rem 0;
-}
-@media (max-width: 540px) { .download-grid { grid-template-columns: 1fr; } }
-.download-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 0.85rem 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  transition: border-color 0.15s;
-}
-.download-card:hover { border-color: var(--accent); text-decoration: none; }
-.download-icon {
-  font-size: 1.25rem;
-  flex-shrink: 0;
-  width: 1.5rem;
-  text-align: center;
-}
-.download-label {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--fg);
-  display: block;
-}
-.download-sub {
-  font-size: 0.72rem;
-  color: var(--fg3);
-  display: block;
-  margin-top: 0.1rem;
-}
-.download-note {
-  font-size: 0.82rem;
-  color: var(--fg2);
-  margin-top: 0.5rem;
-  line-height: 1.6;
-}
-.download-note code {
-  font-size: 0.78rem;
 }
 
 /* Links */
