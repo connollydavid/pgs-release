@@ -90,6 +90,7 @@ Threads coordinate via blocking queues, semaphores, and AtomicBoolean for cancel
 - State assumptions explicitly. If uncertain, ask.
 - If multiple interpretations exist, present them — don't pick silently.
 - If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
 
 ### Simplicity First
 - No features beyond what was asked. No abstractions for single-use code.
@@ -106,6 +107,7 @@ Threads coordinate via blocking queues, semaphores, and AtomicBoolean for cancel
 ### Goal-Driven Execution
 - Transform tasks into verifiable goals with success criteria.
 - For multi-step tasks, state a brief plan with verification steps.
+- Strong success criteria let you loop independently. Weak criteria ("make it work") require clarification — ask before starting.
 
 ### Document Before You Work (MUST)
 Before any decision or body of work that changes design, architecture, or approach:
