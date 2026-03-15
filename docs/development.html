@@ -339,10 +339,75 @@ footer a { color: var(--fg2); }
 </section>
 
 <section>
+  <h2>Series Evolution</h2>
+  <p>This patch series has been through four major iterations, each informed by testing, review, and upstream FFmpeg conventions. The full history is preserved as git tags.</p>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-letter">v0</span>
+      <span class="series-title">Proof of concept</span>
+    </div>
+    <ul>
+      <li>PGS encoder only, ported from <a href="https://github.com/slartibardfast/punkgraphicstream">PunkGraphicStream</a> (Java/JNI)</li>
+      <li>NeuQuant quantization from pngnq, hardcoded to 256 colors</li>
+      <li>No animation, no text-to-bitmap pipeline, no FATE tests</li>
+      <li>Established the patent-grounded specification (<code>docs/pgs-specification.md</code>)</li>
+    </ul>
+  </div>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-letter">v1</span>
+      <span class="series-title">Feature-complete draft</span>
+    </div>
+    <ul>
+      <li>21 patches across 7 phases &mdash; encoder, quantization API, text-to-bitmap, animation, GIF, OCR</li>
+      <li>Public <code>avfilter_subtitle_render_*</code> and <code>avfilter_subtitle_ocr_*</code> APIs in libavfilter</li>
+      <li>Palette animation via composition state machine, region-weighted quantization for karaoke</li>
+      <li>Three quantization algorithms (NeuQuant, Median Cut, ELBG) unified under <code>av_quantize_*</code></li>
+      <li>OCR roundtrip tested across 114 languages (105 pass, 92%)</li>
+    </ul>
+  </div>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-letter"><a href="https://github.com/slartibardfast/FFmpeg/tree/history/pgs-v2">v2</a></span>
+      <span class="series-title">First stable release</span>
+      <span class="series-count">&middot; 17 patches</span>
+    </div>
+    <ul>
+      <li>Consolidated from 21 to 17 patches (squashed ELBG move + algo, region-weighted API + usage, quantize_method into encoder)</li>
+      <li>PGS decoder model compliance: DTS/PTS timing, coded data buffer validation, decoded object buffer tracking, palette optimization, object versioning</li>
+      <li>GIF RGBA palette mapping fix (sorted palette mismatch)</li>
+      <li>Released as <a href="https://github.com/slartibardfast/pgs-release/releases/tag/n8.0.1-pgs.0">n8.0.1-pgs.0</a> on FFmpeg 8.0.1 &mdash; first stable build on an official release branch</li>
+      <li>All upstream FATE tests pass, 8 new FATE tests</li>
+    </ul>
+  </div>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-letter"><a href="https://github.com/slartibardfast/FFmpeg/tree/history/pgs-v3">v3</a></span>
+      <span class="series-title">Upstream review rework</span>
+      <span class="series-count">&middot; 14 patches</span>
+    </div>
+    <ul>
+      <li>End-to-end upstream suitability audit: 8 critical issues, 10 significant, all resolved</li>
+      <li>Renderer and OCR stay in libavfilter as internal <code>ff_sub_render_*</code> / <code>ff_sub_ocr_*</code> &mdash; no public API commitment, no version bumps</li>
+      <li>Orchestration moved to fftools: <code>ffmpeg_enc_sub.c</code> (text-to-bitmap), <code>ffmpeg_dec_sub.c</code> (bitmap-to-text), following the sub2video precedent</li>
+      <li>Eliminated <code>#include .c</code> pattern &mdash; animation utilities in proper <code>ffmpeg_sub_util.h</code> header</li>
+      <li>ABI-safe enum ordering (<code>AV_QUANTIZE_NEUQUANT</code>, <code>MEDIAN_CUT</code>, <code>ELBG</code>, <code>NB</code>)</li>
+      <li>FF-prefixed palettemap structs (<code>FFColorInfo</code>, <code>FFColorNode</code>, etc.)</li>
+      <li>ELBG move split from Median Cut for independent review</li>
+      <li>No private header imports from fftools, no unrelated cosmetic changes</li>
+    </ul>
+  </div>
+</section>
+
+<section>
   <h2>Links</h2>
   <div class="links">
-    <a href="https://github.com/slartibardfast/FFmpeg/tree/pgs-series">Patches (master)</a>
-    <a href="https://github.com/slartibardfast/FFmpeg/tree/pgs-series-8.0.1">Patches (8.0.1)</a>
+    <a href="https://github.com/slartibardfast/FFmpeg/tree/pgs-series-v2">Patches (v3, latest)</a>
+    <a href="https://github.com/slartibardfast/FFmpeg/tree/pgs-series-8.0.1">Patches (8.0.1 stable)</a>
     <a href="quantizers/">Quantizer comparison</a>
     <a href="ocr-languages/">OCR languages</a>
     <a href="color-distance/">Color distance metrics</a>
