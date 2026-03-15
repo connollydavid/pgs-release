@@ -85,9 +85,11 @@ Phase 3a: [PATCH 1/1] Text-to-bitmap: universal animation ← DONE
 Phase 4:  [PATCH 1/2] Region-weighted quantization          ← DONE (fd72cd4d83, b4ed0c4e82)
 Phase 5:  [PATCH 1/5] Median Cut + ELBG algorithm integration  ← DONE
 Phase 6:  [PATCH 1/1] GIF encoder RGBA quantization          ← DONE (d215fe732d)
+Phase 8:  [PATCH 1/1] PGS decoder model compliance            ← PLANNING
 ```
 
-Total: ~19 patches across 8 submissions. Each phase is independent.
+Total: ~20 patches across 9 submissions. Each phase is independent
+(Phase 8 depends on Phase 1 only).
 
 ### Phase dependency for animation
 
@@ -700,6 +702,16 @@ pairs (4 bitmap decoders x 6 text encoders).
 - [x] Language coverage: 105/114 pass (92%), documented in PHASE7.md
 - [x] Release builds with Tesseract (CI, `-eng` variant with tessdata)
 
+### Phase 8: PGS decoder model compliance ← PLANNING
+16. Compute DTS/PTS per HDMV timing formulas
+17. Validate coded data buffer (1 MB leaky bucket)
+18. Track decoded object buffer (4 MB)
+19. Insert Acquisition Points at configurable interval
+20. Optimize PDS to write only active palette entries
+21. Track object version numbers
+22. FATE tests for timing, buffer model, palette size
+23. Verify against SUPer reference output
+
 ## Verification
 
 ```bash
@@ -745,7 +757,8 @@ make -j$(nproc) && make fate
 | Phase 4 | [PHASE4.md](PHASE4.md) | Region-weighted quantization |
 | Phase 5 | [PHASE5.md](PHASE5.md) | Algorithm integration |
 | Phase 6 | [PHASE6.md](PHASE6.md) | GIF encoder RGBA quantization |
-| Phase 7 | (inline above) | OCR bitmap-to-text conversion |
+| Phase 7 | [PHASE7.md](PHASE7.md) | OCR bitmap-to-text conversion |
+| Phase 8 | [PHASE8.md](PHASE8.md) | PGS decoder model compliance |
 
 ## References
 
