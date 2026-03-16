@@ -391,10 +391,34 @@ footer a { color: var(--fg2); }
 </section>
 
 <section>
+  <h2>v5 Optimizations</h2>
+  <p style="margin-bottom:1rem">Encoder and muxer improvements measured against real PGS output.</p>
+
+  <div class="quality-row"><span class="style">Palette delta (fade, 1 entry changed)</span><span class="psnr">42 &rarr; 7 bytes (83%)</span></div>
+  <div class="quality-row"><span class="style">Palette delta (fade, 2 entries changed)</span><span class="psnr">42 &rarr; 12 bytes (71%)</span></div>
+  <div class="quality-row"><span class="style">DTS decode window (1920&times;1080)</span><span class="psnr">64.8 ms (5832 ticks)</span></div>
+  <div class="quality-row"><span class="style">DTS decode window (1280&times;720)</span><span class="psnr">28.8 ms (2592 ticks)</span></div>
+  <div class="quality-row"><span class="style">DTS decode window (720&times;480)</span><span class="psnr">10.8 ms (972 ticks)</span></div>
+  <div class="quality-row"><span class="style">Clear Display Set size</span><span class="psnr">17 bytes (PCS + END)</span></div>
+
+  <p style="margin-top:1rem">Overlapping subtitle events with different durations produce the correct Display Set sequence via the event lookahead window:</p>
+  <div class="demo">
+    <pre>
+Input:  Sub A 1s-5s "Hello", Sub B 3s-7s "World"
+
+DS 1  T=1.0s  Epoch Start  "Hello" alone      121&times;57
+DS 2  T=3.0s  Epoch Start  "Hello"+"World"    138&times;125
+DS 3  T=5.0s  Epoch Start  "World" alone      138&times;57
+DS 4  T=7.0s  Normal       Clear               0 objects</pre>
+  </div>
+  <p>11 FATE tests cover all v5 features: DTS formula validation at 3 resolutions, palette delta entry counts, and overlapping event pipeline.</p>
+</section>
+
+<section>
   <h2>Links</h2>
   <div class="links">
-    <a href="https://github.com/slartibardfast/FFmpeg/tree/history/pgs-v3">Patches (v3, 14 patches)</a>
-    <a href="https://github.com/slartibardfast/FFmpeg/tree/pgs3-8.0.1">Patches (8.0.1, 14 patches)</a>
+    <a href="https://github.com/slartibardfast/FFmpeg/tree/pgs5">Patches (v5, latest)</a>
+    <a href="https://github.com/slartibardfast/FFmpeg/tree/pgs3-8.0.1">Patches (8.0.1 stable)</a>
     <a href="quantizers/">Quantizer comparison</a>
     <a href="ocr-languages/">OCR languages</a>
     <a href="color-distance/">Color distance metrics</a>
