@@ -135,8 +135,14 @@ FFmpeg release tags follow the format `n{ffmpeg-version}-pgs.{N}`:
 - Only bump the tag after a confirmed stable build (all 6 targets green, artifacts verified)
 - Run FATE locally before cutting a release
 
+### Patch Series Discipline (MUST)
+Every patch in a series MUST compile independently when applied in sequence. This is non-negotiable for upstream submission and bisectability.
+- **Before committing a patch:** verify that every `#include` references a file that exists at that point in the series — either from upstream or from an earlier patch.
+- **Dependency order:** if patch B includes a header created by patch A, patch A MUST come first. Plan the series order BEFORE writing patches. Draw the dependency graph.
+- **Two-patch structure:** Patch 1 creates new files (FATE trivially passes), Patch 2 refactors consumer (FATE must be bit-for-bit). The library/header patch always comes before its consumer.
+- **Verification:** after building a series, run `git rebase upstream/master --exec 'make -j$(nproc)'` to confirm every patch compiles. This is not optional — do it before pushing.
+
 ### FFmpeg Extraction Patterns
-- **Two-patch structure:** Patch 1 creates new files (FATE trivially passes), Patch 2 refactors consumer (FATE must be bit-for-bit).
 - **API boundary validation:** When moving code from a filter (with AVOption validation) into a library API, the library must validate its own inputs. AVOption constraints don't follow the code. Any parameter feeding shifts, array indices, or division needs bounds checking at the API boundary.
 - **Heap allocation changes:** When replacing inline struct arrays with heap-allocated contexts, void return types may need to become int to propagate allocation failures. Trace NULL safety through the full call chain.
 - **Review discipline:** Three passes (upstream style, security, functional). For each finding, determine whether we introduced it or it's pre-existing. Only fix what we introduced. Document intentional trade-offs in commit messages.
