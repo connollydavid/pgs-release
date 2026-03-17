@@ -259,8 +259,8 @@ footer a { color: var(--fg2); }
 
 <header>
   <p style="margin-bottom:1rem"><a href="../">&larr; FFmpeg Subtitle Tools</a></p>
-  <h1>Color Quantization: Three Algorithms, One API</h1>
-  <p>Three color quantization algorithms integrated into a single <code>av_quantize_*</code> API. Quality and performance data on representative subtitle images.</p>
+  <h1>Colour Quantization: Three Algorithms, One API</h1>
+  <p>Three colour quantization algorithms integrated into a single <code>av_quantize_*</code> API. Quality and performance data on representative subtitle images.</p>
   <p>All measurements from a 128&times;64 test image with <code>quality=10</code>. PSNR computed per-pixel in sRGB against the original, averaged over RGB channels.</p>
 </header>
 
@@ -289,7 +289,7 @@ footer a { color: var(--fg2); }
   <h2>Quality &mdash; PSNR (dB)</h2>
   <p style="margin-bottom:0.5rem">Higher is better. &ge;40&thinsp;dB is visually lossless for subtitles. Measured on five test images at three palette sizes.</p>
 
-  <h3 class="data-table-heading">16-color palette</h3>
+  <h3 class="data-table-heading">16-colour palette</h3>
   <table class="data-table">
     <tr><th>Image</th><th class="elbg">ELBG</th><th class="mediancut">Median Cut</th><th class="neuquant">NeuQuant</th></tr>
     <tr><td>Simple white text</td><td class="best">99.99</td><td class="best">99.99</td><td class="best">99.99</td></tr>
@@ -299,7 +299,7 @@ footer a { color: var(--fg2); }
     <tr><td>HSV colour sweep</td><td class="best">20.73</td><td>19.14</td><td>15.32</td></tr>
   </table>
 
-  <h3 class="data-table-heading">64-color palette</h3>
+  <h3 class="data-table-heading">64-colour palette</h3>
   <table class="data-table">
     <tr><th>Image</th><th class="elbg">ELBG</th><th class="mediancut">Median Cut</th><th class="neuquant">NeuQuant</th></tr>
     <tr><td>Simple white text</td><td class="best">99.99</td><td class="best">99.99</td><td class="best">99.99</td></tr>
@@ -309,7 +309,7 @@ footer a { color: var(--fg2); }
     <tr><td>HSV colour sweep</td><td class="best">26.37</td><td>24.14</td><td>20.06</td></tr>
   </table>
 
-  <h3 class="data-table-heading">256-color palette (PGS maximum)</h3>
+  <h3 class="data-table-heading">256-colour palette (PGS maximum)</h3>
   <table class="data-table">
     <tr><th>Image</th><th class="elbg">ELBG</th><th class="mediancut">Median Cut</th><th class="neuquant">NeuQuant</th></tr>
     <tr><td>Simple white text</td><td class="best">99.99</td><td class="best">99.99</td><td class="best">99.99</td></tr>
@@ -325,7 +325,7 @@ footer a { color: var(--fg2); }
 </section>
 
 <section>
-  <h2>Quality &mdash; Visual Bars (256 colors)</h2>
+  <h2>Quality &mdash; Visual Bars (256 colours)</h2>
   <p style="margin-bottom:0.5rem">PSNR on the hardest test cases. The "simple" cases are all 99.99&thinsp;dB and omitted.</p>
 
   <div class="bar-chart">
@@ -357,29 +357,29 @@ footer a { color: var(--fg2); }
   <h3 class="data-table-heading">HSV colour sweep (worst case)</h3>
   <table class="data-table">
     <tr><th>Palette size</th><th class="elbg">ELBG</th><th class="mediancut">Median Cut</th><th class="neuquant">NeuQuant</th></tr>
-    <tr><td>16 colors</td><td>2.54</td><td>8.41</td><td class="best">2.16</td></tr>
-    <tr><td>64 colors</td><td>7.30</td><td>10.90</td><td class="best">2.86</td></tr>
-    <tr><td>256 colors</td><td>24.59</td><td>17.91</td><td class="best">5.06</td></tr>
+    <tr><td>16 colours</td><td>2.54</td><td>8.41</td><td class="best">2.16</td></tr>
+    <tr><td>64 colours</td><td>7.30</td><td>10.90</td><td class="best">2.86</td></tr>
+    <tr><td>256 colours</td><td>24.59</td><td>17.91</td><td class="best">5.06</td></tr>
   </table>
 
   <h3 class="data-table-heading">Simple white text (best case)</h3>
   <table class="data-table">
     <tr><th>Palette size</th><th class="elbg">ELBG</th><th class="mediancut">Median Cut</th><th class="neuquant">NeuQuant</th></tr>
-    <tr><td>16 colors</td><td>1.51</td><td>0.74</td><td class="best">0.49</td></tr>
-    <tr><td>64 colors</td><td>4.33</td><td class="best">0.72</td><td>0.67</td></tr>
-    <tr><td>256 colors</td><td>15.98</td><td class="best">0.76</td><td>1.40</td></tr>
+    <tr><td>16 colours</td><td>1.51</td><td>0.74</td><td class="best">0.49</td></tr>
+    <tr><td>64 colours</td><td>4.33</td><td class="best">0.72</td><td>0.67</td></tr>
+    <tr><td>256 colours</td><td>15.98</td><td class="best">0.76</td><td>1.40</td></tr>
   </table>
 
   <div class="takeaway">
-    <strong>Key finding:</strong> NeuQuant is consistently the fastest. ELBG scales poorly with palette size (O(n&times;steps&times;codebook)). Median Cut is fast on simple images but slows down on high-entropy inputs due to histogram construction in OkLab space. For PGS subtitles (typically &lt;100 unique colors), all three complete in under 5&thinsp;ms.
+    <strong>Key finding:</strong> NeuQuant is consistently the fastest. ELBG scales poorly with palette size (O(n&times;steps&times;codebook)). Median Cut is fast on simple images but slows down on high-entropy inputs due to histogram construction in OkLab space. For PGS subtitles (typically &lt;100 unique colours), all three complete in under 5&thinsp;ms.
   </div>
 </section>
 
 <section>
   <h2>Recommendation</h2>
   <div class="takeaway">
-    <p><strong>For most subtitle work: use the default (NeuQuant).</strong> Subtitles typically have fewer than 100 unique colors. All three algorithms achieve perfect or near-perfect PSNR at this complexity. NeuQuant is the fastest and produces excellent results.</p>
-    <p style="margin-top:0.5rem"><strong>For complex ASS with gradients or many colors: consider Median Cut or ELBG.</strong> The data shows 10&ndash;15&thinsp;dB improvement on gradient stress tests. ELBG is best on pure gradients; Median Cut is best on structured multi-region images and runs faster.</p>
+    <p><strong>For most subtitle work: use the default (NeuQuant).</strong> Subtitles typically have fewer than 100 unique colours. All three algorithms achieve perfect or near-perfect PSNR at this complexity. NeuQuant is the fastest and produces excellent results.</p>
+    <p style="margin-top:0.5rem"><strong>For complex ASS with gradients or many colours: consider Median Cut or ELBG.</strong> The data shows 10&ndash;15&thinsp;dB improvement on gradient stress tests. ELBG is best on pure gradients; Median Cut is best on structured multi-region images and runs faster.</p>
   </div>
 </section>
 
@@ -400,8 +400,8 @@ footer a { color: var(--fg2); }
   <h2>Links</h2>
   <div class="links">
     <a href="../">FFmpeg Subtitle Tools</a>
-    <a href="../color-distance/">Color distance metrics</a>
-    <a href="https://github.com/slartibardfast/FFmpeg/tree/pgs3">Patches</a>
+    <a href="../color-distance/">Colour distance metrics</a>
+    <a href="https://github.com/slartibardfast/FFmpeg/tree/pgs5">Patches</a>
   </div>
 </section>
 
