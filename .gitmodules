@@ -1,12 +1,12 @@
 [submodule "punkgraphicstream"]
 	path = punkgraphicstream
-	url = https://github.com/slartibardfast/punkgraphicstream.git
+	url = https://github.com/connollydavid/punkgraphicstream.git
 [submodule "libpgs-jni"]
 	path = libpgs-jni
-	url = https://github.com/slartibardfast/libpgs-jni.git
+	url = https://github.com/connollydavid/libpgs-jni.git
 [submodule "libass"]
 	path = libass
 	url = https://github.com/libass/libass.git
 [submodule "ffmpeg"]
 	path = ffmpeg
-	url = https://github.com/slartibardfast/FFmpeg.git
+	url = https://github.com/connollydavid/FFmpeg.git
