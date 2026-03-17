@@ -1,9 +1,11 @@
 # Phase 9: v4 Series — Address Expert Panel Review
 
-## Status: Planning
+## Status: Complete
 
-Apply all findings from PHASE8-REVIEW-V3.md to produce v4 of the
-patch series. Work in phases, testing at each step.
+Applied all findings from PHASE8-REVIEW-V3.md to produce v4 of the
+patch series (branch `pgs4`, tagged `history/pgs-v4`). All critical,
+high, and medium fixes integrated. v5 built on top with additional
+optimisations (Phase 10).
 
 ## Phase 9a: Critical fixes (R1-R7)
 

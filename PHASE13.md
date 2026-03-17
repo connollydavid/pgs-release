@@ -1,6 +1,6 @@
 # Phase 13: PGS Encoder Features (v6)
 
-## Status: Planning
+## Status: WIP
 
 Encoder features beyond v5's optimisations. Ordered by dependency — each step
 builds on the previous. Together they bring the encoder to full HDMV spec

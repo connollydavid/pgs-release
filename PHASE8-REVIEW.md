@@ -1,10 +1,11 @@
 # Phase 8 Review: Upstream Suitability Audit
 
-## Status: In Progress
+## Status: Complete
 
-End-to-end review of all 17 patches for FFmpeg upstream submission
+End-to-end review of all 17 patches (v3) for FFmpeg upstream submission
 readiness. Two independent review passes identified 16 blocking
-issues and ~25 significant issues across the series.
+issues and ~25 significant issues across the series. All findings
+addressed in v4 (Phase 9).
 
 ## Patch Series (17 patches)
 

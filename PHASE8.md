@@ -1,6 +1,12 @@
 # Phase 8: PGS Decoder Model Compliance
 
-## Status: Planning
+## Status: Partially Complete — remainder moved to Phase 13
+
+Items 8a (DTS/PTS timing) and 8e (palette optimisation) were implemented
+in v5 as Phase 10b and 10a respectively. Items 8b (CDB model), 8c (DOB
+model), and 8d (Acquisition Points) are deferred to Phase 13 (v6 encoder
+features) where they depend on palette reuse and multi-object support.
+Item 8f (object versioning) is also deferred to Phase 13.
 
 ## Context
 
@@ -8,21 +14,16 @@ Phase 1 delivered a working PGS encoder with composition state machine,
 palette animation, and ODS fragmentation. It deferred three areas that
 are required for full HDMV decoder model compliance:
 
-1. **DTS/PTS timing** — all segments currently emit DTS=0
-2. **Buffer model validation** — no check for coded data buffer overflow
-3. **Acquisition Point insertion** — no seek-friendly refresh points
+1. **DTS/PTS timing** — ~~all segments currently emit DTS=0~~ **DONE (v5, Phase 10b)**
+2. **Buffer model validation** — no check for coded data buffer overflow — **deferred to Phase 13e**
+3. **Acquisition Point insertion** — no seek-friendly refresh points — **deferred to Phase 13c**
 
-These omissions produce streams that work in software players (which
-ignore timing constraints) but may fail on hardware Blu-ray players
-that enforce the reference decoder model specified in US7620297B2 and
-US8638861B2.
-
-Additionally, several encoder features are unnecessarily wasteful or
+Additionally, several encoder features were unnecessarily wasteful or
 missing polish:
 
-4. **Palette optimization** — PDS currently writes all 256 entries
-5. **Object version tracking** — always 0, should increment within epoch
-6. **Window sizing validation** — no enforcement of minimum window size
+4. **Palette optimization** — ~~PDS currently writes all 256 entries~~ **DONE (v5, Phase 10a — palette delta encoding)**
+5. **Object version tracking** — always 0, should increment within epoch — **deferred to Phase 13**
+6. **Window sizing validation** — no enforcement of minimum window size — **deferred to Phase 13**
 
 ## Patent Basis
 

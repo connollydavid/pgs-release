@@ -85,7 +85,7 @@ Phase 3a: [PATCH 1/1] Text-to-bitmap: universal animation ← DONE
 Phase 4:  [PATCH 1/2] Region-weighted quantization          ← DONE (fd72cd4d83, b4ed0c4e82)
 Phase 5:  [PATCH 1/5] Median Cut + ELBG algorithm integration  ← DONE
 Phase 6:  [PATCH 1/1] GIF encoder RGBA quantization          ← DONE (d215fe732d)
-Phase 8:  [PATCH 1/1] PGS decoder model compliance            ← PLANNING
+Phase 8:  [PATCH 1/1] PGS decoder model compliance            ← PARTIAL (DTS+palette done in v5; buffer model+AP → Phase 13)
 ```
 
 Total: ~20 patches across 9 submissions. Each phase is independent
@@ -702,15 +702,15 @@ pairs (4 bitmap decoders x 6 text encoders).
 - [x] Language coverage: 105/114 pass (92%), documented in PHASE7.md
 - [x] Release builds with Tesseract (CI, `-eng` variant with tessdata)
 
-### Phase 8: PGS decoder model compliance ← PLANNING
-16. Compute DTS/PTS per HDMV timing formulas
-17. Validate coded data buffer (1 MB leaky bucket)
-18. Track decoded object buffer (4 MB)
-19. Insert Acquisition Points at configurable interval
-20. Optimize PDS to write only active palette entries
-21. Track object version numbers
-22. FATE tests for timing, buffer model, palette size
-23. Verify against SUPer reference output
+### Phase 8: PGS decoder model compliance ← PARTIAL
+16. ~~Compute DTS/PTS per HDMV timing formulas~~ ← DONE (v5, Phase 10b)
+17. Validate coded data buffer (1 MB leaky bucket) ← deferred to Phase 13e
+18. Track decoded object buffer (4 MB) ← deferred to Phase 13e
+19. Insert Acquisition Points at configurable interval ← deferred to Phase 13c
+20. ~~Optimize PDS to write only active palette entries~~ ← DONE (v5, Phase 10a)
+21. Track object version numbers ← deferred to Phase 13
+22. FATE tests for timing, buffer model, palette size ← partially done (DTS test in v5)
+23. Verify against SUPer reference output ← deferred
 
 ## Verification
 
