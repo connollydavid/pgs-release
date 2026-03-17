@@ -212,6 +212,17 @@ footer {
   font-size: 0.8rem;
 }
 footer a { color: var(--fg2); }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
 </style>
 </head>
 <body>
@@ -220,17 +231,17 @@ footer a { color: var(--fg2); }
 
 <header>
   <h1>FFmpeg Subtitle Tools</h1>
-  <p><span class="version-tag">n8.1-pgs5.0</span> Pre-built FFmpeg with full subtitle format conversion. Text to bitmap, bitmap to text, and everything between.</p>
+  <p><span class="version-tag">n8.1-pgs5.0</span> Convert subtitles between any format. SRT to Blu-ray PGS, PGS to SRT via OCR, styled subtitles with full animation &mdash; one command, no format barriers.</p>
   <div class="error-msg">"Subtitle encoding currently only possible from text to text or bitmap to bitmap"</div>
-  <p>That's <a href="https://trac.ffmpeg.org/ticket/3819">#3819</a>, open since 2014. These builds fix it &mdash; 88 new conversion pairs, a PGS encoder (<a href="https://trac.ffmpeg.org/ticket/6843">#6843</a>), and direct RGBA-to-GIF encoding.</p>
+  <p>That bug is <a href="https://trac.ffmpeg.org/ticket/3819">FFmpeg #3819</a>, open since 2014. These builds fix it &mdash; ready-to-use binaries, no dependencies, drop-in replacement for your existing FFmpeg. Adds a PGS encoder (<a href="https://trac.ffmpeg.org/ticket/6843">#6843</a>), 88 format conversions that weren't possible before, and direct RGBA-to-GIF encoding.</p>
 </header>
 
 <section>
-  <h2>Animation</h2>
+  <h2 class="sr-only">Animation</h2>
   <div class="demo">
-    <img src="demo.gif" alt="ASS fade effect encoded as PGS palette animation">
+    <img src="demo.gif" alt="Subtitle fade effect converted from styled text to Blu-ray PGS bitmap format">
   </div>
-  <p>ASS effects are rendered frame-by-frame and classified automatically. Fades use palette-only Display Sets &mdash; no bitmap retransmission, smooth animation within the Blu-ray decoder model. Overlapping events with different durations produce the correct Display Set sequence via an event lookahead window.</p>
+  <p>Fades, colour changes, and movement in styled subtitles (ASS/SSA) are preserved when converting to Blu-ray PGS. The encoder detects animation automatically &mdash; no manual tagging, no frame-by-frame export. Overlapping subtitles with different timings are handled correctly.</p>
 </section>
 
 <section>
@@ -247,12 +258,12 @@ ffmpeg -i input.mkv -c:s srt output.srt
 # RGBA to GIF without filter pipeline
 ffmpeg -i input.mp4 -c:v gif out.gif</pre>
   </div>
-  <p>Conversion is automatic &mdash; set the output codec, FFmpeg handles the rest.</p>
+  <p>Set the output format, FFmpeg handles the rest. Text to bitmap, bitmap to text, 114 OCR languages supported.</p>
 </section>
 
 <section>
   <h2>Download</h2>
-  <p>Static binaries on <a href="https://github.com/FFmpeg/FFmpeg/releases/tag/n8.1">FFmpeg 8.1</a>. No dependencies. <a href="https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">LGPL 2.1</a>.</p>
+  <p>Ready-to-use binaries built on <a href="https://github.com/FFmpeg/FFmpeg/releases/tag/n8.1">FFmpeg 8.1</a>. Download, extract, run. <a href="https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">LGPL 2.1</a>.</p>
 
   <div class="download-grid">
     <a class="download-card" href="https://github.com/slartibardfast/pgs-release/releases">
