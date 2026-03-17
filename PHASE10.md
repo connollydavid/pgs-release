@@ -1,6 +1,6 @@
 # Phase 10: PGS Encoder Optimizations (v5)
 
-## Status: In Progress
+## Status: Complete — released as n8.1-pgs5.0
 
 Encoder improvements beyond the review-mandated fixes in v4.
 
@@ -15,19 +15,24 @@ For a 16-color subtitle fade at 24fps over 72 frames:
 - Before: 72 × 82 bytes = ~5.9 KB of PDS data
 - After:  72 × 7 bytes  = ~0.5 KB of PDS data (90% reduction)
 
-## 10b: DTS Computation — PLANNED
+## 10b: DTS Computation — DONE
 
-Compute proper DTS for PGS packets per the HDMV timing model.
-Currently `DTS = PTS`; spec says `DTS = PTS - decode_duration`.
-The encoder already computes `decode_duration` — needs a mechanism
-to pass it to the muxer.
+Per-segment DTS in SUP muxer (`supenc.c`): two-pass approach scans
+PGS segments for timing parameters, then writes with computed DTS
+using PGS_FREQ (90kHz), PGS_RD (16Mbps), PGS_RC (32Mbps) decoder
+model constants.
 
-## 10c: Event Lookahead Window — PLANNED
+Per-packet DTS in fftools: `DTS = PTS - decode_duration`, clamped
+to 0. The encoder computes `decode_duration` from bitmap dimensions
+and the HDMV transfer rate model.
 
-Buffer subtitle events with full time spans. Compute change points
-where the set of visible subtitles changes. Re-render at each
-change point. Handles overlapping events with different durations.
-See PHASE9-LOOKAHEAD.md for design.
+## 10c: Event Lookahead Window — DONE
+
+Event buffer replaces simple same-PTS coalescing. Buffers subtitle
+events with full time spans, computes change points where the set of
+visible subtitles changes, re-renders at each change point. Handles
+overlapping events with different durations producing the correct
+Display Set sequence. See PHASE9-LOOKAHEAD.md for design.
 
 ## Known Issues
 
