@@ -143,5 +143,5 @@ complete, tagged `history/pgs-v6`.
 | 5 | `aa9f64bdf9` | CDB rate control (`max_cdb_usage`) + test | Done |
 | 6 | `8136e40001` | Bidirectional forced disposition bridge | Done |
 | 7 | `d8aa72b624` | MPEG-TS DVB forced types (demux + mux) | Done |
-| 8 | `24bafce944` | `-forced_subs_filter` CLI option | Done |
-| 9 | `54a51a0eb6` | `forced_style` AVOption (ASS style → forced flag) | Done |
+| 8 | `2d3fbf3ba0` | `forced_subs_filter` CLI option | Done |
+| 9 | `842ea76bba` | `forced_style` AVOption (ASS style → forced flag) | Done |
