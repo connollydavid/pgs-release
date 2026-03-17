@@ -19,11 +19,44 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y nasm pkg-config libass-dev libtesseract-dev tesseract-ocr-eng
+          sudo apt-get install -y nasm pkg-config \
+            libass-dev libtesseract-dev tesseract-ocr-eng
 
+      # Configure mirrors ffmpeg-release.yml but uses system shared libs
+      # instead of the static sysroot, and keeps doc/debug/ffplay disabled.
       - name: Configure FFmpeg
         working-directory: ffmpeg
-        run: ./configure --disable-doc --enable-libass --enable-libtesseract
+        run: |
+          ./configure \
+            --enable-libass \
+            --enable-libtesseract \
+            --disable-doc \
+            --disable-debug \
+            --enable-ffmpeg \
+            --enable-ffprobe \
+            --disable-ffplay \
+            \
+            --enable-protocol=file,pipe \
+            \
+            --enable-decoder=ass,ssa,subrip,webvtt \
+            --enable-decoder=hdmv_pgs_subtitle,dvb_subtitle,dvdsub,xsub \
+            --enable-decoder=mov_text,microdvd,jacosub,realtext,text \
+            \
+            --enable-encoder=pgssub,ass,subrip,webvtt,mov_text,dvbsub \
+            --enable-encoder=gif \
+            \
+            --enable-muxer=matroska,mp4,mov,mpegts,sup,srt,ass,webvtt,avi,null \
+            --enable-muxer=framecrc \
+            --enable-demuxer=matroska,mov,mpegts,sup,srt,ass,webvtt,avi \
+            \
+            --enable-parser=h264,hevc,av1,vp9,mpeg4video \
+            --enable-parser=aac,ac3,mpegaudio,vorbis,opus \
+            \
+            --enable-bsf=h264_mp4toannexb,hevc_mp4toannexb \
+            --enable-bsf=aac_adtstoasc,extract_extradata \
+            \
+            --enable-filter=subtitles,ocr,null,anull,copy,acopy \
+            --enable-filter=rgbtestsrc,color,testsrc
 
       - name: Build FFmpeg
         working-directory: ffmpeg
