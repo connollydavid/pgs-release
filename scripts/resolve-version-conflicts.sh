@@ -1,118 +1,273 @@
 #!/bin/bash
-# resolve-version-conflicts.sh — resolve FFmpeg version bump conflicts during cherry-pick/rebase
+# resolve-version-conflicts.sh — resolve FFmpeg version bump conflicts during rebase
 #
-# When cherry-picking patches across branches (e.g. master → release), library
+# When rebasing patches across branches (e.g. master → release/8.1), library
 # version bumps in */version.h and doc/APIchanges conflict because the minor
-# version diverges between branches. This script resolves those conflicts
-# automatically by incrementing from the HEAD (target branch) value.
+# version diverges between branches.
 #
-# Usage:
-#   Run from the ffmpeg/ submodule directory during a conflicted cherry-pick:
-#     ../scripts/resolve-version-conflicts.sh
-#     git cherry-pick --continue --no-edit
+# Usage (during a conflicted rebase or cherry-pick):
+#   ../scripts/resolve-version-conflicts.sh
+#   git rebase --continue
+#
+# Usage (as rebase --exec for automatic resolution):
+#   git rebase upstream/release/8.1 \
+#     --exec '../scripts/resolve-version-conflicts.sh --exec-mode'
+#
+# In --exec-mode, the script is a no-op if there are no conflicts (rebase
+# --exec runs after each successful pick). It only acts when called manually
+# or when conflicts exist.
 #
 # What it does:
-#   - */version.h: takes HEAD minor version + 1
-#   - doc/APIchanges: takes the new API entry from theirs, adjusts the library
-#     version number to match the incremented minor version
-#   - Any other conflicted file: exits with an error (manual resolution needed)
+#   - */version.h: resolves stacked conflict markers by taking the highest
+#     MINOR version from either side, then incrementing by 1. Handles the
+#     MICRO reset to 100 that accompanies MINOR bumps.
+#   - doc/APIchanges: keeps BOTH sides (ours = existing entries on target
+#     branch, theirs = new entry from the rebased patch). Adjusts the
+#     version number in theirs to be MINOR+1 from the highest ours entry.
+#   - Changelog: keeps both sides.
+#   - Any other conflicted file: exits with error (manual resolution needed).
+#
+# Environment:
+#   Run from the ffmpeg/ submodule directory (or wherever .git is).
+#   Requires python3 for the conflict resolution logic.
 #
 # Limitations:
-#   - Assumes one conflict block per file
-#   - Assumes standard FFmpeg version.h format (#define LIBxxx_VERSION_MINOR  N)
+#   - Assumes standard FFmpeg version.h format
+#   - Does not resolve non-version conflicts (e.g. Makefile test lists)
 
 set -euo pipefail
 
-conflicts=$(git diff --name-only --diff-filter=U)
+EXEC_MODE=0
+if [ "${1:-}" = "--exec-mode" ]; then
+    EXEC_MODE=1
+fi
+
+conflicts=$(git diff --name-only --diff-filter=U 2>/dev/null || true)
 
 if [ -z "$conflicts" ]; then
+    [ $EXEC_MODE -eq 1 ] && exit 0
     echo "No conflicted files."
     exit 0
 fi
 
+echo "Resolving version conflicts in: $conflicts"
+
 for f in $conflicts; do
     case "$f" in
         */version.h)
-            # Extract the HEAD (ours) minor version from the conflict block
-            head_minor=$(sed -n '/^<<<<<<</,/^=======/{ /VERSION_MINOR/{s/.*MINOR  *//p;}}' "$f")
-            if [ -z "$head_minor" ]; then
-                echo "ERROR: could not parse HEAD minor version from $f"
-                exit 1
-            fi
-            new_minor=$((head_minor + 1))
-            # Resolve: replace conflict block with incremented version
+            # Handle stacked conflict markers from multiple rebased version bumps.
+            # Strategy: find the highest MINOR version mentioned anywhere in the
+            # conflict blocks, then set MINOR = max + 1, MICRO = 100.
+            python3 << 'PYEOF'
+import re, sys
+
+with open("CONFLICTFILE") as fh:
+    content = fh.read()
+
+# Find all MINOR version numbers in conflict blocks
+minors = [int(m) for m in re.findall(
+    r'VERSION_MINOR\s+(\d+)', content)]
+
+if not minors:
+    print("ERROR: no VERSION_MINOR found in CONFLICTFILE", file=sys.stderr)
+    sys.exit(1)
+
+# Also find MINOR outside conflict blocks (the resolved value)
+highest = max(minors)
+
+# Find the macro name (LIBAVUTIL_VERSION_MINOR, LIBAVCODEC_VERSION_MINOR, etc.)
+macro = re.search(r'(LIB\w+_VERSION_MINOR)', content)
+if not macro:
+    print("ERROR: no version macro found in CONFLICTFILE", file=sys.stderr)
+    sys.exit(1)
+macro_name = macro.group(1)
+
+# Remove all conflict blocks, replace with the highest + 1 if our patch
+# is bumping, or highest if it's just catching up to the target branch.
+# Heuristic: if theirs (the patch) has a lower number, it was written
+# against an older base. Increment from ours (the target).
+# If theirs is higher, the patch already bumped — keep the bump relative
+# to our base by using max(ours) + 1.
+
+# Extract ours and theirs from the FIRST conflict block
+m = re.search(
+    r'<<<<<<< HEAD\n.*?' + macro_name + r'\s+(\d+).*?\n'
+    r'=======\n.*?' + macro_name + r'\s+(\d+).*?\n'
+    r'>>>>>>> [^\n]+',
+    content, re.DOTALL)
+
+if m:
+    ours_minor = int(m.group(1))
+    theirs_minor = int(m.group(2))
+    # If theirs bumped (theirs > some base), increment from ours
+    new_minor = ours_minor + 1
+else:
+    new_minor = highest
+
+# Strip ALL conflict markers and version lines within them,
+# replace with single clean definition
+cleaned = re.sub(
+    r'<<<<<<< [^\n]*\n'
+    r'(?:.*?\n)*?'
+    r'=======\n'
+    r'(?:.*?\n)*?'
+    r'>>>>>>> [^\n]*\n',
+    '',
+    content)
+
+# Now set the MINOR version
+cleaned = re.sub(
+    r'#define\s+' + macro_name + r'\s+\d+',
+    f'#define {macro_name}  {new_minor}',
+    cleaned)
+
+# Reset MICRO to 100 (standard for MINOR bumps)
+micro_name = macro_name.replace('MINOR', 'MICRO')
+cleaned = re.sub(
+    r'#define\s+' + micro_name + r'\s+\d+',
+    f'#define {micro_name} 100',
+    cleaned)
+
+with open("CONFLICTFILE", 'w') as fh:
+    fh.write(cleaned)
+
+print(f"  CONFLICTFILE: {macro_name} → {new_minor}")
+PYEOF
+            # Replace placeholder with actual filename
+            sed_safe=$(echo "$f" | sed 's/[&/\]/\\&/g')
             python3 -c "
-import re
-content = open('$f').read()
-content = re.sub(
-    r'<<<<<<< HEAD\n#define (\w+VERSION_MINOR)\s+\d+\n=======\n#define \1\s+\d+\n>>>>>>> [^\n]+',
-    f'#define \\\\1  $new_minor',
-    content
-)
-open('$f', 'w').write(content)
+import re, sys
+
+f = '$f'
+with open(f) as fh:
+    content = fh.read()
+
+minors = [int(m) for m in re.findall(r'VERSION_MINOR\s+(\d+)', content)]
+if not minors:
+    print(f'ERROR: no VERSION_MINOR found in {f}', file=sys.stderr)
+    sys.exit(1)
+
+macro = re.search(r'(LIB\w+_VERSION_MINOR)', content)
+if not macro:
+    print(f'ERROR: no version macro found in {f}', file=sys.stderr)
+    sys.exit(1)
+macro_name = macro.group(1)
+micro_name = macro_name.replace('MINOR', 'MICRO')
+
+# Find ours (HEAD) minor from first conflict
+m = re.search(
+    r'<<<<<<< HEAD\n(?:.*?\n)*?#define\s+' + macro_name + r'\s+(\d+)',
+    content, re.DOTALL)
+ours_minor = int(m.group(1)) if m else max(minors)
+new_minor = ours_minor + 1
+
+# Remove all conflict blocks
+cleaned = re.sub(
+    r'<<<<<<< [^\n]*\n(?:.*?\n)*?=======\n(?:.*?\n)*?>>>>>>> [^\n]*\n',
+    '', content)
+
+cleaned = re.sub(
+    r'#define\s+' + macro_name + r'\s+\d+',
+    f'#define {macro_name}  {new_minor}', cleaned)
+cleaned = re.sub(
+    r'#define\s+' + micro_name + r'\s+\d+',
+    f'#define {micro_name} 100', cleaned)
+
+with open(f, 'w') as fh:
+    fh.write(cleaned)
+print(f'  {f}: {macro_name} {ours_minor} -> {new_minor}')
 "
-            # Verify no conflict markers remain
-            if grep -q '<<<<<<< HEAD' "$f"; then
-                echo "ERROR: unresolved conflict markers remain in $f"
+            if grep -q '<<<<<<' "$f"; then
+                echo "ERROR: unresolved markers in $f"
                 exit 1
             fi
             git add "$f"
-            echo "  $f: MINOR $head_minor → $new_minor"
             ;;
 
         doc/APIchanges)
-            # Detect which library the conflict is about (lavu, lavc, lavf, etc.)
-            lib_tag=$(sed -n '/^=======/,/^>>>>>>>/{ /[0-9]\+\.[0-9]\+\.100/{ s/.*- \(la[a-z]*\) .*/\1/p; }}' "$f" | head -1)
-            if [ -z "$lib_tag" ]; then
-                # Fallback: try from HEAD side
-                lib_tag=$(sed -n '/^<<<<<<</,/^=======/{ /[0-9]\+\.[0-9]\+\.100/{ s/.*- \(la[a-z]*\) .*/\1/p; }}' "$f" | head -1)
-            fi
-            if [ -z "$lib_tag" ]; then
-                echo "ERROR: could not detect library tag from APIchanges conflict"
-                exit 1
-            fi
-
-            # Get HEAD minor version for this library from the conflict
-            head_ver=$(sed -n "/^<<<<<<</,/^=======/{ /$lib_tag [0-9]/{ s/.*$lib_tag //; s/ .*//; p; }}" "$f" | head -1)
-            if [ -n "$head_ver" ]; then
-                head_minor=$(echo "$head_ver" | cut -d. -f2)
-            else
-                # HEAD side might not have a version line for this lib — use 0
-                head_minor=0
-            fi
-            new_minor=$((head_minor + 1))
-            major=$(echo "$head_ver" | cut -d. -f1)
-            if [ -z "$major" ]; then
-                # Get major from theirs side
-                major=$(sed -n "/^=======/,/^>>>>>>>/{ /$lib_tag [0-9]/{ s/.*$lib_tag //; s/\..*//; p; }}" "$f" | head -1)
-            fi
-
+            # Keep BOTH sides: ours (target branch entries) + theirs (new entry).
+            # Adjust theirs version number to be consistent with the target branch.
             python3 -c "
 import re
-content = open('$f').read()
-m = re.search(r'<<<<<<< HEAD\n(.*?)\n=======\n(.*?)\n>>>>>>> [^\n]+', content, re.DOTALL)
-if m:
-    ours = m.group(1)
-    theirs = m.group(2)
-    # Fix the first version reference for $lib_tag in theirs
-    lines = theirs.split('\n')
-    fixed_lines = []
-    first_ver_fixed = False
-    for line in lines:
-        if not first_ver_fixed and re.search(r'$lib_tag $major\.\d+\.100', line):
-            line = re.sub(r'$lib_tag $major\.\d+\.100', '$lib_tag $major.$new_minor.100', line)
-            first_ver_fixed = True
-        fixed_lines.append(line)
-    replacement = '\n'.join(fixed_lines)
-    content = content[:m.start()] + replacement + content[m.end():]
-    open('$f', 'w').write(content)
+
+f = 'doc/APIchanges'
+with open(f) as fh:
+    content = fh.read()
+
+# Find conflict block
+m = re.search(
+    r'<<<<<<< HEAD\n(.*?)\n=======\n(.*?)\n>>>>>>> [^\n]+',
+    content, re.DOTALL)
+
+if not m:
+    print(f'  {f}: no conflict block found')
+    exit(0)
+
+ours = m.group(1).strip()
+theirs = m.group(2).strip()
+
+# Find the highest version in ours for each library
+# Format: '2026-xx-xx - hash - libname major.minor.100 - header'
+ours_versions = {}
+for line in ours.split('\n'):
+    vm = re.match(r'.*- (la\w+) (\d+)\.(\d+)\.\d+', line)
+    if vm:
+        lib, major, minor = vm.group(1), int(vm.group(2)), int(vm.group(3))
+        if lib not in ours_versions or minor > ours_versions[lib][1]:
+            ours_versions[lib] = (major, minor)
+
+# Find what library theirs references
+theirs_lib = None
+theirs_line_match = None
+for line in theirs.split('\n'):
+    vm = re.match(r'(.*- )(la\w+) (\d+)\.(\d+)(\.\d+ .*)', line)
+    if vm:
+        theirs_lib = vm.group(2)
+        theirs_major = int(vm.group(3))
+        theirs_minor = int(vm.group(4))
+        theirs_line_match = vm
+        break
+
+if theirs_lib and theirs_lib in ours_versions:
+    # Increment from ours
+    new_minor = ours_versions[theirs_lib][1] + 1
+    theirs = re.sub(
+        r'(- ' + theirs_lib + r' \d+\.)\d+(\.)',
+        f'\\g<1>{new_minor}\\2', theirs, count=1)
+
+# Combine: theirs (new) on top, then ours (existing)
+combined = theirs + '\n\n' + ours
+content = content[:m.start()] + combined + content[m.end():]
+
+with open(f, 'w') as fh:
+    fh.write(content)
+print(f'  {f}: merged (theirs on top, version adjusted)')
 "
-            if grep -q '<<<<<<< HEAD' "$f"; then
-                echo "ERROR: unresolved conflict markers remain in $f"
+            if grep -q '<<<<<<' "$f"; then
+                echo "ERROR: unresolved markers in $f"
                 exit 1
             fi
             git add "$f"
-            echo "  $f: $lib_tag $major.$head_minor → $major.$new_minor"
+            ;;
+
+        Changelog)
+            # Keep both sides
+            python3 -c "
+import re
+with open('Changelog') as fh:
+    c = fh.read()
+c = re.sub(r'<<<<<<< [^\n]*\n', '', c)
+c = re.sub(r'=======\n', '', c)
+c = re.sub(r'>>>>>>> [^\n]*\n', '', c)
+with open('Changelog', 'w') as fh:
+    fh.write(c)
+print('  Changelog: merged (both sides)')
+"
+            if grep -q '<<<<<<' "Changelog"; then
+                echo "ERROR: unresolved markers in Changelog"
+                exit 1
+            fi
+            git add Changelog
             ;;
 
         *)
@@ -122,4 +277,4 @@ if m:
     esac
 done
 
-echo "All version conflicts resolved."
+echo "All version conflicts resolved. Run: git rebase --continue"
