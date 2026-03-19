@@ -1,5 +1,72 @@
 # Plan: NeuQuant Quantizer + Text-to-Bitmap for FFmpeg (Upstream Focus)
 
+## Current Work
+
+_Scratch buffer — what we're doing right now._
+
+(empty)
+
+## Outstanding Items
+
+### Quick fixes
+
+- [ ] **CI FATE workflow** — runs 10 of 18 tests. Add: `api-pgs-palette-reuse`,
+  `api-pgs-multi-object`, `api-pgs-ap-interval`, `api-pgs-forced`,
+  `api-pgs-rate-control`, `sub-pgs`, `sub-pgs-overlap`, `sub-ocr-roundtrip`
+- [ ] **quantizers/index.html** — links to pgs5, should be pgs7
+- [ ] **color-distance/index.html** — check for stale links
+- [ ] **Co-Authored-By** — inconsistent across patches ("Claude Opus 4.6" vs
+  "Claude Opus 4.6 (1M context)"). Standardise on next rebase.
+
+### Encoder improvements (deferred from Phase 8)
+
+- [ ] **Object version tracking** — ODS always writes `object_version = 0`.
+  Should increment within an epoch when the same `object_id` gets new data.
+  Hardware decoders may use this to detect stale objects. ~10 lines in
+  `pgssubenc.c`. PHASE8.md §8f.
+- [ ] **Window sizing validation** — no enforcement of minimum window size
+  per HDMV spec. PHASE8.md §8f.
+- [ ] **SUPer reference validation** — never compared output against
+  cubicibo's hardware-validated reference encoder. Would catch spec
+  interpretation differences.
+
+### Rate control (deferred from Phase 13)
+
+- [ ] **CDB event deferral** — current `max_cdb_usage` drops events. Full
+  deferral would re-queue events in the fftools event buffer and retry when
+  CDB has refilled. Requires changes to `ffmpeg_enc_sub.c` event loop.
+  Deferred because `avcodec_encode_subtitle` is synchronous — no EAGAIN.
+
+### Upstream fixes (not our code, but we could submit)
+
+- [ ] **movenc.c** — doesn't write `AV_DISPOSITION_FORCED` to MP4 track
+  metadata. The read side (isom.c) handles it. One-line fix.
+- [ ] **dvbsubdec.c** — doesn't set `AV_SUBTITLE_FLAG_FORCED` per-rect.
+  DVB forced is stream-level only. Bridge via disposition (our Patch 6)
+  works around this.
+- [ ] **dvbsubenc.c** — doesn't read `AV_SUBTITLE_FLAG_FORCED`. PGS→DVB
+  transcoding loses forced flag at the content level.
+
+### Features (discussed, not started)
+
+- [ ] **Subtitle stream merging** — merge forced + non-forced input streams
+  into one PGS output. Discussed as "Approach E" (priority queue in fftools
+  accepting events from multiple decoders). Significant fftools work.
+- [ ] **Over-broad animation detection** — `strchr(rect->ass, '{')` triggers
+  multi-timepoint scanning for any ASS override tag, including non-animated
+  ones like `{\b1}`. Check for animation-specific tags (`\fad`, `\move`,
+  `\t`, `\fade`) instead. Review finding S4 from PHASE8-REVIEW.md.
+
+### Submission
+
+- [ ] **Upstream submission to ffmpeg-devel** — patches ready as 4 independent
+  series (see PHASE14.md). Series A (mpegts fix) can go immediately. Series B
+  (encoder) is the core value. Need RFC email first (template in PLAN.md §Phase 0).
+- [ ] **Rebase onto latest upstream** before submission — both master and 8.1
+  may have advanced. Use `scripts/resolve-version-conflicts.sh`.
+
+---
+
 ## Context
 
 FFmpeg has no PGS subtitle encoder (ticket #6843) and no way to convert
