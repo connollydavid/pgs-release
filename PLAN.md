@@ -10,11 +10,11 @@ _Scratch buffer — what we're doing right now._
 
 ### Quick fixes
 
-- [ ] **CI FATE workflow** — runs 10 of 18 tests. Add: `api-pgs-palette-reuse`,
-  `api-pgs-multi-object`, `api-pgs-ap-interval`, `api-pgs-forced`,
-  `api-pgs-rate-control`, `sub-pgs`, `sub-pgs-overlap`, `sub-ocr-roundtrip`
-- [ ] **quantizers/index.html** — links to pgs5, should be pgs7
-- [ ] **color-distance/index.html** — check for stale links
+- [x] **CI FATE workflow** — added 5 API tests (15 total). `sub-pgs`,
+  `sub-pgs-overlap`, `sub-ocr-roundtrip` intentionally excluded (need
+  fate-suite samples or pixel-matched system libs).
+- [x] **quantizers/index.html** — updated pgs5 → pgs7
+- [x] **color-distance/index.html** — checked, no stale links
 - [ ] **Co-Authored-By** — inconsistent across patches ("Claude Opus 4.6" vs
   "Claude Opus 4.6 (1M context)"). Standardise on next rebase.
 
