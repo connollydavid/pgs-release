@@ -1,0 +1,52 @@
+name: Site
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install mdBook
+        run: |
+          mkdir -p "$HOME/.local/bin"
+          curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.40/mdbook-v0.4.40-x86_64-unknown-linux-gnu.tar.gz | tar -xz -C "$HOME/.local/bin"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Fetch host-lifecycle
+        uses: ./.github/actions/host-lifecycle
+
+      - name: Generate the book (lifecycle order; every room)
+        run: |
+          host-lifecycle book .
+          host-lifecycle book --check .
+
+      - name: Build the book
+        run: mdbook build
+
+      # call/0002: the Pages root is the authored product site from docs/;
+      # the development book publishes under /book/, never at the root.
+      - name: Assemble the site
+        run: |
+          mkdir site-out
+          cp -r docs/. site-out/
+          cp -r mdBook/out site-out/book
+
+      # Machine check of call/0002: fail loudly if a regenerated workflow ever
+      # stops serving the product site at the root or drops the /book/ mount.
+      - name: Assert the call/0002 layout
+        run: |
+          cmp docs/index.html site-out/index.html
+          test -f site-out/book/index.html
+
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site-out

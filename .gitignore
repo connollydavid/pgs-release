@@ -22,12 +22,18 @@ target/
 .DS_Store
 Thumbs.db
 
-# Phase 4 test binaries
+# plan/0004 test binaries
 phase4_compare
 phase4_debug
 phase4_hyab
 phase4_metrics
 
-# Local tools and references (not tracked)
+# Local references (not tracked)
 SUPer/
-tools/
+
+# Materialized software worktrees (recipe in .host-software)
+/software/
+
+# Generated mdBook output (host-lifecycle book)
+/book.toml
+/mdBook/

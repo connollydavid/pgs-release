@@ -1,0 +1,38 @@
+name: Verify Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Materialize punkgraphicstream
+        uses: ./.github/actions/host-lifecycle
+        with:
+          item: punkgraphicstream
+
+      - name: Materialize libpgs-jni
+        uses: ./.github/actions/host-lifecycle
+        with:
+          item: libpgs-jni
+
+      - name: Materialize libass
+        uses: ./.github/actions/host-lifecycle
+        with:
+          item: libass
+
+      - name: Materialize ffmpeg
+        uses: ./.github/actions/host-lifecycle
+        with:
+          item: ffmpeg
+
+      # The one mandated gate: pins, receipts (whose rechecks re-run the
+      # naming, prose, reconcile, and room-validation audits), hazards.
+      - name: software --check
+        run: host-lifecycle software --check .

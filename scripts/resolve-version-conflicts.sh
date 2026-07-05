@@ -6,12 +6,12 @@
 # version diverges between branches.
 #
 # Usage (during a conflicted rebase or cherry-pick):
-#   ../scripts/resolve-version-conflicts.sh
+#   ../../../scripts/resolve-version-conflicts.sh
 #   git rebase --continue
 #
 # Usage (as rebase --exec for automatic resolution):
 #   git rebase upstream/release/8.1 \
-#     --exec '../scripts/resolve-version-conflicts.sh --exec-mode'
+#     --exec '../../../scripts/resolve-version-conflicts.sh --exec-mode'
 #
 # In --exec-mode, the script is a no-op if there are no conflicts (rebase
 # --exec runs after each successful pick). It only acts when called manually
@@ -28,7 +28,8 @@
 #   - Any other conflicted file: exits with error (manual resolution needed).
 #
 # Environment:
-#   Run from the ffmpeg/ submodule directory (or wherever .git is).
+#   Run from the ffmpeg worktree, software/ffmpeg/<branch>/ (or wherever
+#   .git is; the relative paths above assume the recorded worktree depth).
 #   Requires python3 for the conflict resolution logic.
 #
 # Limitations:

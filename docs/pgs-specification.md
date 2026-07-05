@@ -4,9 +4,9 @@ Comprehensive technical reference for the HDMV Presentation Graphic Stream forma
 used for bitmap subtitles on Blu-ray Discs, stored in `.sup` files.
 
 Compiled from:
-- US Patent US20090185789A1 / US8350870B2 (Panasonic — McCrossan, Okada, Ogawa)
-- US Patent US8638861B2 (Sony — segment syntax, buffering)
-- US Patent US7620297B2 (Panasonic — decoder model, buffer management)
+- US Patent US20090185789A1 / US8350870B2 (Panasonic: McCrossan, Okada, Ogawa)
+- US Patent US8638861B2 (Sony: segment syntax and the buffering model)
+- US Patent US7620297B2 (Panasonic: decoder model, buffer management)
 - FFmpeg `libavcodec/pgssubdec.c` (reference decoder, Stephen Backway, LGPL 2.1)
 - Scorpius blog (practical format breakdown)
 - Doom9 forum reverse-engineering threads
@@ -56,11 +56,11 @@ Offset  Size  Field
 
 | Code | Name | Description |
 |------|------|-------------|
-| 0x16 | PCS | Presentation Composition Segment — display control |
-| 0x17 | WDS | Window Definition Segment — display area rectangles |
-| 0x14 | PDS | Palette Definition Segment — color table |
-| 0x15 | ODS | Object Definition Segment — RLE bitmap data |
-| 0x80 | END | End of Display Set — terminator (zero-length payload) |
+| 0x16 | PCS | Presentation Composition Segment: display control |
+| 0x17 | WDS | Window Definition Segment: display area rectangles |
+| 0x14 | PDS | Palette Definition Segment: color table |
+| 0x15 | ODS | Object Definition Segment: RLE bitmap data |
+| 0x80 | END | End of Display Set: terminator (zero-length payload) |
 
 ---
 
@@ -72,7 +72,7 @@ needed to render one screen of subtitles.
 ### Segment Order Within a Display Set
 
 ```
-PCS → WDS → PDS → ODS [→ ODS...] → END
+PCS -> WDS -> PDS -> ODS [-> ODS...] -> END
 ```
 
 - Exactly one PCS per Display Set
@@ -84,9 +84,9 @@ PCS → WDS → PDS → ODS [→ ODS...] → END
 
 | Value | Name | Description |
 |-------|------|-------------|
-| 0x00 | Normal | Incremental update — contains only differences from previous |
-| 0x40 | Acquisition Point | Complete refresh — safe entry point for seeking |
-| 0x80 | Epoch Start | New epoch — clears all buffers and starts fresh |
+| 0x00 | Normal | Incremental update: contains only differences from previous |
+| 0x40 | Acquisition Point | Complete refresh: safe entry point for seeking |
+| 0x80 | Epoch Start | New epoch: clears all buffers and starts fresh |
 
 The composition state is encoded in the **top 2 bits** of the composition
 state byte in the PCS. FFmpeg extracts it as `byte >> 6`.
@@ -109,19 +109,19 @@ epoch:
 
 ---
 
-## 5. Presentation Composition Segment (PCS) — 0x16
+## 5. Presentation Composition Segment (PCS): 0x16
 
 ```
 Offset  Size  Field
 ------  ----  -----
 0x00    2     Video Width (e.g., 0x0780 = 1920)
 0x02    2     Video Height (e.g., 0x0438 = 1080)
-0x04    1     Frame Rate (always 0x10 — ignored by decoders)
+0x04    1     Frame Rate (always 0x10: ignored by decoders)
 0x05    2     Composition Number (increments per update within epoch)
 0x07    1     Composition State (0x00=Normal, 0x40=Acquisition, 0x80=Epoch Start)
 0x08    1     Palette Update Flag (0x00=False, 0x80=True)
 0x09    1     Palette ID (reference to PDS)
-0x0A    1     Number of Composition Objects (0–2)
+0x0A    1     Number of Composition Objects (0-2)
 ```
 
 Followed by `N` Composition Object entries (8 bytes each, or 16 if cropped):
@@ -155,7 +155,7 @@ If Cropped flag (bit 7) is set, 8 additional bytes follow:
 
 ---
 
-## 6. Window Definition Segment (WDS) — 0x17
+## 6. Window Definition Segment (WDS): 0x17
 
 ```
 Offset  Size  Field
@@ -178,13 +178,13 @@ Offset  Size  Field
 ### Constraints
 
 - Window position and dimensions are fixed within an epoch
-- Windows should be at least ~25–33% of the graphics plane (per patent)
+- Windows should be at least ~25-33% of the graphics plane (per patent)
 - Position range: 0 to `video_width - 1` / `video_height - 1`
 - A maximum of 2 windows per display set (matching the 2-object limit)
 
 ---
 
-## 7. Palette Definition Segment (PDS) — 0x14
+## 7. Palette Definition Segment (PDS): 0x14
 
 ```
 Offset  Size  Field
@@ -199,10 +199,10 @@ determined by `(segment_size - 2) / 5`:
 ```
 Offset  Size  Field
 ------  ----  -----
-0x00    1     Palette Entry ID (color index 0–255)
-0x01    1     Y  (Luminance, 0–255)
-0x02    1     Cr (Red difference, 0–255)
-0x03    1     Cb (Blue difference, 0–255)
+0x00    1     Palette Entry ID (color index 0-255)
+0x01    1     Y  (Luminance, 0-255)
+0x02    1     Cr (Red difference, 0-255)
+0x03    1     Cb (Blue difference, 0-255)
 0x04    1     Alpha (0 = fully transparent, 255 = fully opaque)
 ```
 
@@ -230,7 +230,7 @@ B = Y + 1.8556 × (Cb - 128)
 
 ---
 
-## 8. Object Definition Segment (ODS) — 0x15
+## 8. Object Definition Segment (ODS): 0x15
 
 ```
 Offset  Size  Field
@@ -281,10 +281,10 @@ Each pixel is an 8-bit palette index. Runs are encoded as follows:
 |-------------|---------|
 | `CC` | 1 pixel of color `CC` (where CC ≠ 0x00) |
 | `00 00` | End of line |
-| `00 0L` | `L` pixels of color 0 (L = 1–63, bits 5:0) |
-| `00 4L LL` | `L` pixels of color 0 (L = 64–16383, 14-bit: bits 5:0 of first byte + second byte) |
-| `00 8L CC` | `L` pixels of color `CC` (L = 3–63, bits 5:0) |
-| `00 CL LL CC` | `L` pixels of color `CC` (L = 64–16383, 14-bit: bits 5:0 of first byte + second byte) |
+| `00 0L` | `L` pixels of color 0 (L = 1-63, bits 5:0) |
+| `00 4L LL` | `L` pixels of color 0 (L = 64-16383, 14-bit: bits 5:0 of first byte + second byte) |
+| `00 8L CC` | `L` pixels of color `CC` (L = 3-63, bits 5:0) |
+| `00 CL LL CC` | `L` pixels of color `CC` (L = 64-16383, 14-bit: bits 5:0 of first byte + second byte) |
 
 ### Decoding Algorithm (from FFmpeg)
 
@@ -335,12 +335,12 @@ scattered pixels:
 
 ---
 
-## 10. End of Display Set Segment — 0x80
+## 10. End of Display Set Segment: 0x80
 
 ```
 Offset  Size  Field
 ------  ----  -----
-(none — zero-length payload)
+(none: zero-length payload)
 ```
 
 The END segment marks the completion of a display set. Its segment size is 0.
@@ -363,9 +363,9 @@ The END segment marks the completion of a display set. Its segment size is 0.
 
 | Rate | Bytes/sec | Bits/sec | Path |
 |------|-----------|----------|------|
-| Rx | 2,000,000 | 16 Mbps | Stream → Coded Data Buffer |
-| Rd | 16,000,000 | 128 Mbps | Coded Data → Decoded Object Buffer |
-| Rc | 32,000,000 | 256 Mbps | Object Buffer → Graphics Plane |
+| Rx | 2,000,000 | 16 Mbps | Stream -> Coded Data Buffer |
+| Rd | 16,000,000 | 128 Mbps | Coded Data -> Decoded Object Buffer |
+| Rc | 32,000,000 | 256 Mbps | Object Buffer -> Graphics Plane |
 
 ### Object Buffer Constraints
 
@@ -499,7 +499,7 @@ sequential display sets:
 ## 15. .sup File Format
 
 A `.sup` file is simply the concatenation of all PGS segments with their
-13-byte headers. There is no file-level header or index — segments are
+13-byte headers. There is no file-level header or index: segments are
 read sequentially. The file can be identified by the `PG` (0x5047) magic
 bytes at the start.
 

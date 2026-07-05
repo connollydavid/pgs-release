@@ -1,6 +1,6 @@
 # FFmpeg Subtitle Tools
 
-Pre-built FFmpeg with full subtitle format conversion. Text to bitmap, bitmap to text, and everything between.
+Pre-built FFmpeg with full subtitle format conversion: text to bitmap, and bitmap back to text.
 
 **Website:** [connollydavid.github.io/pgs-release](https://connollydavid.github.io/pgs-release/)
 

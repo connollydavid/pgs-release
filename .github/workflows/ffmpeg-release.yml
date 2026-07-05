@@ -50,10 +50,14 @@ jobs:
             llvm_mingw: true
 
     steps:
-      - name: Checkout with submodules
+      - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Materialize the ffmpeg worktree
+        id: ffmpeg
+        uses: ./.github/actions/host-lifecycle
         with:
-          submodules: recursive
+          item: ffmpeg
 
       # ── Install build tools ──────────────────────────────────────────────
       - name: Install Linux dependencies
@@ -108,7 +112,7 @@ jobs:
 
       # ── Build FFmpeg ───────────────────────────────────────────────────────
       - name: Configure FFmpeg
-        working-directory: ffmpeg
+        working-directory: ${{ steps.ffmpeg.outputs.path }}
         env:
           PREFIX: ${{ github.workspace }}/sysroot
         run: |
@@ -261,15 +265,15 @@ jobs:
           ./configure "${FLAGS[@]}"
 
       - name: Build FFmpeg
-        working-directory: ffmpeg
+        working-directory: ${{ steps.ffmpeg.outputs.path }}
         run: make -j$(nproc)
 
       - name: Collect binaries
         run: |
           mkdir -p dist
-          cp ffmpeg/ffmpeg${{ matrix.ext }}  dist/
-          cp ffmpeg/ffprobe${{ matrix.ext }} dist/
-          cp ffmpeg/COPYING.LGPLv2.1 dist/LICENSE
+          cp "${{ steps.ffmpeg.outputs.path }}/ffmpeg${{ matrix.ext }}"  dist/
+          cp "${{ steps.ffmpeg.outputs.path }}/ffprobe${{ matrix.ext }}" dist/
+          cp "${{ steps.ffmpeg.outputs.path }}/COPYING.LGPLv2.1" dist/LICENSE
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

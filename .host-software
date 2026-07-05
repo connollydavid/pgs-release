@@ -1,0 +1,26 @@
+# .host-software — the Where room recipe (see STRUCTURE.md)
+# Materialize with: host-lifecycle software --materialize .
+
+[software "punkgraphicstream"]
+    url          = https://github.com/connollydavid/punkgraphicstream.git
+    pin          = b0bc361763635d5d2d139a3b5ffc9fd41dffc74e
+    branch       = master
+    repro-exempt = call/0003
+
+[software "libpgs-jni"]
+    url          = https://github.com/connollydavid/libpgs-jni.git
+    pin          = e9b532d562ae6a53fa2cd30b142cefa4cfce94fa
+    branch       = master
+    repro-exempt = call/0003
+
+[software "libass"]
+    url          = https://github.com/libass/libass.git
+    pin          = bbb3c7f1570a4a021e52683f3fbdf74fe492ae84
+    branch       = master
+    repro-exempt = call/0003
+
+[software "ffmpeg"]
+    url          = https://github.com/connollydavid/FFmpeg.git
+    pin          = a7ffc46c4325a7f3273058fb8f6e5d3186ac711c
+    branch       = pgs8-wip
+    repro-exempt = call/0003

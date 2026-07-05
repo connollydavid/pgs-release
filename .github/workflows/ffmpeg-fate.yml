@@ -11,10 +11,14 @@ jobs:
     name: Build & FATE
     runs-on: ubuntu-24.04
     steps:
-      - name: Checkout with submodules
+      - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Materialize the ffmpeg worktree
+        id: ffmpeg
+        uses: ./.github/actions/host-lifecycle
         with:
-          submodules: recursive
+          item: ffmpeg
 
       - name: Install dependencies
         run: |
@@ -25,7 +29,7 @@ jobs:
       # Configure mirrors ffmpeg-release.yml but uses system shared libs
       # instead of the static sysroot, and keeps doc/debug/ffplay disabled.
       - name: Configure FFmpeg
-        working-directory: ffmpeg
+        working-directory: ${{ steps.ffmpeg.outputs.path }}
         run: |
           ./configure \
             --enable-libass \
@@ -59,7 +63,7 @@ jobs:
             --enable-filter=rgbtestsrc,color,testsrc
 
       - name: Build FFmpeg
-        working-directory: ffmpeg
+        working-directory: ${{ steps.ffmpeg.outputs.path }}
         run: make -j$(nproc)
 
       # 15 self-contained API tests (no external library rendering dependency).
@@ -67,7 +71,7 @@ jobs:
       # sub-ocr-roundtrip (depend on system libass/tesseract pixel output
       # matching references — validated locally with pinned libs).
       - name: Run FATE tests
-        working-directory: ffmpeg
+        working-directory: ${{ steps.ffmpeg.outputs.path }}
         run: |
           make -j$(nproc) \
             fate-quantize \

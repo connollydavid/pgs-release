@@ -1,8 +1,41 @@
 # Plan: NeuQuant Quantizer + Text-to-Bitmap for FFmpeg (Upstream Focus)
 
+## Milestones
+
+The closed milestone records, in acceptance order:
+
+| Milestone | Title |
+|---|---|
+| [0001](0001-hdmv-pgs-encoder/README.md) | HDMV PGS subtitle encoder |
+| [0002](0002-color-quantization-api/README.md) | Color quantization API and palette mapping |
+| [0003](0003-text-to-bitmap-conversion/README.md) | Text-to-bitmap subtitle conversion |
+| [0004](0004-region-weighted-quantization/README.md) | Region-weighted quantization |
+| [0005](0005-quantizer-algorithm-integration/README.md) | Quantizer algorithm integration |
+| [0006](0006-gif-encoder-rgba-quantization/README.md) | GIF encoder RGBA quantization |
+| [0007](0007-upstream-review-findings/README.md) | Upstream review findings |
+| [0008](0008-ocr-bitmap-to-text/README.md) | OCR bitmap-to-text subtitle conversion |
+| [0009](0009-pgs-decoder-model-compliance/README.md) | PGS decoder model compliance |
+| [0010](0010-upstream-suitability-audit/README.md) | Upstream suitability audit |
+| [0011](0011-v3-consolidated-claude-review/README.md) | v3 consolidated Claude-driven review |
+| [0012](0012-v4-review-fixes/README.md) | v4 review fixes |
+| [0013](0013-subtitle-event-lookahead/README.md) | Subtitle event lookahead window |
+| [0014](0014-pgs-encoder-optimizations/README.md) | PGS encoder optimizations (v5) |
+| [0015](0015-website-updates/README.md) | Website updates for v4/v5 |
+| [0016](0016-fate-ci-website-visibility/README.md) | FATE CI and website test visibility |
+| [0017](0017-pgs-encoder-features/README.md) | PGS encoder features (v6) |
+| [0018](0018-upstream-submission-restructuring/README.md) | Upstream submission restructuring (v7) |
+
 ## Current Work
 
-_Scratch buffer — what we're doing right now._
+_Scratch buffer: what we're doing right now._
+
+Adopting the connollydavid/host methodology (2026-07-05): this repository
+becomes an agentic project: spine CLAUDE.md, cast/plan/call rooms, the four
+submodules re-embedded as a bare store with worktrees under software/, phase
+documents renamed to content-named milestones under plan/. Case b (merge
+existing CLAUDE.md rules), Shallow PR mode. Durable exception recorded: the
+GitHub Pages root is the content-full product site; the development mdBook
+publishes under /book/, never at the site root.
 
 v8 development on `pgs8-wip` (master base, off `pgs7`).
 2 patches: rect bounds validation, NeuQuant minimum iterations.
@@ -11,61 +44,61 @@ v8 development on `pgs8-wip` (master base, off `pgs7`).
 
 ### Quick fixes
 
-- [x] **CI FATE workflow** — added 5 API tests (15 total). `sub-pgs`,
+- [x] **CI FATE workflow**: added 5 API tests (15 total). `sub-pgs`,
   `sub-pgs-overlap`, `sub-ocr-roundtrip` intentionally excluded (need
   fate-suite samples or pixel-matched system libs).
-- [x] **quantizers/index.html** — updated pgs5 → pgs7
-- [x] **color-distance/index.html** — checked, no stale links
-- [x] **Co-Authored-By** — inconsistent across patches ("Claude Opus 4.6" vs
+- [x] **quantizers/index.html**: updated pgs5 -> pgs7
+- [x] **color-distance/index.html**: checked, no stale links
+- [x] **Co-Authored-By**: inconsistent across patches ("Claude Opus 4.6" vs
   "Claude Opus 4.6 (1M context)"). Standardise on next rebase.
 
-### Encoder improvements (deferred from Phase 8)
+### Encoder improvements (deferred from plan/0009)
 
-- [x] **Object version tracking** — already implemented in v5. Reset on
+- [x] **Object version tracking**: already implemented in v5. Reset on
   Epoch Start (line 723), passed to ODS (742), incremented after write (745).
-  PHASE8.md said deferred but it was done.
-- [x] **Window bounds validation** — rect bounds check in pgssubenc.c
+  plan/0009-pgs-decoder-model-compliance/README.md said deferred but it was done.
+- [x] **Window bounds validation**: rect bounds check in pgssubenc.c
   (pgs8-wip patch 1). Rejects rects extending beyond video frame.
-- [x] **NeuQuant minimum iterations** — clamp samplepixels to PRIME4 (503)
+- [x] **NeuQuant minimum iterations**: clamp samplepixels to PRIME4 (503)
   in neuquant.c (pgs8-wip patch 2). Fixes quality degradation on tiny
   bitmaps. Coprime walk wraps uniformly.
-- [ ] **SUPer reference validation** — never compared output against
+- [ ] **SUPer reference validation**: never compared output against
   cubicibo's hardware-validated reference encoder. Would catch spec
   interpretation differences.
 
-### Rate control (deferred from Phase 13)
+### Rate control (deferred from plan/0017)
 
-- [ ] **CDB event deferral** — current `max_cdb_usage` drops events. Full
+- [ ] **CDB event deferral**: current `max_cdb_usage` drops events. Full
   deferral would re-queue events in the fftools event buffer and retry when
   CDB has refilled. Requires changes to `ffmpeg_enc_sub.c` event loop.
-  Deferred because `avcodec_encode_subtitle` is synchronous — no EAGAIN.
+  Deferred because `avcodec_encode_subtitle` is synchronous: no EAGAIN.
 
 ### Upstream fixes (not our code, but we could submit)
 
-- [ ] **movenc.c** — doesn't write `AV_DISPOSITION_FORCED` to MP4 track
+- [ ] **movenc.c**: doesn't write `AV_DISPOSITION_FORCED` to MP4 track
   metadata. The read side (isom.c) handles it. One-line fix.
-- [ ] **dvbsubdec.c** — doesn't set `AV_SUBTITLE_FLAG_FORCED` per-rect.
+- [ ] **dvbsubdec.c**: doesn't set `AV_SUBTITLE_FLAG_FORCED` per-rect.
   DVB forced is stream-level only. Bridge via disposition (our Patch 6)
   works around this.
-- [ ] **dvbsubenc.c** — doesn't read `AV_SUBTITLE_FLAG_FORCED`. PGS→DVB
+- [ ] **dvbsubenc.c**: doesn't read `AV_SUBTITLE_FLAG_FORCED`. PGS->DVB
   transcoding loses forced flag at the content level.
 
 ### Features (discussed, not started)
 
-- [ ] **Subtitle stream merging** — merge forced + non-forced input streams
+- [ ] **Subtitle stream merging**: merge forced + non-forced input streams
   into one PGS output. Discussed as "Approach E" (priority queue in fftools
   accepting events from multiple decoders). Significant fftools work.
-- [ ] **Over-broad animation detection** — `strchr(rect->ass, '{')` triggers
+- [ ] **Over-broad animation detection**: `strchr(rect->ass, '{')` triggers
   multi-timepoint scanning for any ASS override tag, including non-animated
   ones like `{\b1}`. Check for animation-specific tags (`\fad`, `\move`,
-  `\t`, `\fade`) instead. Review finding S4 from PHASE8-REVIEW.md.
+  `\t`, `\fade`) instead. See the over-broad animation detection finding in plan/0010-upstream-suitability-audit/README.md.
 
 ### Submission
 
-- [ ] **Upstream submission to ffmpeg-devel** — patches ready as 4 independent
-  series (see PHASE14.md). Series A (mpegts fix) can go immediately. Series B
-  (encoder) is the core value. Need RFC email first (template in PLAN.md §Phase 0).
-- [ ] **Rebase onto latest upstream** before submission — both master and 8.1
+- [ ] **Upstream submission to ffmpeg-devel**: patches ready as 4 independent
+  series (see plan/0018-upstream-submission-restructuring/README.md). Series A (mpegts fix) can go immediately. Series B
+  (encoder) is the core value. Need RFC email first (template in the RFC email section below).
+- [ ] **Rebase onto latest upstream** before submission: both FFmpeg master and FFmpeg 8.1
   may have advanced. Use `scripts/resolve-version-conflicts.sh`.
 
 ---
@@ -83,7 +116,7 @@ We build seven things in phases:
 4. DVD subtitle encoder consolidation (first consumer of shared API)
 5. Median Cut + ELBG algorithm integration + GIF cleanup (complete unification)
 6. GIF encoder RGBA quantization (direct RGBA-to-GIF without filter pipeline)
-7. OCR bitmap-to-text conversion (reverse of Phase 3, via Tesseract)
+7. OCR bitmap-to-text conversion (reverse of plan/0003, via Tesseract)
 
 ## Upstream Acceptance Intelligence
 
@@ -91,19 +124,19 @@ We build seven things in phases:
 
 | Risk | Evidence | Mitigation |
 |------|----------|-----------|
-| **Text-to-bitmap rejected in 2022** | [Coza's 12-patch series](https://patchwork.ffmpeg.org/project/ffmpeg/cover/20220503161328.842587-1-traian.coza@gmail.com/) — wrong location (libavcodec), called "hacky" | Rendering in libavfilter (where libass lives); send RFC first |
+| **Text-to-bitmap rejected in 2022** | [Coza's 12-patch series](https://patchwork.ffmpeg.org/project/ffmpeg/cover/20220503161328.842587-1-traian.coza@gmail.com/): wrong location (libavcodec), called "hacky" | Rendering in libavfilter (where libass lives); send RFC first |
 | **Subtitle filtering is contentious** | Active [RFC](https://www.mail-archive.com/ffmpeg-devel@ffmpeg.org/msg181951.html) (May 2025) + [$1000 bounty dispute](https://www.mail-archive.com/ffmpeg-devel@ffmpeg.org/msg181991.html) | Don't build subtitle filter infrastructure; use utility function pattern |
 | **Large series get stuck** | softworkz's 25-patch set: 9 versions, never merged | 2-4 patches per phase |
-| **AI code policy** | [RFC July 2025](https://www.mail-archive.com/ffmpeg-devel@ffmpeg.org/msg183437.html) — AMD patch rejected as "AI slop" | Disclose assistance; thorough human review |
+| **AI code policy** | [RFC July 2025](https://www.mail-archive.com/ffmpeg-devel@ffmpeg.org/msg183437.html): AMD patch rejected as "AI slop" | Disclose assistance; thorough human review |
 | **Ticket #6843** | [PGS encoder requested](https://trac.ffmpeg.org/ticket/6843) | Reference in commits |
-| **Ticket #3819** | [Subtitle type incompatibility](https://trac.ffmpeg.org/ticket/3819) | Phase 3 addresses directly |
+| **Ticket #3819** | [Subtitle type incompatibility](https://trac.ffmpeg.org/ticket/3819) | plan/0003 addresses directly |
 
 ### Key reviewers
 
-- **Lynne** — skeptical of subtitle architecture changes
-- **Anton Khirnov** — design purity
-- **Hendrik Leppkes** — subtitle architecture
-- **Michael Niedermayer** — security, edge cases
+- **Lynne**: skeptical of subtitle architecture changes
+- **Anton Khirnov**: design purity
+- **Hendrik Leppkes**: subtitle architecture
+- **Michael Niedermayer**: security, edge cases
 
 ## Architecture
 
@@ -121,9 +154,9 @@ Dependency order: `libavutil ← libavcodec ← libavformat ← libavfilter ← 
 - libavfilter already has libass (`vf_subtitles.c`)
 - libavcodec CANNOT depend on libavfilter
 - Putting libass in libavcodec was the 2022 rejection reason
-- fftools already orchestrates sub2video — same pattern
+- fftools already orchestrates sub2video: same pattern
 
-### Data flow (Phase 3)
+### Data flow (plan/0003)
 
 ```
 AVSubtitleRect (SUBTITLE_ASS or SUBTITLE_TEXT)
@@ -131,7 +164,7 @@ AVSubtitleRect (SUBTITLE_ASS or SUBTITLE_TEXT)
   ▼ fftools/ffmpeg_enc.c detects type mismatch
   │
   ├─ avfilter_subtitle_render_frame()         ← libavfilter (libass)
-  │   └─ rasterize → composite → crop → RGBA buffer
+  │   └─ rasterize -> composite -> crop -> RGBA buffer
   ├─ av_quantize_generate_palette()          ← libavutil
   ├─ av_quantize_apply()                     ← libavutil
   └─ rewrite rect: type=BITMAP, data[0]=indices, data[1]=palette
@@ -146,37 +179,37 @@ AVSubtitleRect (SUBTITLE_ASS or SUBTITLE_TEXT)
 Tests are included in the same patch as the code they test (supporting evidence, not separate patches).
 
 ```
-Phase 0:  RFC email
-Phase 1:  [PATCH 1/1] PGS encoder + composition states    ← DONE (2cc882f669), includes state machine
-Phase 2a: [PATCH 1/2] OkLab move + Quantizer API          ← DONE (8e60ec654f, 8d7abb5328)
-Phase 2b: [PATCH 1/2] Palette mapping extraction           ← DONE (3326aa9602, 557d01153a)
-Phase 3:  [PATCH 1/2] Text-to-bitmap + rect splitting     ← DONE
-Phase 3a: [PATCH 1/1] Text-to-bitmap: universal animation ← DONE
-Phase 4:  [PATCH 1/2] Region-weighted quantization          ← DONE (fd72cd4d83, b4ed0c4e82)
-Phase 5:  [PATCH 1/5] Median Cut + ELBG algorithm integration  ← DONE
-Phase 6:  [PATCH 1/1] GIF encoder RGBA quantization          ← DONE (d215fe732d)
-Phase 8:  [PATCH 1/1] PGS decoder model compliance            ← PARTIAL (DTS+palette done in v5; buffer model+AP → Phase 13)
+RFC email
+plan/0001:  [PATCH 1/1] PGS encoder + composition states    ← DONE (2cc882f669), includes state machine
+plan/0002 (api):  [PATCH 1/2] OkLab move + Quantizer API   ← DONE (8e60ec654f, 8d7abb5328)
+plan/0002 (map):  [PATCH 1/2] Palette mapping extraction   ← DONE (3326aa9602, 557d01153a)
+plan/0003:  [PATCH 1/2] Text-to-bitmap + rect splitting     ← DONE
+plan/0003 (anim): [PATCH 1/1] Text-to-bitmap: universal animation ← DONE
+plan/0004:  [PATCH 1/2] Region-weighted quantization          ← DONE (fd72cd4d83, b4ed0c4e82)
+plan/0005:  [PATCH 1/5] Median Cut + ELBG algorithm integration  ← DONE
+plan/0006:  [PATCH 1/1] GIF encoder RGBA quantization          ← DONE (d215fe732d)
+plan/0009:  [PATCH 1/1] PGS decoder model compliance            ← PARTIAL (DTS+palette done in v5; buffer model+AP -> plan/0017)
 ```
 
 Total: ~20 patches across 9 submissions. Each phase is independent
-(Phase 8 depends on Phase 1 only).
+(plan/0009 depends on plan/0001 only).
 
 ### Phase dependency for animation
 
-Animation support spans Phase 1 (encoder state machine, now done) and
-Phase 3a (animation-aware conversion). Phase 3a calls the encoder with
+Animation support spans plan/0001 (encoder state machine, now done) and
+its animation amendment (animation-aware conversion), which calls the encoder with
 palette-only Normal Display Sets to produce fade effects.
 
 ```
-Phase 1 (encoder + composition states) ← DONE
+plan/0001 (encoder + composition states) ← DONE
                         │
-Phase 3 (text-to-bitmap)  ──→ Phase 3a (universal animation pipeline)
+plan/0003 (text-to-bitmap) --> animation amendment (universal animation pipeline)
 ```
 
-Phases 2a, 2b, 5 are unaffected by animation work. Phase 4 (region-weighted
+plan/0002 and plan/0005 are unaffected by animation work. plan/0004 (region-weighted
 quantization) improves karaoke quality specifically during animation.
 
-### Phase 0: RFC email (before any patches)
+### RFC email (before any patches)
 
 ```
 Subject: [RFC] PGS subtitle encoder, quantization API,
@@ -190,9 +223,9 @@ Architecture:
 - Color quantization API in libavutil (NeuQuant with OkLab,
   variable palette 2-256, dithering extracted from vf_paletteuse)
 - Text rendering utility in libavfilter (where libass already
-  lives via vf_subtitles.c — no new external dependencies)
+  lives via vf_subtitles.c: no new external dependencies)
 - Orchestration in fftools (same pattern as sub2video)
-- Encoders unchanged — still accept SUBTITLE_BITMAP only
+- Encoders unchanged: still accept SUBTITLE_BITMAP only
 
 The rendering lives in libavfilter because libavcodec cannot
 depend on libass (Coza's 2022 series was rejected for this).
@@ -203,8 +236,8 @@ I deliberately avoided building subtitle filter infrastructure
 (buffersrc/sink, AVFrame subtitle support). The subtitle
 filtering discussion has fundamental unresolved design
 questions (sparse/overlapping event timing vs contiguous
-frame scheduling). Our utility function approach is orthogonal
-— it works with existing AVSubtitle, requires no AVFrame
+frame scheduling). Our utility function approach is orthogonal:
+it works with existing AVSubtitle, requires no AVFrame
 changes, and can serve as a building block for a future
 text2graphicsub filter if that infrastructure lands.
 
@@ -214,7 +247,7 @@ the series is independently useful and independently testable.
 Code at [repo URL]. Tested with roundtrip encode/decode.
 ```
 
-### Phase 1: PGS encoder — DONE, amendment pending
+### plan/0001: PGS encoder: DONE, amendment pending
 
 ```
 [PATCH 1/1] lavc/pgssubenc: add HDMV PGS subtitle encoder
@@ -224,10 +257,10 @@ Includes encoder, FATE test, reference CRC. Committed `2cc882f669`.
 
 Composition state machine included: automatic state detection (Epoch Start,
 Normal, Acquisition Point), palette_update_flag, palette_version tracking.
-See PHASE1.md for design details grounded in patents US20090185789A1,
+See plan/0001-hdmv-pgs-encoder/README.md for design details grounded in patents US20090185789A1,
 US8638861B2, and US7620297B2.
 
-### Phase 2a: Quantizer API + NeuQuant — DONE
+### Quantizer API + NeuQuant (plan/0002): DONE
 
 ```
 [PATCH 1/2] lavu: move OkLab palette utilities from libavfilter  (8e60ec654f)
@@ -236,9 +269,9 @@ US8638861B2, and US7620297B2.
 
 Patch 1 is a pure refactor (palette.{h,c} move, include updates, no functional change).
 Patch 2 includes quantize.h, quantize.c, neuquant.{h,c}, tests/quantize.c,
-version bump (MINOR 25→26), and APIchanges — one logical unit with its test.
+version bump (MINOR 25->26), and APIchanges: one logical unit with its test.
 
-### Phase 2b: Palette mapping extraction — DONE
+### Palette mapping extraction (plan/0002): DONE
 
 ```
 [PATCH 1/2] lavu: extract palette mapping and dithering from vf_paletteuse  (3326aa9602)
@@ -248,10 +281,10 @@ version bump (MINOR 25→26), and APIchanges — one logical unit with its test.
 Patch 1 creates palettemap.{h,c} with KD-tree colormap, hash cache, and 9 dithering
 algorithms. Internal API only (ff_ prefix). Struct names kept verbatim from original;
 FFColorInfo etc. noted as future work.
-Patch 2 removes ~570 lines from vf_paletteuse.c, replacing with ff_palette_map_*() calls.
+Patch 2 removes ~570 lines from vf_paletteuse.c and replaces them with ff_palette_map_*() calls.
 All 4 paletteuse FATE tests produce bit-for-bit identical output.
 
-### Phase 3: Universal text-to-bitmap — DONE, amendment pending
+### plan/0003: Universal text-to-bitmap: DONE, amendment pending
 
 Rendering in libavfilter, orchestration in fftools. Requires `--enable-libass`.
 
@@ -260,20 +293,20 @@ Rendering in libavfilter, orchestration in fftools. Requires `--enable-libass`.
 [PATCH 2/2] fftools: auto-convert text subtitles to bitmap for encoding (9c953175c6)
 ```
 
-Unlocks 72 text→bitmap subtitle conversion pairs (e.g. SRT→PGS, ASS→DVB).
+Unlocks 72 text->bitmap subtitle conversion pairs (e.g. SRT->PGS, ASS->DVB).
 FATE tests pending (font rendering is platform-dependent; structural test needed).
 
 **Rect splitting (uncommitted):** Scan rendered RGBA for transparent gaps,
 split into 2 composition objects when gap > 32 rows. Implemented in
 `convert_text_to_bitmap()`, needs FATE coverage.
 
-**Amendment (Phase 3a):** Universal animation pipeline — multi-timepoint
+**Animation amendment:** Universal animation pipeline: multi-timepoint
 rendering via `init_event()`/`sample()` API, format-agnostic change
 classification (ALPHA/POSITION/CONTENT), and optimal PGS Display Set
 encoding per change type. Handles fades, motion, and complex transforms
-without parsing format-specific tags. See PHASE3.md for full details.
+without parsing format-specific tags. See plan/0003-text-to-bitmap-conversion/README.md for full details.
 
-### Phase 4: Region-weighted quantization (after Phase 3)
+### plan/0004: Region-weighted quantization (after plan/0003)
 
 ```
 [PATCH 1/1] lavu/quantize: add region-weighted palette generation
@@ -281,12 +314,12 @@ without parsing format-specific tags. See PHASE3.md for full details.
 
 When overlapping subtitle events have radically different color profiles
 (karaoke + dialogue), NeuQuant allocates palette entries by pixel count,
-starving the smaller event. Region-weighted sampling ensures each event
+which starves the smaller event. Region-weighted sampling ensures each event
 gets fair palette representation. Quality validation uses HyAB distance
-(Abasi et al. 2020) — Euclidean OkLab gives misleading results for
-sparse per-region palette coverage. See PHASE4.md for full design.
+(Abasi et al. 2020): Euclidean OkLab gives misleading results for
+sparse per-region palette coverage. See plan/0004-region-weighted-quantization/README.md for full design.
 
-### Phase 5: Algorithm integration (after Phase 2)
+### plan/0005: Algorithm integration (after plan/0002)
 
 ```
 [PATCH 1/5] libavutil: add Median Cut quantizer algorithm
@@ -296,7 +329,7 @@ sparse per-region palette coverage. See PHASE4.md for full design.
 [PATCH 5/5] lavc/pgssubenc, fftools: add quantize_method option
 ```
 
-### Phase 6: GIF encoder RGBA quantization (after Phase 5)
+### plan/0006: GIF encoder RGBA quantization (after plan/0005)
 
 ```
 [PATCH 1/2] lavc/gif: add RGBA input with built-in quantization
@@ -305,8 +338,8 @@ sparse per-region palette coverage. See PHASE4.md for full design.
 
 Accepts `AV_PIX_FMT_RGB32` input directly, using `av_quantize_*` for
 palette generation and `ff_palette_map_apply()` for dithered mapping.
-Simplifies GIF encoding from a complex filter pipeline to a single
-encoder call. The `palettegen`+`paletteuse` pipeline remains available
+GIF encoding becomes a single encoder call in place of a filter
+pipeline. The `palettegen`+`paletteuse` pipeline remains available
 for power users who need cross-frame palette analysis or specific
 dithering tuning.
 
@@ -319,11 +352,11 @@ dithering tuning.
 - No cosmetic + functional changes mixed
 - Tests included with the code they test (not separate patches)
 
-### Upstream requirements for new public API (Phase 2a)
+### Upstream requirements for new public API (plan/0002)
 
 | Requirement | Action |
 |-------------|--------|
-| Version bump | `libavutil/version.h`: MINOR 25→26, MICRO→100 |
+| Version bump | `libavutil/version.h`: MINOR 25->26, MICRO->100 |
 | APIchanges | `doc/APIchanges`: list new public functions |
 | Header guard | `AVUTIL_QUANTIZE_H` |
 | Free naming | `av_quantize_freep()` (`**ptr` pattern) |
@@ -335,11 +368,11 @@ Public API required: Phases 3, 4, 5 all call `av_quantize_*` cross-library.
 
 ---
 
-## Phase 1 Detail: PGS Encoder
+## plan/0001 Detail: PGS Encoder
 
-**DONE — committed `2cc882f669`.**
+**DONE: committed `2cc882f669`.**
 
-Implemented in `ffmpeg/libavcodec/pgssubenc.c`:
+Implemented in `libavcodec/pgssubenc.c` (ffmpeg worktree):
 - PGS RLE encoding per HDMV spec, ODS fragmentation for >64KB
 - Up to 2 composition objects, AABB overlap rejection
 - Frame rate from `avctx->framerate` with AVOption override
@@ -349,7 +382,7 @@ Implemented in `ffmpeg/libavcodec/pgssubenc.c`:
 
 ---
 
-## Phase 2 Detail: Quantizer API
+## plan/0002 Detail: Quantizer API
 
 ### API (`libavutil/quantize.h`)
 
@@ -404,7 +437,7 @@ int av_palette_apply(const uint32_t *palette, int nb_colors,
 | OkLab color space | Perceptual distance, reuse moved `palette.c` |
 | Heap-allocated state | Thread-safe, no globals |
 | RGBA byte order | FFmpeg convention (not ABGR) |
-| `max_colors` 2–256 | DVD=4, DVB=16, PGS=256 |
+| `max_colors` 2-256 | DVD=4, DVB=16, PGS=256 |
 | Alpha-aware distance | `colorimportance()` weighting |
 
 ### NeuQuant copyright (must preserve)
@@ -414,10 +447,10 @@ Copyright (c) 1994 Anthony Dekker
 Modified for RGBA: Copyright (c) 2004-2006 Stuart Coyle
 Rewritten: Copyright (c) 2009 Kornel Lesiński
 Adapted for FFmpeg: Copyright (c) 2026 David Connolly
-[Original permissive license — attribution only]
+[Original permissive license: attribution only]
 ```
 
-### Palette mapping extraction from `vf_paletteuse.c` (Phase 2b)
+### Palette mapping extraction from `vf_paletteuse.c` (plan/0002)
 
 | Component | Lines | Destination |
 |-----------|-------|-------------|
@@ -431,7 +464,7 @@ Adapted for FFmpeg: Copyright (c) 2026 David Connolly
 
 ---
 
-## Phase 3 Detail: Universal Text→Bitmap
+## plan/0003 Detail: Universal Text->Bitmap
 
 ### The problem: 72 broken pairs
 
@@ -455,10 +488,10 @@ Put libass rendering directly in libavcodec. Paul B Mahol: "this needs to
 be in libavfilter instead of libavcodec." Rejection was clear: libavcodec
 is the wrong place for libass.
 
-**3. softworkz's subtitle filtering (Sep 2021–Jun 2025, 25 patches, 9+ versions, unmerged)**
+**3. softworkz's subtitle filtering (Sep 2021-Jun 2025, 25 patches, 9+ versions, unmerged)**
 Full subtitle filter infrastructure: AVFrame subtitle fields, frame-based
 codec API, sbuffersrc/sbuffersink, ~15 subtitle filters. Includes
-`text2graphicsub` which does exactly what Phase 3 does — as a filter node.
+`text2graphicsub` which does exactly what plan/0003 does: as a filter node.
 
 Why it hasn't merged after 4+ years:
 - The timing problem: subtitle events are sparse (gaps) and non-exclusive
@@ -479,7 +512,7 @@ Our approach sidesteps the subtitle filtering debate:
 - **Compatible with future subtitle filters.** Our rendering utility becomes
   a building block for a future `text2graphicsub` filter if one lands.
 
-**Why not libavcodec?** Coza's 2022 rejection. libavcodec→libass is a
+**Why not libavcodec?** Coza's 2022 rejection. libavcodec->libass is a
 dependency violation.
 
 **Why public API (`avfilter_subtitle_render_*`)?** `ff_` symbols are invisible
@@ -506,21 +539,21 @@ int avfilter_subtitle_render_frame(AVSubtitleRenderContext *ctx,
                                     int *x, int *y, int *w, int *h);
 ```
 
-Rendering flow: ASS event → `ass_process_chunk()` → `ass_render_frame()` →
-`ASS_Image` linked list → composite alpha masks onto transparent RGBA canvas →
-crop bounding box → return RGBA + position. Caller (fftools) quantizes to
+Rendering flow: ASS event -> `ass_process_chunk()` -> `ass_render_frame()` ->
+`ASS_Image` linked list -> composite alpha masks onto transparent RGBA canvas ->
+crop bounding box -> return RGBA + position. Caller (fftools) quantizes to
 palette using `av_quantize_*`.
 
 ### Orchestration (`fftools/ffmpeg_enc.c`)
 
-In `do_subtitle_out()`, detect text→bitmap mismatch before encoding:
+In `do_subtitle_out()`, detect text->bitmap mismatch before encoding:
 1. Lazy-init renderer (canvas_size, ASS header, font attachments)
-2. Render each text rect → RGBA
-3. Quantize RGBA → palette + indices via `av_quantize_*`
+2. Render each text rect -> RGBA
+3. Quantize RGBA -> palette + indices via `av_quantize_*`
 4. Rewrite rect: type=BITMAP, data[0]=indices, data[1]=palette
 5. Continue to `avcodec_encode_subtitle()`
 
-Relax text→bitmap gate in `fftools/ffmpeg_mux_init.c` (probe-and-free pattern
+Relax text->bitmap gate in `fftools/ffmpeg_mux_init.c` (probe-and-free pattern
 to detect libass availability at runtime without preprocessor conditionals).
 
 ### Clip-box splitting (top/bottom composition objects)
@@ -533,31 +566,31 @@ This avoids wasting bandwidth on transparent pixels spanning the gap.
 Algorithm: scan rows of rendered RGBA for fully-transparent runs. If a
 gap exceeds a threshold (32 rows), quantize the full RGBA image first,
 then split the index buffer into top and bottom halves. Both halves share
-one palette — PGS allows only one PDS (palette) per Display Set, so
+one palette: PGS allows only one PDS (palette) per Display Set, so
 independent quantization per half would produce incorrect colors for the
 second rect (the encoder writes only `rects[0]->data[1]` as the PDS).
 
-### Animation pipeline (Phase 3a)
+### Animation pipeline (plan/0003 amendment)
 
 Palette animation and position animation are core to the text-to-bitmap
-layer — they determine output quality for common ASS effects. The encoder
-composition state machine (Phase 1, done) provides the foundation —
-Phase 3a builds the animation-aware conversion layer on top.
+layer: they determine output quality for common ASS effects. The encoder
+composition state machine (plan/0001, done) provides the foundation;
+the animation amendment builds the animation-aware conversion layer on top.
 
-**Encoder support (done in Phase 1):**
+**Encoder support (done in plan/0001):**
 - Composition states: Epoch Start / Acquisition Point / Normal
 - palette_update_flag: emit PDS-only Display Sets (no WDS or ODS)
 - palette_version: increment within epoch
-- See PHASE1.md for encoder specification
+- See plan/0001-hdmv-pgs-encoder/README.md for encoder specification
 
-**Phase 3a — Universal subtitle animation:**
+**Animation amendment: universal subtitle animation:**
 - Multi-timepoint rendering via `init_event()` + `sample()` API
 - Every-frame scan gated by format hint (SUBTITLE_ASS with `{`)
 - Classify changes: ALPHA (fade), POSITION (motion), CONTENT (complex)
 - ALPHA: quantize peak frame, palette-only Normal DS chain
 - POSITION: quantize once, position-only Normal DS chain
 - CONTENT: independent quantization per frame, Epoch Start each
-- See PHASE3.md for full animation pipeline specification
+- See plan/0003-text-to-bitmap-conversion/README.md for full animation pipeline specification
 
 **Decoder model constants (from patents, validated by hardware testing):**
 
@@ -572,14 +605,14 @@ Phase 3a builds the animation-aware conversion layer on top.
 | Max palettes/epoch | 8 | US8638861B2 |
 
 A palette-only Display Set (~1300 bytes) takes <0.65 ms at Rx = 2 MB/s,
-enabling 60+ palette updates/second without buffer overflow. This is the
+so 60+ palette updates/second fit without buffer overflow. This is the
 foundation for smooth fade animation.
 
 ### FATE testing
 
 Font rendering is platform-dependent (FreeType version, fontconfig).
 Structural unit test validates render API and rect splitting. Integration
-test verifies SRT→PGS pipeline produces valid output. Gated on CONFIG_LIBASS.
+test verifies SRT->PGS pipeline produces valid output. Gated on CONFIG_LIBASS.
 
 ### Usage
 
@@ -592,27 +625,27 @@ ffmpeg -i movie.mkv -map 0:s -c:s pgssub -s 1920x1080 output.sup
 
 ---
 
-## Phase 4 Detail: Region-Weighted Quantization
+## plan/0004 Detail: Region-Weighted Quantization
 
 Extends `av_quantize_*` API with `av_quantize_add_region()` for
 multi-event palette generation. When overlapping events contribute to a
 single PGS Display Set, equal-weight sampling ensures each event's
 colors get fair palette representation regardless of pixel count.
 
-HyAB distance metric was considered but dropped — SSE proved sufficient
+HyAB distance metric was considered but dropped: SSE proved sufficient
 to demonstrate the 76% karaoke quality improvement unambiguously.
 
-See [PHASE4.md](PHASE4.md) for full design and implementation notes.
+See [plan/0004-region-weighted-quantization/README.md](0004-region-weighted-quantization/README.md) for full design and implementation notes.
 
 ---
 
-## Phase 5 Detail: Algorithm Integration
+## plan/0005 Detail: Algorithm Integration
 
 - Wrap Median Cut from `vf_palettegen.c` as `AV_QUANTIZE_MEDIAN_CUT`
 - Wrap ELBG from `libavcodec/elbg.{h,c}` as `AV_QUANTIZE_ELBG`
 - Refactor `vf_palettegen.c` to use shared quantizer API
 
-## Phase 6 Detail: GIF Encoder RGBA Quantization
+## plan/0006 Detail: GIF Encoder RGBA Quantization
 
 Add `AV_PIX_FMT_RGB32` support to the GIF encoder so users can encode
 GIF directly from RGBA without the `palettegen`+`paletteuse` filter
@@ -637,8 +670,8 @@ a non-dithered intermediate with terrible quality):
 - Per-frame palette, transparency via reserved slot 255
 
 **Trade-offs vs filter pipeline:**
-- Per-frame palette (no cross-frame optimization) — acceptable for most use cases
-- No `stats_mode=diff_frames` equivalent — animated GIFs with changing content may use more bandwidth
+- Per-frame palette (no cross-frame optimization): acceptable for most use cases
+- No `stats_mode=diff_frames` equivalent: animated GIFs with changing content may use more bandwidth
 - Dithering quality equivalent to paletteuse when using same mode
 - Global palette option: cache first frame's palette for subsequent frames (optional enhancement)
 
@@ -648,11 +681,11 @@ a non-dithered intermediate with terrible quality):
 
 | Component | Location | Phase |
 |-----------|----------|-------|
-| OkLab ↔ sRGB | `libavutil/palette.{h,c}` | 2a — DONE (moved from libavfilter/) |
-| KD-Tree + 9 dithering | `libavfilter/vf_paletteuse.c` | 2b — extract to `libavutil/palettemap.c` |
-| libass rendering | `libavfilter/vf_subtitles.c` | 3 — pattern for `subtitle_render.c` |
-| ELBG quantizer | `libavcodec/elbg.{h,c}` | 5 — wrap as `AV_QUANTIZE_ELBG` |
-| Median Cut | `libavfilter/vf_palettegen.c` | 5 — wrap as `AV_QUANTIZE_MEDIAN_CUT` |
+| OkLab ↔ sRGB | `libavutil/palette.{h,c}` | 2a: DONE (moved from libavfilter/) |
+| KD-Tree + 9 dithering | `libavfilter/vf_paletteuse.c` | 2b: extract to `libavutil/palettemap.c` |
+| libass rendering | `libavfilter/vf_subtitles.c` | 3: pattern for `subtitle_render.c` |
+| ELBG quantizer | `libavcodec/elbg.{h,c}` | 5: wrap as `AV_QUANTIZE_ELBG` |
+| Median Cut | `libavfilter/vf_palettegen.c` | 5: wrap as `AV_QUANTIZE_MEDIAN_CUT` |
 
 ### Code to consolidate
 
@@ -711,54 +744,54 @@ a non-dithered intermediate with terrible quality):
 
 ## Implementation Order
 
-### Phase 1: DONE (encoder + composition state machine)
-Committed `2cc882f669` in ffmpeg submodule. Includes composition state
+### plan/0001: DONE (encoder + composition state machine)
+Committed `2cc882f669` in the ffmpeg worktree. Includes composition state
 machine, palette_update_flag, palette_version tracking, and Acquisition
 Point support.
 
-### Phase 2a: DONE
-Committed `8e60ec654f` (palette move) and `8d7abb5328` (quantizer API) in ffmpeg submodule.
+### Quantizer API series (plan/0002): DONE
+Committed `8e60ec654f` (palette move) and `8d7abb5328` (quantizer API) in the ffmpeg worktree.
 
-### Phase 2b: DONE
+### Palette mapping series (plan/0002): DONE
 Committed `3326aa9602` (extract) and `557d01153a` (refactor filter).
 
-### Phase 3 + 3a: DONE
+### plan/0003 + animation amendment: DONE
 All committed on `pgs-series` branch, reorganized into 4 independent
 submission series (A: PGS encoder, B: quantization, C: renderer,
 D: text-to-bitmap). See plan file for series details.
 
-### Phase 4: Region-weighted quantization ← DONE
+### plan/0004: Region-weighted quantization ← DONE
 8. Add `av_quantize_add_region()` to quantizer API ← DONE
 9. Use `add_region()` in coalescing path for multi-event frames ← DONE
-10. ~~Add HyAB distance for quality validation~~ — dropped, SSE sufficient (76% improvement)
+10. ~~Add HyAB distance for quality validation~~: dropped, SSE sufficient (76% improvement)
 11. Verify `make fate` ← DONE
 
-### Phase 5: Algorithm integration
+### plan/0005: Algorithm integration
 10. Extract Median Cut from vf_palettegen as `AV_QUANTIZE_MEDIAN_CUT`
 11. Refactor vf_palettegen to use shared quantizer API
 12. Wrap ELBG as `AV_QUANTIZE_ELBG`
 13. Verify `make fate`
 
-### Phase 6: GIF encoder RGBA quantization ← DONE
+### plan/0006: GIF encoder RGBA quantization ← DONE
 14. Add RGBA input with built-in quantization + dithering to GIF encoder ← DONE (d215fe732d)
 15. Verify `make fate` ← DONE
 
-### Phase 7: OCR bitmap-to-text subtitle conversion ← DONE
-Reverse of Phase 3: bitmap subtitles (PGS, DVB, DVD, XSUB) to text
+### plan/0008: OCR bitmap-to-text subtitle conversion ← DONE
+Reverse of plan/0003: bitmap subtitles (PGS, DVB, DVD, XSUB) to text
 (ASS, SRT, WebVTT, MOV text) via Tesseract OCR. Unlocks 24 conversion
 pairs (4 bitmap decoders x 6 text encoders).
 
 **Design decisions:**
-- Symmetric to Phase 3: library in libavfilter, orchestration in fftools
+- Symmetric to plan/0003: library in libavfilter, orchestration in fftools
 - `subtitle_ocr.{h,c}` mirrors `subtitle_render.{h,c}` API pattern
 - Gated on `CONFIG_LIBTESSERACT` (stubs when unavailable)
 - Buffered bitmap dedup: palette-only changes (PGS fades) skip OCR
 - Min-duration filtering (200ms) discards stray fade frames
 - Position mapping: bitmap (x,y) to `\an`/`\pos`/`\move` tags
 
-**Two-patch structure (matching Phase 3):**
-1. `lavfi: add bitmap subtitle OCR utility` — subtitle_ocr.{h,c}, API test
-2. `fftools: auto-convert bitmap subtitles to text via OCR` — dedup, positioning
+**Two-patch structure (matching plan/0003):**
+1. `lavfi: add bitmap subtitle OCR utility`: subtitle_ocr.{h,c}, API test
+2. `fftools: auto-convert bitmap subtitles to text via OCR`: dedup and positioning
 
 **Status:**
 - [x] Patch 1: Library API (subtitle_ocr.h/c, Makefile, version, APIchanges)
@@ -769,50 +802,50 @@ pairs (4 bitmap decoders x 6 text encoders).
 - [x] Clean build (no warnings)
 - [x] FATE roundtrip test (sub-ocr-roundtrip, gated on CONFIG_LIBTESSERACT)
 - [x] Commits on pgs-series and pgs-series-8.0.1
-- [x] Language coverage: 105/114 pass (92%), documented in PHASE7.md
+- [x] Language coverage: 105 of 114 languages passing (92%), documented in plan/0008-ocr-bitmap-to-text/README.md
 - [x] Release builds with Tesseract (CI, `-eng` variant with tessdata)
 
-### Phase 8: PGS decoder model compliance ← PARTIAL
-16. ~~Compute DTS/PTS per HDMV timing formulas~~ ← DONE (v5, Phase 10b)
-17. Validate coded data buffer (1 MB leaky bucket) ← deferred to Phase 13e
-18. Track decoded object buffer (4 MB) ← deferred to Phase 13e
-19. Insert Acquisition Points at configurable interval ← deferred to Phase 13c
-20. ~~Optimize PDS to write only active palette entries~~ ← DONE (v5, Phase 10a)
-21. Track object version numbers ← deferred to Phase 13
+### plan/0009: PGS decoder model compliance ← PARTIAL
+16. ~~Compute DTS/PTS per HDMV timing formulas~~ ← DONE (v5, plan/0014)
+17. Validate coded data buffer (1 MB leaky bucket) ← deferred to plan/0017 (buffer model)
+18. Track decoded object buffer (4 MB) ← deferred to plan/0017 (buffer model)
+19. Insert Acquisition Points at configurable interval ← deferred to plan/0017 (acquisition points)
+20. ~~Optimize PDS to write only active palette entries~~ ← DONE (v5, plan/0014)
+21. Track object version numbers ← deferred to plan/0017
 22. FATE tests for timing, buffer model, palette size ← partially done (DTS test in v5)
 23. Verify against SUPer reference output ← deferred
 
 ## Verification
 
 ```bash
-# Phase 1 (done)
+# plan/0001 (done)
 FATE_SAMPLES=/tmp/fate-samples make fate-sub-pgs
 
-# Phase 1 (encoder + composition states, done)
+# plan/0001 (encoder + composition states, done)
 FATE_SAMPLES=/tmp/fate-samples make fate-sub-pgs  # passes
 
-# Phase 2 (done)
+# plan/0002 (done)
 make -j$(nproc) && make fate  # no behavior change
 
-# Phase 3 (requires --enable-libass)
+# plan/0003 (requires --enable-libass)
 ./configure --enable-libass --disable-doc && make -j$(nproc)
 ./ffmpeg -i test.srt -c:s pgssub -s 1920x1080 /tmp/t2b.sup
 ./ffprobe -v error -show_streams /tmp/t2b.sup | grep hdmv_pgs
 
-# Phase 3a (animation pipeline)
+# animation amendment (plan/0003)
 FATE_SAMPLES=/tmp/fate-samples make fate-api-pgs-fade fate-api-pgs-animation-util
 ./ffmpeg -i test_fade.ass -c:s pgssub -s 1920x1080 /tmp/fade.sup
 ./ffprobe -v error -show_packets /tmp/fade.sup  # verify multiple display sets
 
-# Phase 4 (region-weighted quantization)
+# plan/0004 (region-weighted quantization)
 make -j$(nproc) && make fate
 # Karaoke test: overlapping events with different color profiles
 ./ffmpeg -i karaoke_test.ass -c:s pgssub -s 1920x1080 /tmp/karaoke.sup
 
-# Phase 5 (algorithm integration)
+# plan/0005 (algorithm integration)
 make -j$(nproc) && make fate  # all quantizers unified
 
-# Phase 6 (GIF RGBA quantization)
+# plan/0006 (GIF RGBA quantization)
 make -j$(nproc) && make fate
 ./ffmpeg -i input.mp4 -c:v gif -quantizer mediancut -dither floyd_steinberg /tmp/test.gif
 ```
@@ -821,14 +854,14 @@ make -j$(nproc) && make fate
 
 | Phase | Document | Status |
 |-------|----------|--------|
-| Phase 1 + 1a | [PHASE1.md](PHASE1.md) | Retrospective + amendment plan |
-| Phase 2a + 2b | [PHASE2.md](PHASE2.md) | Retrospective (complete) |
-| Phase 3 + 3a | [PHASE3.md](PHASE3.md) | Retrospective + animation plan |
-| Phase 4 | [PHASE4.md](PHASE4.md) | Region-weighted quantization |
-| Phase 5 | [PHASE5.md](PHASE5.md) | Algorithm integration |
-| Phase 6 | [PHASE6.md](PHASE6.md) | GIF encoder RGBA quantization |
-| Phase 7 | [PHASE7.md](PHASE7.md) | OCR bitmap-to-text conversion |
-| Phase 8 | [PHASE8.md](PHASE8.md) | PGS decoder model compliance |
+| plan/0001 (+ amendment) | [plan/0001-hdmv-pgs-encoder/README.md](0001-hdmv-pgs-encoder/README.md) | Retrospective + amendment plan |
+| plan/0002 (both series) | [plan/0002-color-quantization-api/README.md](0002-color-quantization-api/README.md) | Retrospective (complete) |
+| plan/0003 (+ amendment) | [plan/0003-text-to-bitmap-conversion/README.md](0003-text-to-bitmap-conversion/README.md) | Retrospective + animation plan |
+| plan/0004 | [plan/0004-region-weighted-quantization/README.md](0004-region-weighted-quantization/README.md) | Region-weighted quantization |
+| plan/0005 | [plan/0005-quantizer-algorithm-integration/README.md](0005-quantizer-algorithm-integration/README.md) | Algorithm integration |
+| plan/0006 | [plan/0006-gif-encoder-rgba-quantization/README.md](0006-gif-encoder-rgba-quantization/README.md) | GIF encoder RGBA quantization |
+| plan/0008 | [plan/0008-ocr-bitmap-to-text/README.md](0008-ocr-bitmap-to-text/README.md) | OCR bitmap-to-text conversion |
+| plan/0009 | [plan/0009-pgs-decoder-model-compliance/README.md](0009-pgs-decoder-model-compliance/README.md) | PGS decoder model compliance |
 
 ## References
 
@@ -842,12 +875,12 @@ make -j$(nproc) && make fate
 
 ### Compiled specification
 
-- `docs/pgs-specification.md` — Synthesized from patents + reverse engineering
+- `docs/pgs-specification.md`: Synthesized from patents + reverse engineering
 
 ### Reference implementations (cited for spec interpretation, not code)
 
-- FFmpeg `libavcodec/pgssubdec.c` — Reference decoder
-- SUPer — Hardware-validated PGS encoder (composition state transitions,
+- FFmpeg `libavcodec/pgssubdec.c`: Reference decoder
+- SUPer: Hardware-validated PGS encoder (composition state transitions,
   decoder model compliance, palette animation sequences)
 
 ## Release Builds
@@ -863,7 +896,7 @@ Minimal subtitle-focused FFmpeg build (`--disable-everything` + selective enable
 - **Parsers**: H.264, HEVC, AV1, VP9, AAC, AC3 (bitstream framing for `-c copy`)
 - **BSFs**: h264_mp4toannexb, hevc_mp4toannexb, aac_adtstoasc, extract_extradata
 - **Filters**: subtitles (libass overlay), null, anull, copy, acopy
-- **libass**: statically linked (from pinned `libass/` submodule on Windows; system package on Linux/macOS)
+- **libass**: statically linked (from the pinned libass component in `.host-software` on Windows; system package on Linux/macOS)
 
 ### Targets
 

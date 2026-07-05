@@ -1,0 +1,12 @@
+# Sanctioned tell-shaped tokens (versions, enum rates, colour-matrix
+# coefficients); full contextual phrases, masked before detection.
+JUnit 4.11
+FILM_NTSC (23.976)
+TV_NTSC (29.97)
+HD_NTSC (59.94)
+Claude Opus 4.6
+FFmpeg 8.1
+Y + 1.5748 × (Cr - 128)
+0.1873 × (Cb - 128)
+0.4681 × (Cr - 128)
+Y + 1.8556 × (Cb - 128)

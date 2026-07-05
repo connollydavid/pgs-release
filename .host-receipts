@@ -1,0 +1,11 @@
+[receipt "adopt"]
+    disposition = done
+    evidence = .host stamp at template revision 5707980; rooms cast/ plan/ call/ scaffolded; case-b merge staged as CLAUDE.md.proposed
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "upgrade"]
+    disposition = skip
+    reason = adopted at the template head (baseline 7127dc4); the upgrade ledger lists 0 pending entries
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05

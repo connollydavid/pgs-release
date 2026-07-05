@@ -44,10 +44,14 @@ jobs:
             llvm_mingw: true
 
     steps:
-      - name: Checkout (for libass submodule)
+      - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Materialize the libass worktree
+        id: libass
+        uses: ./.github/actions/host-lifecycle
         with:
-          submodules: recursive
+          item: libass
 
       - name: Install Linux dependencies
         if: matrix.os == 'linux'
@@ -330,8 +334,8 @@ jobs:
             -GNinja
           ninja -C ft-build2 install
 
-          # ── libass (pinned 0.17.4 from submodule) ─────────────────────────
-          cd libass
+          # ── libass (pinned 0.17.4 worktree from .host-software) ──────────
+          cd "$GITHUB_WORKSPACE/${{ steps.libass.outputs.path }}"
           ./autogen.sh
           CFLAGS="-O2" \
           PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig" \
@@ -340,7 +344,7 @@ jobs:
             --disable-fontconfig \
             --disable-require-system-font-provider
           make -j$(nproc) install
-          cd ..
+          cd "$GITHUB_WORKSPACE"
 
           # ── Leptonica (image processing library for Tesseract) ──────────
           # Leptonica with minimal deps: only zlib and libpng.

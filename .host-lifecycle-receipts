@@ -1,0 +1,71 @@
+[receipt "classify"]
+    disposition = done
+    evidence = host-lifecycle classify . printed case b (pre-methodology CLAUDE.md present)
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "embed" "punkgraphicstream"]
+    disposition = done
+    evidence = gitlink converted to .host-software stanza; software --materialize realised the worktree at its pin; software --check ok
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "embed" "libpgs-jni"]
+    disposition = done
+    evidence = gitlink converted to .host-software stanza; software --materialize realised the worktree at its pin; software --check ok
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "embed" "libass"]
+    disposition = done
+    evidence = gitlink converted to .host-software stanza; software --materialize realised the worktree at its pin; software --check ok
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "embed" "ffmpeg"]
+    disposition = done
+    evidence = gitlink converted to .host-software stanza; software --materialize realised the worktree at its pin; software --check ok
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "remap"]
+    disposition = done
+    evidence = dictionary in call/0001 applied via remap --apply; remap --check clean; host-lint --all exit 0
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "publish"]
+    disposition = done
+    evidence = host-lifecycle book . + book --check .: every room renders (30 pages); Site workflow publishes docs/ at the root and the book under /book/ per call/0002 on merge to main
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "release" "punkgraphicstream"]
+    disposition = skip
+    reason = call/0001
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "release" "libpgs-jni"]
+    disposition = skip
+    reason = call/0001
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "release" "libass"]
+    disposition = skip
+    reason = call/0001
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "release" "ffmpeg"]
+    disposition = skip
+    reason = call/0001
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "verify"]
+    disposition = done
+    evidence = validate plan/ call/ ok; prose clean; reconcile clean; remap --check clean; book --check renders every room; hook blocks a tell commit (tested); software --check ok
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
