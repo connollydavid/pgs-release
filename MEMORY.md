@@ -27,3 +27,19 @@
   be restored from the archive commit afterwards; the standalone host-lint
   binary reads LEXICON while `remap --check` reads `.host-lint-allow` — keep
   both in sync.
+
+## 2026-07-05 — Adoption PR opened (#1); tool findings
+
+- PR: https://github.com/connollydavid/pgs-release/pull/1. Verify receipt
+  deliberately unrecorded until the CLAUDE.md swap (its recheck runs the
+  prose audit, which the outgoing CLAUDE.md fails).
+- The gate's remap recheck refuses a comment-only .host-remap even though
+  the host README retires the dictionary after apply; kept one applied
+  entry as a workaround. Candidate upstream fixes to raise on
+  host-lifecycle: (a) accept an empty dictionary in the recheck, (b) stop
+  remap --apply substituting inside host-lint:ignore fences, (c) unify the
+  LEXICON / .host-lint-allow split between host-lint and remap --check.
+- mdBook under /book/ needed no tool change: book output uses relative
+  links, and the publish recheck only tests that mdbook.yml exists. A
+  native sub-path option in the publish phase would let call/0002's
+  exception retire; considering raising as an enhancement.
