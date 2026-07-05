@@ -39,7 +39,7 @@ are spec-interpretation findings; record them in call/ before submission.
 - depends: #super-validation
 - verify: attested operator
 
-Both FFmpeg master and the 8.1 stable branch have moved. Rebase `pgs8-wip`
+Both FFmpeg master and FFmpeg 8.1 have moved. Rebase `pgs8-wip`
 with `scripts/resolve-version-conflicts.sh` in exec mode, then confirm every
 patch compiles in sequence per the patch-series discipline in CLAUDE.md.
 
