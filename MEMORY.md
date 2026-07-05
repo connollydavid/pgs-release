@@ -83,3 +83,17 @@
   gh-pages:/. The failing legacy build from main:/docs is gone for good.
 - Still open: allium/specula submodule adds (operator command, in the PR
   body) and the cast/ personas discussion.
+
+## 2026-07-05 — All four verification tools wired
+
+- Operator authorized the allium and specula submodule adds; wired at the
+  template's pins (b86dba9), every lane green on that commit.
+- Gotcha with a correction: the first wiring attempt was reported pushed
+  but had been silently blocked — the host-lint pre-commit hook fails
+  closed on staged gitlinks (git show ":path" exits 128 for mode 160000),
+  so every git submodule add commit is rejected once the hook is live.
+  Filed as connollydavid/host-lint#19; the installed hook copies carry a
+  local skip-gitlinks amendment (tool source untouched). Re-apply the
+  amendment if hooks are ever reinstalled before the fix lands.
+- The only remaining spine obligation is authoring cast/ personas by
+  discussion before planning new work.
