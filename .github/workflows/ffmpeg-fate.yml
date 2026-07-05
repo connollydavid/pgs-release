@@ -15,11 +15,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Materialize the ffmpeg worktree
-        run: |
-          curl -fsSL --retry 5 -o /tmp/host-lifecycle \
-            https://github.com/connollydavid/host-lifecycle/releases/download/v0.36.0/host-lifecycle-linux-amd64
-          chmod +x /tmp/host-lifecycle
-          /tmp/host-lifecycle software --materialize --item ffmpeg .
+        id: ffmpeg
+        uses: ./.github/actions/host-lifecycle
+        with:
+          item: ffmpeg
 
       - name: Install dependencies
         run: |
@@ -30,7 +29,7 @@ jobs:
       # Configure mirrors ffmpeg-release.yml but uses system shared libs
       # instead of the static sysroot, and keeps doc/debug/ffplay disabled.
       - name: Configure FFmpeg
-        working-directory: software/ffmpeg/pgs8-wip
+        working-directory: ${{ steps.ffmpeg.outputs.path }}
         run: |
           ./configure \
             --enable-libass \
@@ -64,7 +63,7 @@ jobs:
             --enable-filter=rgbtestsrc,color,testsrc
 
       - name: Build FFmpeg
-        working-directory: software/ffmpeg/pgs8-wip
+        working-directory: ${{ steps.ffmpeg.outputs.path }}
         run: make -j$(nproc)
 
       # 15 self-contained API tests (no external library rendering dependency).
@@ -72,7 +71,7 @@ jobs:
       # sub-ocr-roundtrip (depend on system libass/tesseract pixel output
       # matching references — validated locally with pinned libs).
       - name: Run FATE tests
-        working-directory: software/ffmpeg/pgs8-wip
+        working-directory: ${{ steps.ffmpeg.outputs.path }}
         run: |
           make -j$(nproc) \
             fate-quantize \

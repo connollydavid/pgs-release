@@ -1,0 +1,58 @@
+name: host-lifecycle
+description: >-
+  Fetch the pinned host-lifecycle release (checksum-verified) and, when `item`
+  is set, materialize that .host-software component (bare store cached by pin)
+  and audit it. Single source for the tool version across all workflows.
+inputs:
+  item:
+    description: Component to materialize from .host-software (empty installs the tool only)
+    required: false
+    default: ""
+outputs:
+  path:
+    description: Worktree path (software/<item>/<branch>) when item is set
+    value: ${{ steps.recipe.outputs.path }}
+runs:
+  using: composite
+  steps:
+    - name: Fetch the pinned tool
+      id: recipe
+      shell: bash
+      run: |
+        VERSION=v0.36.0
+        case "$(uname -s)-$(uname -m)" in
+          Linux-x86_64)  ASSET=host-lifecycle-linux-amd64;  SHA=1e2af70d8e0251986b5cd497c1d5b5f8cb0e6ac82c345cd47480dff5865a18ff ;;
+          Linux-aarch64) ASSET=host-lifecycle-linux-arm64;  SHA=bc82d3d35eac2270e1633ec48d94461cc9c4f8bdf4958ba1f331939f6bf55958 ;;
+          Darwin-arm64)  ASSET=host-lifecycle-darwin-arm64; SHA=ffb213437cba1b67b396f4de65274b03cb249fb66765357076f8906329728a44 ;;
+          Darwin-x86_64) ASSET=host-lifecycle-darwin-amd64; SHA=a0c22f1807122ba184f1ca71ba61f91a772bf3d98ebfea230743e0a748996dc6 ;;
+          *) echo "unsupported runner: $(uname -s)-$(uname -m)" >&2; exit 1 ;;
+        esac
+        curl -fsSL --retry 5 -o /tmp/host-lifecycle \
+          "https://github.com/connollydavid/host-lifecycle/releases/download/$VERSION/$ASSET"
+        if command -v sha256sum >/dev/null; then
+          echo "$SHA  /tmp/host-lifecycle" | sha256sum -c -
+        else
+          echo "$SHA  /tmp/host-lifecycle" | shasum -a 256 -c -
+        fi
+        chmod +x /tmp/host-lifecycle
+        if [ -n "${{ inputs.item }}" ]; then
+          item='${{ inputs.item }}'
+          branch=$(awk -v item="$item" '$0 ~ "\\[software \""item"\"\\]"{f=1;next} /^\[/{f=0} f&&$1=="branch"{print $3;exit}' .host-software)
+          pin=$(awk -v item="$item" '$0 ~ "\\[software \""item"\"\\]"{f=1;next} /^\[/{f=0} f&&$1=="pin"{print $3;exit}' .host-software)
+          echo "path=software/$item/${branch:-main}" >> "$GITHUB_OUTPUT"
+          echo "pin=$pin" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Cache the bare store by pin
+      if: inputs.item != ''
+      uses: actions/cache@v4
+      with:
+        path: software/${{ inputs.item }}/.bare
+        key: bare-${{ inputs.item }}-${{ steps.recipe.outputs.pin }}
+
+    - name: Materialize and audit the component
+      if: inputs.item != ''
+      shell: bash
+      run: |
+        /tmp/host-lifecycle software --materialize --item '${{ inputs.item }}' .
+        /tmp/host-lifecycle software --check --item '${{ inputs.item }}' .

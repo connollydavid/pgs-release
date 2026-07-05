@@ -20,10 +20,7 @@ jobs:
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Fetch host-lifecycle
-        run: |
-          curl -fsSL --retry 5 -o /tmp/host-lifecycle \
-            https://github.com/connollydavid/host-lifecycle/releases/download/v0.36.0/host-lifecycle-linux-amd64
-          chmod +x /tmp/host-lifecycle
+        uses: ./.github/actions/host-lifecycle
 
       - name: Generate the book (lifecycle order; every room)
         run: |
@@ -40,6 +37,13 @@ jobs:
           mkdir site-out
           cp -r docs/. site-out/
           cp -r mdBook/out site-out/book
+
+      # Machine check of call/0002: fail loudly if a regenerated workflow ever
+      # stops serving the product site at the root or drops the /book/ mount.
+      - name: Assert the call/0002 layout
+        run: |
+          cmp docs/index.html site-out/index.html
+          test -f site-out/book/index.html
 
       - name: Publish to gh-pages
         uses: peaceiris/actions-gh-pages@v4

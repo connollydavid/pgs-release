@@ -13,14 +13,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Materialize software worktrees
-        run: |
-          curl -fsSL --retry 5 -o /tmp/host-lifecycle \
-            https://github.com/connollydavid/host-lifecycle/releases/download/v0.36.0/host-lifecycle-linux-amd64
-          chmod +x /tmp/host-lifecycle
-          /tmp/host-lifecycle software --materialize --item punkgraphicstream .
-          /tmp/host-lifecycle software --materialize --item libpgs-jni .
-          /tmp/host-lifecycle software --materialize --item libass .
+      - name: Materialize punkgraphicstream
+        id: pgs
+        uses: ./.github/actions/host-lifecycle
+        with:
+          item: punkgraphicstream
+
+      - name: Materialize libpgs-jni
+        id: jni
+        uses: ./.github/actions/host-lifecycle
+        with:
+          item: libpgs-jni
+
+      - name: Materialize libass
+        id: libass
+        uses: ./.github/actions/host-lifecycle
+        with:
+          item: libass
 
       - name: Install native build dependencies
         run: |
