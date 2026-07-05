@@ -43,3 +43,27 @@
   links, and the publish recheck only tests that mdbook.yml exists. A
   native sub-path option in the publish phase would let call/0002's
   exception retire; considering raising as an enhancement.
+
+## 2026-07-05 — Review fixes landed; adoption completed on the branch
+
+- Claude-driven multi-angle review of PR #1 (the advisor tool was
+  unavailable); confirmed findings fixed on the branch: rebase-script
+  usage paths, plan link prefixes, letter-suffixed series labels reworded
+  to content, stale submodule-layout claims, link-skills.sh exec bit.
+- CI single-sources the tool through .github/actions/host-lifecycle:
+  pinned version, sha256-verified download, unsupported-runner guard,
+  bare stores cached by pin, per-item pin audit, worktree path emitted so
+  no workflow hard-codes a branch. gate.yml runs the full
+  software --check on every push/PR; mdbook.yml asserts the call/0002
+  layout post-assembly.
+- Operator directed complete adoption: CLAUDE.md.proposed installed as
+  CLAUDE.md; prose and naming audits clean; verify receipt recorded; full
+  gate green (no hazards).
+- Upstream issues filed: host-lifecycle#11 (remap recheck vs retire
+  step), #12 (remap --apply inside host-lint:ignore fences), #13
+  (LEXICON vs .host-lint-allow split), #14 (materialize shallow/cache),
+  host#17 (publish-phase sub-path mount; would retire call/0002's
+  hand-rolled exception).
+- Still operator-only: adding tools/allium + tools/specula submodules
+  (session permission layer refuses third-party repos in auto mode) and
+  flipping the Pages source to gh-pages after the first Site publish.
