@@ -24,8 +24,8 @@ jobs:
 
       - name: Generate the book (lifecycle order; every room)
         run: |
-          /tmp/host-lifecycle book .
-          /tmp/host-lifecycle book --check .
+          host-lifecycle book .
+          host-lifecycle book --check .
 
       - name: Build the book
         run: mdbook build

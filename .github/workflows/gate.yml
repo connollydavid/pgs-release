@@ -35,4 +35,4 @@ jobs:
       # The one mandated gate: pins, receipts (whose rechecks re-run the
       # naming, prose, reconcile, and room-validation audits), hazards.
       - name: software --check
-        run: /tmp/host-lifecycle software --check .
+        run: host-lifecycle software --check .

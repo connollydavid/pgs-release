@@ -27,14 +27,19 @@ runs:
           Darwin-x86_64) ASSET=host-lifecycle-darwin-amd64; SHA=a0c22f1807122ba184f1ca71ba61f91a772bf3d98ebfea230743e0a748996dc6 ;;
           *) echo "unsupported runner: $(uname -s)-$(uname -m)" >&2; exit 1 ;;
         esac
-        curl -fsSL --retry 5 -o /tmp/host-lifecycle \
+        BIN_DIR="$HOME/.local/bin"
+        mkdir -p "$BIN_DIR"
+        curl -fsSL --retry 5 -o "$BIN_DIR/host-lifecycle" \
           "https://github.com/connollydavid/host-lifecycle/releases/download/$VERSION/$ASSET"
         if command -v sha256sum >/dev/null; then
-          echo "$SHA  /tmp/host-lifecycle" | sha256sum -c -
+          echo "$SHA  $BIN_DIR/host-lifecycle" | sha256sum -c -
         else
-          echo "$SHA  /tmp/host-lifecycle" | shasum -a 256 -c -
+          echo "$SHA  $BIN_DIR/host-lifecycle" | shasum -a 256 -c -
         fi
-        chmod +x /tmp/host-lifecycle
+        chmod +x "$BIN_DIR/host-lifecycle"
+        # Receipt rechecks shell out to `host-lifecycle` by name.
+        echo "$BIN_DIR" >> "$GITHUB_PATH"
+        export PATH="$BIN_DIR:$PATH"
         # The tool reads the adopted template's lifecycle.manifest (receipt
         # rechecks, book order); a plain checkout leaves the submodule empty.
         git submodule update --init --depth 1 host-template
@@ -57,5 +62,5 @@ runs:
       if: inputs.item != ''
       shell: bash
       run: |
-        /tmp/host-lifecycle software --materialize --item '${{ inputs.item }}' .
-        /tmp/host-lifecycle software --check --item '${{ inputs.item }}' .
+        host-lifecycle software --materialize --item '${{ inputs.item }}' .
+        host-lifecycle software --check --item '${{ inputs.item }}' .
