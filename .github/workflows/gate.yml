@@ -36,3 +36,10 @@ jobs:
       # naming, prose, reconcile, and room-validation audits), hazards.
       - name: software --check
         run: host-lifecycle software --check .
+
+      # Until host-lint and remap --check read one allowlist
+      # (connollydavid/host-lifecycle#13), the two must stay identical.
+      - name: Allowlists in sync
+        run: |
+          diff <(grep -v '^#' LEXICON | sed '/^$/d' | sort) \
+               <(grep -v '^#' .host-lint-allow | sed '/^$/d' | sort)
