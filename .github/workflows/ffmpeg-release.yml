@@ -50,10 +50,21 @@ jobs:
             llvm_mingw: true
 
     steps:
-      - name: Checkout with submodules
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
+
+      - name: Materialize the ffmpeg worktree
+        run: |
+          case "$(uname -s)-$(uname -m)" in
+            Linux-x86_64)  HL=host-lifecycle-linux-amd64 ;;
+            Linux-aarch64) HL=host-lifecycle-linux-arm64 ;;
+            Darwin-arm64)  HL=host-lifecycle-darwin-arm64 ;;
+            Darwin-x86_64) HL=host-lifecycle-darwin-amd64 ;;
+          esac
+          curl -fsSL --retry 5 -o /tmp/host-lifecycle \
+            "https://github.com/connollydavid/host-lifecycle/releases/download/v0.36.0/$HL"
+          chmod +x /tmp/host-lifecycle
+          /tmp/host-lifecycle software --materialize --item ffmpeg .
 
       # ── Install build tools ──────────────────────────────────────────────
       - name: Install Linux dependencies
@@ -108,7 +119,7 @@ jobs:
 
       # ── Build FFmpeg ───────────────────────────────────────────────────────
       - name: Configure FFmpeg
-        working-directory: ffmpeg
+        working-directory: software/ffmpeg/pgs8-wip
         env:
           PREFIX: ${{ github.workspace }}/sysroot
         run: |
@@ -261,15 +272,15 @@ jobs:
           ./configure "${FLAGS[@]}"
 
       - name: Build FFmpeg
-        working-directory: ffmpeg
+        working-directory: software/ffmpeg/pgs8-wip
         run: make -j$(nproc)
 
       - name: Collect binaries
         run: |
           mkdir -p dist
-          cp ffmpeg/ffmpeg${{ matrix.ext }}  dist/
-          cp ffmpeg/ffprobe${{ matrix.ext }} dist/
-          cp ffmpeg/COPYING.LGPLv2.1 dist/LICENSE
+          cp software/ffmpeg/pgs8-wip/ffmpeg${{ matrix.ext }}  dist/
+          cp software/ffmpeg/pgs8-wip/ffprobe${{ matrix.ext }} dist/
+          cp software/ffmpeg/pgs8-wip/COPYING.LGPLv2.1 dist/LICENSE
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

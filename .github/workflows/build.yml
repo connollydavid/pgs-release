@@ -10,10 +10,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout with submodules
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
+
+      - name: Materialize software worktrees
+        run: |
+          curl -fsSL --retry 5 -o /tmp/host-lifecycle \
+            https://github.com/connollydavid/host-lifecycle/releases/download/v0.36.0/host-lifecycle-linux-amd64
+          chmod +x /tmp/host-lifecycle
+          /tmp/host-lifecycle software --materialize --item punkgraphicstream .
+          /tmp/host-lifecycle software --materialize --item libpgs-jni .
+          /tmp/host-lifecycle software --materialize --item libass .
 
       - name: Install native build dependencies
         run: |
@@ -30,7 +37,7 @@ jobs:
 
       - name: Build libass (static)
         run: |
-          cd libass
+          cd software/libass/master
           ./autogen.sh
           ./configure --disable-shared --enable-static --with-pic --prefix=$PWD/install
           make -j$(nproc)
@@ -39,24 +46,24 @@ jobs:
       - name: Build libpgs-jni
         run: |
           gcc -fPIC -shared -std=c99 -Wall -O2 \
-            -I libpgs-jni \
-            -I libass/install/include/ass \
+            -I software/libpgs-jni/master \
+            -I software/libass/master/install/include/ass \
             -I $JAVA_HOME/include \
             -I $JAVA_HOME/include/linux \
-            libpgs-jni/name_connolly_david_pgs_Render.c \
-            -L libass/install/lib -Wl,-Bstatic -lass -Wl,-Bdynamic \
+            software/libpgs-jni/master/name_connolly_david_pgs_Render.c \
+            -L software/libass/master/install/lib -Wl,-Bstatic -lass -Wl,-Bdynamic \
             $(pkg-config --libs freetype2 fontconfig fribidi harfbuzz) \
             -lm \
-            -o punkgraphicstream/libpgs-jni.so
+            -o software/punkgraphicstream/master/libpgs-jni.so
 
       - name: Build Java app
         run: |
-          cd punkgraphicstream
+          cd software/punkgraphicstream/master
           mvn package -B
 
       - name: Acceptance test - encode ASS to SUP
         run: |
-          cd punkgraphicstream
+          cd software/punkgraphicstream/master
           java -Djava.library.path=. \
             -cp target/pgs-*.jar \
             name.connolly.david.pgs.console.PunkGraphicStream \
@@ -64,7 +71,7 @@ jobs:
 
       - name: Acceptance test - verify SUP with ffprobe
         run: |
-          ffprobe -v error -show_streams punkgraphicstream/src/test/resources/test.sup \
+          ffprobe -v error -show_streams software/punkgraphicstream/master/src/test/resources/test.sup \
             | grep codec_name=hdmv_pgs_subtitle
 
       - name: Upload artifacts
@@ -72,5 +79,5 @@ jobs:
         with:
           name: pgs-linux-x86_64
           path: |
-            punkgraphicstream/target/pgs-*.jar
-            punkgraphicstream/libpgs-jni.so
+            software/punkgraphicstream/master/target/pgs-*.jar
+            software/punkgraphicstream/master/libpgs-jni.so
