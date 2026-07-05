@@ -1,0 +1,549 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Phase 8 Review: Upstream Suitability Audit - pgs-release</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">pgs-release</a></li><li class="chapter-item expanded affix "><li class="part-title">Cast: who</li><li class="chapter-item expanded "><a href="../../cast/index.html"><strong aria-hidden="true">1.</strong> Cast: the project's Who</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../cast/applying-personas.html"><strong aria-hidden="true">1.1.</strong> Applying personas during planning</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Plan: what & when</li><li class="chapter-item expanded "><a href="../../plan-index.html"><strong aria-hidden="true">2.</strong> Plan</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../plan/0001-hdmv-pgs-encoder/index.html"><strong aria-hidden="true">2.1.</strong> Phase 1: HDMV PGS Subtitle Encoder</a></li><li class="chapter-item expanded "><a href="../../plan/0002-color-quantization-api/index.html"><strong aria-hidden="true">2.2.</strong> Phase 2: Color Quantization API and Palette Mapping</a></li><li class="chapter-item expanded "><a href="../../plan/0003-text-to-bitmap-conversion/index.html"><strong aria-hidden="true">2.3.</strong> Phase 3: Text-to-Bitmap Subtitle Conversion</a></li><li class="chapter-item expanded "><a href="../../plan/0004-region-weighted-quantization/index.html"><strong aria-hidden="true">2.4.</strong> Phase 4: Region-Weighted Quantization</a></li><li class="chapter-item expanded "><a href="../../plan/0005-quantizer-algorithm-integration/index.html"><strong aria-hidden="true">2.5.</strong> Phase 5: Algorithm Integration</a></li><li class="chapter-item expanded "><a href="../../plan/0006-gif-encoder-rgba-quantization/index.html"><strong aria-hidden="true">2.6.</strong> Phase 6: GIF Encoder RGBA Quantization</a></li><li class="chapter-item expanded "><a href="../../plan/0007-upstream-review-findings/index.html"><strong aria-hidden="true">2.7.</strong> Upstream Review Findings</a></li><li class="chapter-item expanded "><a href="../../plan/0008-ocr-bitmap-to-text/index.html"><strong aria-hidden="true">2.8.</strong> Phase 7: OCR Bitmap-to-Text Subtitle Conversion</a></li><li class="chapter-item expanded "><a href="../../plan/0009-pgs-decoder-model-compliance/index.html"><strong aria-hidden="true">2.9.</strong> Phase 8: PGS Decoder Model Compliance</a></li><li class="chapter-item expanded "><a href="../../plan/0010-upstream-suitability-audit/index.html" class="active"><strong aria-hidden="true">2.10.</strong> Phase 8 Review: Upstream Suitability Audit</a></li><li class="chapter-item expanded "><a href="../../plan/0011-v3-consolidated-claude-review/index.html"><strong aria-hidden="true">2.11.</strong> v3 Expert Panel Review: Consolidated Findings</a></li><li class="chapter-item expanded "><a href="../../plan/0012-v4-review-fixes/index.html"><strong aria-hidden="true">2.12.</strong> Phase 9: v4 Series — Address Expert Panel Review</a></li><li class="chapter-item expanded "><a href="../../plan/0013-subtitle-event-lookahead/index.html"><strong aria-hidden="true">2.13.</strong> Phase 9a-R1: Subtitle Event Lookahead Window</a></li><li class="chapter-item expanded "><a href="../../plan/0014-pgs-encoder-optimizations/index.html"><strong aria-hidden="true">2.14.</strong> Phase 10: PGS Encoder Optimizations (v5)</a></li><li class="chapter-item expanded "><a href="../../plan/0015-website-updates/index.html"><strong aria-hidden="true">2.15.</strong> Phase 11: Website Updates for v4/v5</a></li><li class="chapter-item expanded "><a href="../../plan/0016-fate-ci-website-visibility/index.html"><strong aria-hidden="true">2.16.</strong> Phase 12: FATE CI + Website Test Visibility</a></li><li class="chapter-item expanded "><a href="../../plan/0017-pgs-encoder-features/index.html"><strong aria-hidden="true">2.17.</strong> Phase 13: PGS Encoder Features (v6)</a></li><li class="chapter-item expanded "><a href="../../plan/0018-upstream-submission-restructuring/index.html"><strong aria-hidden="true">2.18.</strong> Phase 14: Upstream Submission Restructuring (v7)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Software: where</li><li class="chapter-item expanded "><a href="../../where.html"><strong aria-hidden="true">3.</strong> Software</a></li><li class="chapter-item expanded affix "><li class="part-title">Call: why</li><li class="chapter-item expanded "><a href="../../call/0000-use-markdown-decision-records.html"><strong aria-hidden="true">4.</strong> Use Markdown decision records (MADR)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../call/0001-adopt-host-template.html"><strong aria-hidden="true">4.1.</strong> Adopt the host-template methodology</a></li><li class="chapter-item expanded "><a href="../../call/0002-mdbook-under-book-subdir.html"><strong aria-hidden="true">4.2.</strong> Publish the development mdBook under /book/, never at the site root</a></li><li class="chapter-item expanded "><a href="../../call/0003-migrated-software-repro-exempt.html"><strong aria-hidden="true">4.3.</strong> Migrated software components are repro-exempt for now</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Reference: how</li><li class="chapter-item expanded "><a href="../../CLAUDE.html"><strong aria-hidden="true">5.</strong> CLAUDE.md: operating manual for an agentic project</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../STRUCTURE.html"><strong aria-hidden="true">5.1.</strong> Structure</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Memory</li><li class="chapter-item expanded "><a href="../../MEMORY.html"><strong aria-hidden="true">6.</strong> Memory</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">pgs-release</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="phase-8-review-upstream-suitability-audit"><a class="header" href="#phase-8-review-upstream-suitability-audit">Phase 8 Review: Upstream Suitability Audit</a></h1>
+<h2 id="status-complete"><a class="header" href="#status-complete">Status: Complete</a></h2>
+<p>End-to-end review of all 17 patches (v3) for FFmpeg upstream submission
+readiness. Two independent review passes identified 16 blocking
+issues and ~25 significant issues across the series. All findings
+addressed in v4 (Phase 9).</p>
+<h2 id="patch-series-17-patches"><a class="header" href="#patch-series-17-patches">Patch Series (17 patches)</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>#</th><th>Hash</th><th>Description</th><th>Series</th></tr></thead><tbody>
+<tr><td>1</td><td>a6631a74f6</td><td>PGS encoder + decoder model</td><td>A</td></tr>
+<tr><td>2</td><td>a96d0dfb2f</td><td>OkLab move</td><td>B</td></tr>
+<tr><td>3</td><td>f01af575cb</td><td>NeuQuant quantize API</td><td>B</td></tr>
+<tr><td>4</td><td>af25d87a50</td><td>Palette mapping extraction</td><td>B</td></tr>
+<tr><td>5</td><td>fd1c1c7420</td><td>vf_paletteuse refactor</td><td>B</td></tr>
+<tr><td>6</td><td>e3d4e9604f</td><td>Region-weighted quantization</td><td>B</td></tr>
+<tr><td>7</td><td>904e64655f</td><td>Median Cut + palettegen refactor</td><td>B</td></tr>
+<tr><td>8</td><td>a0c004ce0f</td><td>ELBG move + algo</td><td>B</td></tr>
+<tr><td>9</td><td>282fff42de</td><td>Subtitle renderer</td><td>C</td></tr>
+<tr><td>10</td><td>b2344f3e3c</td><td>Renderer multi-timepoint API</td><td>C</td></tr>
+<tr><td>11</td><td>11a15c8bda</td><td>Core text-to-bitmap</td><td>D</td></tr>
+<tr><td>12</td><td>5564065730</td><td>Animation classification</td><td>D</td></tr>
+<tr><td>13</td><td>57f01a5c28</td><td>Fade animation</td><td>D</td></tr>
+<tr><td>14</td><td>4d96bd80fc</td><td>Event coalescing</td><td>D</td></tr>
+<tr><td>15</td><td>efee54529c</td><td>GIF RGBA quantization</td><td>E</td></tr>
+<tr><td>16</td><td>b5f3a76c2c</td><td>OCR library</td><td>F</td></tr>
+<tr><td>17</td><td>65e74aa15a</td><td>OCR fftools orchestration</td><td>F</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="critical-issues-blocks-acceptance"><a class="header" href="#critical-issues-blocks-acceptance">Critical Issues (blocks acceptance)</a></h2>
+<h3 id="c1-include-c-file-pattern-patches-12-13"><a class="header" href="#c1-include-c-file-pattern-patches-12-13">C1. <code>#include .c</code> file pattern [patches 12, 13]</a></h3>
+<p><code>ffmpeg_subtitle_animation.c</code> is <code>#include</code>d directly into other <code>.c</code>
+files. The commit comment calls this "standard FFmpeg .c inclusion
+pattern for testability" — but this is not an FFmpeg pattern. FFmpeg
+uses <code>.c</code> inclusion only for generated codec tables. For testable
+internal functions, FFmpeg either makes them non-static with <code>ff_</code>
+prefix or uses <code>tests/checkasm/</code>.</p>
+<p><strong>Fix:</strong> Extract <code>ffmpeg_subtitle_animation.c</code> into a proper <code>.c</code>/<code>.h</code>
+pair. Compile as a separate object in <code>fftools/Makefile</code>. Test files
+link against the object. Functions need <code>ff_</code> prefix if called from
+test harnesses, or the test harness can include a thin wrapper.</p>
+<p><strong>Discussion:</strong> The reason for the <code>#include .c</code> pattern was to keep
+animation utilities as static functions (avoiding symbol pollution)
+while still being testable. The upstream-correct approach is to accept
+the symbol visibility cost and use <code>ff_</code> prefix, which is consistent
+with how <code>ffmpeg_filter.c</code> and <code>ffmpeg_mux.c</code> expose internal helpers.</p>
+<h3 id="c2-public-api-naming-patches-9-10-16"><a class="header" href="#c2-public-api-naming-patches-9-10-16">C2. Public API naming [patches 9, 10, 16]</a></h3>
+<p><code>avfilter_subtitle_render_*</code> and <code>avfilter_subtitle_ocr_*</code> use the
+<code>avfilter_</code> prefix, which in FFmpeg convention denotes the public
+libavfilter API. This implies:</p>
+<ul>
+<li>ABI stability commitments</li>
+<li>Version bump + APIchanges entry</li>
+<li>Full Doxygen documentation</li>
+<li>Review scrutiny appropriate for permanent public API</li>
+</ul>
+<p>The functions are only called from fftools. They don't need to be
+public.</p>
+<p><strong>Fix:</strong> Change to <code>ff_subtitle_render_*</code> and <code>ff_subtitle_ocr_*</code>
+(internal symbols). Remove APIchanges entries and version bumps for
+these functions.</p>
+<p><strong>Discussion:</strong> The original reason for <code>avfilter_</code> prefix was that
+<code>ff_</code> symbols are invisible to fftools in shared builds. In shared
+builds, fftools is a separate binary that links against <code>libavfilter.so</code>,
+and <code>ff_</code> symbols are not exported. This is why <code>sub2video</code> code lives
+directly in fftools rather than calling filter internals.</p>
+<p>Options:</p>
+<ol>
+<li><strong>Keep public with <code>avfilter_</code> prefix</strong> — requires full API review,
+version commitment, harder upstream path but correct for shared builds</li>
+<li><strong>Use <code>ff_</code> prefix</strong> — simpler review, but breaks shared builds where
+fftools can't see <code>ff_</code> symbols</li>
+<li><strong>Move orchestration entirely into fftools</strong> — same pattern as
+sub2video. The render/OCR code would be in fftools <code>.c</code> files that
+are compiled directly into the ffmpeg binary. libass and Tesseract
+would be linked directly to fftools, not through libavfilter.</li>
+</ol>
+<p>Option 3 avoids the API naming debate entirely but requires build
+system changes (fftools linking against libass/tesseract directly).
+Option 2 only works for static builds. Option 1 is the current
+approach and arguably correct.</p>
+<p><strong>Recommendation:</strong> Keep <code>avfilter_</code> for now with strong justification
+in the cover letter. The API surface is small (5 render functions,
+5 OCR functions) and follows the precedent of <code>avfilter_graph_*</code> being
+public. If reviewers push back, fall back to option 3.</p>
+<h3 id="c3-abi-break-enum-reordering-patch-8"><a class="header" href="#c3-abi-break-enum-reordering-patch-8">C3. ABI break: enum reordering [patch 8]</a></h3>
+<p><code>AVQuantizeAlgorithm</code> enum values were reordered alphabetically:</p>
+<pre><code class="language-c">// Before (patches 3-7):
+AV_QUANTIZE_NEUQUANT = 0,
+AV_QUANTIZE_MEDIAN_CUT = 1,
+
+// After (patch 8):
+AV_QUANTIZE_ELBG = 0,        // INSERTED — shifts all others
+AV_QUANTIZE_MEDIAN_CUT = 1,
+AV_QUANTIZE_NEUQUANT = 2,    // WAS 0, NOW 2
+</code></pre>
+<p>Code compiled against the old enum and linked against the new library
+silently uses the wrong algorithm.</p>
+<p><strong>Fix:</strong> Append <code>AV_QUANTIZE_ELBG</code> at the end:</p>
+<pre><code class="language-c">AV_QUANTIZE_NEUQUANT = 0,
+AV_QUANTIZE_MEDIAN_CUT = 1,
+AV_QUANTIZE_ELBG = 2,
+</code></pre>
+<p>Also add <code>AV_QUANTIZE_NB</code> sentinel and use it for AVOption max values
+instead of hardcoding the last enum value.</p>
+<p><strong>Discussion:</strong> This is a hard rule in FFmpeg — new enum values are
+always appended, never inserted. The alphabetical ordering was
+cosmetic and not worth the ABI break. The fix is mechanical.</p>
+<h3 id="c4-elbg-move-mixed-into-median-cut-patch-patch-7"><a class="header" href="#c4-elbg-move-mixed-into-median-cut-patch-patch-7">C4. ELBG move mixed into Median Cut patch [patch 7]</a></h3>
+<p>Patch 7 does two unrelated things:</p>
+<ol>
+<li>Moves <code>elbg.{c,h}</code> from <code>libavcodec/</code> to <code>libavutil/</code> (updates 5
+consumers: a64multienc, cinepakenc, msvideo1enc, roqvideoenc, vf_elbg)</li>
+<li>Adds Median Cut quantizer algorithm with palettegen refactor</li>
+</ol>
+<p>These must be separate patches. The ELBG move is a significant
+cross-library change with 5 consumer updates. The Median Cut addition
+is a new algorithm. Mixing them makes review impossible.</p>
+<p><strong>Fix:</strong> Split into two patches:</p>
+<ul>
+<li><code>lavu: move ELBG algorithm from libavcodec to libavutil</code></li>
+<li><code>lavu: add Median Cut quantizer algorithm</code></li>
+</ul>
+<p><strong>Discussion:</strong> These were originally separate patches (the series had
+21 commits) and were squashed during the consolidation pass. The
+squash went too far — these two are logically independent and should
+have stayed separate. This brings us back to 18 patches, which is
+fine.</p>
+<h3 id="c5-fftools-including-private-headers-patch-17"><a class="header" href="#c5-fftools-including-private-headers-patch-17">C5. fftools including private headers [patch 17]</a></h3>
+<pre><code class="language-c">#include "libavcodec/ass.h"       // ff_ass_subtitle_header_full
+#include "libavformat/avlanguage.h" // ff_convert_lang_to
+</code></pre>
+<p>These are <code>ff_</code>-prefixed internal APIs. fftools should not call them.</p>
+<p><strong>Fix options:</strong></p>
+<ol>
+<li>Make the needed functions public (<code>av_</code> prefix, APIchanges entry)</li>
+<li>Duplicate the minimal needed code in fftools</li>
+<li>Use public alternatives that already exist</li>
+</ol>
+<p>For <code>ass.h</code>: the function <code>ff_ass_subtitle_header_full</code> constructs an
+ASS header string. This could be replaced with a simple string
+template in fftools — it's ~10 lines.</p>
+<p>For <code>avlanguage.h</code>: <code>ff_convert_lang_to</code> converts between ISO 639
+language code formats. This is genuinely useful as a public API and
+could be proposed for promotion to <code>av_convert_lang_to</code>.</p>
+<p><strong>Recommendation:</strong> Inline the ASS header construction in fftools
+(trivial). Propose <code>av_convert_lang_to</code> as a public API in a separate
+preparatory patch.</p>
+<h3 id="c6-unprefixed-struct-names-in-header-patch-4"><a class="header" href="#c6-unprefixed-struct-names-in-header-patch-4">C6. Unprefixed struct names in header [patch 4]</a></h3>
+<p><code>palettemap.h</code> exposes these in the global namespace:</p>
+<pre><code class="language-c">struct color_info
+struct color_node
+struct cached_color
+struct cache_node
+</code></pre>
+<p>These will collide with user code.</p>
+<p><strong>Fix:</strong> Prefix with <code>FF</code>:</p>
+<pre><code class="language-c">struct FFColorInfo
+struct FFColorNode
+struct FFCachedColor
+struct FFCacheNode
+</code></pre>
+<p><strong>Discussion:</strong> The commit message acknowledges this as future work.
+Upstream won't accept "future work" — it must be done now. The rename
+is mechanical but touches many lines in <code>palettemap.c</code> and
+<code>vf_paletteuse.c</code>.</p>
+<h3 id="c7-mutating-const-subtitle-patch-11"><a class="header" href="#c7-mutating-const-subtitle-patch-11">C7. Mutating const subtitle [patch 11]</a></h3>
+<p><code>do_subtitle_out</code> signature changed from <code>const AVSubtitle *</code> to
+<code>AVSubtitle *</code> so that <code>convert_text_to_bitmap</code> can rewrite the
+subtitle rects in-place. This is a behavioral change to pre-existing
+code.</p>
+<p><strong>Fix:</strong> Work on a copy. Allocate a local <code>AVSubtitle</code>, copy the
+header fields, allocate new rects for the bitmap data, and free after
+encoding. The original subtitle is not modified.</p>
+<p><strong>Discussion:</strong> The in-place mutation was a shortcut to avoid
+allocation overhead. The cost of copying a subtitle header + rect
+pointers is negligible compared to the render + quantize + encode
+pipeline. The correctness benefit outweighs the minor performance
+cost.</p>
+<h3 id="c8-unrelated-gifc-change-patch-1"><a class="header" href="#c8-unrelated-gifc-change-patch-1">C8. Unrelated gif.c change [patch 1]</a></h3>
+<p>The PGS encoder patch reformats an <code>av_log</code> line in <code>gif.c</code>. This has
+nothing to do with PGS and will be immediately called out.</p>
+<p><strong>Fix:</strong> Remove the gif.c hunk from the PGS encoder patch.</p>
+<hr />
+<h2 id="significant-issues-likely-reviewer-flags"><a class="header" href="#significant-issues-likely-reviewer-flags">Significant Issues (likely reviewer flags)</a></h2>
+<h3 id="s1-domain-specific-ocr-post-processing-patch-16"><a class="header" href="#s1-domain-specific-ocr-post-processing-patch-16">S1. Domain-specific OCR post-processing [patch 16]</a></h3>
+<p>The <code>|</code>-to-<code>I</code> replacement in <code>avfilter_subtitle_ocr_recognize</code> is
+a subtitle-specific heuristic. A generic OCR API should return raw
+Tesseract output. Post-processing belongs in the caller (fftools).</p>
+<h3 id="s2-460-line-animated-encoding-function-patch-13"><a class="header" href="#s2-460-line-animated-encoding-function-patch-13">S2. 460-line animated encoding function [patch 13]</a></h3>
+<p><code>do_subtitle_out_animated()</code> has three nearly-identical code paths
+for ALPHA, POSITION, and CONTENT change types. Each branch repeats
+<code>local_sub</code> setup, <code>check_recording_time</code>, and <code>encode_subtitle_packet</code>
+calls. Extract the common pattern into a helper.</p>
+<h3 id="s3-ffmpeg_encc-growth-patches-11-14"><a class="header" href="#s3-ffmpeg_encc-growth-patches-11-14">S3. ffmpeg_enc.c growth [patches 11-14]</a></h3>
+<p>The subtitle conversion code adds ~1500 lines to <code>ffmpeg_enc.c</code>.
+Upstream will want a separate file (<code>ffmpeg_subtitle.c</code> or similar).</p>
+<h3 id="s4-over-broad-animation-detection-patch-13"><a class="header" href="#s4-over-broad-animation-detection-patch-13">S4. Over-broad animation detection [patch 13]</a></h3>
+<p><code>strchr(rect-&gt;ass, '{')</code> triggers multi-timepoint scanning for any
+ASS event with override tags, including simple <code>{\b1}Bold</code> that has
+no animation. Check for animation-specific tags (<code>\fad</code>, <code>\move</code>,
+<code>\t</code>, <code>\fade</code>) instead.</p>
+<h3 id="s5-dead-struct-in-refactored-filter-patch-5"><a class="header" href="#s5-dead-struct-in-refactored-filter-patch-5">S5. Dead struct in refactored filter [patch 5]</a></h3>
+<p><code>struct stack_node</code> is left behind in <code>vf_paletteuse.c</code> after the
+extraction. Remove it.</p>
+<h3 id="s6-palette-index-bounds-patch-17"><a class="header" href="#s6-palette-index-bounds-patch-17">S6. Palette index bounds [patch 17]</a></h3>
+<p>In <code>bitmap_to_grayscale</code>, pixel indices index into the palette array
+but are not bounds-checked against <code>nb_colors</code>. Since indices are
+<code>uint8_t</code> (0-255) and palette is 256 entries, this is safe in practice,
+but entries beyond <code>nb_colors</code> may be uninitialized.</p>
+<h3 id="s7-apichanges-date-ordering-patch-3"><a class="header" href="#s7-apichanges-date-ordering-patch-3">S7. APIchanges date ordering [patch 3]</a></h3>
+<p>The quantize API entry is dated <code>2026-02-xx</code> but has a higher version
+number than entries dated later. APIchanges must be chronologically
+ordered.</p>
+<h3 id="s8-testsreffatesource--av_clip-vs-av_clip_uintp2-patch-3"><a class="header" href="#s8-testsreffatesource--av_clip-vs-av_clip_uintp2-patch-3">S8. <code>tests/ref/fate/source</code> — av_clip vs av_clip_uintp2 [patch 3]</a></h3>
+<p>Several <code>av_clip(x, 0, 255)</code> calls could use <code>av_clip_uintp2(x, 8)</code>.
+Reviewers (especially Michael Niedermayer) will flag this.</p>
+<h3 id="s9-gif-palette-byte-order-and-transparency-patch-15"><a class="header" href="#s9-gif-palette-byte-order-and-transparency-patch-15">S9. GIF palette byte order and transparency [patch 15]</a></h3>
+<p>The transparency slot is hardcoded at index 255, but the quantizer
+is asked for max_colors=255. If quantization uses all 255 slots,
+there's no collision check. And the palette byte order between
+<code>av_quantize_generate_palette</code> and <code>ff_palette_map_apply</code> relies on
+both using <code>0xAARRGGBB</code> — document this contract.</p>
+<h3 id="s10-alloc-as-probe-for-libass-availability-patch-11"><a class="header" href="#s10-alloc-as-probe-for-libass-availability-patch-11">S10. Alloc-as-probe for libass availability [patch 11]</a></h3>
+<p>The code probes for libass by allocating a 1x1 render context and
+checking for NULL. A simple <code>avfilter_subtitle_render_available()</code>
+boolean would be cleaner.</p>
+<hr />
+<h2 id="low-priority-may-come-up-not-blocking"><a class="header" href="#low-priority-may-come-up-not-blocking">Low Priority (may come up, not blocking)</a></h2>
+<ul>
+<li>No <code>av_log</code> context in render API (functions log to NULL)</li>
+<li>ELBG <code>av_quantize_apply</code> is O(n*k) brute force for pixel mapping</li>
+<li><code>frame_rate</code> AVOption allows invalid intermediate values (0x50)</li>
+<li>Deterministic ELBG seed hardcoded to 1</li>
+<li>GIF per-frame palette with no temporal coherence</li>
+<li>Region-weighted <code>SAMPLES_PER_REGION</code> cap at 8192 is a magic number</li>
+<li><code>bpp</code> parameter in OCR API is always 1 — unnecessary parameter</li>
+<li><code>TessBaseAPIRect()</code> may be deprecated in newer Tesseract versions</li>
+<li>Incomplete RTL language detection in multi-language strings</li>
+</ul>
+<hr />
+<h2 id="execution-plan-full-series-rebuild"><a class="header" href="#execution-plan-full-series-rebuild">Execution Plan: Full Series Rebuild</a></h2>
+<p>The fixes are too interconnected for surgical edits to individual
+patches. Rebuild the entire series from the working HEAD.</p>
+<h3 id="new-patch-structure-16-patches"><a class="header" href="#new-patch-structure-16-patches">New patch structure (16 patches)</a></h3>
+<pre><code>Series A: PGS Encoder (standalone)
+ 1. lavc/pgssubenc: add HDMV PGS subtitle encoder
+
+Series B: Quantization Infrastructure
+ 2. lavu: move OkLab palette utilities from libavfilter
+ 3. lavu: add color quantization API with NeuQuant
+ 4. lavu: extract palette mapping and dithering from vf_paletteuse
+ 5. lavfi/vf_paletteuse: use libavutil palette mapping
+ 6. lavu/quantize: add region-weighted palette generation
+ 7. lavu: move ELBG from libavcodec to libavutil
+ 8. lavu: add Median Cut quantizer algorithm
+ 9. lavu: add ELBG quantizer algorithm
+
+Series C: Text-to-Bitmap (depends on B)
+10. fftools: add text-to-bitmap subtitle conversion
+11. fftools: add subtitle animation and event coalescing
+
+Series D: GIF Encoder (depends on B)
+12. lavc/gif: add RGBA input with built-in quantization
+
+Series E: OCR Bitmap-to-Text
+13. fftools: add bitmap-to-text subtitle conversion via OCR
+
+Series F: Quantizer Selection (depends on B+C)
+14. lavc/pgssubenc, fftools: add quantize_method option
+</code></pre>
+<h3 id="fixes-integrated-into-each-patch"><a class="header" href="#fixes-integrated-into-each-patch">Fixes integrated into each patch</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Patch</th><th>Fixes integrated</th></tr></thead><tbody>
+<tr><td>1</td><td>Remove gif.c cosmetic, decoder model compliance built-in</td></tr>
+<tr><td>4</td><td>FF-prefix structs, remove dead stack_node</td></tr>
+<tr><td>9</td><td>Enum values appended (ABI-safe)</td></tr>
+<tr><td>10</td><td>Renderer in fftools (not libavfilter), no public API, const-correct subtitle handling</td></tr>
+<tr><td>11</td><td>Animation in fftools proper .c file (no #include .c), narrow detection heuristic</td></tr>
+<tr><td>12</td><td>Sorted palette fix built-in</td></tr>
+<tr><td>13</td><td>OCR in fftools (not libavfilter),</td></tr>
+</tbody></table>
+</div>
+<h3 id="new-fftools-files"><a class="header" href="#new-fftools-files">New fftools files</a></h3>
+<pre><code>fftools/ffmpeg_enc_sub.c   — subtitle_render + text-to-bitmap + animation
+fftools/ffmpeg_enc_sub.h   — declarations for enc_sub functions
+fftools/ffmpeg_dec_sub.c   — subtitle_ocr + bitmap-to-text + dedup
+fftools/ffmpeg_dec_sub.h   — declarations for dec_sub functions
+</code></pre>
+<h3 id="files-removed-from-libavfilter"><a class="header" href="#files-removed-from-libavfilter">Files removed from libavfilter</a></h3>
+<pre><code>libavfilter/subtitle_render.{h,c}  — moved to fftools
+libavfilter/subtitle_ocr.{h,c}    — moved to fftools
+</code></pre>
+<p>No libavfilter version bumps or APIchanges entries for render/OCR.</p>
+<hr />
+<h2 id="decisions"><a class="header" href="#decisions">Decisions</a></h2>
+<h3 id="d1-move-renderocr-code-to-fftools-option-3"><a class="header" href="#d1-move-renderocr-code-to-fftools-option-3">D1: Move render/OCR code to fftools (option 3)</a></h3>
+<p>The render and OCR code moves from libavfilter into fftools. No
+library API — the code compiles directly into the ffmpeg binary,
+matching the sub2video precedent. fftools links libass and Tesseract
+directly via configure changes.</p>
+<p>This eliminates the <code>avfilter_*</code> vs <code>ff_*</code> naming debate, the API
+stability commitment, and the shared-build visibility problem.</p>
+<p>The <code>subtitle_render.{h,c}</code> and <code>subtitle_ocr.{h,c}</code> files move
+from <code>libavfilter/</code> to <code>fftools/</code>. The APIchanges entries and
+libavfilter version bumps for these functions are removed.</p>
+<h3 id="d2-animation-stays-in-fftools"><a class="header" href="#d2-animation-stays-in-fftools">D2: Animation stays in fftools</a></h3>
+<p>Animation classification and fade encoding remain in fftools,
+consistent with the sub2video precedent and the D1 decision.
+The encoder stays simple and format-agnostic.</p>
+<h3 id="d3-three-file-split-matching-fftools-convention"><a class="header" href="#d3-three-file-split-matching-fftools-convention">D3: Three-file split matching fftools convention</a></h3>
+<pre><code>fftools/ffmpeg_enc_sub.c  — text-to-bitmap (~1200 lines)
+fftools/ffmpeg_dec_sub.c  — bitmap-to-text (~500 lines)
+fftools/ffmpeg_mux_sub.c  — gate logic, subtitle options (~50 lines)
+</code></pre>
+<p>Naming follows the existing pattern where the base concern comes
+first and the specialization is the suffix:</p>
+<pre><code>ffmpeg_enc.c      →  ffmpeg_enc_sub.c
+ffmpeg_dec.c      →  ffmpeg_dec_sub.c
+ffmpeg_mux_init.c →  ffmpeg_mux_sub.c
+</code></pre>
+<p>The animation utilities (<code>ffmpeg_subtitle_animation.c</code>) fold into
+<code>ffmpeg_enc_sub.c</code> as regular functions with proper declarations in
+a header.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../plan/0009-pgs-decoder-model-compliance/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../plan/0011-v3-consolidated-claude-review/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../plan/0009-pgs-decoder-model-compliance/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../plan/0011-v3-consolidated-claude-review/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

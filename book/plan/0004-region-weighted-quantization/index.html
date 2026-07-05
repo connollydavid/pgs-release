@@ -1,0 +1,331 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Phase 4: Region-Weighted Quantization - pgs-release</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">pgs-release</a></li><li class="chapter-item expanded affix "><li class="part-title">Cast: who</li><li class="chapter-item expanded "><a href="../../cast/index.html"><strong aria-hidden="true">1.</strong> Cast: the project's Who</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../cast/applying-personas.html"><strong aria-hidden="true">1.1.</strong> Applying personas during planning</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Plan: what & when</li><li class="chapter-item expanded "><a href="../../plan-index.html"><strong aria-hidden="true">2.</strong> Plan</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../plan/0001-hdmv-pgs-encoder/index.html"><strong aria-hidden="true">2.1.</strong> Phase 1: HDMV PGS Subtitle Encoder</a></li><li class="chapter-item expanded "><a href="../../plan/0002-color-quantization-api/index.html"><strong aria-hidden="true">2.2.</strong> Phase 2: Color Quantization API and Palette Mapping</a></li><li class="chapter-item expanded "><a href="../../plan/0003-text-to-bitmap-conversion/index.html"><strong aria-hidden="true">2.3.</strong> Phase 3: Text-to-Bitmap Subtitle Conversion</a></li><li class="chapter-item expanded "><a href="../../plan/0004-region-weighted-quantization/index.html" class="active"><strong aria-hidden="true">2.4.</strong> Phase 4: Region-Weighted Quantization</a></li><li class="chapter-item expanded "><a href="../../plan/0005-quantizer-algorithm-integration/index.html"><strong aria-hidden="true">2.5.</strong> Phase 5: Algorithm Integration</a></li><li class="chapter-item expanded "><a href="../../plan/0006-gif-encoder-rgba-quantization/index.html"><strong aria-hidden="true">2.6.</strong> Phase 6: GIF Encoder RGBA Quantization</a></li><li class="chapter-item expanded "><a href="../../plan/0007-upstream-review-findings/index.html"><strong aria-hidden="true">2.7.</strong> Upstream Review Findings</a></li><li class="chapter-item expanded "><a href="../../plan/0008-ocr-bitmap-to-text/index.html"><strong aria-hidden="true">2.8.</strong> Phase 7: OCR Bitmap-to-Text Subtitle Conversion</a></li><li class="chapter-item expanded "><a href="../../plan/0009-pgs-decoder-model-compliance/index.html"><strong aria-hidden="true">2.9.</strong> Phase 8: PGS Decoder Model Compliance</a></li><li class="chapter-item expanded "><a href="../../plan/0010-upstream-suitability-audit/index.html"><strong aria-hidden="true">2.10.</strong> Phase 8 Review: Upstream Suitability Audit</a></li><li class="chapter-item expanded "><a href="../../plan/0011-v3-consolidated-claude-review/index.html"><strong aria-hidden="true">2.11.</strong> v3 Expert Panel Review: Consolidated Findings</a></li><li class="chapter-item expanded "><a href="../../plan/0012-v4-review-fixes/index.html"><strong aria-hidden="true">2.12.</strong> Phase 9: v4 Series — Address Expert Panel Review</a></li><li class="chapter-item expanded "><a href="../../plan/0013-subtitle-event-lookahead/index.html"><strong aria-hidden="true">2.13.</strong> Phase 9a-R1: Subtitle Event Lookahead Window</a></li><li class="chapter-item expanded "><a href="../../plan/0014-pgs-encoder-optimizations/index.html"><strong aria-hidden="true">2.14.</strong> Phase 10: PGS Encoder Optimizations (v5)</a></li><li class="chapter-item expanded "><a href="../../plan/0015-website-updates/index.html"><strong aria-hidden="true">2.15.</strong> Phase 11: Website Updates for v4/v5</a></li><li class="chapter-item expanded "><a href="../../plan/0016-fate-ci-website-visibility/index.html"><strong aria-hidden="true">2.16.</strong> Phase 12: FATE CI + Website Test Visibility</a></li><li class="chapter-item expanded "><a href="../../plan/0017-pgs-encoder-features/index.html"><strong aria-hidden="true">2.17.</strong> Phase 13: PGS Encoder Features (v6)</a></li><li class="chapter-item expanded "><a href="../../plan/0018-upstream-submission-restructuring/index.html"><strong aria-hidden="true">2.18.</strong> Phase 14: Upstream Submission Restructuring (v7)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Software: where</li><li class="chapter-item expanded "><a href="../../where.html"><strong aria-hidden="true">3.</strong> Software</a></li><li class="chapter-item expanded affix "><li class="part-title">Call: why</li><li class="chapter-item expanded "><a href="../../call/0000-use-markdown-decision-records.html"><strong aria-hidden="true">4.</strong> Use Markdown decision records (MADR)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../call/0001-adopt-host-template.html"><strong aria-hidden="true">4.1.</strong> Adopt the host-template methodology</a></li><li class="chapter-item expanded "><a href="../../call/0002-mdbook-under-book-subdir.html"><strong aria-hidden="true">4.2.</strong> Publish the development mdBook under /book/, never at the site root</a></li><li class="chapter-item expanded "><a href="../../call/0003-migrated-software-repro-exempt.html"><strong aria-hidden="true">4.3.</strong> Migrated software components are repro-exempt for now</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Reference: how</li><li class="chapter-item expanded "><a href="../../CLAUDE.html"><strong aria-hidden="true">5.</strong> CLAUDE.md: operating manual for an agentic project</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../STRUCTURE.html"><strong aria-hidden="true">5.1.</strong> Structure</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Memory</li><li class="chapter-item expanded "><a href="../../MEMORY.html"><strong aria-hidden="true">6.</strong> Memory</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">pgs-release</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="phase-4-region-weighted-quantization"><a class="header" href="#phase-4-region-weighted-quantization">Phase 4: Region-Weighted Quantization</a></h1>
+<h2 id="status-done"><a class="header" href="#status-done">Status: DONE</a></h2>
+<p>Two commits on <code>pgs-series</code> branch:</p>
+<ul>
+<li><code>cb332e7d7b</code> lavu/quantize: add region-weighted palette generation</li>
+<li><code>2b03815c86</code> fftools: use region-weighted quantization for coalesced subtitles</li>
+</ul>
+<p>Also squashed a pre-existing Phase 3a bug fix (missing <code>!CONFIG_LIBASS</code>
+stub for <code>avfilter_subtitle_render_add_event</code>) into <code>9f1dfb5401</code>.</p>
+<h3 id="series-review-cleanup-2026-03-07"><a class="header" href="#series-review-cleanup-2026-03-07">Series review cleanup (2026-03-07)</a></h3>
+<p>During a full 14-commit series review, the following cross-cutting issues
+were found and fixed via rebase:</p>
+<ul>
+<li><strong>FFPaletteMapContext made opaque</strong> (Phase 2b) — struct moved from
+palettemap.h to palettemap.c, added <code>ff_palette_map_get_palette()</code> and
+<code>ff_palette_map_get_nodes()</code> accessors, updated vf_paletteuse.c consumer</li>
+<li><strong>APIchanges completed</strong> (Phase 3) — added missing <code>init_event</code>,
+<code>add_event</code>, <code>sample</code> entries to doc/APIchanges</li>
+<li><strong>Doxygen consistency</strong> (Phase 3) — added <code>[in]/[out]</code> parameter
+direction markers to all functions in subtitle_render.h</li>
+<li><strong>Commit reordering</strong> (Phase 3/3a) — core text-to-bitmap now precedes
+animation utilities to match PLAN.md phase dependency structure</li>
+<li><strong>Ticket references</strong> (Phase 3) — added <code>Ref: trac.ffmpeg.org/ticket/3819</code>
+to subtitle rendering and text-to-bitmap commit trailers</li>
+</ul>
+<h2 id="problem"><a class="header" href="#problem">Problem</a></h2>
+<p>PGS Display Sets use a single 256-color palette (PDS) shared across all
+composition objects. When multiple ASS events overlap in time — e.g., a
+large monochrome dialogue region plus a small colorful karaoke region —
+NeuQuant training on the concatenated pixel buffer is dominated by the
+larger region. The karaoke colors get starved of palette entries, causing
+visible color loss.</p>
+<h2 id="solution"><a class="header" href="#solution">Solution</a></h2>
+<p>Add <code>av_quantize_add_region()</code> to the existing quantizer API. Each call
+registers a region of RGBA pixels. When <code>av_quantize_generate_palette()</code>
+is called with regions present, it builds an interleaved sample buffer
+drawing an equal number of pixels from each region, regardless of region
+size. Small regions wrap around to fill their quota.</p>
+<h3 id="key-design-decisions"><a class="header" href="#key-design-decisions">Key design decisions</a></h3>
+<p><strong>Copy semantics:</strong> <code>add_region()</code> copies pixel data internally via
+<code>av_memdup()</code>. The caller may free immediately. Regions are consumed
+(freed) by the next <code>generate_palette()</code> call.</p>
+<p><strong>Fixed region limit:</strong> <code>MAX_REGIONS = 16</code> with inline array (no heap
+allocation for the region list). Returns <code>AVERROR(ENOSPC)</code> on overflow.
+16 is more than sufficient — PGS supports at most 2 composition objects
+per Display Set, and even extreme karaoke rarely exceeds 5 overlapping
+events.</p>
+<p><strong>Uniform sampling:</strong> Every region contributes exactly <code>per_region</code>
+pixels, computed as <code>FFMIN(max_region_size, SAMPLES_PER_REGION)</code> where
+<code>SAMPLES_PER_REGION = 8192</code>. Regions smaller than <code>per_region</code> wrap
+around. This bounds the interleaved buffer at <code>8192 * 16 * 4 = 512 KB</code>
+regardless of input size.</p>
+<p><strong>Backward compatible:</strong> If no regions are added, <code>generate_palette()</code>
+operates on the flat <code>rgba</code>/<code>nb_pixels</code> parameters as before.</p>
+<h3 id="what-we-dropped"><a class="header" href="#what-we-dropped">What we dropped</a></h3>
+<p><strong>HyAB distance metric:</strong> PLAN.md proposed HyAB (Abasi et al. 2020) for
+quality validation. After implementation and testing, SSE (sum of squared
+Euclidean error in RGBA space) proved sufficient to demonstrate the
+improvement. HyAB added complexity without changing the conclusion. The
+region-weighted approach reduces karaoke SSE by 76% in our test — the
+signal is unambiguous.</p>
+<h2 id="api"><a class="header" href="#api">API</a></h2>
+<pre><code class="language-c">int av_quantize_add_region(AVQuantizeContext *ctx,
+                            const uint8_t *rgba, int nb_pixels);
+</code></pre>
+<ul>
+<li><code>ctx</code>: quantization context from <code>av_quantize_alloc()</code></li>
+<li><code>rgba</code>: RGBA pixel data (4 bytes per pixel), copied internally</li>
+<li><code>nb_pixels</code>: number of pixels in this region</li>
+<li>Returns 0 on success, negative <code>AVERROR</code> on failure</li>
+</ul>
+<h2 id="consumer"><a class="header" href="#consumer">Consumer</a></h2>
+<p>In <code>fftools/ffmpeg_enc.c</code>, <code>flush_coalesced_subtitles()</code> now renders each
+event individually via <code>avfilter_subtitle_render_frame()</code>, adds it as a
+region, then calls <code>generate_palette()</code> on the composite RGBA. This only
+activates when <code>nb &gt; 1</code> (multiple overlapping events).</p>
+<h2 id="tests"><a class="header" href="#tests">Tests</a></h2>
+<p>Six new tests in <code>libavutil/tests/quantize.c</code>:</p>
+<div class="table-wrapper"><table><thead><tr><th>Test</th><th>What it proves</th></tr></thead><tbody>
+<tr><td><code>test_region_weighted</code></td><td>4000 white + 100 red pixels: red survives in palette with regions</td></tr>
+<tr><td><code>test_region_backward_compat</code></td><td>No regions → flat path works unchanged</td></tr>
+<tr><td><code>test_region_starvation_comparison</code></td><td>Flat SSE=43425 vs region SSE=24336 (44% improvement)</td></tr>
+<tr><td><code>test_region_multi_diversity</code></td><td>3 regions (cyan/magenta/yellow) all represented</td></tr>
+<tr><td><code>test_region_single_equivalence</code></td><td>Single region SSE within 20% of flat</td></tr>
+<tr><td><code>test_region_karaoke</code></td><td>Real-world karaoke: flat SSE=6083340 vs region SSE=1438620 (76% improvement)</td></tr>
+</tbody></table>
+</div>
+<h2 id="security-considerations"><a class="header" href="#security-considerations">Security considerations</a></h2>
+<ul>
+<li><code>nb_pixels &gt; INT_MAX / 4</code> guard before <code>* 4</code> byte calculations in <code>add_region()</code></li>
+<li><code>int64_t</code> intermediate for <code>ev_w * ev_h</code> dimension product in <code>ffmpeg_enc.c</code></li>
+<li>Region cleanup on all error paths in <code>generate_palette()</code></li>
+</ul>
+<h2 id="files-changed"><a class="header" href="#files-changed">Files changed</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>File</th><th>Change</th></tr></thead><tbody>
+<tr><td><code>libavutil/quantize.h</code></td><td>Add <code>av_quantize_add_region()</code> declaration, update <code>generate_palette()</code> docs</td></tr>
+<tr><td><code>libavutil/quantize.c</code></td><td>Region storage, <code>build_region_samples()</code>, region path in <code>generate_palette()</code></td></tr>
+<tr><td><code>libavutil/tests/quantize.c</code></td><td>6 new tests + extended error handling test</td></tr>
+<tr><td><code>libavutil/version.h</code></td><td>MINOR bump 26 → 27</td></tr>
+<tr><td><code>doc/APIchanges</code></td><td>New API entry</td></tr>
+<tr><td><code>tests/ref/fate/source</code></td><td>Add pre-existing neuquant.c av_clip lines</td></tr>
+<tr><td><code>fftools/ffmpeg_enc.c</code></td><td>Region-weighted path in coalescing</td></tr>
+<tr><td><code>libavfilter/subtitle_render.c</code></td><td>Squashed: missing <code>!CONFIG_LIBASS</code> stub</td></tr>
+</tbody></table>
+</div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../plan/0003-text-to-bitmap-conversion/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../plan/0005-quantizer-algorithm-integration/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../plan/0003-text-to-bitmap-conversion/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../plan/0005-quantizer-algorithm-integration/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Phase 13: PGS Encoder Features (v6) - pgs-release</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">pgs-release</a></li><li class="chapter-item expanded affix "><li class="part-title">Cast: who</li><li class="chapter-item expanded "><a href="../../cast/index.html"><strong aria-hidden="true">1.</strong> Cast: the project's Who</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../cast/applying-personas.html"><strong aria-hidden="true">1.1.</strong> Applying personas during planning</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Plan: what & when</li><li class="chapter-item expanded "><a href="../../plan-index.html"><strong aria-hidden="true">2.</strong> Plan</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../plan/0001-hdmv-pgs-encoder/index.html"><strong aria-hidden="true">2.1.</strong> Phase 1: HDMV PGS Subtitle Encoder</a></li><li class="chapter-item expanded "><a href="../../plan/0002-color-quantization-api/index.html"><strong aria-hidden="true">2.2.</strong> Phase 2: Color Quantization API and Palette Mapping</a></li><li class="chapter-item expanded "><a href="../../plan/0003-text-to-bitmap-conversion/index.html"><strong aria-hidden="true">2.3.</strong> Phase 3: Text-to-Bitmap Subtitle Conversion</a></li><li class="chapter-item expanded "><a href="../../plan/0004-region-weighted-quantization/index.html"><strong aria-hidden="true">2.4.</strong> Phase 4: Region-Weighted Quantization</a></li><li class="chapter-item expanded "><a href="../../plan/0005-quantizer-algorithm-integration/index.html"><strong aria-hidden="true">2.5.</strong> Phase 5: Algorithm Integration</a></li><li class="chapter-item expanded "><a href="../../plan/0006-gif-encoder-rgba-quantization/index.html"><strong aria-hidden="true">2.6.</strong> Phase 6: GIF Encoder RGBA Quantization</a></li><li class="chapter-item expanded "><a href="../../plan/0007-upstream-review-findings/index.html"><strong aria-hidden="true">2.7.</strong> Upstream Review Findings</a></li><li class="chapter-item expanded "><a href="../../plan/0008-ocr-bitmap-to-text/index.html"><strong aria-hidden="true">2.8.</strong> Phase 7: OCR Bitmap-to-Text Subtitle Conversion</a></li><li class="chapter-item expanded "><a href="../../plan/0009-pgs-decoder-model-compliance/index.html"><strong aria-hidden="true">2.9.</strong> Phase 8: PGS Decoder Model Compliance</a></li><li class="chapter-item expanded "><a href="../../plan/0010-upstream-suitability-audit/index.html"><strong aria-hidden="true">2.10.</strong> Phase 8 Review: Upstream Suitability Audit</a></li><li class="chapter-item expanded "><a href="../../plan/0011-v3-consolidated-claude-review/index.html"><strong aria-hidden="true">2.11.</strong> v3 Expert Panel Review: Consolidated Findings</a></li><li class="chapter-item expanded "><a href="../../plan/0012-v4-review-fixes/index.html"><strong aria-hidden="true">2.12.</strong> Phase 9: v4 Series — Address Expert Panel Review</a></li><li class="chapter-item expanded "><a href="../../plan/0013-subtitle-event-lookahead/index.html"><strong aria-hidden="true">2.13.</strong> Phase 9a-R1: Subtitle Event Lookahead Window</a></li><li class="chapter-item expanded "><a href="../../plan/0014-pgs-encoder-optimizations/index.html"><strong aria-hidden="true">2.14.</strong> Phase 10: PGS Encoder Optimizations (v5)</a></li><li class="chapter-item expanded "><a href="../../plan/0015-website-updates/index.html"><strong aria-hidden="true">2.15.</strong> Phase 11: Website Updates for v4/v5</a></li><li class="chapter-item expanded "><a href="../../plan/0016-fate-ci-website-visibility/index.html"><strong aria-hidden="true">2.16.</strong> Phase 12: FATE CI + Website Test Visibility</a></li><li class="chapter-item expanded "><a href="../../plan/0017-pgs-encoder-features/index.html" class="active"><strong aria-hidden="true">2.17.</strong> Phase 13: PGS Encoder Features (v6)</a></li><li class="chapter-item expanded "><a href="../../plan/0018-upstream-submission-restructuring/index.html"><strong aria-hidden="true">2.18.</strong> Phase 14: Upstream Submission Restructuring (v7)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Software: where</li><li class="chapter-item expanded "><a href="../../where.html"><strong aria-hidden="true">3.</strong> Software</a></li><li class="chapter-item expanded affix "><li class="part-title">Call: why</li><li class="chapter-item expanded "><a href="../../call/0000-use-markdown-decision-records.html"><strong aria-hidden="true">4.</strong> Use Markdown decision records (MADR)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../call/0001-adopt-host-template.html"><strong aria-hidden="true">4.1.</strong> Adopt the host-template methodology</a></li><li class="chapter-item expanded "><a href="../../call/0002-mdbook-under-book-subdir.html"><strong aria-hidden="true">4.2.</strong> Publish the development mdBook under /book/, never at the site root</a></li><li class="chapter-item expanded "><a href="../../call/0003-migrated-software-repro-exempt.html"><strong aria-hidden="true">4.3.</strong> Migrated software components are repro-exempt for now</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Reference: how</li><li class="chapter-item expanded "><a href="../../CLAUDE.html"><strong aria-hidden="true">5.</strong> CLAUDE.md: operating manual for an agentic project</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../STRUCTURE.html"><strong aria-hidden="true">5.1.</strong> Structure</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Memory</li><li class="chapter-item expanded "><a href="../../MEMORY.html"><strong aria-hidden="true">6.</strong> Memory</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">pgs-release</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="phase-13-pgs-encoder-features-v6"><a class="header" href="#phase-13-pgs-encoder-features-v6">Phase 13: PGS Encoder Features (v6)</a></h1>
+<h2 id="status-complete--9-patches-on-pgs6-wip"><a class="header" href="#status-complete--9-patches-on-pgs6-wip">Status: Complete — 9 patches on <code>pgs6-wip</code></a></h2>
+<p>Encoder features beyond v5's optimisations. Exploration revealed that 13a, 13b,
+and 13c were already implemented in v5 — they needed FATE test coverage only.
+The v6 scope expanded to include a comprehensive forced subtitle pipeline
+(disposition bridging, DVB support, stream splitting) alongside the originally
+planned features.</p>
+<h2 id="13a-palette-reuse--done-v5-test-added-in-v6"><a class="header" href="#13a-palette-reuse--done-v5-test-added-in-v6">13a: Palette Reuse — DONE (v5, test added in v6)</a></h2>
+<p>The encoder already omits PDS when the palette hasn't changed. A position-only
+Normal DS writes PCS+END only — no PDS, ODS, or WDS. The <code>palette_version</code>
+field correctly references the previous palette.</p>
+<p><strong>FATE test:</strong> <code>api-pgs-palette-reuse</code> — Patch 1</p>
+<h2 id="13b-multiple-composition-objects--done-v5-test-added-in-v6"><a class="header" href="#13b-multiple-composition-objects--done-v5-test-added-in-v6">13b: Multiple Composition Objects — DONE (v5, test added in v6)</a></h2>
+<p>The encoder handles 2 non-overlapping rects with correct PCS composition
+descriptors, 2 ODS segments, 2 WDS window definitions, and shared PDS. Rect
+splitting remains in fftools (<code>ff_sub_find_gap</code>) — the correct architectural
+layer since splitting operates on pre-quantisation RGBA data.</p>
+<p><strong>FATE test:</strong> <code>api-pgs-multi-object</code> — Patch 2</p>
+<h2 id="13c-acquisition-point-display-sets--done-v5-test-added-in-v6"><a class="header" href="#13c-acquisition-point-display-sets--done-v5-test-added-in-v6">13c: Acquisition Point Display Sets — DONE (v5, test added in v6)</a></h2>
+<p>The <code>ap_interval</code> AVOption (0–60000ms) promotes Normal DS to Acquisition Point
+when the interval has elapsed. AP DS contains full PDS + ODS + WDS for
+random-access seeking. Composition state 0x40 (not 0x80 as incorrectly stated
+in the original plan — 0x80 is Epoch Start).</p>
+<p><strong>FATE test:</strong> <code>api-pgs-ap-interval</code> — Patch 3</p>
+<h2 id="13d-forced-subtitles--done"><a class="header" href="#13d-forced-subtitles--done">13d: Forced Subtitles — DONE</a></h2>
+<p>Added <code>force_all</code> boolean AVOption. When set, all composition objects are marked
+forced (0x40 in PCS composition descriptor) regardless of per-rect flags. The
+existing per-rect <code>AV_SUBTITLE_FLAG_FORCED</code> behaviour is preserved when
+<code>force_all</code> is not set.</p>
+<p><strong>FATE test:</strong> <code>api-pgs-forced</code> — Patch 4</p>
+<h2 id="13e-rate-control--done"><a class="header" href="#13e-rate-control--done">13e: Rate Control — DONE</a></h2>
+<p>Added <code>max_cdb_usage</code> AVOption (0.0–1.0, default 0.0 = disabled). Before
+encoding each Display Set, the encoder estimates the DS size (worst-case
+uncompressed) and computes CDB headroom (accounting for refill at Rx = 2 MB/s
+since the last encode). Events exceeding the threshold are dropped with a
+warning.</p>
+<p><strong>Design decision:</strong> Drop-with-warning rather than deferral. The HDMV subtitle
+encoding API (<code>avcodec_encode_subtitle</code>) is synchronous — there's no EAGAIN
+mechanism. Full deferral would require an event re-queue in fftools, deferred
+to v7 if needed. Drop-with-warning matches hardware authoring tool behaviour.</p>
+<p><strong>FATE test:</strong> <code>api-pgs-rate-control</code> — Patch 5</p>
+<h2 id="13f-forced-subtitle-pipeline--in-progress"><a class="header" href="#13f-forced-subtitle-pipeline--in-progress">13f: Forced Subtitle Pipeline — IN PROGRESS</a></h2>
+<p>Three patches completing the forced subtitle pipeline end-to-end:</p>
+<h3 id="patch-6-bidirectional-disposition-bridge--done"><a class="header" href="#patch-6-bidirectional-disposition-bridge--done">Patch 6: Bidirectional Disposition Bridge — DONE</a></h3>
+<p>Bridge forced flags between stream-level and rect-level:</p>
+<ul>
+<li><strong>Input→rects:</strong> <code>AV_DISPOSITION_FORCED</code> on input stream →
+<code>AV_SUBTITLE_FLAG_FORCED</code> on all decoded rects</li>
+<li><strong>Encoder→output:</strong> <code>force_all=1</code> on encoder → <code>AV_DISPOSITION_FORCED</code>
+on output stream (so MKV FlagForced, MPEG-TS subtitling_type are set)</li>
+</ul>
+<p>Location: <code>fftools/ffmpeg_enc_sub.c</code></p>
+<h3 id="patch-7-mpeg-ts-dvb-forced-subtitle-types--done"><a class="header" href="#patch-7-mpeg-ts-dvb-forced-subtitle-types--done">Patch 7: MPEG-TS DVB Forced Subtitle Types — DONE</a></h3>
+<p>Standalone upstream fix. The MPEG-TS demuxer doesn't map DVB subtitling_type
+0x30–0x35 (forced) to <code>AV_DISPOSITION_FORCED</code>. The muxer doesn't write 0x30
+when the disposition is set. Both directions, mirroring the existing
+hearing-impaired pattern.</p>
+<p>Location: <code>libavformat/mpegts.c</code>, <code>libavformat/mpegtsenc.c</code></p>
+<h3 id="patch-8--forced_subs_filter-cli-option--done"><a class="header" href="#patch-8--forced_subs_filter-cli-option--done">Patch 8: <code>-forced_subs_filter</code> CLI Option — DONE</a></h3>
+<p>fftools CLI option to split subtitle streams by forced flag:</p>
+<ul>
+<li><code>forced</code> — encode only forced events</li>
+<li><code>non_forced</code> — encode only non-forced events (unique — decoder has no equivalent)</li>
+<li><code>all</code> — encode all events (default)</li>
+</ul>
+<p>Only meaningful for bitmap→bitmap paths (PGS→PGS, DVD→PGS) where per-rect
+forced flags are set by the decoder. For text→bitmap (ASS→PGS), use
+<code>force_all=1</code>, <code>-disposition:s forced</code>, or <code>forced_style</code> instead.</p>
+<p>Location: <code>fftools/ffmpeg_enc_sub.c</code>, <code>fftools/ffmpeg_opt.c</code></p>
+<h3 id="patch-9-forced_style-avoption--done"><a class="header" href="#patch-9-forced_style-avoption--done">Patch 9: <code>forced_style</code> AVOption — DONE</a></h3>
+<p>Map an ASS style name to the forced subtitle flag. Events rendered with the
+matching style get <code>forced_on_flag=0x40</code>. Default style name: <code>"Forced"</code>.</p>
+<p>Enables merging forced and non-forced subtitles in a single ASS file:</p>
+<pre><code class="language-bash">ffmpeg -i merged.ass -c:s pgssub -s 1920x1080 out.sup
+# Events with style "Forced" automatically get forced_on_flag
+</code></pre>
+<p>Location: <code>libavcodec/pgssubenc.c</code> (AVOption), <code>fftools/ffmpeg_enc_sub.c</code>
+(style matching in text-to-bitmap path)</p>
+<h2 id="forced-subtitle-roundtrip-after-v6"><a class="header" href="#forced-subtitle-roundtrip-after-v6">Forced Subtitle Roundtrip (after v6)</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Source → Target</th><th>Works?</th><th>How</th></tr></thead><tbody>
+<tr><td>PGS → PGS</td><td>Yes</td><td>rect→flags preserved (v5)</td></tr>
+<tr><td>DVD → PGS</td><td>Yes</td><td>dvdsubdec sets rect→flags (v5)</td></tr>
+<tr><td>MKV DVB → PGS</td><td>Yes</td><td>Patch 6 bridges disposition</td></tr>
+<tr><td>MPEG-TS DVB → PGS</td><td>Yes</td><td>Patch 7 + Patch 6</td></tr>
+<tr><td>ASS/SRT → PGS</td><td>Yes</td><td><code>force_all=1</code> (Patch 4) or <code>-disposition:s forced</code> (Patch 6)</td></tr>
+<tr><td>PGS → MKV (force_all)</td><td>Yes</td><td>Patch 6 sets output disposition → matroskaenc FlagForced</td></tr>
+<tr><td>PGS → MPEG-TS (force_all)</td><td>Yes</td><td>Patch 6 + Patch 7 muxer writes 0x30</td></tr>
+<tr><td>Mixed → forced-only</td><td>Yes</td><td>Patch 8 <code>-forced_subs_filter forced</code></td></tr>
+<tr><td>Mixed → non-forced-only</td><td>Yes</td><td>Patch 8 <code>-forced_subs_filter non_forced</code></td></tr>
+<tr><td>ASS signs+dialogue → PGS</td><td>Yes</td><td>Patch 9 <code>forced_style</code> maps style to flag</td></tr>
+</tbody></table>
+</div>
+<h2 id="known-limitations-upstream-not-our-series"><a class="header" href="#known-limitations-upstream-not-our-series">Known Limitations (upstream, not our series)</a></h2>
+<ul>
+<li><strong>movenc.c</strong> does not write <code>AV_DISPOSITION_FORCED</code> to MP4 track metadata</li>
+<li><strong>dvbsubdec.c</strong> does not set <code>AV_SUBTITLE_FLAG_FORCED</code> per-rect (stream-level only)</li>
+<li><strong>dvbsubenc.c</strong> does not read <code>AV_SUBTITLE_FLAG_FORCED</code></li>
+</ul>
+<h2 id="patch-series-structure"><a class="header" href="#patch-series-structure">Patch Series Structure</a></h2>
+<p>Branch <code>pgs6</code> off <code>pgs5-8.1</code>, tagged <code>history/pgs-v6</code>. Restructured for
+upstream submission as v7 (5 independent series, see PHASE14.md).</p>
+<div class="table-wrapper"><table><thead><tr><th>#</th><th>Commit (pgs6)</th><th>Description</th><th>Status</th></tr></thead><tbody>
+<tr><td>1</td><td><code>a4262366a4</code></td><td>FATE test: palette reuse</td><td>Done</td></tr>
+<tr><td>2</td><td><code>4c46183261</code></td><td>FATE test: multi-object encoding</td><td>Done</td></tr>
+<tr><td>3</td><td><code>88d3bf362e</code></td><td>FATE test: AP interval</td><td>Done</td></tr>
+<tr><td>4</td><td><code>18e48a70f8</code></td><td><code>force_all</code> AVOption + test</td><td>Done</td></tr>
+<tr><td>5</td><td><code>d0ba769aac</code></td><td>CDB rate control (<code>max_cdb_usage</code>) + test</td><td>Done</td></tr>
+<tr><td>6</td><td><code>4f23a1f0ea</code></td><td>Bidirectional forced disposition bridge</td><td>Done</td></tr>
+<tr><td>7</td><td><code>0f73c18470</code></td><td>MPEG-TS DVB forced types (demux + mux)</td><td>Done</td></tr>
+<tr><td>8</td><td><code>4d24411183</code></td><td><code>forced_subs_filter</code> CLI option</td><td>Done</td></tr>
+<tr><td>9</td><td><code>6190c8e773</code></td><td><code>forced_style</code> AVOption (ASS style → forced flag)</td><td>Done</td></tr>
+</tbody></table>
+</div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../plan/0016-fate-ci-website-visibility/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../plan/0018-upstream-submission-restructuring/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../plan/0016-fate-ci-website-visibility/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../plan/0018-upstream-submission-restructuring/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

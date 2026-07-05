@@ -1,0 +1,496 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Phase 8: PGS Decoder Model Compliance - pgs-release</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">pgs-release</a></li><li class="chapter-item expanded affix "><li class="part-title">Cast: who</li><li class="chapter-item expanded "><a href="../../cast/index.html"><strong aria-hidden="true">1.</strong> Cast: the project's Who</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../cast/applying-personas.html"><strong aria-hidden="true">1.1.</strong> Applying personas during planning</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Plan: what & when</li><li class="chapter-item expanded "><a href="../../plan-index.html"><strong aria-hidden="true">2.</strong> Plan</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../plan/0001-hdmv-pgs-encoder/index.html"><strong aria-hidden="true">2.1.</strong> Phase 1: HDMV PGS Subtitle Encoder</a></li><li class="chapter-item expanded "><a href="../../plan/0002-color-quantization-api/index.html"><strong aria-hidden="true">2.2.</strong> Phase 2: Color Quantization API and Palette Mapping</a></li><li class="chapter-item expanded "><a href="../../plan/0003-text-to-bitmap-conversion/index.html"><strong aria-hidden="true">2.3.</strong> Phase 3: Text-to-Bitmap Subtitle Conversion</a></li><li class="chapter-item expanded "><a href="../../plan/0004-region-weighted-quantization/index.html"><strong aria-hidden="true">2.4.</strong> Phase 4: Region-Weighted Quantization</a></li><li class="chapter-item expanded "><a href="../../plan/0005-quantizer-algorithm-integration/index.html"><strong aria-hidden="true">2.5.</strong> Phase 5: Algorithm Integration</a></li><li class="chapter-item expanded "><a href="../../plan/0006-gif-encoder-rgba-quantization/index.html"><strong aria-hidden="true">2.6.</strong> Phase 6: GIF Encoder RGBA Quantization</a></li><li class="chapter-item expanded "><a href="../../plan/0007-upstream-review-findings/index.html"><strong aria-hidden="true">2.7.</strong> Upstream Review Findings</a></li><li class="chapter-item expanded "><a href="../../plan/0008-ocr-bitmap-to-text/index.html"><strong aria-hidden="true">2.8.</strong> Phase 7: OCR Bitmap-to-Text Subtitle Conversion</a></li><li class="chapter-item expanded "><a href="../../plan/0009-pgs-decoder-model-compliance/index.html" class="active"><strong aria-hidden="true">2.9.</strong> Phase 8: PGS Decoder Model Compliance</a></li><li class="chapter-item expanded "><a href="../../plan/0010-upstream-suitability-audit/index.html"><strong aria-hidden="true">2.10.</strong> Phase 8 Review: Upstream Suitability Audit</a></li><li class="chapter-item expanded "><a href="../../plan/0011-v3-consolidated-claude-review/index.html"><strong aria-hidden="true">2.11.</strong> v3 Expert Panel Review: Consolidated Findings</a></li><li class="chapter-item expanded "><a href="../../plan/0012-v4-review-fixes/index.html"><strong aria-hidden="true">2.12.</strong> Phase 9: v4 Series — Address Expert Panel Review</a></li><li class="chapter-item expanded "><a href="../../plan/0013-subtitle-event-lookahead/index.html"><strong aria-hidden="true">2.13.</strong> Phase 9a-R1: Subtitle Event Lookahead Window</a></li><li class="chapter-item expanded "><a href="../../plan/0014-pgs-encoder-optimizations/index.html"><strong aria-hidden="true">2.14.</strong> Phase 10: PGS Encoder Optimizations (v5)</a></li><li class="chapter-item expanded "><a href="../../plan/0015-website-updates/index.html"><strong aria-hidden="true">2.15.</strong> Phase 11: Website Updates for v4/v5</a></li><li class="chapter-item expanded "><a href="../../plan/0016-fate-ci-website-visibility/index.html"><strong aria-hidden="true">2.16.</strong> Phase 12: FATE CI + Website Test Visibility</a></li><li class="chapter-item expanded "><a href="../../plan/0017-pgs-encoder-features/index.html"><strong aria-hidden="true">2.17.</strong> Phase 13: PGS Encoder Features (v6)</a></li><li class="chapter-item expanded "><a href="../../plan/0018-upstream-submission-restructuring/index.html"><strong aria-hidden="true">2.18.</strong> Phase 14: Upstream Submission Restructuring (v7)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Software: where</li><li class="chapter-item expanded "><a href="../../where.html"><strong aria-hidden="true">3.</strong> Software</a></li><li class="chapter-item expanded affix "><li class="part-title">Call: why</li><li class="chapter-item expanded "><a href="../../call/0000-use-markdown-decision-records.html"><strong aria-hidden="true">4.</strong> Use Markdown decision records (MADR)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../call/0001-adopt-host-template.html"><strong aria-hidden="true">4.1.</strong> Adopt the host-template methodology</a></li><li class="chapter-item expanded "><a href="../../call/0002-mdbook-under-book-subdir.html"><strong aria-hidden="true">4.2.</strong> Publish the development mdBook under /book/, never at the site root</a></li><li class="chapter-item expanded "><a href="../../call/0003-migrated-software-repro-exempt.html"><strong aria-hidden="true">4.3.</strong> Migrated software components are repro-exempt for now</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Reference: how</li><li class="chapter-item expanded "><a href="../../CLAUDE.html"><strong aria-hidden="true">5.</strong> CLAUDE.md: operating manual for an agentic project</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../STRUCTURE.html"><strong aria-hidden="true">5.1.</strong> Structure</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Memory</li><li class="chapter-item expanded "><a href="../../MEMORY.html"><strong aria-hidden="true">6.</strong> Memory</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">pgs-release</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="phase-8-pgs-decoder-model-compliance"><a class="header" href="#phase-8-pgs-decoder-model-compliance">Phase 8: PGS Decoder Model Compliance</a></h1>
+<h2 id="status-partially-complete--remainder-moved-to-phase-13"><a class="header" href="#status-partially-complete--remainder-moved-to-phase-13">Status: Partially Complete — remainder moved to Phase 13</a></h2>
+<p>Items 8a (DTS/PTS timing) and 8e (palette optimisation) were implemented
+in v5 as Phase 10b and 10a respectively. Items 8b (CDB model), 8c (DOB
+model), and 8d (Acquisition Points) are deferred to Phase 13 (v6 encoder
+features) where they depend on palette reuse and multi-object support.
+Item 8f (object versioning) is also deferred to Phase 13.</p>
+<h2 id="context"><a class="header" href="#context">Context</a></h2>
+<p>Phase 1 delivered a working PGS encoder with composition state machine,
+palette animation, and ODS fragmentation. It deferred three areas that
+are required for full HDMV decoder model compliance:</p>
+<ol>
+<li><strong>DTS/PTS timing</strong> — <del>all segments currently emit DTS=0</del> <strong>DONE (v5, Phase 10b)</strong></li>
+<li><strong>Buffer model validation</strong> — no check for coded data buffer overflow — <strong>deferred to Phase 13e</strong></li>
+<li><strong>Acquisition Point insertion</strong> — no seek-friendly refresh points — <strong>deferred to Phase 13c</strong></li>
+</ol>
+<p>Additionally, several encoder features were unnecessarily wasteful or
+missing polish:</p>
+<ol start="4">
+<li><strong>Palette optimization</strong> — <del>PDS currently writes all 256 entries</del> <strong>DONE (v5, Phase 10a — palette delta encoding)</strong></li>
+<li><strong>Object version tracking</strong> — always 0, should increment within epoch — <strong>deferred to Phase 13</strong></li>
+<li><strong>Window sizing validation</strong> — no enforcement of minimum window size — <strong>deferred to Phase 13</strong></li>
+</ol>
+<h2 id="patent-basis"><a class="header" href="#patent-basis">Patent Basis</a></h2>
+<p>All timing formulas and buffer constraints derive from three patents:</p>
+<div class="table-wrapper"><table><thead><tr><th>Patent</th><th>Relevant content</th></tr></thead><tbody>
+<tr><td>US7620297B2 (Panasonic)</td><td>Decoder model, Rx/Rd/Rc rates, buffer management</td></tr>
+<tr><td>US8638861B2 (Sony)</td><td>Segment syntax, Coded Data Buffer, timing constraints</td></tr>
+<tr><td>US20090185789A1 (Panasonic)</td><td>Stream shaping, composition states, Acquisition Points</td></tr>
+</tbody></table>
+</div>
+<p>SUPer (cubicibo) used as hardware-validated reference for timing
+and buffer model implementation.</p>
+<h2 id="scope"><a class="header" href="#scope">Scope</a></h2>
+<h3 id="8a-segment-timestamps-dtspts"><a class="header" href="#8a-segment-timestamps-dtspts">8a: Segment Timestamps (DTS/PTS)</a></h3>
+<p>Currently all segments are written with DTS=0. The spec requires:</p>
+<pre><code>DTS(PCS) = PTS(PCS) - DECODE_DURATION
+DTS(first_ODS) = DTS(PCS)
+PTS(first_ODS) = DTS(PCS) + ceil(obj_w * obj_h * FREQ / Rd)
+DTS(next_ODS) = PTS(previous_ODS)
+PTS/DTS(PDS) = DTS(PCS)
+PTS/DTS(END) = PTS(last_ODS)    [or DTS(PCS) if no ODS]
+</code></pre>
+<p>Where:</p>
+<ul>
+<li><code>FREQ = 90000</code> (90 kHz clock)</li>
+<li><code>Rd = 16,000,000</code> bytes/sec (Coded Data → Decoded Object Buffer)</li>
+<li><code>Rc = 32,000,000</code> bytes/sec (Object Buffer → Graphics Plane)</li>
+</ul>
+<p>Decode duration depends on composition state:</p>
+<p><strong>Epoch Start:</strong></p>
+<pre><code>DECODE_DURATION = ceil(FREQ * video_width * video_height / Rc)
+1920x1080: ceil(90000 * 2073600 / 32000000) = 5832 ticks ≈ 64.8 ms
+</code></pre>
+<p><strong>Non-Epoch-Start:</strong></p>
+<pre><code>DECODE_DURATION = max(window_clear_time, object_decode_time) + window_write_time
+window_clear_time  = sum(ceil(FREQ * w_h * w_w / Rc))  per unassigned window
+object_decode_time = sum(ceil(obj_w * obj_h * FREQ / Rd))  per new object
+window_write_time  = sum(ceil(w_h * w_w * FREQ / Rc))  per assigned window
+</code></pre>
+<p><strong>Palette-only (Normal with palette_update_flag):</strong></p>
+<pre><code>DECODE_DURATION = window_write_time only (no objects to decode)
+</code></pre>
+<p>Implementation: compute segment sizes before writing, then set
+timestamps on the 13-byte PG headers. Currently the encoder writes
+segments into a flat buffer without headers (the muxer adds them).
+This requires either:</p>
+<ul>
+<li>(a) The encoder pre-computes timestamps and passes them via side data, or</li>
+<li>(b) The encoder writes the PG headers itself (<code>.sup</code> format), or</li>
+<li>(c) The muxer computes timestamps from segment sizes</li>
+</ul>
+<p>Option (a) is cleanest — the encoder knows object dimensions and
+composition state. Pass decode_duration via <code>AVSubtitle</code> or packet
+side data so the muxer can compute DTS = PTS - decode_duration.</p>
+<h3 id="8b-coded-data-buffer-model"><a class="header" href="#8b-coded-data-buffer-model">8b: Coded Data Buffer Model</a></h3>
+<p>The reference decoder has a 1 MB Coded Data Buffer that fills at
+Rx = 2 MB/s and drains by segment payload size on consumption:</p>
+<pre><code>fill = min(used + round(delta_ticks * Rx / FREQ), BUFFER_SIZE) - segment_size
+if fill &lt; 0: underflow (non-compliant)
+</code></pre>
+<p>The encoder must verify that the stream does not cause buffer
+underflow. This requires tracking:</p>
+<ul>
+<li>Cumulative segment sizes per display set</li>
+<li>Time gaps between display sets</li>
+<li>Buffer fill level across the stream</li>
+</ul>
+<p>For animation sequences (palette-only updates every ~42ms at 24fps),
+each Normal PDS display set is ~1300 bytes. At Rx = 2 MB/s, the
+buffer refills ~84 KB between frames — no risk. But Epoch Start
+display sets with large objects (full-screen 1920x1080 RLE ~100-500 KB)
+need sufficient time gap from the previous display set.</p>
+<p>If a display set would cause underflow, the encoder should:</p>
+<ol>
+<li>Delay the display set (shift PTS forward)</li>
+<li>If delay exceeds acceptable threshold, log a warning</li>
+<li>Never silently produce a non-compliant stream</li>
+</ol>
+<h3 id="8c-decoded-object-buffer-model"><a class="header" href="#8c-decoded-object-buffer-model">8c: Decoded Object Buffer Model</a></h3>
+<p>The Decoded Object Buffer is 4 MB. Each object consumes
+<code>width * height</code> bytes (uncompressed, 1 byte per palette index).
+Objects persist for the entire epoch.</p>
+<p>The encoder must track cumulative object buffer usage within an
+epoch and force an Epoch Start when a new object would exceed 4 MB.</p>
+<p>For typical subtitles (one or two text lines ~1920x100), each object
+is ~192 KB. The 4 MB buffer holds ~20 such objects. Only extreme cases
+(many simultaneous full-screen overlays) would hit this limit.</p>
+<h3 id="8d-acquisition-point-insertion"><a class="header" href="#8d-acquisition-point-insertion">8d: Acquisition Point Insertion</a></h3>
+<p>For seek support, Acquisition Point Display Sets should be emitted
+periodically within long epochs. An Acquisition Point contains
+complete copies of all currently-displayed objects and palettes,
+allowing a decoder to start mid-stream without decoding from the
+last Epoch Start.</p>
+<p>Strategy:</p>
+<ul>
+<li>Default interval: configurable, e.g. 5 seconds (matching typical
+video GOP length)</li>
+<li>Emit Acquisition Point when: time since last Epoch Start or
+Acquisition Point exceeds interval AND currently displaying a subtitle</li>
+<li>Content: full PCS + WDS + PDS + ODS (same as Epoch Start, but
+composition state = 0x40 instead of 0x80)</li>
+<li>Objects reuse cached RLE from the epoch (no re-encoding needed)</li>
+</ul>
+<p>AVOption: <code>-acquisition_point_interval</code> (milliseconds, default 5000,
+0 = disabled)</p>
+<h3 id="8e-palette-optimization"><a class="header" href="#8e-palette-optimization">8e: Palette Optimization</a></h3>
+<p>Currently <code>pgs_write_pds</code> writes all 256 palette entries (1282 bytes)
+even when only a few colors are used. Typical subtitles use 4-16
+colors. Optimized PDS writes only non-transparent entries:</p>
+<pre><code>Optimized PDS size = 2 + 5 * nb_active_colors
+4 colors:  22 bytes  (vs 1282 — 98% reduction)
+16 colors: 82 bytes  (vs 1282 — 94% reduction)
+256 colors: 1282 bytes (no change)
+</code></pre>
+<p>This matters for palette animation: a fade sequence emits many PDS
+segments. Shrinking from 1282 to ~22 bytes each reduces stream
+bitrate and coded buffer pressure proportionally.</p>
+<h3 id="8f-object-version-tracking"><a class="header" href="#8f-object-version-tracking">8f: Object Version Tracking</a></h3>
+<p>Currently the encoder always writes object_version = 0 in ODS.
+Per spec, the version number should increment within an epoch when
+the same object_id receives new bitmap data. Hardware decoders may
+use this to detect stale vs fresh objects.</p>
+<p>Implementation: track <code>obj_version[object_id]</code> in PGSSubEncContext,
+increment on each ODS write, reset on Epoch Start.</p>
+<h2 id="patch-structure"><a class="header" href="#patch-structure">Patch Structure</a></h2>
+<p>Single patch for this phase — all items are tightly coupled through
+the timing model. Splitting would create intermediate states where
+timestamps are partially correct.</p>
+<pre><code>[PATCH 1/1] lavc/pgssubenc: add decoder model compliance
+
+- Compute DTS/PTS per spec timing formulas (8a)
+- Validate coded data buffer (8b)
+- Track decoded object buffer (8c)
+- Insert Acquisition Points at configurable interval (8d)
+- Write only active palette entries in PDS (8e)
+- Track object version numbers (8f)
+- Add -acquisition_point_interval AVOption
+- FATE: verify DTS ordering, buffer model, palette size
+</code></pre>
+<h2 id="context-structure-changes"><a class="header" href="#context-structure-changes">Context Structure Changes</a></h2>
+<pre><code class="language-c">typedef struct PGSSubEncContext {
+    /* existing fields */
+    AVClass *class;
+    int composition_number;
+    int frame_rate;
+    int quantize_method;
+    int epoch_active;
+    /* ... existing cache fields ... */
+
+    /* Phase 8: decoder model */
+    int acquisition_point_interval;  /* ms, 0 = disabled */
+    int64_t last_ap_pts;             /* PTS of last Acquisition Point */
+    int obj_version[PGS_MAX_OBJECT_REFS]; /* ODS version per object_id */
+
+    /* Buffer model state */
+    int64_t coded_buffer_fill;       /* bytes in coded data buffer */
+    int64_t coded_buffer_last_pts;   /* PTS of last buffer drain */
+    int decoded_buffer_used;         /* bytes in decoded object buffer */
+
+    /* Cached RLE for Acquisition Point reuse */
+    uint8_t *cached_rle[PGS_MAX_OBJECT_REFS];
+    int cached_rle_size[PGS_MAX_OBJECT_REFS];
+} PGSSubEncContext;
+</code></pre>
+<h2 id="timing-implementation-detail"><a class="header" href="#timing-implementation-detail">Timing Implementation Detail</a></h2>
+<p>The encoder currently writes raw segment payloads into a flat buffer.
+The PG headers (magic + PTS + DTS + type + size) are added by the
+muxer for <code>.sup</code> output or by the TS muxer for M2TS.</p>
+<p>For DTS computation, the encoder needs to know total segment sizes
+before writing headers. Implementation approach:</p>
+<ol>
+<li>RLE-encode objects first (already done — <code>pgs_encode_rle</code>)</li>
+<li>Compute total display set size from RLE sizes + header sizes</li>
+<li>Compute DECODE_DURATION from composition state and object dimensions</li>
+<li>Set packet DTS = PTS - DECODE_DURATION</li>
+<li>Store per-segment timestamps via AV_PKT_DATA_SUBTITLE_POSITION
+side data (or extend <code>AVSubtitle</code> — TBD based on upstream API)</li>
+</ol>
+<p>For the <code>.sup</code> muxer, DTS goes directly into the PG header.
+For M2TS, DTS goes into the PES header.</p>
+<h2 id="fate-testing"><a class="header" href="#fate-testing">FATE Testing</a></h2>
+<h3 id="timestamp-validation"><a class="header" href="#timestamp-validation">Timestamp validation</a></h3>
+<ul>
+<li>Encode a subtitle, decode it, verify DTS &lt; PTS for all segments</li>
+<li>Verify DTS monotonically non-decreasing within display set</li>
+<li>Verify PTS(last_ODS) = PTS(END)</li>
+</ul>
+<h3 id="buffer-model"><a class="header" href="#buffer-model">Buffer model</a></h3>
+<ul>
+<li>Encode rapid animation sequence, verify no buffer underflow warnings</li>
+<li>Encode large full-screen object, verify sufficient decode duration</li>
+</ul>
+<h3 id="acquisition-points"><a class="header" href="#acquisition-points">Acquisition Points</a></h3>
+<ul>
+<li>Encode 10-second subtitle, verify Acquisition Points at expected
+intervals</li>
+<li>Decode from mid-stream Acquisition Point, verify correct display</li>
+</ul>
+<h3 id="palette-optimization"><a class="header" href="#palette-optimization">Palette optimization</a></h3>
+<ul>
+<li>Encode 4-color subtitle, verify PDS payload &lt; 30 bytes</li>
+<li>Round-trip: encode with optimized PDS, decode, verify identical output</li>
+</ul>
+<h3 id="object-versions"><a class="header" href="#object-versions">Object versions</a></h3>
+<ul>
+<li>Encode two subtitles in one epoch, verify object version increments</li>
+</ul>
+<h2 id="risks"><a class="header" href="#risks">Risks</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Risk</th><th>Mitigation</th></tr></thead><tbody>
+<tr><td>DTS computation breaks existing streams</td><td>Default to current behavior when DTS cannot be computed; add <code>-pgs_timing</code> option</td></tr>
+<tr><td>Buffer model too conservative</td><td>Calibrate against SUPer output on real Blu-ray content</td></tr>
+<tr><td>Acquisition Points inflate stream size</td><td>Only emit when interval &gt; 0 and subtitle is actively displayed</td></tr>
+<tr><td>Side data approach rejected upstream</td><td>Fall back to extending PGSSubEncContext with timing fields</td></tr>
+</tbody></table>
+</div>
+<h2 id="verification"><a class="header" href="#verification">Verification</a></h2>
+<pre><code class="language-bash"># Build and test
+make -j$(nproc) &amp;&amp; make fate
+
+# Timing validation
+./ffmpeg -i test.srt -c:s pgssub -s 1920x1080 /tmp/timed.sup
+./ffprobe -v error -show_packets /tmp/timed.sup | grep -E 'pts|dts'
+# Verify: dts &lt; pts for all packets, dts values increase
+
+# Buffer model
+./ffmpeg -i test_animation.ass -c:s pgssub -s 1920x1080 /tmp/anim.sup 2&gt;&amp;1
+# Verify: no buffer underflow warnings
+
+# Acquisition Points
+./ffmpeg -i test_long.srt -c:s pgssub -s 1920x1080 \
+  -acquisition_point_interval 5000 /tmp/ap.sup
+./ffprobe -v error -show_packets /tmp/ap.sup | grep -c 'flags.*K'
+# Verify: Acquisition Points at ~5s intervals
+
+# Palette size
+./ffprobe -v error -show_packets -select_streams s /tmp/timed.sup \
+  | awk '/size/{print $0}'
+# Verify: PDS packets &lt; 100 bytes for simple subtitles
+</code></pre>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li>US7620297B2 — Decoder model, buffer management, Rx/Rd/Rc rates</li>
+<li>US8638861B2 — Segment syntax, Coded Data Buffer, timing rules</li>
+<li>US20090185789A1 — Stream shaping, Acquisition Point strategy</li>
+<li>SUPer (cubicibo) — Hardware-validated reference implementation</li>
+<li><code>docs/pgs-specification.md</code> — Compiled specification (Section 11)</li>
+<li>PHASE1.md — Deferred items from initial encoder implementation</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../plan/0008-ocr-bitmap-to-text/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../plan/0010-upstream-suitability-audit/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../plan/0008-ocr-bitmap-to-text/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../plan/0010-upstream-suitability-audit/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

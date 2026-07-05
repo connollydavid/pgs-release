@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Colour Distance Metrics &mdash; FFmpeg Subtitle Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fafafa;
+  --fg: #1a1a1a;
+  --fg2: #666;
+  --fg3: #999;
+  --border: #e5e5e5;
+  --accent: #0066cc;
+  --green: #1a7f37;
+  --card-bg: #fff;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111;
+    --fg: #e5e5e5;
+    --fg2: #999;
+    --fg3: #666;
+    --border: #2a2a2a;
+    --accent: #4d9de0;
+    --green: #56d364;
+    --card-bg: #1a1a1a;
+  }
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.7;
+  font-size: 15px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code {
+  font-family: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+  font-size: 0.85em;
+  background: var(--border);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+header {
+  padding: 3rem 0 2rem;
+}
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+header p {
+  color: var(--fg2);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  max-width: 680px;
+}
+
+section {
+  padding: 2rem 0;
+  border-top: 1px solid var(--border);
+}
+section h2 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg3);
+  margin-bottom: 1.25rem;
+}
+section p {
+  color: var(--fg2);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  max-width: 680px;
+}
+
+/* Palette grid */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+  margin: 1rem 0;
+}
+@media (max-width: 600px) { .palette-grid { grid-template-columns: repeat(4, 1fr); } }
+.palette-entry {
+  text-align: center;
+  padding: 0.5rem 0.25rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  border: 1px solid var(--border);
+}
+.palette-entry .name { margin-top: 4px; }
+.palette-entry .hex { color: var(--fg3); font-size: 0.65rem; }
+
+/* Comparison table */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  display: block;
+}
+.comparison-table th {
+  background: var(--card-bg);
+  padding: 0.5rem;
+  text-align: center;
+  border-bottom: 2px solid var(--border);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--fg3);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  white-space: nowrap;
+}
+.comparison-table td {
+  padding: 0.4rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+/* Swatches */
+.swatch {
+  display: inline-block;
+  width: 40px;
+  height: 28px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  vertical-align: middle;
+}
+.swatch-large { width: 60px; height: 36px; }
+.swatch-label {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--fg3);
+  margin-top: 2px;
+}
+.match { background: color-mix(in srgb, var(--green) 10%, transparent); }
+.miss { background: color-mix(in srgb, #cf222e 8%, transparent); }
+
+/* Score bar */
+.score-bar {
+  display: inline-block;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--green);
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* Stat cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+.stat-card {
+  background: var(--card-bg);
+  border-radius: 6px;
+  padding: 1rem;
+  border: 1px solid var(--border);
+}
+.stat-card h4 {
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 0;
+  font-size: 0.8rem;
+}
+
+/* Methodology table */
+.method-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.82rem;
+}
+.method-table th {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg3);
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  border-bottom: 2px solid var(--border);
+}
+.method-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--fg2);
+}
+.method-table td:first-child {
+  font-weight: 500;
+  color: var(--fg);
+  white-space: nowrap;
+}
+
+/* Takeaway */
+.takeaway {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  max-width: 680px;
+}
+.takeaway strong { color: var(--fg); }
+.takeaway p { margin-bottom: 0; }
+
+/* Links / footer */
+.links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.links a {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+footer {
+  padding: 2rem 0;
+  border-top: 1px solid var(--border);
+  color: var(--fg3);
+  font-size: 0.8rem;
+}
+footer a { color: var(--fg2); }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <p style="margin-bottom:1rem"><a href="../">&larr; FFmpeg Subtitle Tools</a></p>
+  <h1>Colour Distance Metrics for Sparse Palette Mapping</h1>
+  <p>Which distance metric picks the best nearest-neighbour in a 16-colour DVD palette? 12 metrics tested across 20 diagnostic colours and 262,144 exhaustive inputs.</p>
+</header>
+
+<section>
+  <h2>The palette</h2>
+  <p>DVD default 16-colour global palette. Each subtitle must select 4 colours from this fixed set.</p>
+  <div class="palette-grid" id="palette-grid"></div>
+</section>
+
+<section>
+  <h2>Comparison</h2>
+  <p>For each test colour, 12 distance metrics pick the nearest palette entry. "Claude's opinion" is what Claude Opus 4.6 judged as the perceptually best match.</p>
+  <table class="comparison-table" id="comparison-table"></table>
+</section>
+
+<section>
+  <h2>Scorecard</h2>
+  <p>How often does each metric agree with Claude's opinion?</p>
+  <div id="scorecard"></div>
+</section>
+
+<section>
+  <h2>Exhaustive statistics (262,144 colors)</h2>
+  <div class="stats-grid" id="stats-grid"></div>
+</section>
+
+<section>
+  <h2>Methodology</h2>
+  <table class="method-table">
+    <tr><th>Metric</th><th>Formula (OkLab unless noted)</th><th>Notes</th></tr>
+    <tr><td>sRGB</td><td>&Delta;R&sup2; + &Delta;G&sup2; + &Delta;B&sup2;</td><td>What dvdsubenc.c uses</td></tr>
+    <tr><td>OkLab</td><td>&Delta;L&sup2; + &Delta;a&sup2; + &Delta;b&sup2;</td><td>Current FFmpeg quantizer</td></tr>
+    <tr><td>HyAB w=N</td><td>|&Delta;L| + N&middot;&radic;(&Delta;a&sup2;+&Delta;b&sup2;)</td><td>Abasi et al. 2020</td></tr>
+    <tr><td>OkLab C&times;N</td><td>&Delta;L&sup2; + N&middot;(&Delta;a&sup2;+&Delta;b&sup2;)</td><td>Chroma-weighted Euclidean</td></tr>
+    <tr><td>OkLab L&times;N</td><td>N&middot;&Delta;L&sup2; + &Delta;a&sup2; + &Delta;b&sup2;</td><td>Lightness-reduced (= C&times;1/N)</td></tr>
+    <tr><td>CIEDE2000</td><td>CIE standard with SL/SC/SH/RT</td><td>In CIELAB, not OkLab</td></tr>
+  </table>
+
+  <div class="takeaway">
+    <p><strong>No perceptual metric beats sRGB for this sparse palette.</strong> All OkLab variants map chromatic colours to achromatic entries (light-grey) too readily. sRGB's equal-weight RGB channels act as implicit hue preservation. Even CIEDE2000 (the CIE gold standard) maps skin tone to grey.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Links</h2>
+  <div class="links">
+    <a href="../">FFmpeg Subtitle Tools</a>
+    <a href="../quantizers/">Quantizer comparison</a>
+  </div>
+</section>
+
+<footer>
+  Abasi, S., Tehran, M.A., Fairchild, M.D. (2020). "Distance metrics for very large color differences." <em>Color Research &amp; Application</em>, 45(2), 208&ndash;223.
+</footer>
+
+</div>
+
+<script>
+const palette = [
+  { hex: '#000000', name: 'black' },
+  { hex: '#0000FF', name: 'blue' },
+  { hex: '#00FF00', name: 'green' },
+  { hex: '#FF0000', name: 'red' },
+  { hex: '#FFFF00', name: 'yellow' },
+  { hex: '#FF00FF', name: 'magenta' },
+  { hex: '#00FFFF', name: 'cyan' },
+  { hex: '#FFFFFF', name: 'white' },
+  { hex: '#808000', name: 'olive' },
+  { hex: '#8080FF', name: 'lt-blue' },
+  { hex: '#800080', name: 'purple' },
+  { hex: '#80FF80', name: 'lt-green' },
+  { hex: '#008080', name: 'teal' },
+  { hex: '#FF8080', name: 'salmon' },
+  { hex: '#555555', name: 'dk-gray' },
+  { hex: '#AAAAAA', name: 'lt-gray' },
+];
+
+const metricNames = [
+  'sRGB', 'OkLab', 'HyAB1', 'HyAB2', 'HyAB3', 'HyAB4',
+  'OkCw2', 'OkCw3', 'OkCw4', 'OkLw.5', 'OkLw.25', 'CIE00'
+];
+
+const cases = [
+  { hex: '#808080', name: 'mid gray',     expected: 15, reason: 'gray should map to gray, not teal',
+    picks: [15, 12, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15] },
+  { hex: '#E0B090', name: 'skin tone',    expected: 13, reason: 'warm colour should stay warm (salmon)',
+    picks: [13, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15] },
+  { hex: '#C0C000', name: 'dark yellow',  expected: 4,  reason: 'desaturated yellow should map to yellow',
+    picks: [4, 11, 15, 4, 4, 4, 4, 4, 4, 4, 4, 4] },
+  { hex: '#C08040', name: 'orange',       expected: 8,  reason: 'orange is between salmon(13) and olive(8)',
+    picks: [13, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8], alts: [8, 13] },
+  { hex: '#40C080', name: 'sea green',    expected: 11, reason: 'green-ish should map to light-green',
+    picks: [11, 15, 15, 15, 11, 11, 11, 11, 11, 11, 11, 11] },
+  { hex: '#400000', name: 'v.dark red',   expected: 0,  reason: 'very dark should map to black',
+    picks: [0, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 0] },
+  { hex: '#202020', name: 'near black',   expected: 14, reason: 'dark gray; black(0) also ok',
+    picks: [0, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 0], alts: [0, 14] },
+  { hex: '#606060', name: 'med-dk gray',  expected: 14, reason: 'medium-dark gray',
+    picks: [14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14] },
+  { hex: '#A0A0A0', name: 'med-lt gray',  expected: 15, reason: 'medium-light gray',
+    picks: [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15] },
+  { hex: '#804000', name: 'brown',        expected: 8,  reason: 'brown is closest to olive',
+    picks: [8, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14] },
+  { hex: '#004080', name: 'dark azure',   expected: 12, reason: 'dark cyan-ish -> teal',
+    picks: [12, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 1] },
+  { hex: '#800040', name: 'dark rose',    expected: 10, reason: 'dark rose -> purple',
+    picks: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10] },
+  { hex: '#C060C0', name: 'orchid',       expected: 5,  reason: 'orchid -> magenta',
+    picks: [15, 9, 9, 10, 10, 10, 9, 10, 10, 9, 10, 5] },
+  { hex: '#60C0C0', name: 'light teal',   expected: 12, reason: 'light teal -> teal or cyan',
+    picks: [15, 15, 15, 15, 12, 12, 15, 15, 15, 15, 15, 6], alts: [6, 12] },
+  { hex: '#FFC080', name: 'peach',        expected: 13, reason: 'peach -> salmon',
+    picks: [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 15] },
+  { hex: '#80C0FF', name: 'sky blue',     expected: 9,  reason: 'sky blue -> light-blue',
+    picks: [9, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 9] },
+  { hex: '#C0FF80', name: 'lime',         expected: 11, reason: 'lime -> light-green',
+    picks: [11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11] },
+  { hex: '#FF8040', name: 'tangerine',    expected: 13, reason: 'orange-red -> salmon',
+    picks: [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 3] },
+  { hex: '#404080', name: 'dark slate',   expected: 10, reason: 'dark blue-purple -> purple',
+    picks: [14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 1] },
+  { hex: '#408040', name: 'forest green', expected: 8,  reason: 'dark green -> olive',
+    picks: [14, 8, 12, 8, 8, 8, 8, 8, 8, 8, 8, 8] },
+];
+
+const exhaustiveStats = {
+  divergenceFromSrgb: [
+    { name: 'sRGB', pct: 0 },
+    { name: 'OkLab', pct: 35.66 },
+    { name: 'HyAB w=1', pct: 38.12 },
+    { name: 'HyAB w=2', pct: 33.15 },
+    { name: 'HyAB w=3', pct: 35.03 },
+    { name: 'HyAB w=4', pct: 37.17 },
+    { name: 'OkLab C\u00d72', pct: 31.02 },
+    { name: 'OkLab C\u00d73', pct: 30.94 },
+    { name: 'OkLab C\u00d74', pct: 31.98 },
+    { name: 'OkLab L\u00d70.5', pct: 31.02 },
+    { name: 'OkLab L\u00d70.25', pct: 31.98 },
+    { name: 'CIEDE2000', pct: 42.15 },
+  ],
+  agreementCiede: [
+    { name: 'sRGB', pct: 57.85 },
+    { name: 'OkLab', pct: 66.34 },
+    { name: 'HyAB w=1', pct: 63.45 },
+    { name: 'HyAB w=2', pct: 68.37 },
+    { name: 'HyAB w=3', pct: 66.32 },
+    { name: 'HyAB w=4', pct: 64.01 },
+    { name: 'OkLab C\u00d72', pct: 70.56 },
+    { name: 'OkLab C\u00d73', pct: 70.74 },
+    { name: 'OkLab C\u00d74', pct: 69.93 },
+    { name: 'OkLab L\u00d70.5', pct: 70.56 },
+    { name: 'OkLab L\u00d70.25', pct: 69.93 },
+    { name: 'CIEDE2000', pct: 100 },
+  ]
+};
+
+function textColor(hex) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return (r*0.299 + g*0.587 + b*0.114) > 128 ? '#000' : '#fff';
+}
+
+const palGrid = document.getElementById('palette-grid');
+palette.forEach((p, i) => {
+  const div = document.createElement('div');
+  div.className = 'palette-entry';
+  div.style.background = p.hex;
+  div.style.color = textColor(p.hex);
+  div.innerHTML = `<div class="name">${p.name}</div><div class="hex">[${i}] ${p.hex}</div>`;
+  palGrid.appendChild(div);
+});
+
+const table = document.getElementById('comparison-table');
+let thead = '<tr><th>Colour</th><th>Input</th><th>Claude\'s<br>opinion</th>';
+metricNames.forEach(m => { thead += `<th>${m}</th>`; });
+thead += '</tr>';
+table.innerHTML = thead;
+
+cases.forEach(c => {
+  let tr = document.createElement('tr');
+  let td0 = `<td style="text-align:left;font-size:0.75rem" title="${c.reason}">${c.name}</td>`;
+  let td1 = `<td><span class="swatch swatch-large" style="background:${c.hex}"></span><span class="swatch-label">${c.hex}</span></td>`;
+  let expHex = palette[c.expected].hex;
+  let td2 = `<td><span class="swatch" style="background:${expHex}"></span><span class="swatch-label">${palette[c.expected].name}</span></td>`;
+
+  let tds = td0 + td1 + td2;
+  c.picks.forEach((pick, mi) => {
+    let pickHex = palette[pick].hex;
+    let alts = c.alts || [c.expected];
+    if (!c.alts) alts = [c.expected];
+    let ok = alts.includes(pick);
+    let cls = ok ? 'match' : 'miss';
+    tds += `<td class="${cls}"><span class="swatch" style="background:${pickHex}"></span><span class="swatch-label">${palette[pick].name}</span></td>`;
+  });
+  tr.innerHTML = tds;
+  table.appendChild(tr);
+});
+
+const scorecard = document.getElementById('scorecard');
+let scores = metricNames.map((name, mi) => {
+  let correct = 0;
+  cases.forEach(c => {
+    let alts = c.alts || [c.expected];
+    if (alts.includes(c.picks[mi])) correct++;
+  });
+  return { name, correct, total: cases.length };
+});
+scores.sort((a, b) => b.correct - a.correct);
+
+let scoreHtml = '<div class="stat-card"><table class="method-table">';
+scoreHtml += '<tr><th>Metric</th><th>Correct</th><th style="width:50%">Accuracy</th></tr>';
+scores.forEach(s => {
+  let pct = (100 * s.correct / s.total).toFixed(0);
+  let barW = (s.correct / s.total * 100).toFixed(0);
+  scoreHtml += `<tr><td>${s.name}</td><td>${s.correct}/${s.total}</td>`;
+  scoreHtml += `<td><span class="score-bar" style="width:${barW}%"></span>${pct}%</td></tr>`;
+});
+scoreHtml += '</table></div>';
+scorecard.innerHTML = scoreHtml;
+
+const statsGrid = document.getElementById('stats-grid');
+
+function renderStatCard(title, data) {
+  let html = `<div class="stat-card"><h4>${title}</h4>`;
+  let sorted = [...data].sort((a,b) => a.pct - b.pct);
+  sorted.forEach(d => {
+    let barW = Math.min(d.pct, 100);
+    html += `<div class="stat-row"><span>${d.name}</span>`;
+    html += `<span><span class="score-bar" style="width:${barW * 0.8}px"></span>${d.pct.toFixed(1)}%</span></div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+statsGrid.innerHTML =
+  renderStatCard('Divergence from sRGB (lower = more similar)', exhaustiveStats.divergenceFromSrgb) +
+  renderStatCard('Agreement with CIEDE2000 (higher = closer to standard)', exhaustiveStats.agreementCiede);
+</script>
+
+</body>
+</html>

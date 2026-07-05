@@ -1,0 +1,1099 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>CLAUDE.md: operating manual for an agentic project - pgs-release</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">pgs-release</a></li><li class="chapter-item expanded affix "><li class="part-title">Cast: who</li><li class="chapter-item expanded "><a href="cast/index.html"><strong aria-hidden="true">1.</strong> Cast: the project's Who</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="cast/applying-personas.html"><strong aria-hidden="true">1.1.</strong> Applying personas during planning</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Plan: what & when</li><li class="chapter-item expanded "><a href="plan-index.html"><strong aria-hidden="true">2.</strong> Plan</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="plan/0001-hdmv-pgs-encoder/index.html"><strong aria-hidden="true">2.1.</strong> Phase 1: HDMV PGS Subtitle Encoder</a></li><li class="chapter-item expanded "><a href="plan/0002-color-quantization-api/index.html"><strong aria-hidden="true">2.2.</strong> Phase 2: Color Quantization API and Palette Mapping</a></li><li class="chapter-item expanded "><a href="plan/0003-text-to-bitmap-conversion/index.html"><strong aria-hidden="true">2.3.</strong> Phase 3: Text-to-Bitmap Subtitle Conversion</a></li><li class="chapter-item expanded "><a href="plan/0004-region-weighted-quantization/index.html"><strong aria-hidden="true">2.4.</strong> Phase 4: Region-Weighted Quantization</a></li><li class="chapter-item expanded "><a href="plan/0005-quantizer-algorithm-integration/index.html"><strong aria-hidden="true">2.5.</strong> Phase 5: Algorithm Integration</a></li><li class="chapter-item expanded "><a href="plan/0006-gif-encoder-rgba-quantization/index.html"><strong aria-hidden="true">2.6.</strong> Phase 6: GIF Encoder RGBA Quantization</a></li><li class="chapter-item expanded "><a href="plan/0007-upstream-review-findings/index.html"><strong aria-hidden="true">2.7.</strong> Upstream Review Findings</a></li><li class="chapter-item expanded "><a href="plan/0008-ocr-bitmap-to-text/index.html"><strong aria-hidden="true">2.8.</strong> Phase 7: OCR Bitmap-to-Text Subtitle Conversion</a></li><li class="chapter-item expanded "><a href="plan/0009-pgs-decoder-model-compliance/index.html"><strong aria-hidden="true">2.9.</strong> Phase 8: PGS Decoder Model Compliance</a></li><li class="chapter-item expanded "><a href="plan/0010-upstream-suitability-audit/index.html"><strong aria-hidden="true">2.10.</strong> Phase 8 Review: Upstream Suitability Audit</a></li><li class="chapter-item expanded "><a href="plan/0011-v3-consolidated-claude-review/index.html"><strong aria-hidden="true">2.11.</strong> v3 Expert Panel Review: Consolidated Findings</a></li><li class="chapter-item expanded "><a href="plan/0012-v4-review-fixes/index.html"><strong aria-hidden="true">2.12.</strong> Phase 9: v4 Series — Address Expert Panel Review</a></li><li class="chapter-item expanded "><a href="plan/0013-subtitle-event-lookahead/index.html"><strong aria-hidden="true">2.13.</strong> Phase 9a-R1: Subtitle Event Lookahead Window</a></li><li class="chapter-item expanded "><a href="plan/0014-pgs-encoder-optimizations/index.html"><strong aria-hidden="true">2.14.</strong> Phase 10: PGS Encoder Optimizations (v5)</a></li><li class="chapter-item expanded "><a href="plan/0015-website-updates/index.html"><strong aria-hidden="true">2.15.</strong> Phase 11: Website Updates for v4/v5</a></li><li class="chapter-item expanded "><a href="plan/0016-fate-ci-website-visibility/index.html"><strong aria-hidden="true">2.16.</strong> Phase 12: FATE CI + Website Test Visibility</a></li><li class="chapter-item expanded "><a href="plan/0017-pgs-encoder-features/index.html"><strong aria-hidden="true">2.17.</strong> Phase 13: PGS Encoder Features (v6)</a></li><li class="chapter-item expanded "><a href="plan/0018-upstream-submission-restructuring/index.html"><strong aria-hidden="true">2.18.</strong> Phase 14: Upstream Submission Restructuring (v7)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Software: where</li><li class="chapter-item expanded "><a href="where.html"><strong aria-hidden="true">3.</strong> Software</a></li><li class="chapter-item expanded affix "><li class="part-title">Call: why</li><li class="chapter-item expanded "><a href="call/0000-use-markdown-decision-records.html"><strong aria-hidden="true">4.</strong> Use Markdown decision records (MADR)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="call/0001-adopt-host-template.html"><strong aria-hidden="true">4.1.</strong> Adopt the host-template methodology</a></li><li class="chapter-item expanded "><a href="call/0002-mdbook-under-book-subdir.html"><strong aria-hidden="true">4.2.</strong> Publish the development mdBook under /book/, never at the site root</a></li><li class="chapter-item expanded "><a href="call/0003-migrated-software-repro-exempt.html"><strong aria-hidden="true">4.3.</strong> Migrated software components are repro-exempt for now</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Reference: how</li><li class="chapter-item expanded "><a href="CLAUDE.html" class="active"><strong aria-hidden="true">5.</strong> CLAUDE.md: operating manual for an agentic project</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="STRUCTURE.html"><strong aria-hidden="true">5.1.</strong> Structure</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Memory</li><li class="chapter-item expanded "><a href="MEMORY.html"><strong aria-hidden="true">6.</strong> Memory</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">pgs-release</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="claudemd-operating-manual-for-an-agentic-project"><a class="header" href="#claudemd-operating-manual-for-an-agentic-project">CLAUDE.md: operating manual for an agentic project</a></h1>
+<p>This file tells you, the agent, how to work in this repository. Follow it
+exactly. The rules are written to be literal: when one says "do X", do X. Do
+not look for a cleverer path. When something is unclear or could mean two
+things, stop and ask the human before you act. Clarity beats cleverness here.</p>
+<h2 id="what-this-repository-is"><a class="header" href="#what-this-repository-is">What this repository is</a></h2>
+<p>This repository is an <strong>agentic project</strong> (e.g. <code>agentic-acme</code>). It is the
+externalized <em>thought</em> about a piece of software: the plans, the decisions, the
+specifications, the people it serves, and the rules you work under. The software
+itself (the <em>action</em>) lives beneath the project as a bare store with worktrees
+(the <em>Where</em> room). You write thought in the project and action in
+the worktree. Keep them separate.</p>
+<p>You are working in a <em>template</em>. A real project replaces the example personas
+with its own and adds its software as the hosted bare store with worktrees. The
+structure below stays the same.</p>
+<h2 id="the-five-rooms"><a class="header" href="#the-five-rooms">The five rooms</a></h2>
+<p>The host has five rooms, one for each question you ask about any piece of work.
+Put each kind of file in its room. Do not invent new top-level folders.</p>
+<div class="table-wrapper"><table><thead><tr><th>Question</th><th>Room</th><th>What goes here</th></tr></thead><tbody>
+<tr><td>Who</td><td><code>cast/</code></td><td>personas: the people (human or agent) the software serves</td></tr>
+<tr><td>What</td><td><code>&lt;software&gt;/</code> (with the code)</td><td>specifications: behaviour (<code>.allium</code>), timing (<code>.tla</code>), verified in the software's own CI</td></tr>
+<tr><td>When</td><td><code>plan/</code></td><td>the milestone index and one folder per milestone</td></tr>
+<tr><td>Where</td><td><code>&lt;software&gt;/</code></td><td>the hosted software, a bare store with worktrees; you add it</td></tr>
+<tr><td>Why</td><td><code>call/</code></td><td>decisions, in MADR format (see <code>call/0000</code>)</td></tr>
+<tr><td>How</td><td><code>CLAUDE.md</code> + <code>tools/</code></td><td>this manual, and the verification tools</td></tr>
+</tbody></table>
+</div>
+<p><code>STRUCTURE.md</code> is the short map of the same thing. Read it once.</p>
+<h2 id="how-you-work-four-principles"><a class="header" href="#how-you-work-four-principles">How you work: four principles</a></h2>
+<p>These four principles govern every change. They exist because language models
+make predictable mistakes; each principle blocks one.</p>
+<h3 id="1-think-before-coding"><a class="header" href="#1-think-before-coding">1. Think before coding</a></h3>
+<ul>
+<li>State your assumptions in plain text before you write code.</li>
+<li>If the request could mean more than one thing, list the meanings and ask which
+one. Do not pick one silently.</li>
+<li>If a simpler approach exists than the one you first reached for, say so.</li>
+<li>If any part of the request is unclear, stop and name the unclear thing. Ask.
+Do not guess.</li>
+</ul>
+<p>The goal: the human never reads your output and says "that is not what I meant."</p>
+<h3 id="2-keep-it-simple"><a class="header" href="#2-keep-it-simple">2. Keep it simple</a></h3>
+<ul>
+<li>Write the least code that solves the stated problem. Nothing speculative.</li>
+<li>Do not add features that were not asked for.</li>
+<li>Do not add an abstraction (a base class, an interface, a wrapper) for
+something used in exactly one place. Write the concrete thing.</li>
+<li>Do not add configuration for a value that has exactly one setting. Hardcode it.</li>
+<li>Do not handle errors that cannot happen given the current inputs.</li>
+<li>If your code is long and the same result fits in a fraction of the lines,
+rewrite it short before you show it.</li>
+</ul>
+<h3 id="3-make-surgical-changes"><a class="header" href="#3-make-surgical-changes">3. Make surgical changes</a></h3>
+<ul>
+<li>Touch only the lines the request needs. Clean up only the mess you made.</li>
+<li>Do not "improve" nearby code, comments, names, or whitespace that the request
+did not ask about.</li>
+<li>Do not refactor working code that is not part of the request.</li>
+<li>Match the existing style exactly: tabs or spaces, snake_case or camelCase,
+whatever the file already uses.</li>
+<li>If your change leaves an import or variable unused, remove it in the same
+commit. If you spot unrelated dead code or a bug, mention it to the human; do
+not silently fix or delete it.</li>
+</ul>
+<p>Check: every line you changed must trace to the request. If a line does not,
+revert it.</p>
+<h3 id="4-drive-to-a-verifiable-goal"><a class="header" href="#4-drive-to-a-verifiable-goal">4. Drive to a verifiable goal</a></h3>
+<p>Turn every task into a goal you can check, then loop until the check passes.</p>
+<ul>
+<li>"Add validation" becomes: write tests for the invalid inputs, then write code
+until those tests pass.</li>
+<li>"Fix the bug" becomes: write a test that reproduces the bug, then change code
+until that test passes.</li>
+<li>"Refactor X" becomes: confirm the tests pass, refactor, confirm they still pass.</li>
+</ul>
+<p>For any task with more than one step, write a short numbered plan first, and give
+each step a check:</p>
+<pre><code>&lt;what you will do&gt; -&gt; verify by: &lt;how you will confirm it worked&gt;
+</code></pre>
+<p>If the success check is weak ("make it work"), ask the human to make it concrete
+before you start.</p>
+<h2 id="names-numbers-and-milestones"><a class="header" href="#names-numbers-and-milestones">Names, numbers, and milestones</a></h2>
+<p>Numbers are identity. Slugs are content. Ordering lives in the index, never in
+the name.</p>
+<ul>
+<li>A milestone is a folder in <code>plan/</code> named <code>NNNN-slug</code>: a four-digit
+zero-padded number, a hyphen, then a lowercase hyphenated slug, for example
+<code>0001-example-milestone</code>. Decisions in <code>call/</code> use the same <code>NNNN-slug</code> form.</li>
+<li>Name a milestone after its content rather than its position. <code>0003-ci-pipeline</code> is
+good. Do <strong>not</strong> name things by ordinal position (<code>phase-one</code>, <code>M2</code>) or by a
+bare numeral (a header that is just "3" or "5.5"). Positions move when a plan
+is re-cut; content names stay attached to their content.</li>
+<li>The number is assigned when the work is accepted, and it never changes. To
+read sequence, read the index, not the filenames.</li>
+<li><code>tools/host-lifecycle</code> allocates these numbers and checks the names for you.
+Use it (see below) instead of numbering by hand.</li>
+</ul>
+<h2 id="decisions-call"><a class="header" href="#decisions-call">Decisions: <code>call/</code></a></h2>
+<p>When you make a choice that someone later will ask "why?", record it as a
+decision in <code>call/</code>, in MADR (Markdown Any Decision Record) format. The bootstrap
+decision <code>call/0000</code> explains the format and links to the MADR spec. One file per
+decision, <code>NNNN-slug.md</code>, number assigned when the decision is accepted.</p>
+<p><code>call/</code> records decisions about <strong>the software under development</strong>, why your
+software is built as it is. It does <strong>not</strong> hold methodology decisions. The
+methodology is settled in this spine (<code>CLAUDE.md</code> + <code>STRUCTURE.md</code>), inherited by
+copy-at-version; a change to it is made in the template and propagated by
+<code>host-lifecycle upgrade</code>, never re-litigated as a project <code>call/</code>.</p>
+<p><strong>Anti-ouroboros.</strong> A project must avoid feeding on its own methodological tail. If a
+<code>call/</code> decision restates a methodology rule that is then settled or changed
+upstream in the spine, retire it the MADR way: set <code>Status: superseded by the spine</code> in place (records are immutable: you change status, never delete). The
+live (<code>accepted</code>) Why room then holds only decisions still in force.
+<code>host-lifecycle validate</code> fails an <code>accepted</code> decision that is missing a <code>Scope:</code>
+header or declares <code>Scope: methodology</code>. The template ships <code>call/0000</code> only as a
+worked example; replace it with your software's own decisions.</p>
+<p><strong>Inherit from the source, not from a host.</strong> You inherit the methodology from
+<em>this template</em> (the versioned source you copy-at-version) alone. A host or
+management repo's <strong>top-level instance contents</strong> (its <code>call/</code>, <code>plan/</code>,
+<code>MEMORY.md</code>, the project-specific parts of its <code>CLAUDE.md</code>) are that project's own
+rooms and bind no adopter. Do not read them as normative.</p>
+<h2 id="specs-with-the-software-they-constrain"><a class="header" href="#specs-with-the-software-they-constrain">Specs, with the software they constrain</a></h2>
+<p>A spec states what the software must do; a tool turns it into a check. Specs live
+<strong>with the software they describe</strong> (in the software repo, beside the code, and
+verified by <strong>that repo's CI</strong>), the way tests live next to code, so a spec and the
+code it constrains move, version, and break together:</p>
+<ul>
+<li>Behaviour and requirements as <code>.allium</code> files, authored and maintained through
+the allium skills (<code>elicit</code>/<code>distill</code>/<code>tend</code>/<code>weed</code>/<code>propagate</code>), checked by
+<code>tools/allium</code> (<code>allium check</code> validates structure; <code>allium analyse</code> adds
+data-flow, reachability, terminal-state and deadlock analysis; <code>allium plan</code>
+derives the test obligations the suite must discharge). The software's CI runs
+<code>check</code> + <code>analyse</code> + <code>plan</code> and fails on any error or warning.</li>
+<li>Timing and concurrency as <code>.tla</code> files, checked by <code>tools/specula</code> (TLA+/TLC),
+run by the software's CI.</li>
+</ul>
+<p>A present spec carries its full lane (see "Mandatory when used", below). Wire the
+tool and its skills before authoring.</p>
+<p>The host's <code>plan/&lt;milestone&gt;/</code> <em>references</em> a spec (by path and the software pin);
+it does not contain it. Do not place specs in the host's <code>plan/</code> tree. Quarantining
+a spec from its software is a bad smell (the spec drifts from the code). A spec that
+ended up under <code>plan/*/spec/</code> is relocated into the software repo.</p>
+<h2 id="personas-cast"><a class="header" href="#personas-cast">Personas: <code>cast/</code></a></h2>
+<p><code>cast/</code> holds the personas: short profiles of the people the software serves. A
+persona is a hypothetical archetypal user, not a real individual. The examples
+here (<code>mara.md</code>, a human operator, and <code>wren.md</code>, an agentic LLM) show the two
+modalities; replace them with your project's own.</p>
+<p>Build at least one persona by discussion with the human before planning the work
+it serves. <code>cast/applying-personas.md</code> gives the cited process for doing this.
+Follow it.</p>
+<h2 id="the-verification-ladder"><a class="header" href="#the-verification-ladder">The verification ladder</a></h2>
+<p>Different kinds of property need different checkers, and different <em>strengths</em> of
+checker. Route each claim to the lane, and to the rung, that can prove it. The base
+lanes:</p>
+<ol>
+<li>
+<p><strong>Hygiene</strong>: <code>tools/host-lint</code>. Catches naming tells: ordinal labels and bare
+numerals leaking into commit messages, headers, and comments. Runs as a git
+hook. <strong>Self-referential software is excluded, not bypassed.</strong> Software that
+<em>detects</em> tells (a linter, parser, validator, grammar tool) must embed them in
+test fixtures, docs, and sometimes source, legitimate self-reference the hook
+would otherwise flag. Exclude that corpus through the tool's ignore mechanism
+(<code>.host-lintignore</code>), which the per-file hook scan MUST honor; validate each
+excluded file line-by-line so no real tell hides among the examples, and keep
+ordinary source scanned (reword an example comment rather than mute the file).
+When a tracked <em>document</em> must instead reproduce a tell <strong>verbatim</strong> (an old-name
+remap table, or a frozen dated review citing another document's numbered steps),
+it is <strong>boxed in the file, not path-excluded</strong>: wrap it in a fenced code block
+tagged <code>host-lint:ignore</code> (markdown only), and the naming scan skips that block
+while the rest of the file stays linted. A regular code block and inline
+backticks stay scanned, so a tell cannot be laundered by quoting it. The choice is
+three-way: reword a pedagogical example or a document's own ordinal label into
+content; box an irreducible literal citation; and path-exclude only the immutable
+record (the append-only memory log, dated review artifacts) and the
+self-referential corpus above.
+<strong>Never <code>--no-verify</code> past the gate to land a fixture.</strong> That silently defeats
+the lane, the same "let red hide" failure as a CI matrix that fail-fast-cancels
+its own jobs. (A fix to either, once found, is a behaviour change: ship it as a
+patch release with a matching tag.) <strong>Legitimate tell-shaped tokens are
+declared, not silenced.</strong> A version string, product name, or cited tracker
+reference that merely <em>looks</em> like a tell is declared in a provenance-checked
+allowlist (host-lint's <code>LEXICON</code>): each entry the full contextual phrase, masked
+before detection; a tracker reference carries its backing URL. Because a sound,
+declarable escape then exists, the identifier/reference tier MAY escalate an
+advisory warn into a blocking flag (the committed <code>strict</code> directive), so an
+<em>un</em>declared tell-shaped token becomes a hard signal. The allowlist is provenance,
+not a mute button: the tool refuses a bare master key, a phrase that is <em>itself</em> a
+tell (rename it, do not declare it), and an un-cited tracker reference (<code>#N</code>,
+<code>owner/repo#N</code>, or an opted-in <code>PROJ-NNNN</code> key); URL liveness is re-derived by a
+network-having lane, never the offline hook.</p>
+<p><strong>Prose hygiene is the same lane, applied continuously.</strong> Beyond naming tells,
+<code>host-lint --prose</code> audits authored docs for the LLM-slop prose tropes that
+tropes.fyi names (decoration dashes and arrows, tricolons, hypophora, and so on).
+The bar matches the naming audit: authored docs carry <strong>zero</strong> prose tropes, as an
+<strong>ongoing</strong> rule, not a one-time migration. It is wired into the <strong>receipts
+mechanism</strong>: the <code>verify</code> phase <strong>applies</strong> the prose audit and <strong>generates</strong> a
+receipt, and <code>software --check</code> re-verifies that receipt by re-running the prose
+audit (<code>host-lifecycle prose</code>, host-lint's <code>--docs</code> engine run in-process, so the
+gate needs no host-lint on PATH), so a doc that regresses to slop re-opens it as a
+HAZARD. The one exception
+is <code>MEMORY.md</code>, the <strong>agent's own append-only working memory</strong>: it is excluded from
+both the naming and prose audits via <code>.host-lintignore</code>, never rewritten.</p>
+<p><strong>The methodology grows by reflective practice, because an agent is blind to its own
+drift.</strong> An agent perceives neither the register it emits nor the restatements its own
+change stales, so both are re-examined on purpose, <strong>prompted</strong> at the trust
+boundaries (the verify gate, adoption), <strong>mechanical-first</strong>, and <strong>operator-validated</strong>.
+Two arms run under this one principle. The first, <strong>gather</strong>, looks forward and grows
+the living grammar: the lane enforces a shared corpus of tells, and that corpus is
+incomplete by nature, so new tell-shapes that emerge in practice are swept up rather
+than waited for. Discovery is <strong>mechanical-first</strong>: sweep the history and recent work
+for a recurring shape the lane does not catch. An agent seldom perceives its own
+register as a tell, so this reflection is <strong>prompted</strong>, at the verify gate before a
+milestone closes and at adoption, and the agent assists rather than leads. <strong>The
+operator validates</strong> whether a surfaced shape is a genuine tell or legitimate domain
+vocabulary, by one test: is the shape a property of how models segment work, or of
+this project's own domain? Authority over a grammar change rests with the operator;
+an agent proposes a change and never approves one.</p>
+<p><strong>A confirmed tell graduates into the shared grammar; legitimacy stays local.</strong> The
+two run in opposite directions because a tell is a property of machine register that
+recurs across projects, while a legitimate token (a version string, a product
+identifier, a cited tracker reference) belongs to one project. So a confirmed tell is
+<strong>proposed upstream</strong> to the shared grammar the lane consumes, where every project
+gains it on the next bump; the project that finds it does not edit that shared source
+itself. A legitimate tell-shaped token stays in the per-project <code>LEXICON</code>. The host's
+own maintainer validates universality and releases the graduation.</p>
+<p><strong>Growth never inverts the disposition order, and it looks forward.</strong> Reword a
+positional or ordinal reference into content by default, since a content name is
+almost always available; box or declare an irreducible citation; declare the
+numeral-free contextual prefix when a shape is a genuine quantity; and reserve a
+graduation for the residue that still recurs once rewording is impossible. Harvesting
+at adoption proposes what to catch from then on, and leaves the immutable past alone,
+which migration disposes of by renaming live files and boxing frozen records. When a
+later grammar bump flags an existing <strong>live</strong> doc, reword it; a <strong>frozen</strong> record is
+boxed. A graduation that proves to over-flag is narrowed by a later grammar release,
+the same as any behaviour fix.</p>
+<p><strong>The second arm, reconcile, looks backward at the project's own restatements.</strong>
+Copy-at-version keeps the verbatim spine current, but a project also <em>restates</em>
+methodology in its own prose: its room map, its components, its verifiers, its
+recorded layout. When a spine change moves a concept, that restatement silently
+drifts, because the upgrade propagates the spine yet never re-reads the paraphrase.
+<strong>Prefer pointing over paraphrasing</strong>: define each methodology concept once, at a
+stable <code>{#id}</code> anchor on a heading in an authored doc (its home), and <em>point</em> at it from elsewhere
+with a <code>[text](FILE#id)</code> link rather than restating it. For example, a home is the
+heading <code>## Components {#components}</code> (the <code>{#id}</code> sits at the end of the heading) and a
+pointer is <code>[components](STRUCTURE.md#components)</code>. The concepts are <code>components</code>,
+<code>verifiers</code>, <code>software-root</code>, and <code>spec-home</code>. The first two are project-local, read from
+its <code>.host-software</code>: the <code>[software]</code> members are the <code>components</code> (a project <em>with</em> a
+single-file entrance sets it apart with an <code>[entrance]</code> stanza naming that member; most have none), and the
+<code>[verification]</code> drivers are the <code>verifiers</code>. The last two are the fixed layout:
+<code>software-root</code> is where the project's software lives (<code>software/</code>) and <code>spec-home</code> is
+where its specs live, with the software. The lifecycle manifest is phases only, so no adopter
+inherits another project's facts; <code>manifest --check</code> rejects a project-fact stanza.
+<code>host-lifecycle reconcile</code> runs three checks over the tracked docs, operable at the
+weak-agent bar: <strong>link-integrity</strong> (every concept link resolves to its home),
+<strong>declared-anchor</strong> (the link names a real concept), and <strong>coverage</strong> (each
+project-local home names its full <code>.host-software</code> set, so a dropped tool fails by
+absence, the bite). Coverage guards the home and a pointer cannot drift; an enumeration
+left un-pointed is the author's choice and is not guarded. The earlier inline
+<code>&lt;!-- host-reconcile: KIND --&gt;</code> annotation is
+<strong>deprecated</strong>: it is kept checking during the transition and a surviving annotation is
+warned, and the form retires a spine revision later, never silently inert.
+<strong>The trigger is conditional and host-aware.</strong> <strong>Adoption</strong> runs the full reconcile
+once; for a <strong>development host</strong> that authors its spine changes, the <strong>verify gate</strong> is
+the binding trigger: <code>software --check</code> runs reconcile in its recheck. <strong>Disposition is
+three-way</strong>, as for a flagged tell: convert a live restatement to a pointer, box a
+frozen citation, forward-correct an immutable record (a <code>call/</code> body, a <code>Status: done</code>
+doc, <code>MEMORY.md</code>). A reconcile fix stays <strong>local</strong> and never propagates, the mirror of a
+gathered tell graduating <strong>upstream</strong>. A sibling check closes decision-status drift:
+<code>host-lifecycle validate</code> HAZARDs an <code>accepted</code> <code>call/</code> decision whose <code>Scope:</code> names
+<code>host-template</code>, since its rule is now spine-resident and belongs superseded there.
+<strong>The entrance check is reconcile's standalone sibling.</strong> A document read out of context
+cannot point at a definition, so a single-file entry restates the spine and stales, whether
+a front-door README or a standalone <code>SKILL.md</code> loaded on its own. The entrance check holds
+such a document by coverage and generation, the way reconcile holds a linkable one by
+pointers. A project declares one entrance, a global singleton, in an <code>[entrance]</code> stanza in
+<code>.host-software</code>: the <code>member</code> it belongs to (set apart from <code>components</code>), the <code>document</code>
+within that member (default <code>README.md</code>, so a <code>SKILL.md</code> or a landing page is reached by
+path), and the concepts it <code>restates</code> (<code>true</code> for every concept, or a named subset).
+<code>host-lifecycle entrance --check</code> then holds the document complete against the declared
+concepts: it generates the <code>.host</code> stamp and covers the rest. A document that restates only
+home-less doctrine declares no checkable concept, and the tool says so rather than claim a
+coverage it cannot deliver.
+The legacy per-member marker is retired: a surviving <code>front-door = true</code> or <code>entrance = true</code> on a <code>[software]</code> member is a loud error, not the entrance, so declare the stanza.</p>
+</li>
+<li>
+<p><strong>Requirements</strong>: <code>tools/allium</code> (MIT, by JUXT). Does the software meet the
+behaviour the spec states? Author and maintain <code>.allium</code> specs <strong>through the
+allium skills</strong>, not by hand: <code>elicit</code>/<code>distill</code> to author, <code>tend</code> to evolve,
+<code>weed</code> to find spec↔code divergence, <code>propagate</code> to generate the tests. Gate
+each spec in the software's CI with <code>allium check</code> (structure) + <code>allium analyse</code> (data flow, reachability, terminal states, deadlock) + <code>allium plan</code>
+(test obligations).</p>
+</li>
+<li>
+<p><strong>Timing and concurrency</strong>: <code>tools/specula</code> (Apache-2.0). TLA+ model
+checking: are the orderings and timings correct? Model-check each <code>.tla</code> with
+TLC in the software's CI.</p>
+</li>
+</ol>
+<p><strong>Deeper rungs, <code>tools/host-prove</code></strong> (our tooling, Unlicense). The base lanes are
+<em>bounded</em>: TLC checks one finite instance, allium's tests sample inputs. When a claim
+must hold for <em>all</em> parameter values or <em>all</em> inputs, host-prove drives three heavier
+verifiers as agentic skills, each turning the tool's output into one machine-readable
+verdict so the rung runs down to a small model:</p>
+<ol start="4">
+<li><strong>Symbolic / parametric</strong>: <strong>Apalache</strong> (TLA+ to SMT/Z3; the <code>apalache-symbolic</code>
+skill). Proves a <code>.tla</code> invariant across a whole symbolic parameter family at once,
+where TLC can only enumerate one instance.</li>
+<li><strong>Proof / unbounded</strong>: <strong>TLAPS</strong> (<code>tlapm</code>; the <code>tlaps-proof</code> skill). A deductive,
+machine-checked proof that a property holds for all states, the must-hold-for-all
+claims bounded and symbolic checking cannot close. (Authoring a proof needs a strong
+model; the skill scopes a weak model to running and maintaining existing proofs.)</li>
+<li><strong>Code-conformance</strong>: verify the <em>implementation</em> against the spec, beyond tests
+and trace validation. This rung is <strong>target-specific</strong>: Rust uses <strong>Kani</strong> (the
+<code>kani-conformance</code> skill), C uses CBMC, and so on. The methodology prescribes the
+<em>obligation</em>; the project picks the verifier its language supports. (Prefer
+byte/char-level targets: <code>str::split</code>/<code>Vec</code> make CBMC-style checkers blow up.)</li>
+</ol>
+<p>Read the ladder as: hygiene, then requirements, then bounded timing (TLC), then symbolic
+(Apalache), then proof (TLAPS), with code-conformance (Kani et al.) the orthogonal rung
+that ties a proven spec to the running code. The deeper rungs are <strong>opt-in and inert</strong>
+(see below): nothing installs or runs until a project declares one.</p>
+<p><strong>Mandatory when used (RFC-2119).</strong> Adopting a lane is optional (not every
+project needs TLA+); <strong>once a spec of a kind exists, its tool, skills, and CI
+lane are required.</strong> A component carrying any <code>.allium</code> spec MUST wire <code>tools/allium</code>
+and its skills and run <code>check</code> + <code>analyse</code> + <code>plan</code> in that repo's CI, and the
+<code>plan</code> obligations MUST be discharged by the software's tests. A component carrying
+any <code>.tla</code> spec MUST wire <code>tools/specula</code> and TLC-check it in that repo's CI. A spec
+present without its full lane is a <strong>defect</strong>, not a choice. The lanes are not
+reference decoration. The tools are referenced submodules; their skills are
+generated, gitignored symlinks (<code>link-skills.sh</code>), wired before you author a spec.
+This is <strong>enforced</strong>, not only stated: <code>host-lifecycle software --check</code> raises a
+HAZARD when a materialized component carries a <code>.allium</code> with no <code>allium check</code> +
+<code>allium analyse</code> CI workflow, or a <code>.tla</code> with no TLC lane.</p>
+<p>The deeper rungs work the same way, one level up: they are <strong>opt-in and inert until a
+project declares a rung</strong> by dispositioning an obligation <code>kani:</code>/<code>apalache:</code>/<code>tlaps:</code>
+(below). A declaration then obliges that rung's CI lane and a re-deriver that runs.
+<code>software --check</code> HAZARDs an obligation that declares <code>kani:</code> with no <code>cargo kani</code> lane,
+<code>apalache:</code> with no <code>apalache-mc</code> lane, or <code>tlaps:</code> with no <code>tlapm</code> lane, and it HAZARDs a
+declared rung whose shared re-deriver, host-prove, does not run, since a re-derivation that
+cannot run leaves the rung undischarged however complete the CI config reads. So install the
+re-deriver where the gate runs, the same way the verifier itself is installed. The digest a
+rung records is <strong>earned</strong> through <code>obligations --rederive --record-digests</code>, which re-runs the
+proof and records only on a pass, in place of a hand edit, so a fresh digest stands for a
+passing re-derivation on the current inputs. The mere presence of a <code>.tla</code> or a crate never
+activates a rung; only the declaration does, so a project pays for a heavier verifier exactly
+when, and only when, it chooses to.</p>
+<p><strong>Obligations are discharged, not just emitted.</strong> <code>allium plan</code> derives a test
+obligation for every config default, entity, enum, invariant, rule and transition.
+Each obligation MUST be <strong>dispositioned</strong> in a sibling <code>&lt;spec&gt;.obligations</code> manifest
+(the remap-dictionary discipline applied to tests) as <code>test:&lt;name&gt;</code> (a named test
+discharges it), <code>structural</code> (the spec's own <code>check</code>/<code>analyse</code> lane covers it),
+<code>waived: &lt;reason&gt;</code> (an honest, recorded gap), or a deeper-rung proof: <code>kani:&lt;harness&gt;</code>,
+<code>apalache:&lt;inv&gt;</code>, or <code>tlaps:&lt;theorem&gt;</code> (a host-prove rung discharges it, stronger than
+a test, for all inputs/parameters). <code>host-lifecycle obligations &lt;spec&gt; --tests &lt;dir&gt; [--prove &lt;dir&gt;]</code> fails on any undispositioned obligation, any stale disposition, any
+<code>test:&lt;name&gt;</code> absent from the test sources, and any rung proof name absent from the
+<code>--prove</code> sources; the software's CI runs it, and <code>software --check</code> HAZARDs a
+<code>.allium</code> that has no <code>.obligations</code> manifest. An
+obligation left undispositioned is a defect. Discharge is total, per component.</p>
+<p><strong>A verification lane reports clean only after it performs its check (no-hollow-green,
+<code>call/0035</code>).</strong> A <code>test:</code> disposition is name-presence until it carries an <code>exercises=&lt;symbol&gt;</code>
+link to a function the discharging test drives. <code>host-lifecycle obligations --strict-discharge</code>
+then HAZARDs a <code>test:</code> whose named test does not reference that symbol, an <code>#[ignore]</code>'d
+discharging test, a behavioural obligation relabelled <code>structural</code>, or a <code>waived:</code> lacking a
+reason. The link is an auditable heuristic, weaker than a proof: the claim that a test truly
+drives the rule is the opt-in re-derivation below, and what the tool cannot mechanically
+establish is labelled <em>attested</em> rather than asserted as proved. The strict check is staged
+warn-then-retire, so bumping the tool never reddens a green ladder. The build lane obeys the
+same rule: <code>software --verify-build</code> prints its clean line only when a build was verified and
+none was left unrun, and it exits non-zero on an in-scope build it could not rebuild, so it
+never attests a guarantee it did not establish.</p>
+<p><strong>A rung is discharged by re-derivation, not by name-presence (<code>call/0018</code>).</strong> That a
+proof <em>exists</em> is not that it <em>passes</em>. <code>--prove</code> only lints that the rung's named
+target is present (AVAILABLE ≠ DISCHARGED). The real discharge is
+<code>host-lifecycle obligations &lt;spec&gt; --rederive &lt;dir&gt;</code>, which re-runs each rung's verifier
+through host-prove <strong>in its recorded pinned toolchain</strong> and requires a PASS at the
+declared <code>bound=</code>, checkable anywhere, with no keys and no dependence on a specific CI;
+it generalizes the reproducible-build re-derivation (which reproduces a recorded artifact
+hash) so the same re-derivation applies to proofs as well as artifacts. The cheap offline signal is <strong>input-digest staleness</strong>: a
+rung may declare <code>inputs=&lt;files&gt;</code>, <code>--rederive --record-digests</code> fingerprints them with
+<code>git hash-object</code> into a committed <code>&lt;manifest&gt;.digests</code> ledger, and a later offline run
+reports the proof <strong>STALE</strong> if those inputs drifted without a fresh re-derivation.
+Enforcement is <strong>project-pluggable</strong>: a required check, any CI, a pre-push hook, or the
+operator running the verify phase; the methodology prescribes the re-derivation and ships
+the re-deriver, and never bakes in a CI.</p>
+<p>Two rules govern the tools:</p>
+<ul>
+<li>
+<p><strong>Reference, don't vendor.</strong> Each tool is a git submodule pinned to a commit.
+Keep its code out of this repository. This governs an <strong>adopter</strong> consuming
+the tools. A <strong>development host</strong> that <em>authors</em> a host-* tool is the exception:
+it develops that tool as a Where-room software component of its own (materialized
+and released through the lifecycle like any software it builds) and consumes the
+built result (binary + worktree-sourced skills) from that worktree, rather than
+referencing its own source as a foreign submodule. Reference is for the consumer;
+the producer of a tool embeds it.</p>
+<p>Almost every project references the host-* tools and releases none of its
+own, and for such a project this release-side complement of the carve-out is
+a no-op, so a first read stops here. The rule binds only where two facts
+about your own repository both hold: your repository releases a host-* tool
+of its own, and it carries host-template as a submodule whose pins include
+that tool. If the first is false, as it is for a project that only consumes
+the tools, the rule does not apply and you change nothing, with no template
+pin to look for. Where both hold, the producer carries that tool's pin twice,
+once in its own Where room and again inside the vendored template, so a
+release is unfinished until every carried-template pin surface for that tool
+is bumped to the released commit, and <code>host-lifecycle software --check</code>
+HAZARDs any carried-template pin left behind.
+The producer re-pins the carried template when it releases the tool, just as
+it embeds the tool when it develops it.</p>
+</li>
+<li>
+<p><strong>Instruct, don't patch.</strong> Drive the tools through this manual and their own
+interfaces. Do not edit a tool's source to make it fit. If a tool needs a
+change, raise it upstream.</p>
+</li>
+</ul>
+<p>The <em>output</em> a tool produces about your project (a report, a counterexample, a
+generated check) belongs to your project, not to the tool's license, the same
+way a compiler's license does not cover the program it compiles.</p>
+<h2 id="the-host--tools"><a class="header" href="#the-host--tools">The host-* tools</a></h2>
+<p>Three of the tools are ours, released into the public domain (Unlicense):</p>
+<ul>
+<li><strong>host-grammar</strong>: the shared rules for valid names and numbers. A library, not
+a command. Both tools below depend on it.</li>
+<li><strong>host-lint</strong>: the <em>checker</em>. It reads text and flags naming tells.</li>
+<li><strong>host-lifecycle</strong>: the <em>generator</em>. It allocates numbers and scaffolds
+milestones, decisions, and personas without spending model tokens on
+mechanical work. Run <code>host-lifecycle next &lt;dir&gt;</code> for the next number and
+<code>host-lifecycle validate &lt;dir&gt;</code> to check a folder. It also materialises and
+audits the <em>Where</em> room: <code>host-lifecycle software --materialize|--check &lt;dir&gt;</code>
+realises the <code>.host-software</code> bare store + worktrees and verifies each is at its
+pin.</li>
+</ul>
+<p>Because the generator and the checker share <code>host-grammar</code>, what host-lifecycle
+emits is exactly what host-lint accepts. Trust that symmetry; do not number by
+hand.</p>
+<h3 id="the-lifecycle-phases-every-phase-emits-a-receipt"><a class="header" href="#the-lifecycle-phases-every-phase-emits-a-receipt">The lifecycle phases, every phase emits a receipt</a></h3>
+<p>host-lifecycle ships one Claude <strong>skill per lifecycle phase</strong>, generated into
+<code>.claude/skills/</code> by <code>link-skills.sh</code> exactly as the allium/specula skills are:
+<strong>classify</strong> (preview + case), <strong>adopt</strong> (governance + rooms + stamp), <strong>embed</strong>
+(the software as a bare store with worktrees), <strong>remap</strong> (the dictionary rename),
+<strong>verify</strong> (the gate sweep: <code>validate</code>, <code>software --check</code>, <code>obligations</code>,
+<code>book --check</code>), <strong>publish</strong> (the doc site), <strong>upgrade</strong> (the ledger), and
+<strong>release</strong> (the strict, tool-carried release: verify, build in the recorded
+toolchain, re-derive the artifact hash, re-pin, tag, receipt). Each owns the
+judgment around its mechanical command.</p>
+<p>The phases (their order, modality, command, and the evidence each carries) are
+not re-typed in prose; they live once in the tool-readable <strong><code>lifecycle.manifest</code></strong>
+(one <code>[phase "&lt;name&gt;"]</code> stanza each), which <code>host-lifecycle</code> reads at the project's
+adopted <code>.host</code> revision for <code>--next</code>, the <code>book</code> order, and the receipt gate. Read
+the whole lifecycle at a glance with <code>host-lifecycle manifest &lt;path&gt;</code>.</p>
+<p>Unlike a verification lane, which is conditional on a spec existing, the lifecycle
+is <strong>driven by the tool, never hand-operated</strong>, and the rule is <strong>every phase
+emits a receipt</strong>, not "every phase runs". Modality is first-class: a phase may be
+<strong>conditional</strong> (embed and release apply only with a Where room) or <strong>recurring</strong>
+(once per software component), so it can legitimately not run; even then it records
+a <strong>receipt</strong> written by the tool, in <code>.host-receipts</code> for a methodology-version phase
+(adopt, upgrade) and <code>.host-lifecycle-receipts</code> for an operational one: <code>done</code> with re-derivable
+evidence, <code>skip</code> with a cited reason, or tool-computed <code>n-a</code>. <code>host-lifecycle software --check</code> re-verifies each <code>done</code> by the manifest's closed <code>recheck =</code> and
+<strong>HAZARDs a phase with no receipt</strong>, the one defect the gate needs; a protected
+core (<code>verify</code>, <code>skippable = false</code>) refuses a skip outright. Operating a phase
+ad-hoc (hand-scaffolding rooms, hand-renaming files, hand-rolling the site or a
+release) leaves no receipt, and so is a defect by construction.</p>
+<h3 id="never-adopt-a-software-repository-in-place"><a class="header" href="#never-adopt-a-software-repository-in-place">Never adopt a software repository in place</a></h3>
+<p>A host is a <em>separate meta-repo</em>; the software it governs lives beneath it as the
+<em>Where</em> room (a bare store with worktrees recorded in <code>.host-software</code>). The two
+stay separable and independently versioned. That is the whole point of "keep
+them separate". So at <strong>first adoption</strong> (no <code>.host</code> stamp yet), if the target
+directory is itself a software repository (it carries a root build manifest
+(<code>Cargo.toml</code>, <code>package.json</code>, <code>go.mod</code>, <code>pyproject.toml</code>, …) and is not already
+managing software via <code>.host-software</code>), you <strong>MUST</strong> refuse to continue.
+<code>host-lifecycle classify &lt;dir&gt;</code> enforces this: it prints the refusal and exits
+non-zero instead of a case letter, rather than letting you turn the code repo
+into the host.</p>
+<p>Refusing is not the end of the task. Embed the software the right way instead:
+create or choose an empty host repository (e.g. <code>agentic-&lt;name&gt;</code>), <code>adopt</code> it
+there, then add the software as the Where room with a <code>[software "&lt;name&gt;"]</code>
+stanza in the host's <code>.host-software</code> (the repo's URL, a pinned SHA, the worktree
+set) and <code>software --materialize</code>. The classify refusal prints these exact steps.</p>
+<h2 id="audited-plans-and-append-only-memory"><a class="header" href="#audited-plans-and-append-only-memory">Audited plans and append-only memory</a></h2>
+<p>Two disciplines keep the host trustworthy across sessions.</p>
+<ul>
+<li><strong>Audited plans.</strong> Every change to <code>plan/</code> (the milestone index or any
+milestone document) and every decision in <code>call/</code> is committed and pushed
+immediately, in its own commit, not batched with code. After you finish a step
+in the software, update the plan to say what you actually did, in a separate
+commit.</li>
+<li><strong>Append-only memory.</strong> <code>MEMORY.md</code> is a running log of decisions, discovered
+constraints, and lessons. Add a short entry whenever you finish something
+significant, hit a non-obvious bug, or find an unexpected constraint, as you
+go, not at the end. Commit it on its own and push it. Never rewrite or delete an
+old entry; if one was wrong, add a new entry that corrects it and points back.</li>
+</ul>
+<p>The test for both: a new session with no memory of this conversation should be
+able to read <code>plan/</code>, <code>call/</code>, and <code>MEMORY.md</code> and continue without repeating a
+past mistake.</p>
+<h2 id="the-task-graph-in-plan-tasks-are-receipted-nodes"><a class="header" href="#the-task-graph-in-plan-tasks-are-receipted-nodes">The task graph: in-plan tasks are receipted nodes</a></h2>
+<p>A milestone's <code>## Build sequence</code> is not loose prose. Each step is a <strong>task</strong>: an
+anchored <code>### </code> heading under that section, ending in <code>{#anchor}</code> (the placement
+stock mdBook honors), for example <code>### Gather the data {#gather-data}</code>. Its
+identity is global, <code>plan/NNNN#anchor</code>, so a receipt and a dependency hang on a
+stable anchor, never a position that renumbers when a plan is re-cut. An anchored
+<code>### </code> heading belongs only under <code>## Build sequence</code>, and a build-sequence <code>### </code>
+without an anchor is refused, so a task is never confused with an ordinary
+subsection.</p>
+<p>A few bullets under each task heading carry its fields:</p>
+<pre><code>## Build sequence
+
+### Gather the data {#gather-data}
+
+- verify: cargo test gather
+- inputs: src/gather.rs
+
+### Ship it {#ship-it}
+
+- depends: #gather-data
+- verify: attested call/0007
+</code></pre>
+<ul>
+<li><strong><code>depends</code></strong> names the prerequisites: a local <code>#anchor</code>, or a cross-milestone
+<code>plan/NNNN#anchor</code>. A task with no <code>depends</code> takes the previous task in the
+section (the linear default), and the first task is a root. The project's tasks
+form <strong>one graph</strong> across milestones, and <code>host-lifecycle tasks</code> derives the
+<strong>ready frontier</strong> (the tasks whose prerequisites all carry a done receipt),
+which a coordinator may run in parallel.</li>
+<li><strong><code>verify</code></strong> is a command the gate re-runs (mechanical), or <code>attested &lt;call/NNNN | operator&gt;</code> (a decision the gate resolves, or an operator confirmation).</li>
+<li><strong><code>inputs</code></strong> names the files a mechanical verify covers, fingerprinted so the
+gate flags a done as stale once they drift (<code>call/0018</code>'s input-digest
+staleness, one level down).</li>
+</ul>
+<p><strong>Declare prerequisites; the tool derives parallelism.</strong> State for each task only
+what must finish before it. The needs-question is local and conservative, and a
+missing edge merely over-serializes (safe), while a guessed "independent" edge
+races two workers (a corruption), so the author never answers "what can run at
+once?" A coordinator fans a frontier out to parallel workers <strong>only when they are
+resource-isolated</strong> (separate worktrees), since <code>depends</code> orders work, it does not
+lock a shared resource.</p>
+<p><strong>Every task emits a receipt, and the gate is mandatory.</strong> <code>host-lifecycle tasks --record</code> writes a receipt into <code>.host-task-receipts</code> (it reads the task's own
+<code>verify</code>/<code>inputs</code>, so you never re-type them), a tool-written ledger you never
+hand-edit. <code>software --check</code> HAZARDs a task with no receipt, a <code>done</code> whose
+mechanical inputs drifted or whose citation does not resolve, a <code>skip</code> without a
+resolvable <code>call/NNNN</code>, and an orphan receipt whose task was renamed or removed. A
+<code>done</code> is re-derivable, never self-asserted: the cheap gate checks the input
+digest, and <code>tasks --rederive</code> re-runs the command and refreshes it. These task
+receipts are a third receipt kind beside the methodology-version and operational
+ledgers.</p>
+<h2 id="software-and-submodule-discipline"><a class="header" href="#software-and-submodule-discipline">Software and submodule discipline</a></h2>
+<p>The <strong>tools</strong> are submodules; the <strong>software</strong> is a bare store with worktrees.
+Both follow a commit-upstream-first rule:</p>
+<ul>
+<li><strong>A tool submodule:</strong> commit and push inside it (on <code>main</code>) first, then commit
+the updated submodule pointer in the host and push.</li>
+<li><strong>The software:</strong> commit and push inside the canonical worktree first, then
+record the new SHA as the <code>.host-software</code> <code>pin</code> and push that host commit. The
+recorded pin is the audit anchor a gitlink used to be.</li>
+</ul>
+<p>Never push a host commit whose tool pointer or software pin is not yet pushed. If
+a push fails (no network, no auth), stop, tell the human which commits are
+unpushed, and do not start work that depends on them.</p>
+<p><strong>Tag every release.</strong> A version bump (a change to the <code>version</code> in a tool's or
+the software's manifest (<code>Cargo.toml</code>, …)) <strong>MUST</strong> be accompanied by a matching
+annotated git tag <code>vX.Y.Z</code> at the release commit, pushed alongside it (<code>git tag -a vX.Y.Z -m "&lt;name&gt; vX.Y.Z" &amp;&amp; git push origin vX.Y.Z</code>). The tag <strong>is</strong> the release:
+a tag-triggered CI job builds the artifacts from it (e.g. a <code>v*</code> release workflow).
+An untagged version bump is an unreleased version, a defect; back-fill the tag at
+its bump commit. Do not re-pin <code>.host-software</code> (or a tool pointer) to a
+version-bumped commit that carries no matching tag.</p>
+<p><strong>Worktree-absence coherence.</strong> A separately-materialized path (the
+software worktree, or a tool submodule) is absent (or empty) until materialized; a
+fresh clone, CI, and a partial submodule init do not have it. So <strong>do not git-track
+an artifact that depends on such a path existing</strong> (a skill symlink into
+<code>&lt;software&gt;/</code> <em>or</em> into <code>tools/&lt;tool&gt;/skills/</code>): gitignore it and <strong>generate</strong> it
+after materialization: <code>link-skills.sh</code> produces <code>.claude/skills/*</code> for the tools
+present, and the software's links are recreated after <code>software --materialize</code>.
+Where an automated context genuinely needs the path, it materializes first;
+otherwise it must tolerate the absence. <code>host-lifecycle software --check</code> flags any
+tracked symlink whose target is not itself tracked here as a <code>HAZARD</code>. And: an
+un-materialized CI job must exercise each runtime-critical artifact. "done" means
+the whole CI sweep is green, not one artifact built.</p>
+<p><strong>Worktrees live under <code>software/</code>.</strong> Every materialized Where-room worktree
+<strong>MUST</strong> surface at <code>software/&lt;name&gt;/&lt;branch&gt;/</code> <em>under</em> the host root, never a bare
+external path disjoint from the tree. The rule an agent relies on is: <em>if you build it, its
+files live under the host root</em>, so an edit through the default-cwd path lands in
+the tree under test. When a backing store genuinely must live elsewhere (another
+filesystem or platform (e.g. a native-Windows build that cannot sit on a WSL
+share)), record it on the parallel-worktree line as <code>store=&lt;path&gt;</code> (and optionally
+<code>host=&lt;os&gt;</code>, the OS that <strong>materializes</strong> the store, i.e. where you run
+<code>host-lifecycle</code>, <em>not</em> the build platform; for a Windows Dev Drive reached from WSL
+that is <code>linux</code>, even though the build's own <code>attest-host</code> is <code>windows</code>). Off-platform,
+<code>host=</code> makes <code>--materialize</code>/<code>--check</code> skip the line rather than fail.
+<code>software --materialize</code> then realises the store at that path and the in-tree
+<code>software/&lt;name&gt;/&lt;branch&gt;/</code> as a <strong>symlink / directory junction / bind-mount</strong> to it. <code>host-lifecycle software --check</code> <strong>HAZARDs</strong> any recorded worktree path that
+escapes the host root, and any <code>store=</code> line whose in-tree handle is missing or
+does not resolve to the store. A disjoint external worktree with no in-structure
+handle is the wrong-tree footgun (edits silently land in a tree not under test)
+and is a defect, not a layout choice.</p>
+<p><strong>Reproducible builds, the production anchor.</strong> Software <em>initiated</em> under the
+methodology has <strong>reproducible builds</strong>: its deployed artifact MUST be byte-reproducible
+from the pinned source plus a recorded build recipe (a pinned <code>toolchain</code> and <code>build</code>
+command in <code>.host-software</code>). That is what makes the pin a true production anchor (a
+clean rebuild from the pin equals what is deployed) rather than just a source pin.
+Record per component which line ships (<code>deploy</code>) and the artifact's expected hash
+(<code>artifact = &lt;path&gt; &lt;sha256&gt;</code>); <code>host-lifecycle software --check</code> attests these cheaply
+(a present artifact that matches is <strong>verified</strong>; one built by a local toolchain that
+differs from the canonical hash is <strong>noted, not failed</strong>, the same reasoning
+<code>--install-hooks</code> uses, since the recorded hash is the pinned build host's output), and
+a CI job runs <code>host-lifecycle software --verify-build</code> to rebuild from the pin and fail
+unless the artifact reproduces. <code>--verify-build</code>, not <code>--check</code>, is the reproducibility
+proof. For <strong>greenfield</strong> software, non-reproducibility is a defect designed out from the
+start.</p>
+<p><strong>Hermetic builds, the dependency bundle.</strong> Reproducibility and hermeticity are the same
+lane: a component that ships static or self-contained release binaries MUST be able to
+reproduce them offline from pinned inputs, never from whatever a network fetch returns at
+build time. The recommended mechanism is a reusable, versioned, hash-pinned <strong>dependency
+bundle</strong>: vendor the dependency layer once, publish it as a downloadable release (the pattern
+<code>pgs-release</code> uses for its prebuilt sysroot), and have every build download and verify that
+bundle and build with no network. Record it per component as <code>deps-bundle = &lt;url&gt; &lt;sha256&gt;</code>
+in <code>.host-software</code>. <code>host-lifecycle software --verify-build</code> and <code>release</code> then perform the
+one controlled, pinned download, verify the sha (the provenance half of the gate), stage the
+vendored sources, and build under <code>--network none</code> (the egress half). The gate invariant is
+specific and enforceable: a component recording a <code>deps-bundle</code> MUST build offline, its staged
+bundle sha MUST match the recorded one, and <code>software --check</code> HAZARDs a <code>deps-bundle</code> pin that
+has drifted from the producer's committed <code>deps-bundle.lock</code>. A component that genuinely cannot
+vendor offline, such as one with a network-fetching <code>build.rs</code> or a non-Rust toolchain, may
+carry <code>hermetic-exempt = call/NNNN</code> citing a software-scoped case decision, the same escape
+shape as <code>repro-exempt</code>; the exemption is never available where offline vendoring is feasible.</p>
+<p><strong>Multi-platform builds.</strong> A component whose <em>one</em> source pin ships on several platforms
+records one <code>[build "&lt;name&gt;" "&lt;platform&gt;"]</code> subsection per platform under its
+<code>[software "&lt;name&gt;"]</code> stanza, each carrying its own <code>build</code>/<code>toolchain</code>/<code>artifact</code>/<code>deploy</code>
+(and optional <code>repro-exempt</code>) plus an <code>attest-host</code> naming the OS (<code>linux</code>, <code>windows</code>,
+<code>macos</code>) that reproduces it. <code>--check</code> and <code>--verify-build</code> iterate the builds and attest
+each only on its <code>attest-host</code>. A build whose host is not the current one is skipped, and
+the run does not fail (a Linux runner cannot reproduce the Windows artifact, and is not asked to).
+The flat single-build fields remain the form for a single-platform component.</p>
+<p><strong>Escape clause (migrated software only).</strong> Pre-existing software brought under the
+methodology may not be reproducible yet. It may carry <code>repro-exempt = call/NNNN</code> citing a
+recorded <strong>case decision</strong>, a software-scoped <code>call/</code> decision documenting why it is not
+yet reproducible and the interim provenance. <code>--verify-build</code> then warns and skips the
+rebuild comparison; <code>--check</code> still requires the citation to resolve. The exemption is
+meant to be retired as the component converges on reproducibility, and is <strong>never</strong>
+available to greenfield software.</p>
+<h2 id="upgrading"><a class="header" href="#upgrading">Upgrading</a></h2>
+<p>Adopting is one event; the template moves on. The <code>.host</code> stamp records the <code>baseline</code>
+ledger entry (every entry at or before its position in <code>UPGRADING.md</code> counts as applied).
+The <code>applied</code> set of out-of-order entries lives in <code>.host-receipts</code> (the methodology-version
+trail); <code>host-lifecycle migrate-receipts</code> moves it there from a legacy <code>.host</code>. <code>UPGRADING.md</code> is the ledger of actions, one <code>[upgrade "&lt;revision&gt;"]</code>
+stanza each, ordered by file position; a stanza may declare <code>independent</code> or
+<code>depends = &lt;id&gt; …</code> (logical prerequisites, distinct from the <code>requires</code> tool-version
+floor) and a <code>verify</code> post-condition.</p>
+<p>To upgrade, fetch the template to the target revision, then:</p>
+<ul>
+<li><code>host-lifecycle upgrade &lt;dir&gt;</code> lists every ledger entry <strong>not yet applied</strong>, by
+ledger position, never git ancestry (ledger SHAs are a linear-commit artifact and
+some are orphaned from HEAD). A legacy single-<code>revision</code> stamp is migrated once to a
+<code>baseline</code>. <code>upgrade --next</code> prints the single next safe action.</li>
+<li>Apply an entry, then record it with <code>host-lifecycle upgrade --record &lt;id&gt;</code> (an id,
+an unambiguous prefix, or a ledger ordinal). The tool validates the id, refuses if a
+<code>depends</code> is unapplied, runs the entry's <code>verify</code> post-condition (or, when it has
+none, requires an explicit <code>--unverified call/NNNN</code> citation) and appends an
+append-only claim. <strong>You never hand-edit the stamp.</strong></li>
+<li>A late <strong>independent</strong> entry may be cherry-applied without an earlier unrelated one:
+the deferred entries stay pending and <strong>re-list</strong>. A forgotten or premature record
+can never silently hide owed work (fail-safe). <code>upgrade --advance</code> later compacts a
+contiguous applied run into the <code>baseline</code>.</li>
+<li><code>host-lifecycle software --check</code> re-checks every recorded claim (a <code>verify</code> that no
+longer holds, or an applied entry whose <code>depends</code> is unapplied, is a loud <code>HAZARD</code>).</li>
+</ul>
+<p>The tool carries the process. Even a low-capability agent upgrades by reading one
+line and running one command, never editing the stamp by hand. Re-stamp is the tool's
+job, not yours.</p>
+<h2 id="provenance"><a class="header" href="#provenance">Provenance</a></h2>
+<p>The four working principles are rewritten, in our own words, from observations by
+Andrej Karpathy on where LLM coding goes wrong, by way of Jiayuan Zhang
+(@forrestchang) and the andrej-karpathy-skills contributors. The persona process
+in <code>cast/applying-personas.md</code> follows Powell, Keenan and McDaid (2007) on
+personas in XP, with later agile work cited alongside it. This manual is released
+into the public domain (Unlicense); the credit here is acknowledgement, not a
+license obligation.</p>
+<h2 id="project-specifics-pgs-release"><a class="header" href="#project-specifics-pgs-release">Project specifics: pgs-release</a></h2>
+<p>"Work as if you live in the early days of a better world."</p>
+<p>This section carries the rules that are this project's own. The methodology
+above is the spine, inherited verbatim from the template; nothing here may
+contradict it.</p>
+<h3 id="what-this-project-is"><a class="header" href="#what-this-project-is">What this project is</a></h3>
+<p>PunkGraphicStream (v0.7.2) converts ASS (Advanced SubStation Alpha) subtitle
+files into PGS/SUP (Presentation Graphic Stream) subtitle files for Blu-ray
+discs. It is a Java application with a native C library (libpgs-jni) wrapping
+libass via JNI. The larger ongoing effort is contributing subtitle conversion
+(quantizer API, text-to-bitmap, OCR bitmap-to-text) upstream to FFmpeg.</p>
+<p>Read <code>plan/PLAN.md</code> first for FFmpeg work. The PGS format specification is
+<code>docs/pgs-specification.md</code>.</p>
+<h3 id="the-where-room-four-components"><a class="header" href="#the-where-room-four-components">The Where room: four components</a></h3>
+<p>The software lives under <code>software/</code> as bare stores with worktrees, recorded
+in <code>.host-software</code>:</p>
+<div class="table-wrapper"><table><thead><tr><th>Component</th><th>What it is</th></tr></thead><tbody>
+<tr><td><code>software/punkgraphicstream/</code></td><td>Main Java application (Maven project)</td></tr>
+<tr><td><code>software/libpgs-jni/</code></td><td>Native C JNI wrapper around libass</td></tr>
+<tr><td><code>software/libass/</code></td><td>libass, pinned to 0.17.4</td></tr>
+<tr><td><code>software/ffmpeg/</code></td><td>FFmpeg, our upstream contribution branch</td></tr>
+</tbody></table>
+</div>
+<h3 id="build-commands"><a class="header" href="#build-commands">Build commands</a></h3>
+<p>Java application, from <code>software/punkgraphicstream/master/</code>:</p>
+<pre><code class="language-bash">mvn compile              # Compile
+mvn package              # Build JAR (target/pgs-0.0.1-SNAPSHOT.jar)
+mvn test                 # Run tests (JUnit)
+mvn test -Dtest=MyTest   # Run single test class
+mvn clean                # Clean build artifacts
+</code></pre>
+<p>Compiler warnings (<code>-Xlint:unchecked</code>, <code>-Xlint:deprecation</code>) are enabled.</p>
+<p>FFmpeg, from <code>software/ffmpeg/pgs8-wip/</code>:</p>
+<pre><code class="language-bash">./configure --disable-doc &amp;&amp; make -j$(nproc)      # Build
+FATE_SAMPLES=/tmp/fate-samples make fate-sub-pgs  # Run PGS FATE test
+</code></pre>
+<p>FFmpeg style: 4-space indent, no tabs, 80-char lines, K&amp;R braces, and
+<code>snake_case</code> function names.</p>
+<h3 id="architecture-of-punkgraphicstream"><a class="header" href="#architecture-of-punkgraphicstream">Architecture of PunkGraphicStream</a></h3>
+<p>The processing pipeline is multi-threaded:</p>
+<pre><code>ASS file -&gt; RenderRunnable -&gt; QuantizeRunnable (N threads) -&gt; EncodeRunnable -&gt; .sup file
+             (JNI/libass)      (NeuQuant color reduction)     (PGS encoding)
+</code></pre>
+<p>RenderRunnable opens ASS via JNI, iterates timecodes, renders frames to
+BufferedImages and detects animation changes. QuantizeRunnable color-quantizes
+images using the NeuQuant neural-net algorithm on one thread per CPU.
+EncodeRunnable encodes quantized frames to PGS/SUP format via SupGenerator.
+Thread coordination uses blocking queues plus semaphores, with an
+AtomicBoolean for cancellation.</p>
+<p>Key packages (<code>name.connolly.david.pgs.*</code>):</p>
+<div class="table-wrapper"><table><thead><tr><th>Package</th><th>Purpose</th></tr></thead><tbody>
+<tr><td>(root)</td><td>Core domain: <code>Timecode</code>, <code>FrameRate</code>, <code>Resolution</code>, <code>SubtitleEvent</code>, <code>Render</code></td></tr>
+<tr><td><code>.color</code></td><td>NeuQuant color quantization, YCrCb Rec709 color space</td></tr>
+<tr><td><code>.concurrency</code></td><td>Pipeline runnables and <code>EncodeQueue</code></td></tr>
+<tr><td><code>.console</code></td><td>CLI entry point</td></tr>
+<tr><td><code>.ui</code></td><td>Swing GUI entry point and dialogs</td></tr>
+<tr><td><code>.util</code></td><td>PES/TS packets, SUP reporting, <code>ProgressSink</code> interface</td></tr>
+</tbody></table>
+</div>
+<p>Key design decisions:</p>
+<ul>
+<li><code>Render</code> is an enum singleton managing native library lifecycle.</li>
+<li><code>Timecode</code> uses Facebook's "flicks" (1 sec = 705,600,000 flicks) for
+frame-rate-precise timing without floating point.</li>
+<li><code>FrameRate</code> enum: FILM (24), FILM_NTSC (23.976), TV_PAL (25),
+TV_NTSC (29.97), HD_PAL (50), HD_NTSC (59.94).</li>
+<li><code>Resolution</code> enum: NTSC_480, PAL_576, HD_720, HD_1080.</li>
+<li>Java 1.6 target (being modernized): originally required no diamonds, no
+try-with-resources, no lambdas.</li>
+</ul>
+<p>Entry points: GUI is <code>name.connolly.david.pgs.ui.PunkGraphicStream</code>, CLI is
+<code>name.connolly.david.pgs.console.PunkGraphicStream</code>.</p>
+<h3 id="website-style"><a class="header" href="#website-style">Website style</a></h3>
+<ul>
+<li>British English in prose (colour, optimisation, behaviour). American
+English in code identifiers, CSS properties, and API names (color,
+quantize).</li>
+<li>Exception: "quantizer" and "quantization" always use American spelling even
+in prose. The FFmpeg API name <code>av_quantize_*</code> is the canonical form and we
+do not mix spellings of the same term.</li>
+<li>Never rename directories (<code>color-distance/</code>) or CSS properties for British
+spelling.</li>
+</ul>
+<h3 id="publishing-the-site-root-is-the-products"><a class="header" href="#publishing-the-site-root-is-the-products">Publishing: the site root is the product's</a></h3>
+<p><strong>Durable exception to the methodology's publish phase (operator ruling,
+2026-07-05).</strong> The GitHub Pages root, https://connollydavid.github.io/pgs-release/,
+is the content-full public product site, served from <code>docs/</code>. The development
+mdBook that <code>host-lifecycle book</code> generates MUST publish under the <code>/book/</code>
+sub-directory of that site, never at the site root. <code>docs/</code> stays the authored
+product site; the book is generated output and is never committed.</p>
+<h3 id="honest-attribution"><a class="header" href="#honest-attribution">Honest attribution</a></h3>
+<p>When Claude simulates expert perspectives, role-plays reviewers, or generates
+analysis from multiple viewpoints, documentation MUST make clear these are
+Claude-driven prompts, not human experts. Never imply human review where none
+occurred. Use language like "Claude-driven review across simulated
+perspectives" rather than "expert panel review".</p>
+<h3 id="upstream-review-discipline"><a class="header" href="#upstream-review-discipline">Upstream review discipline</a></h3>
+<p>When reviewing, only flag issues in OUR code. Never fix, reorder, or restyle
+pre-existing upstream code, even if it violates conventions. Our patches must
+be minimal diffs against upstream.</p>
+<p>Review in three passes (upstream style, then security, then functional). For
+each finding, determine whether we introduced it or it is pre-existing. Only
+fix what we introduced. Document intentional trade-offs in commit messages.</p>
+<p>FFmpeg extraction patterns learned on this work:</p>
+<ul>
+<li><strong>API boundary validation.</strong> When moving code from a filter (with AVOption
+validation) into a library API, the library must validate its own inputs.
+AVOption constraints do not follow the code. Any parameter feeding shifts,
+array indices, or division needs bounds checking at the API boundary.</li>
+<li><strong>Heap allocation changes.</strong> When replacing inline struct arrays with
+heap-allocated contexts, void return types may need to become int to
+propagate allocation failures. Trace NULL safety through the full call
+chain.</li>
+</ul>
+<h3 id="static-builds-must"><a class="header" href="#static-builds-must">Static builds (MUST)</a></h3>
+<p>When producing release binaries, link third-party dependencies statically
+wherever the host OS allows:</p>
+<ul>
+<li>Build all deps (zlib, freetype, fribidi, harfbuzz, libass, and the rest)
+from source as <code>.a</code> files into an isolated sysroot.</li>
+<li>Never use system or Homebrew shared libraries for release builds; they will
+not be present on the user's machine.</li>
+<li>Use <code>--disable-shared --enable-static</code> for autoconf deps and
+<code>-DBUILD_SHARED_LIBS=OFF</code> for CMake deps.</li>
+<li>Isolate pkg-config with <code>PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig"</code> and
+<code>PKG_CONFIG_PATH=""</code>.</li>
+<li>Pass <code>--pkg-config-flags=--static</code> and <code>--extra-cflags/ldflags</code> pointing at
+the sysroot to the top-level build.</li>
+<li>On Windows/mingw: add <code>-static-libgcc</code>. <code>libwinpthread-1.dll</code> cannot be
+eliminated. harfbuzz's CMake detects pthreads via <code>find_package(Threads)</code>
+on non-MSVC Windows and emits <code>-lpthread</code> into <code>harfbuzz.pc</code>; bundle the
+DLL in the zip instead.</li>
+<li>On Linux: add <code>-static-libgcc -static-libstdc++</code> to avoid pulling in
+<code>libgcc_s.so</code> and <code>libstdc++.so</code> (harfbuzz brings C++ object files into the
+final link).</li>
+<li>Only platform-mandated dynamic libs are acceptable (glibc on Linux,
+libSystem.dylib on macOS, kernel DLLs on Windows).</li>
+</ul>
+<p>The prebuilt sysroot is published as a versioned dependency-bundle release
+(the pattern the spine's hermetic-builds rule cites); the deps workflows under
+<code>.github/workflows/</code> build and publish it.</p>
+<h3 id="ffmpeg-release-versioning"><a class="header" href="#ffmpeg-release-versioning">FFmpeg release versioning</a></h3>
+<p>FFmpeg release tags follow the format <code>n{ffmpeg-version}-pgsN.{build}</code>, for
+example <code>n8.0.1-pgs3.0</code> (first build of series v3 on the 8.0.1 base):</p>
+<ul>
+<li>Increment <code>.build</code> for rebuilds on the same series (build config fixes).</li>
+<li>Increment <code>N</code> for a new series version.</li>
+<li>Do not reuse an existing tag for a retry. Delete with <code>--cleanup-tag</code> and
+increment build.</li>
+<li>Only bump the tag after a confirmed stable build (all 6 targets green,
+artifacts verified).</li>
+<li>Run FATE locally before cutting a release.</li>
+</ul>
+<p>This scheme governs the FFmpeg patch-series releases. The spine's <code>vX.Y.Z</code>
+tag rule governs tool and software manifest version bumps, which this project
+does not make.</p>
+<h3 id="branch-and-version-discipline-must"><a class="header" href="#branch-and-version-discipline-must">Branch and version discipline (MUST)</a></h3>
+<p>Each patch series version gets its own branch. Never commit new-version work
+on an old-version branch.</p>
+<ul>
+<li><strong>Branch naming:</strong> <code>pgs{N}</code> for version N on master, <code>pgs{N}-8.0.1</code> for
+version N on 8.0.1.</li>
+<li><strong>History tags:</strong> <code>history/pgs-v{N}</code> tags the final state of each version.</li>
+<li><strong>New phase of work means a new version:</strong> when starting new features
+beyond review fixes, create a new branch (<code>pgs{N+1}</code>) from the current
+HEAD. Do not continue on <code>pgs{N}</code>.</li>
+<li><strong>Freeze old branches:</strong> once <code>history/pgs-v{N}</code> is tagged, <code>pgs{N}</code> is
+frozen. Only cherry-pick critical fixes if needed for a release.</li>
+<li><strong>Before committing:</strong> verify you are on the correct branch for the work
+being done. <code>git branch --show-current</code> should match the version you
+intend to modify.</li>
+</ul>
+<h3 id="patch-series-discipline-must"><a class="header" href="#patch-series-discipline-must">Patch series discipline (MUST)</a></h3>
+<p>Every patch in a series MUST compile independently when applied in sequence.
+This is non-negotiable for upstream submission and bisectability.</p>
+<ul>
+<li><strong>Before committing a patch:</strong> verify that every <code>#include</code> references a
+file that exists at that point in the series, either from upstream or from
+an earlier patch.</li>
+<li><strong>Dependency order:</strong> if patch B includes a header created by patch A,
+patch A MUST come first. Plan the series order BEFORE writing patches.
+Draw the dependency graph.</li>
+<li><strong>Two-patch structure:</strong> Patch 1 creates new files (FATE trivially passes),
+Patch 2 refactors the consumer (FATE must be bit-for-bit). The
+library/header patch always comes before its consumer.</li>
+<li><strong>Verification:</strong> after building a series, run
+<code>git rebase upstream/master --exec 'make -j$(nproc)'</code> to confirm every
+patch compiles. This is not optional. Do it before pushing.</li>
+</ul>
+<h3 id="merge-provenance"><a class="header" href="#merge-provenance">Merge provenance</a></h3>
+<p>This file merged the pre-methodology CLAUDE.md (last at commit fe72149's
+parent history) with the template spine on 2026-07-05. Rules subsumed by the
+spine and dropped from this section: "Think Before Coding" (spine principle
+1), "Simplicity First" (principle 2), the general half of "Surgical Changes"
+(principle 3), "Goal-Driven Execution" (principle 4), and "Document Before
+You Work" (the spine's audited plans and append-only memory). The epigraph at
+the top of this section is preserved from the original file.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="call/0003-migrated-software-repro-exempt.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="STRUCTURE.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="call/0003-migrated-software-repro-exempt.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="STRUCTURE.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

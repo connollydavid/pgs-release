@@ -1,0 +1,867 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Phase 3: Text-to-Bitmap Subtitle Conversion - pgs-release</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">pgs-release</a></li><li class="chapter-item expanded affix "><li class="part-title">Cast: who</li><li class="chapter-item expanded "><a href="../../cast/index.html"><strong aria-hidden="true">1.</strong> Cast: the project's Who</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../cast/applying-personas.html"><strong aria-hidden="true">1.1.</strong> Applying personas during planning</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Plan: what & when</li><li class="chapter-item expanded "><a href="../../plan-index.html"><strong aria-hidden="true">2.</strong> Plan</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../plan/0001-hdmv-pgs-encoder/index.html"><strong aria-hidden="true">2.1.</strong> Phase 1: HDMV PGS Subtitle Encoder</a></li><li class="chapter-item expanded "><a href="../../plan/0002-color-quantization-api/index.html"><strong aria-hidden="true">2.2.</strong> Phase 2: Color Quantization API and Palette Mapping</a></li><li class="chapter-item expanded "><a href="../../plan/0003-text-to-bitmap-conversion/index.html" class="active"><strong aria-hidden="true">2.3.</strong> Phase 3: Text-to-Bitmap Subtitle Conversion</a></li><li class="chapter-item expanded "><a href="../../plan/0004-region-weighted-quantization/index.html"><strong aria-hidden="true">2.4.</strong> Phase 4: Region-Weighted Quantization</a></li><li class="chapter-item expanded "><a href="../../plan/0005-quantizer-algorithm-integration/index.html"><strong aria-hidden="true">2.5.</strong> Phase 5: Algorithm Integration</a></li><li class="chapter-item expanded "><a href="../../plan/0006-gif-encoder-rgba-quantization/index.html"><strong aria-hidden="true">2.6.</strong> Phase 6: GIF Encoder RGBA Quantization</a></li><li class="chapter-item expanded "><a href="../../plan/0007-upstream-review-findings/index.html"><strong aria-hidden="true">2.7.</strong> Upstream Review Findings</a></li><li class="chapter-item expanded "><a href="../../plan/0008-ocr-bitmap-to-text/index.html"><strong aria-hidden="true">2.8.</strong> Phase 7: OCR Bitmap-to-Text Subtitle Conversion</a></li><li class="chapter-item expanded "><a href="../../plan/0009-pgs-decoder-model-compliance/index.html"><strong aria-hidden="true">2.9.</strong> Phase 8: PGS Decoder Model Compliance</a></li><li class="chapter-item expanded "><a href="../../plan/0010-upstream-suitability-audit/index.html"><strong aria-hidden="true">2.10.</strong> Phase 8 Review: Upstream Suitability Audit</a></li><li class="chapter-item expanded "><a href="../../plan/0011-v3-consolidated-claude-review/index.html"><strong aria-hidden="true">2.11.</strong> v3 Expert Panel Review: Consolidated Findings</a></li><li class="chapter-item expanded "><a href="../../plan/0012-v4-review-fixes/index.html"><strong aria-hidden="true">2.12.</strong> Phase 9: v4 Series — Address Expert Panel Review</a></li><li class="chapter-item expanded "><a href="../../plan/0013-subtitle-event-lookahead/index.html"><strong aria-hidden="true">2.13.</strong> Phase 9a-R1: Subtitle Event Lookahead Window</a></li><li class="chapter-item expanded "><a href="../../plan/0014-pgs-encoder-optimizations/index.html"><strong aria-hidden="true">2.14.</strong> Phase 10: PGS Encoder Optimizations (v5)</a></li><li class="chapter-item expanded "><a href="../../plan/0015-website-updates/index.html"><strong aria-hidden="true">2.15.</strong> Phase 11: Website Updates for v4/v5</a></li><li class="chapter-item expanded "><a href="../../plan/0016-fate-ci-website-visibility/index.html"><strong aria-hidden="true">2.16.</strong> Phase 12: FATE CI + Website Test Visibility</a></li><li class="chapter-item expanded "><a href="../../plan/0017-pgs-encoder-features/index.html"><strong aria-hidden="true">2.17.</strong> Phase 13: PGS Encoder Features (v6)</a></li><li class="chapter-item expanded "><a href="../../plan/0018-upstream-submission-restructuring/index.html"><strong aria-hidden="true">2.18.</strong> Phase 14: Upstream Submission Restructuring (v7)</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Software: where</li><li class="chapter-item expanded "><a href="../../where.html"><strong aria-hidden="true">3.</strong> Software</a></li><li class="chapter-item expanded affix "><li class="part-title">Call: why</li><li class="chapter-item expanded "><a href="../../call/0000-use-markdown-decision-records.html"><strong aria-hidden="true">4.</strong> Use Markdown decision records (MADR)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../call/0001-adopt-host-template.html"><strong aria-hidden="true">4.1.</strong> Adopt the host-template methodology</a></li><li class="chapter-item expanded "><a href="../../call/0002-mdbook-under-book-subdir.html"><strong aria-hidden="true">4.2.</strong> Publish the development mdBook under /book/, never at the site root</a></li><li class="chapter-item expanded "><a href="../../call/0003-migrated-software-repro-exempt.html"><strong aria-hidden="true">4.3.</strong> Migrated software components are repro-exempt for now</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Reference: how</li><li class="chapter-item expanded "><a href="../../CLAUDE.html"><strong aria-hidden="true">5.</strong> CLAUDE.md: operating manual for an agentic project</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../STRUCTURE.html"><strong aria-hidden="true">5.1.</strong> Structure</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Memory</li><li class="chapter-item expanded "><a href="../../MEMORY.html"><strong aria-hidden="true">6.</strong> Memory</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">pgs-release</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="phase-3-text-to-bitmap-subtitle-conversion"><a class="header" href="#phase-3-text-to-bitmap-subtitle-conversion">Phase 3: Text-to-Bitmap Subtitle Conversion</a></h1>
+<h2 id="status-done-core--rect-splitting--animation"><a class="header" href="#status-done-core--rect-splitting--animation">Status: DONE (core + rect splitting + animation)</a></h2>
+<p>All committed on <code>pgs-series</code> branch, reorganized into 4 independent
+submission series. Encoder composition states done in Phase 1.</p>
+<h2 id="context"><a class="header" href="#context">Context</a></h2>
+<p>FFmpeg has no way to convert text subtitles (SRT, ASS, WebVTT, etc.) to bitmap
+format (PGS, DVB, DVD, XSUB). This blocks 72 subtitle conversion pairs
+(18 text decoders x 4 bitmap encoders) and is tracked as ticket #3819.</p>
+<p>Phases 1-2 built the infrastructure: PGS encoder, NeuQuant quantizer API,
+OkLab palette utilities, and palette mapping/dithering extraction. Phase 3
+connects them with a text rendering utility to close the text→bitmap gap.</p>
+<h2 id="prior-art-and-approach-justification"><a class="header" href="#prior-art-and-approach-justification">Prior Art and Approach Justification</a></h2>
+<p>Three prior attempts inform our design:</p>
+<p><strong>1. Clement Boesch's AVFrame subtitle WIP (Nov 2016)</strong>
+Proposed putting subtitles into AVFrame via <code>extended_data</code> pointers to
+<code>AVFrameSubtitleRectangle</code>. wm4 raised concerns about memory management,
+ABI stability, and display time semantics. Never completed. Established the
+idea but exposed the fundamental mismatch: subtitle events are sparse and
+overlapping, unlike contiguous audio/video frames.</p>
+<p><strong>2. Coza's text-to-bitmap series (May 2022, 12 patches, rejected)</strong>
+Put libass rendering directly in libavcodec. Paul B Mahol: "this needs to be
+in libavfilter instead of libavcodec." Nicolas George raised process issues.
+softworkz noted overlap with existing subtitle filtering work. The rejection
+was clear: libavcodec is the wrong place for libass.
+(patchwork.ffmpeg.org/project/ffmpeg/cover/20220503161328.842587-1-traian.coza@gmail.com/)</p>
+<p><strong>3. softworkz's subtitle filtering (Sep 2021–Jun 2025, 25 patches, 9+ versions, unmerged)</strong>
+The most ambitious attempt: full subtitle filter infrastructure including
+AVFrame subtitle fields, frame-based codec API, sbuffersrc/sbuffersink,
+~15 subtitle filters, and sub2video replacement. Includes <code>text2graphicsub</code>
+which does exactly what our Phase 3 does — but as a filter graph node.</p>
+<p>Why it hasn't merged after 4+ years:</p>
+<ul>
+<li><strong>The timing problem</strong>: Subtitle events are sparse (gaps) and non-exclusive
+(overlapping). The filter graph scheduler expects contiguous, non-overlapping
+frames. softworkz solved this with dual timing fields on AVFrame
+(<code>pts</code>/<code>duration</code> for scheduling, <code>subtitle_timing.start_pts</code>/<code>.duration</code>
+for the actual event). Hendrik Leppkes objected: "In 3 of your 4 cases, the
+two sets of fields seem to be close to identical with no good reason to be
+separate." Anton Khirnov and Lynne also expressed skepticism.</li>
+<li><strong>Series size</strong>: 25 patches touching 89 files. Review burden is enormous.</li>
+<li><strong>$1,000 bounty</strong>: softworkz offered $1,000 for anyone to demonstrate a
+working implementation without the extra timing fields, arguing it was
+structurally impossible. No taker as of Jun 2025.</li>
+<li><strong>Status</strong>: Deadlocked. No consensus on the fundamental API design.</li>
+</ul>
+<h3 id="why-we-use-a-utility-function-not-subtitle-filters"><a class="header" href="#why-we-use-a-utility-function-not-subtitle-filters">Why we use a utility function, not subtitle filters</a></h3>
+<p>The subtitle filtering infrastructure requires: AVFrame subtitle fields,
+frame-based subtitle codec API, sbuffersrc/sbuffersink, filter format
+negotiation for subtitles, and a solution to the timing mismatch problem.
+This is real, necessary work — but it's a multi-year project with unresolved
+design disagreements among core developers.</p>
+<p>Our approach sidesteps all of this:</p>
+<ul>
+<li><strong>No AVFrame changes.</strong> We work with existing <code>AVSubtitle</code>/<code>AVSubtitleRect</code>.</li>
+<li><strong>No filter graph involvement.</strong> The conversion is a function call in
+fftools, not a filter node. Same pattern as sub2video (which converts
+bitmap subtitles to video frames entirely in fftools, ~200 lines in
+<code>ffmpeg_filter.c</code>, without formal filter infrastructure).</li>
+<li><strong>No opinion on the timing debate.</strong> We don't need dual timing fields
+because we're not scheduling subtitle frames through a filter graph.</li>
+<li><strong>Minimal scope.</strong> 2 patches, ~500 lines. Independently useful regardless
+of whether subtitle filters eventually land.</li>
+<li><strong>Rendering in libavfilter</strong> where libass already lives (vf_subtitles.c).
+This directly addresses Coza's rejection reason.</li>
+<li><strong>Compatible with future subtitle filters.</strong> If softworkz's work (or a
+successor) eventually merges, our rendering utility can be called from
+a <code>text2graphicsub</code> filter. The utility function becomes a building block,
+not an obstacle.</li>
+</ul>
+<h3 id="anticipated-reviewer-questions-and-prepared-answers"><a class="header" href="#anticipated-reviewer-questions-and-prepared-answers">Anticipated reviewer questions and prepared answers</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Question</th><th>Answer</th></tr></thead><tbody>
+<tr><td>"Why not wait for subtitle filters?"</td><td>Deadlocked 4+ years. 72 broken pairs today. Our utility is compatible with future filter work.</td></tr>
+<tr><td>"Why not put this in libavcodec?"</td><td>Coza 2022 rejection: "needs to be in libavfilter." libavcodec→libass is a dependency violation.</td></tr>
+<tr><td>"Why public API in libavfilter?"</td><td><code>ff_</code> symbols are invisible to fftools in shared builds. fftools must call the renderer.</td></tr>
+<tr><td>"Doesn't this overlap with softworkz's text2graphicsub?"</td><td>Same goal, different mechanism. Our utility can be reused by a future filter. We don't build filter infrastructure.</td></tr>
+<tr><td>"Why not use the existing subtitles filter?"</td><td>It burns text onto video (overlay). We need standalone bitmaps for subtitle encoders. Different output.</td></tr>
+<tr><td>"What about the sub2video approach?"</td><td>sub2video converts bitmap→video for filter graphs. We convert text→bitmap for encoding. Complementary, same organizational pattern.</td></tr>
+</tbody></table>
+</div>
+<h2 id="key-design-decisions"><a class="header" href="#key-design-decisions">Key Design Decisions</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Decision</th><th>Choice</th><th>Rationale</th></tr></thead><tbody>
+<tr><td>Library for rendering</td><td><strong>libavfilter</strong></td><td>libass already lives here (vf_subtitles.c). libavcodec→libass was rejected in 2022.</td></tr>
+<tr><td>API visibility</td><td><strong>Public</strong> (<code>avfilter_subtitle_render_*</code>)</td><td><code>ff_</code> symbols invisible to fftools in shared builds. fftools needs to call the renderer. Version bump + APIchanges required.</td></tr>
+<tr><td>Stub for no-libass builds</td><td><strong>Return <code>AVERROR(ENOSYS)</code></strong></td><td>Header always installed; functions return error when CONFIG_LIBASS unset. fftools checks at runtime.</td></tr>
+<tr><td>Quantization</td><td><strong>Caller (fftools) calls <code>av_quantize_*</code></strong></td><td>Rendering returns RGBA; caller quantizes. Keeps renderer focused on one job.</td></tr>
+<tr><td>Canvas size</td><td><strong>Required parameter</strong></td><td>Auto-detection from video is a nice-to-have but adds complexity. Required for correct ASS layout.</td></tr>
+<tr><td>Rect splitting</td><td><strong>Single rect initially</strong></td><td>PGS spec allows up to 2 composition objects but doesn't require it. Multi-rect splitting is a follow-up optimization.</td></tr>
+<tr><td>Font attachments</td><td><strong>Supported in API from day 1</strong></td><td>MKV/ASS files embed fonts. Reviewers will ask. libass handles via <code>ass_add_font()</code>.</td></tr>
+<tr><td>FATE testing</td><td><strong>Structural roundtrip test</strong></td><td>Font rendering is platform-dependent (FreeType version, fontconfig). Can't do pixel-exact. Test: text→PGS→decode, verify valid output structure.</td></tr>
+</tbody></table>
+</div>
+<h2 id="patch-structure-2-patches"><a class="header" href="#patch-structure-2-patches">Patch Structure (2 patches)</a></h2>
+<h3 id="patch-12-lavfi-add-text-subtitle-rendering-utility-via-libass"><a class="header" href="#patch-12-lavfi-add-text-subtitle-rendering-utility-via-libass">Patch 1/2: <code>lavfi: add text subtitle rendering utility (via libass)</code></a></h3>
+<p>New public API in libavfilter for rendering text/ASS subtitle events to
+cropped RGBA bitmaps. CONFIG_LIBASS gated. FATE trivially passes (no
+existing code changed).</p>
+<h3 id="patch-22-fftools-auto-convert-text-subtitles-to-bitmap-for-encoding"><a class="header" href="#patch-22-fftools-auto-convert-text-subtitles-to-bitmap-for-encoding">Patch 2/2: <code>fftools: auto-convert text subtitles to bitmap for encoding</code></a></h3>
+<p>Orchestration in <code>fftools/ffmpeg_enc.c</code>. Relaxes the text-to-bitmap
+rejection in <code>fftools/ffmpeg_mux_init.c</code>. Includes FATE roundtrip test.</p>
+<h2 id="patch-1-detail"><a class="header" href="#patch-1-detail">Patch 1 Detail</a></h2>
+<h3 id="new-libavfiltersubtitle_renderh-public--added-to-headers"><a class="header" href="#new-libavfiltersubtitle_renderh-public--added-to-headers">New: <code>libavfilter/subtitle_render.h</code> (public — added to HEADERS)</a></h3>
+<pre><code class="language-c">// Copyright 2026 David Connolly
+
+typedef struct AVSubtitleRenderContext AVSubtitleRenderContext;
+
+/**
+ * Allocate a subtitle rendering context.
+ * @param canvas_w  output canvas width (e.g. 1920)
+ * @param canvas_h  output canvas height (e.g. 1080)
+ * @return context or NULL on failure (ENOMEM or no libass)
+ */
+AVSubtitleRenderContext *avfilter_subtitle_render_alloc(int canvas_w,
+                                                        int canvas_h);
+void avfilter_subtitle_render_freep(AVSubtitleRenderContext **ctx);
+
+/**
+ * Set ASS script header (styles, script info).
+ * From AVCodecContext-&gt;subtitle_header after decoding.
+ */
+int avfilter_subtitle_render_set_header(AVSubtitleRenderContext *ctx,
+                                         const char *header);
+
+/**
+ * Add an embedded font (e.g. MKV attachment).
+ * @param name  font family name (from attachment metadata)
+ * @param data  raw font file data
+ * @param size  font data size in bytes
+ */
+int avfilter_subtitle_render_add_font(AVSubtitleRenderContext *ctx,
+                                       const char *name,
+                                       const uint8_t *data, int size);
+
+/**
+ * Render one subtitle event to a cropped RGBA bitmap.
+ * @param[in]  text         ASS dialogue line (Dialogue: 0,...)
+ * @param[in]  start_ms     event start time in milliseconds
+ * @param[in]  duration_ms  event duration in milliseconds
+ * @param[out] rgba         allocated RGBA buffer (caller frees with av_free)
+ * @param[out] linesize     RGBA row stride
+ * @param[out] x,y          crop position on canvas
+ * @param[out] w,h          crop dimensions
+ * @return 0 on success, negative AVERROR on failure
+ */
+int avfilter_subtitle_render_frame(AVSubtitleRenderContext *ctx,
+                                    const char *text,
+                                    int64_t start_ms, int64_t duration_ms,
+                                    uint8_t **rgba, int *linesize,
+                                    int *x, int *y, int *w, int *h);
+
+/**
+ * Set up a subtitle event for multi-timepoint rendering.
+ * Clears previous events and adds the given text. After calling this,
+ * use avfilter_subtitle_render_sample() at one or more timestamps.
+ */
+int avfilter_subtitle_render_init_event(AVSubtitleRenderContext *ctx,
+                                         const char *text,
+                                         int64_t start_ms,
+                                         int64_t duration_ms);
+
+/**
+ * Render a snapshot of the current event at a specific time.
+ * Must be called after init_event(). Can be called multiple times
+ * at different timestamps to sample animation frames.
+ * @param detect_change  0=identical, 1=changed, 2=unknown (first call)
+ */
+int avfilter_subtitle_render_sample(AVSubtitleRenderContext *ctx,
+                                     int64_t render_time_ms,
+                                     uint8_t **rgba, int *linesize,
+                                     int *x, int *y, int *w, int *h,
+                                     int *detect_change);
+</code></pre>
+<h3 id="new-libavfiltersubtitle_renderc"><a class="header" href="#new-libavfiltersubtitle_renderc">New: <code>libavfilter/subtitle_render.c</code></a></h3>
+<p><strong>Context struct</strong> (definition in .c, opaque to consumers):</p>
+<pre><code class="language-c">typedef struct AVSubtitleRenderContext {
+    ASS_Library  *library;
+    ASS_Renderer *renderer;
+    ASS_Track    *track;
+    int canvas_w, canvas_h;
+} AVSubtitleRenderContext;
+</code></pre>
+<p><strong><code>avfilter_subtitle_render_alloc()</code>:</strong></p>
+<ol>
+<li><code>av_mallocz()</code> context</li>
+<li><code>ass_library_init()</code>, <code>ass_renderer_init()</code></li>
+<li><code>ass_set_frame_size(renderer, canvas_w, canvas_h)</code></li>
+<li><code>ass_set_fonts(renderer, NULL, NULL, 1, NULL, 1)</code> (system font fallback)</li>
+<li><code>ass_new_track(library)</code> (empty track, header added later)</li>
+</ol>
+<p>Follows vf_subtitles.c <code>init()</code> pattern (lines 135-161).</p>
+<p><strong><code>avfilter_subtitle_render_set_header()</code>:</strong></p>
+<ul>
+<li><code>ass_process_codec_private(track, header, strlen(header))</code></li>
+</ul>
+<p><strong><code>avfilter_subtitle_render_add_font()</code>:</strong></p>
+<ul>
+<li><code>ass_add_font(library, name, data, size)</code></li>
+</ul>
+<p><strong><code>avfilter_subtitle_render_init_event()</code>:</strong></p>
+<ol>
+<li><code>ass_flush_events(track)</code> (clear previous events)</li>
+<li><code>ass_process_chunk(track, text, strlen(text), start_ms, duration_ms)</code></li>
+</ol>
+<p><strong><code>avfilter_subtitle_render_sample()</code>:</strong></p>
+<ol>
+<li><code>ass_render_frame(renderer, track, render_time_ms, &amp;detect_change)</code></li>
+<li>Walk <code>ASS_Image</code> linked list → compute bounding box</li>
+<li>Allocate RGBA canvas (bounding box size, transparent)</li>
+<li>Composite each ASS_Image span:
+<pre><code class="language-c">for (ASS_Image *img = images; img; img = img-&gt;next) {
+    // img-&gt;bitmap is an alpha mask
+    // img-&gt;color is 0xRRGGBBAA (AA=0 means opaque in ASS)
+    // Alpha-composite mask * color onto RGBA canvas
+}
+</code></pre>
+</li>
+<li>Set output x, y, w, h (bounding box position/size)</li>
+<li>Return 0</li>
+</ol>
+<p><strong><code>avfilter_subtitle_render_frame()</code>:</strong>
+Thin wrapper — calls <code>init_event()</code> then <code>sample()</code> at start_ms.
+Convenience function for static (non-animated) subtitle rendering.</p>
+<p>Key difference from vf_subtitles.c <code>overlay_ass_image()</code> (line 218):
+that function blends onto an existing video frame via <code>ff_blend_mask()</code>.
+We composite onto a fresh transparent RGBA canvas — simpler alpha math,
+no <code>FFDrawContext</code> dependency.</p>
+<p><strong>No-libass stub</strong> (compiled when CONFIG_LIBASS is unset):</p>
+<pre><code class="language-c">AVSubtitleRenderContext *avfilter_subtitle_render_alloc(int w, int h)
+{ return NULL; }
+// All other functions return AVERROR(ENOSYS)
+</code></pre>
+<h3 id="modified-libavfiltermakefile"><a class="header" href="#modified-libavfiltermakefile">Modified: <code>libavfilter/Makefile</code></a></h3>
+<pre><code class="language-makefile">HEADERS += subtitle_render.h
+OBJS += subtitle_render.o    # always compiled (public API symbols must exist)
+</code></pre>
+<p>The .o is always compiled. Inside <code>subtitle_render.c</code>, <code>#if CONFIG_LIBASS</code>
+selects full implementation vs stubs (alloc returns NULL, others return
+AVERROR(ENOSYS)). This ensures the shared library always exports the
+symbols regardless of build configuration.</p>
+<h3 id="modified-libavfilterversionh"><a class="header" href="#modified-libavfilterversionh">Modified: <code>libavfilter/version.h</code></a></h3>
+<p>Bump MINOR (since new public API added).</p>
+<h3 id="modified-docapichanges"><a class="header" href="#modified-docapichanges">Modified: <code>doc/APIchanges</code></a></h3>
+<p>Add entry for <code>avfilter_subtitle_render_*</code> functions.</p>
+<h2 id="patch-2-detail"><a class="header" href="#patch-2-detail">Patch 2 Detail</a></h2>
+<h3 id="modified-fftoolsffmpeg_mux_initc"><a class="header" href="#modified-fftoolsffmpeg_mux_initc">Modified: <code>fftools/ffmpeg_mux_init.c</code></a></h3>
+<p>Relax the text-to-bitmap rejection gate (lines 891-896):</p>
+<pre><code class="language-c">if (input_props &amp;&amp; output_props &amp;&amp; input_props != output_props) {
+    if ((input_props &amp; AV_CODEC_PROP_TEXT_SUB) &amp;&amp;
+        (output_props &amp; AV_CODEC_PROP_BITMAP_SUB)) {
+        // Text-to-bitmap handled by subtitle renderer in ffmpeg_enc.c
+        AVSubtitleRenderContext *test = avfilter_subtitle_render_alloc(1, 1);
+        if (!test) {
+            av_log(ost, AV_LOG_ERROR,
+                   "Text to bitmap subtitle conversion requires libass "
+                   "(configure with --enable-libass)\n");
+            return AVERROR(ENOSYS);
+        }
+        avfilter_subtitle_render_freep(&amp;test);
+    } else {
+        av_log(ost, AV_LOG_ERROR,
+               "Subtitle encoding currently only possible from text to text "
+               "or bitmap to bitmap\n");
+        return AVERROR(EINVAL);
+    }
+}
+</code></pre>
+<p>Probe-and-free pattern avoids <code>#if CONFIG_LIBASS</code> preprocessor in fftools
+(which doesn't include config_components.h). Runtime check is cleaner.</p>
+<h3 id="modified-fftoolsffmpeg_encc"><a class="header" href="#modified-fftoolsffmpeg_encc">Modified: <code>fftools/ffmpeg_enc.c</code></a></h3>
+<p><strong>Add to <code>OutputStream</code> or separate context</strong>: a <code>AVSubtitleRenderContext *sub_render</code>
+field, initialized lazily on first text-to-bitmap encode.</p>
+<p><strong>Modify <code>do_subtitle_out()</code></strong> (line 379):
+Before <code>avcodec_encode_subtitle()</code>, detect text→bitmap mismatch and convert:</p>
+<pre><code class="language-c">static int convert_text_to_bitmap(OutputStream *ost, AVSubtitle *sub)
+{
+    // 1. Lazy-init: create AVSubtitleRenderContext if not yet created
+    //    - canvas_size from ost-&gt;enc_ctx (or AVOption)
+    //    - set header from ost-&gt;enc_ctx-&gt;subtitle_header
+    //    - add fonts from input attachments
+
+    // 2. For each rect with type == SUBTITLE_ASS or SUBTITLE_TEXT:
+    //    a. Wrap plain text in ASS dialogue format if needed
+    //    b. Call avfilter_subtitle_render_frame() → RGBA + position
+    //    c. Call av_quantize_alloc() + av_quantize_generate_palette()
+    //    d. Call av_quantize_apply() → palette indices
+    //    e. Rewrite rect:
+    //       - type = SUBTITLE_BITMAP
+    //       - data[0] = palette indices
+    //       - data[1] = ARGB palette (uint32_t[256])
+    //       - x, y, w, h from render output
+    //       - nb_colors from quantizer
+
+    // 3. Free RGBA intermediate buffers
+    return 0;
+}
+</code></pre>
+<p>Insert before the <code>avcodec_encode_subtitle()</code> call:</p>
+<pre><code class="language-c">if (needs_text_to_bitmap_conversion(ost, sub)) {
+    ret = convert_text_to_bitmap(ost, sub);
+    if (ret &lt; 0)
+        return ret;
+}
+</code></pre>
+<p><strong>Canvas size</strong>: Accept from encoder's <code>-canvas_size</code> option. PGS encoder
+already has <code>canvas_size</code> in its AVOptions. For other bitmap encoders,
+may need to add it or derive from video stream dimensions.</p>
+<p><strong>Font attachment forwarding</strong>: Iterate input file's attachment streams,
+call <code>avfilter_subtitle_render_add_font()</code> for each font.</p>
+<p><strong>Cleanup</strong>: Free <code>sub_render</code> context in stream cleanup path.</p>
+<h3 id="fate-test"><a class="header" href="#fate-test">FATE Test</a></h3>
+<p>Add a roundtrip test (requires <code>--enable-libass</code> and FATE samples):</p>
+<pre><code class="language-bash"># Test: SRT → PGS encode → PGS decode → verify structure
+ffmpeg -i input.srt -c:s pgssub -canvas_size 1920x1080 output.sup
+ffprobe -show_packets output.sup
+</code></pre>
+<p>The test verifies:</p>
+<ul>
+<li>Pipeline doesn't crash</li>
+<li>Output contains valid PGS packets</li>
+<li>Packet count matches input subtitle count</li>
+<li>Timing is preserved (PTS values)</li>
+</ul>
+<p><strong>NOT pixel-exact</strong> — font rendering varies by platform (FreeType version,
+fontconfig, available fonts). Reference is packet count + timing, not CRC.</p>
+<p>Gate the test with <code>CONFIG_LIBASS</code> so it's skipped on builds without libass.</p>
+<h2 id="risks"><a class="header" href="#risks">Risks</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Risk</th><th>Severity</th><th>Mitigation</th></tr></thead><tbody>
+<tr><td>"Why public API?" pushback</td><td>HIGH</td><td><code>ff_</code> symbols invisible in shared builds. fftools must call renderer. No alternative without subtitle filter infra.</td></tr>
+<tr><td>"Put it in libavcodec" pushback</td><td>HIGH</td><td>Coza 2022 precedent. libavcodec→libass rejected. Prepared answer.</td></tr>
+<tr><td>"Build subtitle filters instead"</td><td>MEDIUM</td><td>Punt: no AVFrame subtitle support, no subtitle buffersrc/sink. Too large a project. Our utility is minimal.</td></tr>
+<tr><td>Platform-dependent FATE</td><td>MEDIUM</td><td>Structural test (packet count + timing), not pixel CRC.</td></tr>
+<tr><td>ASS rendering edge cases</td><td>MEDIUM</td><td>Defer complex ASS features (animations, karaoke). Basic dialogue positioning covers 95% of use cases.</td></tr>
+<tr><td>Canvas size required</td><td>LOW</td><td>Document clearly. Auto-detection from video stream is follow-up work.</td></tr>
+<tr><td>Memory management in fftools</td><td>LOW</td><td>Follow existing <code>do_subtitle_out()</code> patterns. Careful free on error paths.</td></tr>
+</tbody></table>
+</div>
+<h2 id="verification"><a class="header" href="#verification">Verification</a></h2>
+<pre><code class="language-bash">cd /home/david/pgs/ffmpeg
+./configure --enable-libass --disable-doc &amp;&amp; make -j$(nproc)
+
+# Existing tests still pass:
+make fate-quantize
+FATE_SAMPLES=/tmp/fate-samples make fate-sub-pgs
+FATE_SAMPLES=/tmp/fate-samples make fate-filter-paletteuse-nodither
+FATE_SAMPLES=/tmp/fate-samples make fate-filter-paletteuse-bayer
+
+# Manual roundtrip test:
+echo "1\n00:00:01,000 --&gt; 00:00:03,000\nHello World" &gt; /tmp/test.srt
+./ffmpeg -i /tmp/test.srt -c:s pgssub -canvas_size 1920x1080 /tmp/test.sup
+./ffprobe -v error -show_packets /tmp/test.sup
+
+# ASS with styles:
+./ffmpeg -i test.ass -c:s pgssub -canvas_size 1920x1080 /tmp/test_ass.sup
+./ffprobe -v error -show_streams /tmp/test_ass.sup
+
+# Verify no libass regression:
+FATE_SAMPLES=/tmp/fate-samples make fate-filter-sub2video
+</code></pre>
+<h2 id="critical-files"><a class="header" href="#critical-files">Critical Files</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody>
+<tr><td><code>libavfilter/subtitle_render.{h,c}</code></td><td><strong>NEW</strong> — rendering utility</td></tr>
+<tr><td><code>libavfilter/Makefile</code></td><td>Add HEADERS + OBJS</td></tr>
+<tr><td><code>libavfilter/version.h</code></td><td>Version bump</td></tr>
+<tr><td><code>doc/APIchanges</code></td><td>New public API entry</td></tr>
+<tr><td><code>fftools/ffmpeg_enc.c</code></td><td>Orchestration (convert_text_to_bitmap)</td></tr>
+<tr><td><code>fftools/ffmpeg_mux_init.c</code></td><td>Relax text→bitmap gate</td></tr>
+<tr><td><code>libavfilter/vf_subtitles.c</code></td><td><strong>Reference</strong> — libass init/render patterns</td></tr>
+<tr><td><code>libavcodec/avcodec.h</code></td><td><strong>Reference</strong> — AVSubtitleRect struct</td></tr>
+<tr><td><code>fftools/ffmpeg_filter.c</code></td><td><strong>Reference</strong> — sub2video_copy_rect pattern</td></tr>
+</tbody></table>
+</div>
+<h2 id="rect-splitting"><a class="header" href="#rect-splitting">Rect Splitting</a></h2>
+<h3 id="problem"><a class="header" href="#problem">Problem</a></h3>
+<p>When a rendered bitmap contains text at both top and bottom of the screen
+(e.g., dialogue at bottom + song lyrics at top, or an ASS event with
+<code>\an8</code> and <code>\an2</code> positioning), the single RGBA bitmap includes a large
+transparent gap in the middle. Encoding this as one object wastes
+bandwidth on transparent pixels and RLE-encodes empty rows.</p>
+<p>PGS supports up to 2 non-overlapping composition objects per display set.
+Splitting the bitmap at a transparent gap produces two smaller objects,
+each with its own window and position.</p>
+<h3 id="algorithm"><a class="header" href="#algorithm">Algorithm</a></h3>
+<p>In <code>convert_text_to_bitmap()</code> and <code>flush_coalesced_subtitles()</code>:</p>
+<ol>
+<li>After rendering RGBA, quantize the full image to palette + indices</li>
+<li>Scan rows for a fully-transparent horizontal gap (threshold: 32 rows)</li>
+<li>If gap found, split the index buffer into top and bottom halves</li>
+<li>Both halves share one palette via <code>fill_rect_bitmap()</code> helper</li>
+</ol>
+<p><strong>Critical constraint</strong>: PGS allows only one PDS (palette) per Display Set.
+The encoder writes <code>rects[0]-&gt;data[1]</code> as the single PDS. Independent
+quantization per half would produce incorrect colors for the second rect —
+its palette indices would reference the first rect's palette. The fix is
+to quantize once, then distribute indices.</p>
+<h3 id="implementation"><a class="header" href="#implementation">Implementation</a></h3>
+<p>Functions in <code>fftools/ffmpeg_enc.c</code> and <code>fftools/ffmpeg_subtitle_animation.c</code>:</p>
+<ul>
+<li><code>find_transparent_gap()</code> — scan for horizontal gap in RGBA data</li>
+<li><code>fill_rect_bitmap()</code> — fill AVSubtitleRect from pre-quantized indices + shared palette</li>
+<li><code>quantize_rgba_to_rect()</code> — single-rect helper (quantize + fill)</li>
+<li>Both <code>convert_text_to_bitmap()</code> and <code>flush_coalesced_subtitles()</code> use
+quantize-first-then-split when a gap is found</li>
+</ul>
+<h2 id="animation-support"><a class="header" href="#animation-support">Animation Support</a></h2>
+<h3 id="problem-1"><a class="header" href="#problem-1">Problem</a></h3>
+<p>Text subtitle effects (fades, motion, transforms) produce a single static
+bitmap per event in the basic pipeline. The PGS spec supports animation
+through:</p>
+<ul>
+<li><strong>Palette animation</strong>: One bitmap (ODS) + chain of palette updates (PDS)
+with modified alpha values (NORMAL composition, palette_update_flag)</li>
+<li><strong>Position animation</strong>: One bitmap (ODS) + chain of PCS coordinate
+updates (NORMAL composition, no ODS retransmission)</li>
+</ul>
+<p>These techniques are specified in:</p>
+<ul>
+<li>US20090185789A1 (Panasonic) — composition states, palette_update_flag</li>
+<li>US8638861B2 (Sony) — segment timing, PDS versioning</li>
+<li>US7620297B2 (Panasonic) — decoder model, object buffer persistence</li>
+</ul>
+<h3 id="approach-format-agnostic-multi-timepoint-rendering"><a class="header" href="#approach-format-agnostic-multi-timepoint-rendering">Approach: Format-Agnostic Multi-Timepoint Rendering</a></h3>
+<p>Rather than parsing format-specific tags, render each event at every
+frame interval and observe what changes in the RGBA output. Classify
+changes to determine the optimal PGS encoding:</p>
+<ul>
+<li><strong>Alpha-only changes</strong> (fades) → palette-only Normal Display Sets</li>
+<li><strong>Position-only changes</strong> (motion) → position-only Normal Display Sets</li>
+<li><strong>Content changes</strong> (transforms, karaoke) → new Epoch Start per frame</li>
+</ul>
+<p>The animation-aware conversion runs in <code>fftools/ffmpeg_enc.c</code> via
+<code>do_subtitle_out_animated()</code>, gated by format hint (only SUBTITLE_ASS
+with override tags triggers the scan). Static subtitles (SRT, ASS
+without <code>{</code>) use the fast single-render path with zero overhead.</p>
+<h3 id="encoder-state-machine-phase-1"><a class="header" href="#encoder-state-machine-phase-1">Encoder state machine (Phase 1)</a></h3>
+<p>The PGS encoder composition state machine provides the foundation:</p>
+<ul>
+<li>Automatic state detection (Epoch Start, Normal, palette_update)</li>
+<li>palette_update_flag for PDS-only Display Sets</li>
+<li>palette_version tracking and incrementing</li>
+<li>Object reuse across Normal Display Sets</li>
+</ul>
+<h3 id="decoder-model-budgeting"><a class="header" href="#decoder-model-budgeting">Decoder model budgeting</a></h3>
+<p>Per the HDMV spec, a palette-only Display Set (PCS + PDS + END) is
+small (~1300 bytes for 256-entry palette) and transfers quickly. At
+Rx = 2 MB/s, a full palette update takes ~0.65 ms to arrive. This
+allows high-frequency palette animation (60+ steps/second) without
+exceeding buffer constraints.</p>
+<p>Position animation requires PCS + WDS + END (~30-50 bytes), even smaller.</p>
+<h2 id="phase-3a-universal-subtitle-animation"><a class="header" href="#phase-3a-universal-subtitle-animation">Phase 3a: Universal Subtitle Animation</a></h2>
+<h3 id="status-done"><a class="header" href="#status-done">Status: DONE</a></h3>
+<h3 id="key-insight"><a class="header" href="#key-insight">Key Insight</a></h3>
+<p>Rather than parsing format-specific tags (<code>\fad</code>, <code>\move</code>, <code>\t</code>), render
+the subtitle event at multiple timepoints and observe what changed in the
+RGBA output. Frame-to-frame comparison classifies changes for optimal PGS
+encoding. This handles ALL animation types in ALL text subtitle formats
+without parsing any tags.</p>
+<p>The PGS encoder's composition state machine (Phase 1) already supports
+three Display Set types for changed frames:</p>
+<div class="table-wrapper"><table><thead><tr><th>Change type</th><th>PGS encoding</th><th>Segments</th></tr></thead><tbody>
+<tr><td>New/full change</td><td>Epoch Start (0x80)</td><td>PCS + WDS + PDS + ODS + END</td></tr>
+<tr><td>Palette only</td><td>Normal + palette_update</td><td>PCS + PDS + END</td></tr>
+<tr><td>Position only</td><td>Normal</td><td>PCS + END</td></tr>
+</tbody></table>
+</div>
+<h3 id="render-api-extension"><a class="header" href="#render-api-extension">Render API Extension</a></h3>
+<p>Split <code>avfilter_subtitle_render_frame()</code> into two functions for
+multi-timepoint rendering:</p>
+<ul>
+<li><code>init_event()</code> — flush events, add text to track (call once per event)</li>
+<li><code>sample()</code> — render at a specific timestamp (call N times)</li>
+</ul>
+<p><code>render_frame()</code> becomes a thin wrapper calling both. Both have
+<code>#if !CONFIG_LIBASS</code> stubs matching the existing pattern.</p>
+<h3 id="animation-detection-every-frame-scan--format-hint"><a class="header" href="#animation-detection-every-frame-scan--format-hint">Animation Detection: Every-Frame Scan + Format Hint</a></h3>
+<p>Scan every frame interval within the event duration. Gate by format:</p>
+<ol>
+<li><strong>SUBTITLE_TEXT</strong> (SRT, WebVTT): animation structurally impossible.
+Render once, quantize, single encode. Zero overhead.</li>
+<li><strong>SUBTITLE_ASS without <code>{</code></strong>: no override tags, no animation.
+Same fast path as SUBTITLE_TEXT.</li>
+<li><strong>SUBTITLE_ASS with <code>{...}</code></strong>: every-frame scan via <code>init_event</code>/<code>sample</code>.</li>
+</ol>
+<p>Frame interval: <code>frame_ms = 1000 * framerate.den / framerate.num</code>,
+fallback to 42ms (~24fps) if framerate unset.</p>
+<p>Cost: <code>ass_render_frame()</code> with cached glyphs: ~0.03ms per call.
+A 3-second event at 24fps: 72 calls = ~2ms. Static frames
+(detect_change=0) are skipped instantly. Acceptable for offline
+PGS encoding.</p>
+<h3 id="change-classification-fftoolsffmpeg_subtitle_animationc"><a class="header" href="#change-classification-fftoolsffmpeg_subtitle_animationc">Change Classification (<code>fftools/ffmpeg_subtitle_animation.c</code>)</a></h3>
+<p>Given two RGBA frames with bounding boxes, classify the change:</p>
+<pre><code class="language-c">enum SubtitleChangeType {
+    SUB_CHANGE_NONE,       /* Identical frames */
+    SUB_CHANGE_POSITION,   /* Same content, different x/y (motion) */
+    SUB_CHANGE_ALPHA,      /* Same RGB, different alpha (fades) */
+    SUB_CHANGE_CONTENT,    /* Different bitmap (complex animation) */
+};
+</code></pre>
+<p>Algorithm:</p>
+<ol>
+<li>Dimensions differ → <strong>CONTENT</strong></li>
+<li>Pixel data identical, position differs → <strong>POSITION</strong></li>
+<li>Pixel data identical, position same → <strong>NONE</strong></li>
+<li>For all pixels where alpha&gt;0 in either frame: if RGB matches
+but alpha differs → <strong>ALPHA</strong></li>
+<li>Otherwise → <strong>CONTENT</strong></li>
+</ol>
+<p>Combined changes (alpha + position) → <strong>CONTENT</strong> (PGS can't combine
+palette_update and position update in one Normal DS).</p>
+<h3 id="utility-functions"><a class="header" href="#utility-functions">Utility Functions</a></h3>
+<p>Extracted to <code>fftools/ffmpeg_subtitle_animation.c</code> for testability via
+FFmpeg's <code>.c</code> inclusion pattern. All functions are <code>static</code> — private in
+production, accessible to tests via <code>#include</code>.</p>
+<pre><code class="language-c">// Compute sum of alpha values across RGBA buffer
+static int64_t rgba_alpha_sum(const uint8_t *rgba, int w, int h, int linesize);
+
+// Classify change between two RGBA frames
+static enum SubtitleChangeType classify_subtitle_change(
+    const uint8_t *rgba0, int x0, int y0, int w0, int h0, int ls0,
+    const uint8_t *rgba1, int x1, int y1, int w1, int h1, int ls1);
+
+// Scale palette alpha by percentage (0-100)
+static void scale_palette_alpha(const uint32_t *src, uint32_t *dst,
+                                int nb_colors, int alpha_pct);
+</code></pre>
+<h3 id="animation-loop-do_subtitle_out_animated"><a class="header" href="#animation-loop-do_subtitle_out_animated">Animation Loop (<code>do_subtitle_out_animated()</code>)</a></h3>
+<p>Two-pass architecture for the animation path:</p>
+<p><strong>Pass 1 (scan):</strong> Render every frame, classify changes, find peak alpha
+frame, record animated timestamps. Per-event classification uses worst-case
+change type across ALL frames — if ANY frame is CONTENT, the whole event
+uses the CONTENT path.</p>
+<p><strong>Pass 2 (encode):</strong> Based on event-level classification:</p>
+<ul>
+<li><strong>ALPHA (fade):</strong> Re-render peak frame, quantize as reference palette.
+Epoch Start with SCALED palette (first frame's alpha ratio vs peak).
+Subsequent frames get palette-only Normal Display Sets.</li>
+<li><strong>POSITION (motion):</strong> Quantize first frame (all frames share same
+bitmap). Epoch Start at first position, then position-only Normal DS.</li>
+<li><strong>CONTENT (complex animation):</strong> Each frame quantized independently.
+Epoch Start per frame.</li>
+</ul>
+<p>Reference frame selection for ALPHA: the peak-opacity frame gives best
+palette quality (quantizing at low alpha wastes precision). The Epoch Start
+uses reference INDICES (peak bitmap shape) but SCALED PALETTE (first
+frame's alpha), preventing a flash on fade-in.</p>
+<h3 id="fade-timing-model"><a class="header" href="#fade-timing-model">Fade Timing Model</a></h3>
+<pre><code>\fad(300,500) on event 1.0s → 4.0s (24fps):
+
+Pass 1 (scan ~2ms):
+  Render 72 frames. detect_change=1 for ~7 fade-in + ~12 fade-out.
+  Peak found around 1.333s (alpha_sum is maximum).
+  Event classified as ALPHA (all changes are alpha-only).
+
+Pass 2 (encode):
+  Quantize peak frame → ref_palette + ref_indices
+  1.000s  Epoch Start: ref indices + scaled palette (alpha≈0%)
+  1.042s  Normal PDS: alpha≈14%
+  ...
+  1.292s  Normal PDS: alpha≈100%   ← matches peak palette
+  (static frames skipped)
+  3.500s  Normal PDS: alpha≈80%
+  ...
+  3.958s  Normal PDS: alpha≈8%
+  4.000s  Clear (num_rects=0)      ← existing pipeline handles this
+</code></pre>
+<p>For <code>\move(100,200,300,400)</code>:</p>
+<pre><code>Pass 1: all frames differ in position, classified POSITION
+Pass 2:
+  1.000s  Epoch Start at (100,200)
+  1.042s  Normal: position (103,203)
+  ...
+  4.000s  Clear
+</code></pre>
+<h3 id="palette_version-safety"><a class="header" href="#palette_version-safety">palette_version Safety</a></h3>
+<p>Alpha-only steps increment palette_version (byte, 0-255). If steps
+exceed 254 within an epoch, emit an Epoch Start to reset the counter.
+<code>palette_version</code> is a byte (0-255) — the "8 palettes per epoch"
+spec limit refers to palette <strong>ID slots</strong> (0-7), not version
+increments. We use a single palette ID (0), so 255 versions are
+available. This matches SUPer's approach.</p>
+<h3 id="rect-splitting-interaction"><a class="header" href="#rect-splitting-interaction">Rect Splitting Interaction</a></h3>
+<p>Skip rect splitting when animation is detected. Two independently-quantized
+rects have separate palettes — a single PDS can't update both.
+Animated events use single-rect encoding.</p>
+<h3 id="animation-coverage"><a class="header" href="#animation-coverage">Animation Coverage</a></h3>
+<p>All animation is handled by observing renderer output — no tag parsing:</p>
+<div class="table-wrapper"><table><thead><tr><th>Animation type</th><th>Examples</th><th>Classification</th><th>PGS path</th></tr></thead><tbody>
+<tr><td>Uniform alpha fade</td><td><code>\fad(in,out)</code>, <code>\fade(...)</code>, <code>\t(\alpha...)</code></td><td>ALPHA</td><td>Palette-only Normal DS</td></tr>
+<tr><td>Linear motion</td><td><code>\move(x1,y1,x2,y2)</code></td><td>POSITION</td><td>Position-only Normal DS</td></tr>
+<tr><td>Bitmap transform</td><td><code>\t(\fscx)</code>, <code>\t(\frz)</code>, <code>\t(\bord)</code></td><td>CONTENT</td><td>Epoch Start per frame</td></tr>
+<tr><td>Color change</td><td><code>\t(\1c&amp;H...)</code>, <code>\t(\3c&amp;H...)</code></td><td>CONTENT</td><td>Epoch Start per frame</td></tr>
+<tr><td>Karaoke</td><td><code>\k</code>, <code>\K</code>, <code>\ko</code></td><td>CONTENT</td><td>Epoch Start per frame</td></tr>
+<tr><td>Fade + move</td><td><code>\fad(300,0)\move(...)</code></td><td>CONTENT</td><td>Epoch Start per frame</td></tr>
+<tr><td>No animation</td><td>SRT, <code>{\pos(...)}</code>, <code>{\b1}</code></td><td>NONE</td><td>Single Epoch Start</td></tr>
+</tbody></table>
+</div>
+<h3 id="encoder-bug-fix-libavcodecpgssubencc"><a class="header" href="#encoder-bug-fix-libavcodecpgssubencc">Encoder Bug Fix (<code>libavcodec/pgssubenc.c</code>)</a></h3>
+<p>Fixed palette_version ordering: version must be incremented BEFORE writing
+segments, not after. Without this fix, the first palette update would
+repeat version 0, confusing hardware decoders.</p>
+<h3 id="fate-tests"><a class="header" href="#fate-tests">FATE Tests</a></h3>
+<ol>
+<li><strong>Encoder state machine</strong> (<code>tests/api/api-pgs-fade-test.c</code>, 6 tests):
+Construct AVSubtitle structs, call encoder with different palettes,
+positions, and clears. Verifies composition_state, palette_update_flag,
+palette_version, and num_composition_objects in output segments.</li>
+<li><strong>Animation utilities</strong> (<code>tests/api/api-pgs-animation-util-test.c</code>):
+Unit tests for <code>classify_subtitle_change()</code> (identical, position,
+alpha, content, null, transparent pixels), <code>compute_alpha_ratio()</code>,
+and <code>scale_palette_alpha()</code> via <code>.c</code> inclusion.</li>
+</ol>
+<h3 id="files"><a class="header" href="#files">Files</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>File</th><th>Change</th></tr></thead><tbody>
+<tr><td><code>libavfilter/subtitle_render.h</code></td><td>Add <code>init_event()</code> + <code>sample()</code> declarations</td></tr>
+<tr><td><code>libavfilter/subtitle_render.c</code></td><td>Split <code>render_frame()</code> into init + sample</td></tr>
+<tr><td><code>fftools/ffmpeg_subtitle_animation.c</code></td><td>NEW — classify + alpha utilities</td></tr>
+<tr><td><code>fftools/ffmpeg_enc.c</code></td><td>Animation orchestration, dispatch, render context helper</td></tr>
+<tr><td><code>libavcodec/pgssubenc.c</code></td><td>palette_version ordering fix</td></tr>
+<tr><td><code>tests/api/api-pgs-fade-test.c</code></td><td>NEW — encoder state machine test (6 tests)</td></tr>
+<tr><td><code>tests/api/api-pgs-animation-util-test.c</code></td><td>NEW — animation utility tests</td></tr>
+<tr><td><code>tests/api/Makefile</code></td><td>Add test programs</td></tr>
+<tr><td><code>tests/fate/api.mak</code></td><td>Add FATE targets</td></tr>
+</tbody></table>
+</div>
+<h2 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h2>
+<p>Our existing work consumed by this phase:</p>
+<ul>
+<li><code>av_quantize_*</code> (Phase 2a) — RGBA → palette + indices</li>
+<li><code>ff_palette_map_*</code> (Phase 2b) — available but not needed directly
+(quantizer's <code>av_quantize_apply()</code> handles the index mapping)</li>
+<li>PGS encoder (Phase 1) — primary test target for the pipeline</li>
+</ul>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li>US20090185789A1 (Panasonic) — Composition states, palette_update_flag</li>
+<li>US8638861B2 (Sony) — PDS versioning, segment timing constraints</li>
+<li>US7620297B2 (Panasonic) — Decoder model, object buffer persistence</li>
+<li><code>docs/pgs-specification.md</code> — Compiled spec with decoder model constants</li>
+<li>SUPer encoder — Hardware-validated reference for palette animation
+sequences and decoder model compliance (cited for spec interpretation,
+not code patterns)</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../plan/0002-color-quantization-api/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../plan/0004-region-weighted-quantization/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../plan/0002-color-quantization-api/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../plan/0004-region-weighted-quantization/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

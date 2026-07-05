@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Development &mdash; FFmpeg Subtitle Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fafafa;
+  --fg: #1a1a1a;
+  --fg2: #666;
+  --fg3: #999;
+  --border: #e5e5e5;
+  --accent: #0066cc;
+  --green: #1a7f37;
+  --card-bg: #fff;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111;
+    --fg: #e5e5e5;
+    --fg2: #999;
+    --fg3: #666;
+    --border: #2a2a2a;
+    --accent: #4d9de0;
+    --green: #56d364;
+    --card-bg: #1a1a1a;
+  }
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.7;
+  font-size: 15px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code {
+  font-family: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+  font-size: 0.85em;
+  background: var(--border);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+}
+
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Header */
+header {
+  padding: 5rem 0 3rem;
+}
+header h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+  margin-bottom: 1.25rem;
+}
+header p {
+  color: var(--fg2);
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+/* Sections */
+section {
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--border);
+}
+section h2 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg3);
+  margin-bottom: 1.5rem;
+}
+section p, section li {
+  color: var(--fg2);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+section ul {
+  list-style: none;
+  padding: 0;
+}
+section li {
+  padding-left: 1rem;
+  position: relative;
+}
+section li::before {
+  content: "\2013";
+  position: absolute;
+  left: 0;
+  color: var(--fg3);
+}
+
+/* Prior art */
+.prior-item {
+  margin-bottom: 1rem;
+}
+.prior-item strong { color: var(--fg); font-weight: 500; }
+
+/* Patch series */
+.series {
+  margin-bottom: 1.75rem;
+}
+.series-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.series-letter {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--fg3);
+  width: 1.25rem;
+}
+.series-title {
+  font-weight: 500;
+  color: var(--fg);
+  font-size: 0.95rem;
+}
+.series-count {
+  color: var(--fg3);
+  font-size: 0.8rem;
+}
+.series ul {
+  margin-left: 1.75rem;
+}
+
+/* Quality */
+.quality-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+.quality-row:last-child { border-bottom: none; }
+.quality-row .style { color: var(--fg2); }
+.quality-row .psnr {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: var(--fg);
+}
+
+/* FATE */
+.fate-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem 2rem;
+}
+@media (max-width: 540px) { .fate-list { grid-template-columns: 1fr; } }
+.fate-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  padding: 0.3rem 0;
+}
+.fate-check {
+  color: var(--green);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+.fate-name {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 0.78rem;
+  color: var(--fg);
+}
+
+/* Links */
+.links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.links a {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Footer */
+footer {
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--border);
+  color: var(--fg3);
+  font-size: 0.8rem;
+}
+footer a { color: var(--fg2); }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <p style="margin-bottom:1rem"><a href="./">&larr; Stable release &amp; downloads</a></p>
+  <h1>Development: Upstream Patch Series</h1>
+  <p>A patch series adding subtitle format conversion to FFmpeg, maintained against <a href="https://github.com/connollydavid/FFmpeg/tree/pgs7">master</a> and the <a href="https://github.com/connollydavid/FFmpeg/tree/pgs7-8.1">8.1 release branch</a>. Currently in its seventh iteration.</p>
+</header>
+
+<section>
+  <h2>Approach</h2>
+  <div class="prior-item">
+    <p><strong>Prior art.</strong> Two attempts stalled. Coza (2022) put libass in libavcodec &mdash; a dependency violation. softworkz (2021&ndash;2025) proposed full subtitle filter infrastructure across 25 patches and 89 files; design questions remain unresolved.</p>
+  </div>
+  <p><strong>This series</strong> takes the minimal path. libass (rendering) and Tesseract (OCR) already live in libavfilter. Small utility APIs there, called from fftools in the same pattern as <code>sub2video</code>, handle both directions. No filter infrastructure. No AVFrame changes.</p>
+</section>
+
+<section>
+  <h2>Patches</h2>
+  <p style="margin-bottom:1.5rem">Stable: <a href="https://github.com/connollydavid/FFmpeg/tree/pgs7-8.1">pgs7-8.1</a> (29 patches). Latest: <a href="https://github.com/connollydavid/FFmpeg/tree/pgs7">pgs7</a> (29 patches on master). Plus a <a href="https://github.com/connollydavid/FFmpeg/tree/pgs7-a">standalone DVB fix</a> (1 patch). Structured as independent submission groups for upstream review.</p>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-title">PGS Encoder</span>
+      <span class="series-count">&middot; 11 patches</span>
+    </div>
+    <ul>
+      <li>PGS encoder with composition state machine, decoder model compliance, palette animation</li>
+      <li>Palette delta encoding: only changed PDS entries written (83% reduction for single-entry fades)</li>
+      <li>Per-segment DTS in SUP muxer, per-packet DTS in fftools per HDMV timing model</li>
+      <li><code>force_all</code> option for forced subtitles; <code>max_cdb_usage</code> CDB rate control</li>
+      <li>Forced disposition bridge: automatic <code>AV_DISPOSITION_FORCED</code> &harr; per-rect flag propagation</li>
+      <li><code>-forced_subs_filter</code> CLI option to split streams by forced flag</li>
+      <li>9 FATE tests (encoder, palette, DTS, overlap, forced, rate control)</li>
+    </ul>
+  </div>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-title">Colour Quantization</span>
+      <span class="series-count">&middot; 10 patches</span>
+    </div>
+    <ul>
+      <li>NeuQuant, Median Cut, and ELBG quantizers via <code>av_quantize_*</code> API</li>
+      <li>OkLab colour space, palette remapping and dithering extracted from <code>vf_paletteuse</code></li>
+      <li>Region-weighted palette generation for overlapping subtitle events</li>
+      <li>GIF encoder: direct RGBA-to-GIF via built-in quantization and dithering</li>
+      <li><a href="quantizers/">Algorithm comparison with PSNR and timing data</a></li>
+    </ul>
+  </div>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-title">Text-to-Bitmap Conversion</span>
+      <span class="series-count">&middot; 6 patches</span>
+    </div>
+    <ul>
+      <li>libass rendering utility in libavfilter; subtitle bitmap utilities in libavutil</li>
+      <li>Orchestration in fftools: <code>ffmpeg_enc_sub.c</code> (render, quantize, animate, coalesce)</li>
+      <li>Event lookahead window for overlapping subtitles with different durations</li>
+      <li><code>forced_style</code> option: ASS style names &rarr; forced flag (comma-separated, opt-in)</li>
+    </ul>
+  </div>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-title">OCR (Bitmap to Text)</span>
+      <span class="series-count">&middot; 2 patches</span>
+    </div>
+    <ul>
+      <li>Tesseract OCR in libavfilter; orchestration in fftools (<code>ffmpeg_dec_sub.c</code>)</li>
+      <li>Bitmap deduplication for PGS fade sequences; PSM fallback for RTL scripts</li>
+      <li><code>-sub_ocr_lang</code>, <code>-sub_ocr_datapath</code> CLI options</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Quality</h2>
+  <p style="margin-bottom:1rem">Palette quantization PSNR at 256 colours (PGS maximum). NeuQuant is the default; Median Cut and ELBG available via <code>-quantize_method</code>. <a href="quantizers/">Full comparison</a>.</p>
+  <div class="quality-row"><span class="style">Simple white text</span><span class="psnr">99.99 dB (all)</span></div>
+  <div class="quality-row"><span class="style">Karaoke highlight</span><span class="psnr">99.99 dB (all)</span></div>
+  <div class="quality-row"><span class="style">Multicolour (4 regions)</span><span class="psnr">69.20 dB (Median Cut)</span></div>
+  <div class="quality-row"><span class="style">RGB gradient stress test</span><span class="psnr">35.31 dB (ELBG)</span></div>
+</section>
+
+<section>
+  <h2>OCR details</h2>
+  <p>Tested across <a href="ocr-languages/">114 languages</a> with UDHR Article 1 roundtrip (text &rarr; PGS &rarr; text). 105 pass, 9 fail (Tesseract training data limitations). Bitmap deduplication skips OCR on palette-only changes (PGS fade sequences). PSM fallback handles RTL and complex scripts. Per-language <code>preserve_interword_spaces</code> tuning prevents word merging in Arabic, Hebrew, and Persian.</p>
+</section>
+
+<section>
+  <h2 id="tests">Tests</h2>
+  <p style="margin-bottom:0.5rem">18 FATE tests run on every push via CI. 17 are self-contained; <code>sub-pgs</code> uses fate-suite samples. <a href="https://github.com/connollydavid/pgs-release/actions/workflows/ffmpeg-fate.yml"><img src="https://github.com/connollydavid/pgs-release/actions/workflows/ffmpeg-fate.yml/badge.svg" alt="FFmpeg FATE" style="vertical-align:middle"></a></p>
+
+  <p style="margin-bottom:0.25rem; font-weight:500; color:var(--fg)">PGS encoder</p>
+  <div class="fate-list" style="margin-bottom:1rem">
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">sub-pgs</span></div>
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">sub-pgs-overlap</span></div>
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">api-pgs-fade</span></div>
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">api-pgs-palette-delta</span></div>
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">api-pgs-palette-reuse</span></div>
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">api-pgs-multi-object</span></div>
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">api-pgs-dts</span></div>
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">api-pgs-ap-interval</span></div>
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">api-pgs-overlap-verify</span></div>
+  </div>
+
+  <p style="margin-bottom:0.25rem; font-weight:500; color:var(--fg)">Forced subtitles &amp; rate control</p>
+  <div class="fate-list" style="margin-bottom:1rem">
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">api-pgs-forced</span></div>
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">api-pgs-rate-control</span></div>
+  </div>
+
+  <p style="margin-bottom:0.25rem; font-weight:500; color:var(--fg)">Animation &amp; pipeline</p>
+  <div class="fate-list" style="margin-bottom:1rem">
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">api-pgs-animation-util</span></div>
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">api-pgs-animation-timing</span></div>
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">api-pgs-coalesce</span></div>
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">api-pgs-rectsplit</span></div>
+  </div>
+
+  <p style="margin-bottom:0.25rem; font-weight:500; color:var(--fg)">Quantization &amp; GIF</p>
+  <div class="fate-list" style="margin-bottom:1rem">
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">quantize</span></div>
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">gifenc-rgba</span></div>
+  </div>
+
+  <p style="margin-bottom:0.25rem; font-weight:500; color:var(--fg)">OCR</p>
+  <div class="fate-list" style="margin-bottom:1rem">
+    <div class="fate-item"><span class="fate-check">&#10003;</span><span class="fate-name">sub-ocr-roundtrip</span></div>
+  </div>
+  <p style="font-size:0.82rem">Full OCR language coverage (114 languages, 92% pass rate) on the <a href="ocr-languages/">OCR languages page</a>.</p>
+
+  <p style="margin-top:1.25rem; font-weight:500; color:var(--fg); margin-bottom:0.25rem">Known upstream failures (not our patches)</p>
+  <div class="fate-list">
+    <div class="fate-item"><span class="fate-check" style="color:var(--fg3)">&#10007;</span><span class="fate-name" style="color:var(--fg3)">sws-unscaled</span></div>
+  </div>
+  <p style="font-size:0.82rem; color:var(--fg3)">Fails on clean FFmpeg 8.1 without our patches. Pre-existing libswscale issue.</p>
+</section>
+
+<section>
+  <h2>Spec Compliance</h2>
+  <p>Decoder model grounded in the Panasonic and Sony HDMV patents (US20090185789A1, US8638861B2, US7620297B2). Buffer sizes, transfer rates, and palette limits taken from the patents, not reverse-engineered from player behaviour.</p>
+  <p><a href="https://github.com/cubicibo/SUPer">SUPer</a> by cubicibo used as a hardware-validated reference.</p>
+</section>
+
+<section>
+  <h2>Series Evolution</h2>
+  <p>Each iteration informed by testing, review, and upstream FFmpeg conventions. History preserved as git tags.</p>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-letter">v0</span>
+      <span class="series-title">Early experiments</span>
+    </div>
+    <ul>
+      <li>Rapidly evolving, ported from <a href="https://github.com/connollydavid/punkgraphicstream">PunkGraphicStream</a> (Java/JNI)</li>
+      <li>PGS encoder, NeuQuant quantization, early text-to-bitmap work</li>
+      <li>Established the patent-grounded specification (<code>docs/pgs-specification.md</code>)</li>
+    </ul>
+  </div>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-letter"><a href="https://github.com/connollydavid/FFmpeg/tree/history/pgs-v1">v1</a></span>
+      <span class="series-title">Feature-complete series</span>
+      <span class="series-count">&middot; 21 patches</span>
+    </div>
+    <ul>
+      <li>First complete series: encoder, quantization API, text-to-bitmap, animation, GIF, OCR</li>
+      <li>Originally on a master snapshot, then rebased to FFmpeg 8.0.1</li>
+      <li>Released as <a href="https://github.com/connollydavid/pgs-release/releases/tag/n8.0.1-pgs1.0">n8.0.1-pgs1.0</a></li>
+    </ul>
+  </div>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-letter"><a href="https://github.com/connollydavid/FFmpeg/tree/history/pgs-v2">v2</a></span>
+      <span class="series-title">Consolidation</span>
+      <span class="series-count">&middot; 17 patches</span>
+    </div>
+    <ul>
+      <li>Consolidated from 21 to 17 patches</li>
+      <li>PGS decoder model compliance, GIF RGBA palette fix</li>
+    </ul>
+  </div>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-letter"><a href="https://github.com/connollydavid/FFmpeg/tree/history/pgs-v3">v3</a></span>
+      <span class="series-title">Structural refinement</span>
+      <span class="series-count">&middot; 14 patches</span>
+    </div>
+    <ul>
+      <li>Library/orchestration split: <code>ff_sub_render_*</code> / <code>ff_sub_ocr_*</code> in libavfilter, pipeline in fftools</li>
+      <li>ABI-safe enum ordering, FF-prefixed structs, no <code>#include .c</code> pattern</li>
+      <li>Released as <a href="https://github.com/connollydavid/pgs-release/releases/tag/n8.0.1-pgs3.0">n8.0.1-pgs3.0</a></li>
+    </ul>
+  </div>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-letter"><a href="https://github.com/connollydavid/FFmpeg/tree/history/pgs-v4">v4</a></span>
+      <span class="series-title">Expert review</span>
+      <span class="series-count">&middot; 18 patches</span>
+    </div>
+    <ul>
+      <li>25 findings from Claude-driven review across 5 simulated perspectives (architecture, API, security, subtitle domain, process)</li>
+      <li>Clear Display Sets via <code>AV_CODEC_PROP_EXPLICIT_END</code>, <code>avpriv_</code> cross-library prefixes</li>
+      <li>Subtitle utilities moved to <code>libavutil/sub_util.{h,c}</code>, internal structs to <code>palettemap_internal.h</code></li>
+      <li>Documentation: <code>doc/encoders.texi</code> (PGS), <code>doc/ffmpeg.texi</code> (OCR options), Changelog</li>
+      <li>Every patch verified to compile independently</li>
+    </ul>
+  </div>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-letter"><a href="https://github.com/connollydavid/FFmpeg/tree/pgs5">v5</a></span>
+      <span class="series-title">Encoder optimisations</span>
+      <span class="series-count">&middot; 23 patches</span>
+    </div>
+    <ul>
+      <li>Palette delta encoding: only changed PDS entries written (83% reduction for single-entry fades)</li>
+      <li>Per-segment DTS in SUP muxer and per-packet DTS in fftools per HDMV timing model</li>
+      <li>Event lookahead window: overlapping subtitles with different durations produce correct Display Set sequence</li>
+      <li>Clear Display Sets via <code>AV_CODEC_PROP_EXPLICIT_END</code> and <code>av_subtitle_needs_clear()</code></li>
+      <li>Released as <a href="https://github.com/connollydavid/pgs-release/releases/tag/n8.1-pgs5.0">n8.1-pgs5.0</a></li>
+      <li>13 FATE tests</li>
+    </ul>
+  </div>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-letter"><a href="https://github.com/connollydavid/FFmpeg/tree/history/pgs-v6">v6</a></span>
+      <span class="series-title">Forced subtitle pipeline</span>
+      <span class="series-count">&middot; 32 patches</span>
+    </div>
+    <ul>
+      <li><code>force_all</code> option, disposition bridge (<code>AV_DISPOSITION_FORCED</code> &harr; per-rect flags)</li>
+      <li>DVB forced types 0x30&ndash;0x35 in MPEG-TS demuxer and muxer</li>
+      <li><code>-forced_subs_filter</code> CLI option: split streams by forced/non-forced</li>
+      <li><code>forced_style</code>: ASS style names &rarr; forced flag (comma-separated, opt-in)</li>
+      <li>CDB rate control: <code>max_cdb_usage</code> drops events exceeding HDMV buffer model</li>
+      <li>5 new FATE tests (18 total), shared <code>pgs-test-util.h</code></li>
+    </ul>
+  </div>
+
+  <div class="series">
+    <div class="series-header">
+      <span class="series-letter"><a href="https://github.com/connollydavid/FFmpeg/tree/pgs7">v7</a></span>
+      <span class="series-title">Upstream restructuring</span>
+      <span class="series-count">&middot; 30 patches</span>
+    </div>
+    <ul>
+      <li>Restructured into 4 independent submission groups for upstream review</li>
+      <li>Encoder group merges without quantization API or text-to-bitmap infrastructure</li>
+      <li>Rebased onto FFmpeg master and 8.1</li>
+      <li>Released as <a href="https://github.com/connollydavid/pgs-release/releases/tag/n8.1-pgs7.0">n8.1-pgs7.0</a></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Data</h2>
+  <p style="margin-bottom:1rem">Measured against real PGS output.</p>
+
+  <div class="quality-row"><span class="style">Palette delta (1 entry changed)</span><span class="psnr">42 &rarr; 7 bytes (83%)</span></div>
+  <div class="quality-row"><span class="style">Palette delta (2 entries changed)</span><span class="psnr">42 &rarr; 12 bytes (71%)</span></div>
+  <div class="quality-row"><span class="style">DTS decode window (1920&times;1080)</span><span class="psnr">64.8 ms</span></div>
+  <div class="quality-row"><span class="style">DTS decode window (1280&times;720)</span><span class="psnr">28.8 ms</span></div>
+  <div class="quality-row"><span class="style">DTS decode window (720&times;480)</span><span class="psnr">10.8 ms</span></div>
+  <div class="quality-row"><span class="style">Clear Display Set</span><span class="psnr">17 bytes</span></div>
+
+  <div class="demo">
+    <pre>
+Overlapping events: A 1s-5s, B 3s-7s
+
+DS 1  T=1.0s  Epoch Start  A alone
+DS 2  T=3.0s  Epoch Start  A+B composite
+DS 3  T=5.0s  Epoch Start  B alone (A expired)
+DS 4  T=7.0s  Normal       clear (B expired)</pre>
+  </div>
+</section>
+
+<section>
+  <h2>Links</h2>
+  <div class="links">
+    <a href="https://github.com/connollydavid/FFmpeg/tree/pgs7">Patches (v7, latest)</a>
+    <a href="https://github.com/connollydavid/FFmpeg/tree/pgs7-8.1">Patches (8.1 stable)</a>
+    <a href="quantizers/">Quantizer comparison</a>
+    <a href="ocr-languages/">OCR languages</a>
+    <a href="color-distance/">Colour distance metrics</a>
+    <a href="https://trac.ffmpeg.org/ticket/3819">#3819</a>
+    <a href="https://trac.ffmpeg.org/ticket/6843">#6843</a>
+  </div>
+</section>
+
+<footer>
+  <a href="./">Back to stable release &amp; downloads</a>
+</footer>
+
+</div>
+
+</body>
+</html>
