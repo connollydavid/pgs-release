@@ -27,3 +27,9 @@
     evidence = gitlink converted to .host-software stanza; software --materialize realised the worktree at its pin; software --check ok
     tool = host-lifecycle@0.36.0
     recorded = 2026-07-05
+
+[receipt "remap"]
+    disposition = done
+    evidence = dictionary in call/0001 applied via remap --apply; remap --check clean; host-lint --all exit 0
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
