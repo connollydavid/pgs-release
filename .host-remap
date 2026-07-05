@@ -1,4 +1,7 @@
-# .host-remap — adoption rename dictionary.
-# The migration's substitutions were applied and retired; the durable copy is
-# boxed in call/0001. This file stays comment-only so the remap recheck
-# (host-lifecycle remap --check) audits the live tree against an empty map.
+# .host-remap — adoption rename dictionary (applied 2026-07-05).
+# The full applied map's durable copy is boxed in call/0001. The gate's remap
+# recheck (host-lifecycle remap --check) refuses a comment-only dictionary, so
+# one applied entry is retained. Caveat: its old form survives verbatim inside
+# call/0001's boxed record, and remap --apply substitutes inside
+# host-lint:ignore fences (upstream bug); do not re-run remap --apply.
+PHASE1.md => plan/0001-hdmv-pgs-encoder/README.md
