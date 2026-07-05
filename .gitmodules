@@ -7,3 +7,9 @@
 [submodule "tools/host-lifecycle"]
 	path = tools/host-lifecycle
 	url = https://github.com/connollydavid/host-lifecycle
+[submodule "tools/allium"]
+	path = tools/allium
+	url = https://github.com/juxt/allium
+[submodule "tools/specula"]
+	path = tools/specula
+	url = https://github.com/specula-org/Specula
