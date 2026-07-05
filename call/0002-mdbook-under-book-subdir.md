@@ -26,7 +26,8 @@ content; the book is generated output and is never committed.
 
 - Good: the product site keeps its URLs; the development book gains a stable
   home at `/book/`.
-- Neutral: Pages deployment moves from legacy branch-serving to a workflow
-  artifact so the two trees can be assembled; the site URL does not change.
+- Neutral: Pages deployment becomes a workflow-published artifact rather than
+  legacy branch-serving, so the two trees can be assembled; the site URL does
+  not change.
 - Bad: a future methodology upgrade touching the publish phase must be checked
   against this exception before it is applied.

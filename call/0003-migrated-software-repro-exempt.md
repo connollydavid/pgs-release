@@ -23,9 +23,9 @@ download and hash-verify the pinned sysroot bundle before building; the
 sysroot bundle is the hermetic dependency layer the spine's hermetic-builds
 rule cites.
 
-The exemption is to be retired by recording per-platform
-`[build "ffmpeg" "<platform>"]` recipes with expected artifact hashes once a
-rebuild from the pin is shown to reproduce them.
+Retire the exemption when a rebuild from the pin reproduces the release
+artifacts; at that point record per-platform `[build "ffmpeg" "<platform>"]`
+recipes with the expected artifact hashes.
 
 ## Consequences
 
