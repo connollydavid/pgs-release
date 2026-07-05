@@ -97,3 +97,13 @@
   amendment if hooks are ever reinstalled before the fix lands.
 - The only remaining spine obligation is authoring cast/ personas by
   discussion before planning new work.
+
+## 2026-07-05 — Cast built; the adoption's last spine obligation closed
+
+- Personas by operator discussion: Elias (ffmpeg-devel reviewer, primary),
+  Marcus (archivist), Noa (disc author), Priya (pipeline engineer), Sable
+  (agentic developer). Rationale in cast/README.md: upstream acceptance is
+  the delivery channel for every other persona.
+- Next planning session: cut the v8 milestone from plan/PLAN.md's Current
+  Work with stories prioritised by Elias (series hygiene, FATE evidence,
+  buffer-model answers ready for review).
