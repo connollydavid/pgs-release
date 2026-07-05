@@ -67,3 +67,19 @@
 - Still operator-only: adding tools/allium + tools/specula submodules
   (session permission layer refuses third-party repos in auto mode) and
   flipping the Pages source to gh-pages after the first Site publish.
+
+## 2026-07-05 — Merged; site serving per call/0002
+
+- PR #1 merged to main (all lanes green: gate, build, FATE, six release
+  legs, Site). Operator authorized the Pages source flip; done under the
+  connollydavid account (the slartibardfast login lacks admin on Pages).
+- Pages pipeline wedge, for next time: the pre-flip legacy build of the
+  merge commit hung "building" (its checkout had failed on host-template's
+  recursive third-party submodules) and blocked the first gh-pages
+  deployment ("Deployment failed, try again later"). Flipping the source
+  does not enqueue a fresh build by itself; POST /pages/builds does. The
+  second explicit request deployed clean.
+- Verified live: the product root and /book/ both serve 200 from
+  gh-pages:/. The failing legacy build from main:/docs is gone for good.
+- Still open: allium/specula submodule adds (operator command, in the PR
+  body) and the cast/ personas discussion.
