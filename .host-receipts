@@ -1,0 +1,5 @@
+[receipt "adopt"]
+    disposition = done
+    evidence = .host stamp at template revision 5707980; rooms cast/ plan/ call/ scaffolded; case-b merge staged as CLAUDE.md.proposed
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05

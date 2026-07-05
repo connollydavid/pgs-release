@@ -1,0 +1,41 @@
+# .host-remap — adoption rename dictionary (transient; durable copy in call/0001)
+# Old document names to their content-named homes:
+PHASE8-REVIEW-V3.md => plan/0011-v3-consolidated-claude-review/README.md
+PHASE8-REVIEW.md    => plan/0010-upstream-suitability-audit/README.md
+PHASE9-LOOKAHEAD.md => plan/0013-subtitle-event-lookahead/README.md
+PHASE1.md  => plan/0001-hdmv-pgs-encoder/README.md
+PHASE2.md  => plan/0002-color-quantization-api/README.md
+PHASE3.md  => plan/0003-text-to-bitmap-conversion/README.md
+PHASE4.md  => plan/0004-region-weighted-quantization/README.md
+PHASE5.md  => plan/0005-quantizer-algorithm-integration/README.md
+PHASE6.md  => plan/0006-gif-encoder-rgba-quantization/README.md
+PHASE7.md  => plan/0008-ocr-bitmap-to-text/README.md
+PHASE8.md  => plan/0009-pgs-decoder-model-compliance/README.md
+PHASE9.md  => plan/0012-v4-review-fixes/README.md
+PHASE10.md => plan/0014-pgs-encoder-optimizations/README.md
+PHASE11.md => plan/0015-website-updates/README.md
+PHASE12.md => plan/0016-fate-ci-website-visibility/README.md
+PHASE13.md => plan/0017-pgs-encoder-features/README.md
+PHASE14.md => plan/0018-upstream-submission-restructuring/README.md
+# Live-doc phrase rewording (content names for ordinal labels):
+Review finding S4 from PHASE8-REVIEW.md. => See the over-broad animation detection finding in plan/0010-upstream-suitability-audit/README.md.
+Phase 0: RFC email => RFC email
+Phase 0:  RFC email => RFC email
+§Phase 0 => §RFC email
+both master and 8.1 => both FFmpeg master and FFmpeg 8.1
+105/114 pass (92%) => 105 of 114 languages passing (92%)
+# Ordinal phase references to milestone citations:
+Phase 14 => plan/0018
+Phase 13 => plan/0017
+Phase 12 => plan/0016
+Phase 11 => plan/0015
+Phase 10 => plan/0014
+Phase 9  => plan/0012
+Phase 8  => plan/0009
+Phase 7  => plan/0008
+Phase 6  => plan/0006
+Phase 5  => plan/0005
+Phase 4  => plan/0004
+Phase 3  => plan/0003
+Phase 2  => plan/0002
+Phase 1  => plan/0001

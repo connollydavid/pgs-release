@@ -10,3 +10,12 @@
 # opt into escalation by adding one of these directive lines (drop the leading #):
 #   host-lint: strict            an undeclared tell-shaped token blocks, not warns
 #   host-lint: jira-key PROJ     gate a tracker key: PROJ-NNNN entries need a URL
+JUnit 4.11
+FILM_NTSC (23.976)
+TV_NTSC (29.97)
+HD_NTSC (59.94)
+Claude Opus 4.6
+Y + 1.5748 × (Cr - 128)
+0.1873 × (Cb - 128)
+0.4681 × (Cr - 128)
+Y + 1.8556 × (Cb - 128)

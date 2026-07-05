@@ -1,0 +1,29 @@
+[receipt "classify"]
+    disposition = done
+    evidence = host-lifecycle classify . printed case b (pre-methodology CLAUDE.md present)
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "embed" "punkgraphicstream"]
+    disposition = done
+    evidence = gitlink converted to .host-software stanza; software --materialize realised the worktree at its pin; software --check ok
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "embed" "libpgs-jni"]
+    disposition = done
+    evidence = gitlink converted to .host-software stanza; software --materialize realised the worktree at its pin; software --check ok
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "embed" "libass"]
+    disposition = done
+    evidence = gitlink converted to .host-software stanza; software --materialize realised the worktree at its pin; software --check ok
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
+
+[receipt "embed" "ffmpeg"]
+    disposition = done
+    evidence = gitlink converted to .host-software stanza; software --materialize realised the worktree at its pin; software --check ok
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05

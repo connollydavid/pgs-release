@@ -1,0 +1,32 @@
+# Append-only record (renamed at adoption, never rewritten): closed milestone
+# bodies, per the migration's record layer.
+plan/0001-hdmv-pgs-encoder/README.md
+plan/0002-color-quantization-api/README.md
+plan/0003-text-to-bitmap-conversion/README.md
+plan/0004-region-weighted-quantization/README.md
+plan/0005-quantizer-algorithm-integration/README.md
+plan/0006-gif-encoder-rgba-quantization/README.md
+plan/0007-upstream-review-findings/README.md
+plan/0008-ocr-bitmap-to-text/README.md
+plan/0009-pgs-decoder-model-compliance/README.md
+plan/0010-upstream-suitability-audit/README.md
+plan/0011-v3-consolidated-claude-review/README.md
+plan/0012-v4-review-fixes/README.md
+plan/0013-subtitle-event-lookahead/README.md
+plan/0014-pgs-encoder-optimizations/README.md
+plan/0015-website-updates/README.md
+plan/0016-fate-ci-website-visibility/README.md
+plan/0017-pgs-encoder-features/README.md
+plan/0018-upstream-submission-restructuring/README.md
+
+# The agent's append-only working memory.
+MEMORY.md
+
+# Published product site: presentation-layer HTML whose flagged tokens are
+# data literals (chart values, SVG path data, CSS line-heights), validated
+# line-by-line at adoption; docs/*.md stays linted.
+docs/index.html
+docs/development.html
+docs/color-distance/index.html
+docs/ocr-languages/index.html
+docs/quantizers/index.html
