@@ -22,15 +22,6 @@ target/
 .DS_Store
 Thumbs.db
 
-# plan/0004 test binaries
-phase4_compare
-phase4_debug
-phase4_hyab
-phase4_metrics
-
-# Local references (not tracked)
-SUPer/
-
 # Materialized software worktrees (recipe in .host-software)
 /software/
 
