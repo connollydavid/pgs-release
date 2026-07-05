@@ -30,3 +30,7 @@ docs/development.html
 docs/color-distance/index.html
 docs/ocr-languages/index.html
 docs/quantizers/index.html
+
+# Generated output (host-lifecycle book), never authored:
+mdBook/
+book.toml
