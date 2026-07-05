@@ -35,6 +35,9 @@ runs:
           echo "$SHA  /tmp/host-lifecycle" | shasum -a 256 -c -
         fi
         chmod +x /tmp/host-lifecycle
+        # The tool reads the adopted template's lifecycle.manifest (receipt
+        # rechecks, book order); a plain checkout leaves the submodule empty.
+        git submodule update --init --depth 1 host-template
         if [ -n "${{ inputs.item }}" ]; then
           item='${{ inputs.item }}'
           branch=$(awk -v item="$item" '$0 ~ "\\[software \""item"\"\\]"{f=1;next} /^\[/{f=0} f&&$1=="branch"{print $3;exit}' .host-software)
