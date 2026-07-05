@@ -63,3 +63,9 @@
     reason = call/0001
     tool = host-lifecycle@0.36.0
     recorded = 2026-07-05
+
+[receipt "verify"]
+    disposition = done
+    evidence = validate plan/ call/ ok; prose clean; reconcile clean; remap --check clean; book --check renders every room; hook blocks a tell commit (tested); software --check ok
+    tool = host-lifecycle@0.36.0
+    recorded = 2026-07-05
