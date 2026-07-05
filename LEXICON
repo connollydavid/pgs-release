@@ -1,0 +1,12 @@
+# LEXICON — sanctioned tell-shaped tokens for host-lint (see the host-lint README).
+# One entry per line is the full contextual phrase that legitimizes a token
+# (a version string like NT 3.1, a product like COM1), masked before detection;
+# a tracker reference carries its URL on the same line (#7 then the link).
+#
+# Do NOT hand-author entries — the tool owns every decision:
+#   host-lint lexicon add "<phrase>" [--url <url>]
+#
+# After auditing the repo (host-lint --all) and curating the legitimate tokens,
+# opt into escalation by adding one of these directive lines (drop the leading #):
+#   host-lint: strict            an undeclared tell-shaped token blocks, not warns
+#   host-lint: jira-key PROJ     gate a tracker key: PROJ-NNNN entries need a URL
