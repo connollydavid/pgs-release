@@ -4,4 +4,6 @@
 # one applied entry is retained. Caveat: its old form survives verbatim inside
 # call/0001's boxed record, and remap --apply substitutes inside
 # host-lint:ignore fences (upstream bug); do not re-run remap --apply.
+# Upstream: connollydavid/host-lifecycle#11 (recheck) and #12 (fences);
+# retire this entry when both land.
 PHASE1.md => plan/0001-hdmv-pgs-encoder/README.md
