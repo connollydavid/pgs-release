@@ -97,7 +97,7 @@ v8 development on `pgs8-wip` (master base, off `pgs7`).
 
 - [ ] **Upstream submission to ffmpeg-devel**: patches ready as 4 independent
   series (see plan/0018-upstream-submission-restructuring/README.md). Series A (mpegts fix) can go immediately. Series B
-  (encoder) is the core value. Need RFC email first (template in PLAN.md §RFC email).
+  (encoder) is the core value. Need RFC email first (template in the RFC email section below).
 - [ ] **Rebase onto latest upstream** before submission: both FFmpeg master and FFmpeg 8.1
   may have advanced. Use `scripts/resolve-version-conflicts.sh`.
 
@@ -181,10 +181,10 @@ Tests are included in the same patch as the code they test (supporting evidence,
 ```
 RFC email
 plan/0001:  [PATCH 1/1] PGS encoder + composition states    ← DONE (2cc882f669), includes state machine
-Phase 2a: [PATCH 1/2] OkLab move + Quantizer API          ← DONE (8e60ec654f, 8d7abb5328)
-Phase 2b: [PATCH 1/2] Palette mapping extraction           ← DONE (3326aa9602, 557d01153a)
+plan/0002 (api):  [PATCH 1/2] OkLab move + Quantizer API   ← DONE (8e60ec654f, 8d7abb5328)
+plan/0002 (map):  [PATCH 1/2] Palette mapping extraction   ← DONE (3326aa9602, 557d01153a)
 plan/0003:  [PATCH 1/2] Text-to-bitmap + rect splitting     ← DONE
-Phase 3a: [PATCH 1/1] Text-to-bitmap: universal animation ← DONE
+plan/0003 (anim): [PATCH 1/1] Text-to-bitmap: universal animation ← DONE
 plan/0004:  [PATCH 1/2] Region-weighted quantization          ← DONE (fd72cd4d83, b4ed0c4e82)
 plan/0005:  [PATCH 1/5] Median Cut + ELBG algorithm integration  ← DONE
 plan/0006:  [PATCH 1/1] GIF encoder RGBA quantization          ← DONE (d215fe732d)
@@ -197,16 +197,16 @@ Total: ~20 patches across 9 submissions. Each phase is independent
 ### Phase dependency for animation
 
 Animation support spans plan/0001 (encoder state machine, now done) and
-Phase 3a (animation-aware conversion). Phase 3a calls the encoder with
+its animation amendment (animation-aware conversion), which calls the encoder with
 palette-only Normal Display Sets to produce fade effects.
 
 ```
 plan/0001 (encoder + composition states) ← DONE
                         │
-plan/0003 (text-to-bitmap)  ──-> Phase 3a (universal animation pipeline)
+plan/0003 (text-to-bitmap) --> animation amendment (universal animation pipeline)
 ```
 
-Phases 2a, 2b, 5 are unaffected by animation work. plan/0004 (region-weighted
+plan/0002 and plan/0005 are unaffected by animation work. plan/0004 (region-weighted
 quantization) improves karaoke quality specifically during animation.
 
 ### RFC email (before any patches)
@@ -260,7 +260,7 @@ Normal, Acquisition Point), palette_update_flag, palette_version tracking.
 See plan/0001-hdmv-pgs-encoder/README.md for design details grounded in patents US20090185789A1,
 US8638861B2, and US7620297B2.
 
-### Phase 2a: Quantizer API + NeuQuant: DONE
+### Quantizer API + NeuQuant (plan/0002): DONE
 
 ```
 [PATCH 1/2] lavu: move OkLab palette utilities from libavfilter  (8e60ec654f)
@@ -271,7 +271,7 @@ Patch 1 is a pure refactor (palette.{h,c} move, include updates, no functional c
 Patch 2 includes quantize.h, quantize.c, neuquant.{h,c}, tests/quantize.c,
 version bump (MINOR 25->26), and APIchanges: one logical unit with its test.
 
-### Phase 2b: Palette mapping extraction: DONE
+### Palette mapping extraction (plan/0002): DONE
 
 ```
 [PATCH 1/2] lavu: extract palette mapping and dithering from vf_paletteuse  (3326aa9602)
@@ -300,7 +300,7 @@ FATE tests pending (font rendering is platform-dependent; structural test needed
 split into 2 composition objects when gap > 32 rows. Implemented in
 `convert_text_to_bitmap()`, needs FATE coverage.
 
-**Amendment (Phase 3a):** Universal animation pipeline: multi-timepoint
+**Animation amendment:** Universal animation pipeline: multi-timepoint
 rendering via `init_event()`/`sample()` API, format-agnostic change
 classification (ALPHA/POSITION/CONTENT), and optimal PGS Display Set
 encoding per change type. Handles fades, motion, and complex transforms
@@ -352,7 +352,7 @@ dithering tuning.
 - No cosmetic + functional changes mixed
 - Tests included with the code they test (not separate patches)
 
-### Upstream requirements for new public API (Phase 2a)
+### Upstream requirements for new public API (plan/0002)
 
 | Requirement | Action |
 |-------------|--------|
@@ -372,7 +372,7 @@ Public API required: Phases 3, 4, 5 all call `av_quantize_*` cross-library.
 
 **DONE: committed `2cc882f669`.**
 
-Implemented in `ffmpeg/libavcodec/pgssubenc.c`:
+Implemented in `libavcodec/pgssubenc.c` (ffmpeg worktree):
 - PGS RLE encoding per HDMV spec, ODS fragmentation for >64KB
 - Up to 2 composition objects, AABB overlap rejection
 - Frame rate from `avctx->framerate` with AVOption override
@@ -450,7 +450,7 @@ Adapted for FFmpeg: Copyright (c) 2026 David Connolly
 [Original permissive license: attribution only]
 ```
 
-### Palette mapping extraction from `vf_paletteuse.c` (Phase 2b)
+### Palette mapping extraction from `vf_paletteuse.c` (plan/0002)
 
 | Component | Lines | Destination |
 |-----------|-------|-------------|
@@ -570,12 +570,12 @@ one palette: PGS allows only one PDS (palette) per Display Set, so
 independent quantization per half would produce incorrect colors for the
 second rect (the encoder writes only `rects[0]->data[1]` as the PDS).
 
-### Animation pipeline (Phase 3a)
+### Animation pipeline (plan/0003 amendment)
 
 Palette animation and position animation are core to the text-to-bitmap
 layer: they determine output quality for common ASS effects. The encoder
 composition state machine (plan/0001, done) provides the foundation;
-Phase 3a builds the animation-aware conversion layer on top.
+the animation amendment builds the animation-aware conversion layer on top.
 
 **Encoder support (done in plan/0001):**
 - Composition states: Epoch Start / Acquisition Point / Normal
@@ -583,7 +583,7 @@ Phase 3a builds the animation-aware conversion layer on top.
 - palette_version: increment within epoch
 - See plan/0001-hdmv-pgs-encoder/README.md for encoder specification
 
-**Phase 3a: Universal subtitle animation:**
+**Animation amendment: universal subtitle animation:**
 - Multi-timepoint rendering via `init_event()` + `sample()` API
 - Every-frame scan gated by format hint (SUBTITLE_ASS with `{`)
 - Classify changes: ALPHA (fade), POSITION (motion), CONTENT (complex)
@@ -635,7 +635,7 @@ colors get fair palette representation regardless of pixel count.
 HyAB distance metric was considered but dropped: SSE proved sufficient
 to demonstrate the 76% karaoke quality improvement unambiguously.
 
-See [plan/0004-region-weighted-quantization/README.md](plan/0004-region-weighted-quantization/README.md) for full design and implementation notes.
+See [plan/0004-region-weighted-quantization/README.md](0004-region-weighted-quantization/README.md) for full design and implementation notes.
 
 ---
 
@@ -745,17 +745,17 @@ a non-dithered intermediate with terrible quality):
 ## Implementation Order
 
 ### plan/0001: DONE (encoder + composition state machine)
-Committed `2cc882f669` in ffmpeg submodule. Includes composition state
+Committed `2cc882f669` in the ffmpeg worktree. Includes composition state
 machine, palette_update_flag, palette_version tracking, and Acquisition
 Point support.
 
-### Phase 2a: DONE
-Committed `8e60ec654f` (palette move) and `8d7abb5328` (quantizer API) in ffmpeg submodule.
+### Quantizer API series (plan/0002): DONE
+Committed `8e60ec654f` (palette move) and `8d7abb5328` (quantizer API) in the ffmpeg worktree.
 
-### Phase 2b: DONE
+### Palette mapping series (plan/0002): DONE
 Committed `3326aa9602` (extract) and `557d01153a` (refactor filter).
 
-### plan/0003 + 3a: DONE
+### plan/0003 + animation amendment: DONE
 All committed on `pgs-series` branch, reorganized into 4 independent
 submission series (A: PGS encoder, B: quantization, C: renderer,
 D: text-to-bitmap). See plan file for series details.
@@ -806,11 +806,11 @@ pairs (4 bitmap decoders x 6 text encoders).
 - [x] Release builds with Tesseract (CI, `-eng` variant with tessdata)
 
 ### plan/0009: PGS decoder model compliance ← PARTIAL
-16. ~~Compute DTS/PTS per HDMV timing formulas~~ ← DONE (v5, Phase 10b)
-17. Validate coded data buffer (1 MB leaky bucket) ← deferred to Phase 13e
-18. Track decoded object buffer (4 MB) ← deferred to Phase 13e
-19. Insert Acquisition Points at configurable interval ← deferred to Phase 13c
-20. ~~Optimize PDS to write only active palette entries~~ ← DONE (v5, Phase 10a)
+16. ~~Compute DTS/PTS per HDMV timing formulas~~ ← DONE (v5, plan/0014)
+17. Validate coded data buffer (1 MB leaky bucket) ← deferred to plan/0017 (buffer model)
+18. Track decoded object buffer (4 MB) ← deferred to plan/0017 (buffer model)
+19. Insert Acquisition Points at configurable interval ← deferred to plan/0017 (acquisition points)
+20. ~~Optimize PDS to write only active palette entries~~ ← DONE (v5, plan/0014)
 21. Track object version numbers ← deferred to plan/0017
 22. FATE tests for timing, buffer model, palette size ← partially done (DTS test in v5)
 23. Verify against SUPer reference output ← deferred
@@ -832,7 +832,7 @@ make -j$(nproc) && make fate  # no behavior change
 ./ffmpeg -i test.srt -c:s pgssub -s 1920x1080 /tmp/t2b.sup
 ./ffprobe -v error -show_streams /tmp/t2b.sup | grep hdmv_pgs
 
-# Phase 3a (animation pipeline)
+# animation amendment (plan/0003)
 FATE_SAMPLES=/tmp/fate-samples make fate-api-pgs-fade fate-api-pgs-animation-util
 ./ffmpeg -i test_fade.ass -c:s pgssub -s 1920x1080 /tmp/fade.sup
 ./ffprobe -v error -show_packets /tmp/fade.sup  # verify multiple display sets
@@ -854,14 +854,14 @@ make -j$(nproc) && make fate
 
 | Phase | Document | Status |
 |-------|----------|--------|
-| plan/0001 + 1a | [plan/0001-hdmv-pgs-encoder/README.md](plan/0001-hdmv-pgs-encoder/README.md) | Retrospective + amendment plan |
-| Phase 2a + 2b | [plan/0002-color-quantization-api/README.md](plan/0002-color-quantization-api/README.md) | Retrospective (complete) |
-| plan/0003 + 3a | [plan/0003-text-to-bitmap-conversion/README.md](plan/0003-text-to-bitmap-conversion/README.md) | Retrospective + animation plan |
-| plan/0004 | [plan/0004-region-weighted-quantization/README.md](plan/0004-region-weighted-quantization/README.md) | Region-weighted quantization |
-| plan/0005 | [plan/0005-quantizer-algorithm-integration/README.md](plan/0005-quantizer-algorithm-integration/README.md) | Algorithm integration |
-| plan/0006 | [plan/0006-gif-encoder-rgba-quantization/README.md](plan/0006-gif-encoder-rgba-quantization/README.md) | GIF encoder RGBA quantization |
-| plan/0008 | [plan/0008-ocr-bitmap-to-text/README.md](plan/0008-ocr-bitmap-to-text/README.md) | OCR bitmap-to-text conversion |
-| plan/0009 | [plan/0009-pgs-decoder-model-compliance/README.md](plan/0009-pgs-decoder-model-compliance/README.md) | PGS decoder model compliance |
+| plan/0001 (+ amendment) | [plan/0001-hdmv-pgs-encoder/README.md](0001-hdmv-pgs-encoder/README.md) | Retrospective + amendment plan |
+| plan/0002 (both series) | [plan/0002-color-quantization-api/README.md](0002-color-quantization-api/README.md) | Retrospective (complete) |
+| plan/0003 (+ amendment) | [plan/0003-text-to-bitmap-conversion/README.md](0003-text-to-bitmap-conversion/README.md) | Retrospective + animation plan |
+| plan/0004 | [plan/0004-region-weighted-quantization/README.md](0004-region-weighted-quantization/README.md) | Region-weighted quantization |
+| plan/0005 | [plan/0005-quantizer-algorithm-integration/README.md](0005-quantizer-algorithm-integration/README.md) | Algorithm integration |
+| plan/0006 | [plan/0006-gif-encoder-rgba-quantization/README.md](0006-gif-encoder-rgba-quantization/README.md) | GIF encoder RGBA quantization |
+| plan/0008 | [plan/0008-ocr-bitmap-to-text/README.md](0008-ocr-bitmap-to-text/README.md) | OCR bitmap-to-text conversion |
+| plan/0009 | [plan/0009-pgs-decoder-model-compliance/README.md](0009-pgs-decoder-model-compliance/README.md) | PGS decoder model compliance |
 
 ## References
 
@@ -896,7 +896,7 @@ Minimal subtitle-focused FFmpeg build (`--disable-everything` + selective enable
 - **Parsers**: H.264, HEVC, AV1, VP9, AAC, AC3 (bitstream framing for `-c copy`)
 - **BSFs**: h264_mp4toannexb, hevc_mp4toannexb, aac_adtstoasc, extract_extradata
 - **Filters**: subtitles (libass overlay), null, anull, copy, acopy
-- **libass**: statically linked (from pinned `libass/` submodule on Windows; system package on Linux/macOS)
+- **libass**: statically linked (from the pinned libass component in `.host-software` on Windows; system package on Linux/macOS)
 
 ### Targets
 
