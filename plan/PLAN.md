@@ -61,9 +61,8 @@ the RFC and first series submissions.
 - [x] **NeuQuant minimum iterations**: clamp samplepixels to PRIME4 (503)
   in neuquant.c (pgs8-wip patch 2). Fixes quality degradation on tiny
   bitmaps. Coprime walk wraps uniformly.
-- [ ] **SUPer reference validation**: never compared output against
-  cubicibo's hardware-validated reference encoder. Would catch spec
-  interpretation differences.
+- [ ] **SUPer reference validation**: tracked as the super-validation task
+  in plan/0019.
 
 ### Rate control (deferred from plan/0017)
 
@@ -94,11 +93,9 @@ the RFC and first series submissions.
 
 ### Submission
 
-- [ ] **Upstream submission to ffmpeg-devel**: patches ready as 4 independent
-  series (see plan/0018-upstream-submission-restructuring/README.md). Series A (mpegts fix) can go immediately. Series B
-  (encoder) is the core value. Need RFC email first (template in the RFC email section below).
-- [ ] **Rebase onto latest upstream** before submission: both FFmpeg master and FFmpeg 8.1
-  may have advanced. Use `scripts/resolve-version-conflicts.sh`.
+- [ ] **Upstream submission to ffmpeg-devel**: the active milestone,
+  plan/0019. The rebase, the RFC (template in the RFC email section below),
+  and the series submissions are its build-sequence tasks.
 
 ---
 
