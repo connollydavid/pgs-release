@@ -2,7 +2,7 @@
 
 ## Milestones
 
-The closed milestone records, in acceptance order:
+The milestones, in acceptance order; 0001 through 0018 are closed records.
 
 | Milestone | Title |
 |---|---|
@@ -24,21 +24,20 @@ The closed milestone records, in acceptance order:
 | [0016](0016-fate-ci-website-visibility/README.md) | FATE CI and website test visibility |
 | [0017](0017-pgs-encoder-features/README.md) | PGS encoder features (v6) |
 | [0018](0018-upstream-submission-restructuring/README.md) | Upstream submission restructuring (v7) |
+| [0019](0019-ffmpeg-devel-submission/README.md) | ffmpeg-devel submission (v8, in progress) |
 
 ## Current Work
 
 _Scratch buffer: what we're doing right now._
 
-Adopting the connollydavid/host methodology (2026-07-05): this repository
-becomes an agentic project: spine CLAUDE.md, cast/plan/call rooms, the four
-submodules re-embedded as a bare store with worktrees under software/, phase
-documents renamed to content-named milestones under plan/. Case b (merge
-existing CLAUDE.md rules), Shallow PR mode. Durable exception recorded: the
-GitHub Pages root is the content-full product site; the development mdBook
-publishes under /book/, never at the site root.
+The host methodology adoption completed 2026-07-05 (recorded in call/0001
+through call/0003 and MEMORY.md).
 
-v8 development on `pgs8-wip` (master base, off `pgs7`).
-2 patches: rect bounds validation, NeuQuant minimum iterations.
+Active milestone: plan/0019 (ffmpeg-devel submission, v8). The series lives
+on `pgs8-wip` (master base, off `pgs7`) with two patches: rect bounds
+validation and NeuQuant minimum iterations. Next tasks per the milestone's
+build sequence: SUPer reference validation, then the upstream rebase, then
+the RFC and first series submissions.
 
 ## Outstanding Items
 
