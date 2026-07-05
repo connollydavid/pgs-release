@@ -4,6 +4,14 @@
 
 _Scratch buffer — what we're doing right now._
 
+Adopting the connollydavid/host methodology (2026-07-05): this repository
+becomes an agentic project — spine CLAUDE.md, cast/plan/call rooms, the four
+submodules re-embedded as a bare store with worktrees under software/, phase
+documents renamed to content-named milestones under plan/. Case b (merge
+existing CLAUDE.md rules), Shallow PR mode. Durable exception recorded: the
+GitHub Pages root is the content-full product site; the development mdBook
+publishes under /book/, never at the site root.
+
 v8 development on `pgs8-wip` (master base, off `pgs7`).
 2 patches: rect bounds validation, NeuQuant minimum iterations.
 
