@@ -5,7 +5,7 @@
 This is the programme charter: the enduring context that spans every
 milestone in the plan. It records why the work exists, the architecture it
 follows, what upstream acceptance requires, and the backlog of work not yet
-cut into a milestone. The milestone index lives in [plan/PLAN.md](../PLAN.md);
+cut into a milestone. The milestone index lives in [plan/PLAN.md](PLAN.md);
 each milestone's own record lives in its folder.
 
 ## Context

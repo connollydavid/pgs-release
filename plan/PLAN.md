@@ -3,7 +3,7 @@
 The enduring programme context (why the work exists, architecture, upstream
 acceptance intelligence, submission strategy, deferred backlog, references,
 release builds) lives in the standing charter,
-[plan/0000-ffmpeg-subtitle-upstreaming](0000-ffmpeg-subtitle-upstreaming/README.md).
+[plan/0000-ffmpeg-subtitle-upstreaming.md](0000-ffmpeg-subtitle-upstreaming.md).
 Each milestone's own record lives in its folder.
 
 ## Milestones
@@ -12,7 +12,7 @@ The milestones, in acceptance order; 0001 through 0018 are closed records.
 
 | Milestone | Title |
 |---|---|
-| [0000](0000-ffmpeg-subtitle-upstreaming/README.md) | FFmpeg subtitle upstreaming programme (standing charter) |
+| [0000](0000-ffmpeg-subtitle-upstreaming.md) | FFmpeg subtitle upstreaming programme (standing charter) |
 | [0001](0001-hdmv-pgs-encoder/README.md) | HDMV PGS subtitle encoder |
 | [0002](0002-color-quantization-api/README.md) | Color quantization API and palette mapping |
 | [0003](0003-text-to-bitmap-conversion/README.md) | Text-to-bitmap subtitle conversion |

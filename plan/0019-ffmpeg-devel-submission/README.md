@@ -48,8 +48,8 @@ patch compiles in sequence per the patch-series discipline in CLAUDE.md.
 - depends: #rebase-upstream
 - verify: attested operator
 
-The template lives in plan/0000-ffmpeg-subtitle-upstreaming/README.md under
-the RFC email section. Cite tickets
+The template lives in plan/0000-ffmpeg-subtitle-upstreaming.md under the
+RFC email section. Cite tickets
 #6843 and #3819 and the 72 unlocked conversion pairs; disclose AI assistance
 per the list's policy.
 
