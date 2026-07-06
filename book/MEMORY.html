@@ -294,6 +294,20 @@ facts migrated to the charter. Found but NOT fixed (closed record):
 plan/0008's README says 16 OCR conversion pairs (4x4) while old PLAN.md
 said 24 (claiming 6 text encoders but listing 4); the README figure is
 the record. plan/0019's RFC pointer now names the charter.</p>
+<h2 id="2026-07-06-plan0000-charter-converted-to-a-single-file-3f12251"><a class="header" href="#2026-07-06-plan0000-charter-converted-to-a-single-file-3f12251">2026-07-06: plan/0000 charter converted to a single file (3f12251)</a></h2>
+<p>Corrects the previous entry: the charter now lives at
+plan/0000-ffmpeg-subtitle-upstreaming.md (a single file, mirroring
+call/0000's file form), not in a folder. Operator preference, and the
+folder layer held nothing. Root cause investigated for an upstream case
+study: the template's example milestone (folder + README + spec/) is an
+orphaned form. The folder existed to hold spec/ subdirectories; the spine
+later moved specs into the software repos but the example was never
+re-read, and this adoption copied the surviving container 18 times at
+migration, once for plan/0019, and once more for the original 0000. No
+host-* tool inspects inside a milestone folder (validate is name-level
+only), so both shapes pass silently. Upstream issue to follow: specify
+the single-document milestone shape, forbid sibling files, fix the
+example, define the 0000 charter kind.</p>
 
                     </main>
 
