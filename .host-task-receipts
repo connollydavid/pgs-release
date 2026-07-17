@@ -1,0 +1,6 @@
+[receipt "plan/0020#trailer-decision"]
+    disposition = done
+    verify = attested call/0005
+    evidence = operator ruling 2026-07-17 recorded as call/0005: keep the trailer, normalized, after the sign-off
+    tool = host-lifecycle@0.40.1
+    recorded = 2026-07-17
