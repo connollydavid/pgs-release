@@ -18,16 +18,30 @@ only hostile-review norms). Per the branch discipline, remediation happens on
 a new `pgs9` branch; `pgs8-wip` freezes under a history tag.
 
 Goal, verified: a `pgs9` branch on current upstream master where every commit
-compiles and passes FATE in both static and shared configurations, all
-collateral is present, messages and trailers are uniform, and the plan room
-states the submission process as it actually is today.
+compiles and passes FATE across the build matrix, all collateral is present,
+messages and trailers are uniform, and the plan room states the submission
+process as it actually is today.
+
+A second Claude-driven adversarial pass (2026-07-17) reviewed this plan
+itself against the full upstream checklist and found it instance-shaped:
+it fixed the two cross-library symbol defects the review found while
+fftools consumes eight more `ff_`-prefixed functions from libavfilter (the
+OCR and render utilities), its build matrix never compiled the
+enable-only feature code, and it scheduled no security pass, no configure
+and licence gating check, and no benchmarks. Those gaps are folded in
+below.
 
 ## Finding map
 
 | Review finding | Task |
 |---|---|
+| fftools consumes non-exported `ff_` symbols from libav* (class) | [#cross-lib-symbol-sweep](#cross-lib-symbol-sweep) |
 | Cross-library `ff_sub_*` from libavutil (blocking) | [#relocate-sub-util](#relocate-sub-util) |
 | lavfi calls lavu `ff_` symbols at intermediate commits | [#close-palette-window](#close-palette-window) |
+| Feature code compiles only under enable-only flags | [#per-patch-builds](#per-patch-builds) |
+| No security or memory-safety review scheduled | [#security-pass](#security-pass) |
+| configure untouched; Tesseract licence class unexamined | [#configure-licence-gating](#configure-licence-gating) |
+| No benchmarks for speed-critical quantizer and palette work | [#quantizer-benchmarks](#quantizer-benchmarks) |
 | Missing lavu minor bump on the ELBG avpriv move | [#move-version-bumps](#move-version-bumps) |
 | APIchanges placeholder dates and stale minor numbers | [#apichanges-truth](#apichanges-truth) |
 | New fftools CLI options undocumented | [#cli-docs](#cli-docs) |
@@ -107,9 +121,25 @@ resolve them provisionally here and finish them in
 
 - band
 
-### Relocate sub_util into fftools {#relocate-sub-util}
+### Sweep the cross-library symbol class {#cross-lib-symbol-sweep}
 
 - depends: #cut-pgs9
+
+Enumerate every symbol fftools and the api tests consume from any libav*
+library and disposition each one: already-public API stands, a helper only
+fftools needs relocates into fftools, and a genuine library capability
+becomes public API with full collateral. The known population beyond the
+two tasks below is the `ff_sub_ocr_*` and `ff_sub_render_*` families that
+fftools calls from libavfilter, where the public-API route reopens the
+avfilter-prefix architecture question plan/0010 recorded; that disposition
+is an input to the RFC, and whichever way it goes, no `ff_` symbol may
+cross a library boundary at any commit. The shared-build leg of
+[#per-patch-builds](#per-patch-builds) is the mechanical backstop for
+anything this sweep misses.
+
+- verify: bash -c 'cd software/ffmpeg/pgs9 && ! git grep -qP "\bff_(sub_|srgb_|oklab_)" -- fftools tests/api'
+
+### Relocate sub_util into fftools {#relocate-sub-util}
 
 `ff_sub_find_gap` and `ff_sub_scale_alpha` are consumed only by
 `fftools/ffmpeg_enc_sub.c` and the three `tests/api/api-pgs-*` programs; no
@@ -134,8 +164,11 @@ not the tip.
 
 The ELBG move exports `avpriv_elbg_*` from libavutil: bump the lavu minor
 version in that commit and state the cross-library ABI rationale in its
-message, since moving exported avpriv symbols mid-major draws review
-scrutiny. Confirm the palette move stays lavu-internal after
+message. Moving exported avpriv symbols mid-major draws review scrutiny,
+so research how upstream handled prior avpriv relocations; if precedent
+keeps a forwarding shim in the old library until the next major bump, ship
+the shim, and record the outcome in the commit message either way. Confirm
+the palette move stays lavu-internal after
 [#close-palette-window](#close-palette-window) and therefore needs no bump.
 
 - verify: bash -c 'cd software/ffmpeg/pgs9 && c=$(git log --format=%H --diff-filter=A $(git merge-base pgs9 upstream/master)..pgs9 -- libavutil/elbg.c) && git show $c --stat | grep -q libavutil/version.h'
@@ -146,7 +179,11 @@ scrutiny. Confirm the palette move stays lavu-internal after
 
 Every commit carries `Signed-off-by: David Connolly <david@connol.ly>`, with
 the attribution trailer applied per the recorded decision, ordered after the
-sign-off, and the variant descriptor removed.
+sign-off, and the variant descriptor removed. The same rewrite pass holds
+each message to the documented bar: a what-and-why body, the tracker
+references plan/0000 promises (#6843 on the conversion commits, #3819 on
+the OCR work) where they apply, and the upstream `fate:` subject
+convention weighed for the test commits.
 
 - verify: bash -c 'cd software/ffmpeg/pgs9 && b=$(git merge-base pgs9 upstream/master) && test "$(git rev-list --count $b..pgs9)" = "$(git rev-list --count --grep="Signed-off-by: David Connolly <david@connol.ly>" $b..pgs9)" && ! git log $b..pgs9 | grep -q "1M context"'
 
@@ -165,7 +202,10 @@ identities, not our prose.
 Regenerate the series patches and run `tools/patcheck` over each: fix the
 brace placements, the mismatched doxygen parameter, and add `av_cold` where
 the hint is right; the fprintf hits in standalone FATE api programs and the
-main() prefix hits are noise and stand.
+main() prefix hits are noise and stand. The same pass scans new code lines
+over 80 columns where shorter reads better, and checks alphabetical order
+in the lists the series extends (Makefile objects, allcodecs, configure
+lists, Changelog placement), a checklist item reviewers do enforce.
 
 - verify: attested operator
 
@@ -175,9 +215,14 @@ main() prefix hits are noise and stand.
 
 ### APIchanges entries carry real dates and current minors {#apichanges-truth}
 
-Re-derive the lavu minor numbers against current master, set real dates,
-keep hashes as placeholders until push (upstream practice), and keep the
-entries chronologically ordered.
+Re-derive the lavu minor numbers against current master, keep hashes as
+placeholders until push (upstream practice), and keep the entries
+chronologically ordered. Dates are finalized at the last pre-submission
+rebase, since submission is deferred and rewrite-time dates would stale
+again; the verify below only refuses the known stale placeholders. The
+same pass confirms every public symbol the series adds carries complete
+Doxygen (each parameter, the return value), the documented bar for new
+API.
 
 - verify: bash -c 'cd software/ffmpeg/pgs9 && ! git grep -q "2026-03-xx" -- doc/APIchanges'
 
@@ -197,7 +242,7 @@ encoder commit; MAINTAINERS gains entries for the PGS encoder, the lavu
 quantize and palette modules, and the fftools subtitle conversion, in the
 commits that introduce them.
 
-- verify: bash -c 'cd software/ffmpeg/pgs9 && git grep -q "pgssubenc" -- MAINTAINERS && grep -A1 -m1 "@item PGS " doc/general_contents.texi | head -1 | grep -q "X @tab X"'
+- verify: bash -c 'cd software/ffmpeg/pgs9 && git grep -q "pgssubenc" -- MAINTAINERS && awk -F"@tab" "/^@item PGS /{exit !(\$4 ~ /X/)}" doc/general_contents.texi'
 
 ### Changelog entries for user-visible features {#changelog-features}
 
@@ -207,34 +252,82 @@ encoder options need none.
 
 - verify: bash -c 'cd software/ffmpeg/pgs9 && git grep -qi "ocr" -- Changelog'
 
+### Configure and licence gating {#configure-licence-gating}
+
+The series adds Tesseract-backed OCR and libass-backed rendering without
+touching configure: the lavfi objects build unconditionally with internal
+CONFIG guards. Verify that shape deliberately: the dependency expression
+must match how upstream gates its existing libtesseract and libass
+consumers, a build without the libraries must compile with the features
+absent, and the licence class must be settled, since Tesseract is
+Apache-2.0, which upstream gates behind version3. Record the outcome in
+the commits that wire the gating.
+
+- verify: attested operator
+
 ### Verification {#verification}
 
 - band
 
-### Per-patch builds in both link modes {#per-patch-builds}
+### Per-patch builds across the matrix {#per-patch-builds}
 
-Script the walk: for every commit in the series, build with the default
-static configuration and with --enable-shared, and fail on the first commit
-that does not compile and link. Run it where a build is fast (CI or a native
-filesystem; the WSL /mnt/c mount is too slow for 29 iterations). This is the
-check that would have caught the sub_util defect mechanically, so it becomes
-part of the pre-push rule from here on.
+Script the walk: for every commit in the series, build each configuration
+in the matrix and fail on the first commit that does not compile and link.
+The matrix is the default static configuration, --enable-shared (the leg
+that catches every cross-library symbol defect mechanically), and the
+feature configuration with --enable-libass and --enable-libtesseract,
+without which the OCR and render code never compiles at all, since both
+flags are enable-only. At the encoder commit and at the tip, add the
+new-codec checklist's standalone build, configure --disable-everything
+--enable-encoder=pgssub, which is what catches missing Makefile and
+configure dependency declarations. Run the walk where a build is fast (CI
+or a native filesystem; the WSL /mnt/c mount is too slow for the
+iteration count), and the matrix becomes part of the pre-push rule from
+here on.
 
 - verify: attested operator
 
-### FATE green at every commit that touches refs {#fate-tip}
+### FATE green across the matrix {#fate-tip}
 
 - depends: #per-patch-builds
 
-`make fate` passes at the series tip in both link modes, and at each commit
-that adds or changes a FATE reference the affected tests pass, so a bisect
-never lands on a red test.
+`make fate` passes at the series tip in every matrix configuration. At
+each commit that adds or changes a FATE reference the affected tests
+pass, so a bisect never lands on a red test; running full FATE at all 29
+commits is traded away on cost, a recorded deviation from the letter of
+the no-broken-commits rule. Confirm every sample a test references
+already exists in the fate-suite; a new sample means the samples-request
+process and a download link in the commit message, which no current test
+needs.
+
+- verify: attested operator
+
+### Security and memory-safety pass {#security-pass}
+
+- depends: #fate-tip
+
+The submission checklist requires it and our three-pass review rule
+schedules it: review the encoder's handling of arbitrary AVSubtitle input
+(rect bounds, palette sizes, dimension limits) and the OCR path's handling
+of arbitrary bitmaps for overflow and allocation failures, then run the
+subtitle FATE tests and the api tests under AddressSanitizer or valgrind
+and fix what they surface.
+
+- verify: attested operator
+
+### Quantizer and palette benchmarks {#quantizer-benchmarks}
+
+Benchmark the speed-critical code the checklist names: the three
+quantizers on representative inputs, and before-and-after timings for the
+vf_paletteuse and vf_palettegen refactors, which must not regress.
+Record the numbers in this milestone so the future cover letter can cite
+them.
 
 - verify: attested operator
 
 ### Re-cut the submission series {#recut-series}
 
-- depends: #patcheck-triage, #changelog-features, #fate-tip
+- depends: #patcheck-triage, #changelog-features, #security-pass
 
 Re-derive the submission cut (the five independent series of plan/0018) on
 the rewritten pgs9 commits and record the new manifests in this milestone;
