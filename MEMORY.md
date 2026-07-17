@@ -193,3 +193,29 @@ Frozen pgs8-wip becomes the known-findings regression fixture; live
 acceptance runs on pgs9. Open for operator: pack residence (workspace
 recommended), pgs branch grammar vs `-wip` suffix, patcheck depth,
 sign-off mode default. Both issue texts pass host-lint naming + prose.
+
+## 2026-07-17: adversarial review of the pack design filed as host-lint#23
+
+Claude-driven adversarial review of host-lint#22, filed as a bug. Found
+one live core defect, execution-verified: an explicit nonexistent file
+arg exits 0 clean (scan_file silently skips), a fail-open against the
+tool's own fail-closed pattern. Design soundness breaks: bare-name pack
+dispatch collides with file args (`ffmpeg` names the build artifact in
+the very target tree; remedy is a reserved `pack` verb); the
+area-prefix blocker fails measured ground truth (46 of 2000 upstream
+subjects legitimate: reverts, Bump versions, brace-expansion areas);
+include-exists flags generated headers (config.h family needs an
+allowlist); per-worktree hook modes contradict the shared common-dir
+config; version handshake fails open (the recorded stale-hook-binary
+hazard again). Corpus gaps: fixture scope omitted Coding Rules and Code
+behaviour chapters; missing rules (alphabetical-order, MAINTAINERS
+coverage, checkasm, GPL gating, sample provenance, standalone-compile
+leg); filter/BSF registrations escape the checklist triggers; core
+naming lane not chained in target-clone hooks; no corpus-vs-live-
+upstream drift lane (the pinned texi predates the cosmetic relaxation,
+proving the need). Process: tiers were assigned by intuition where
+call/0037 precedent demands corpus calibration (new task); LGPL fixture
+licensing in an Unlicense repo unresolved. Lesson: measure before
+tiering, and every allowlist the engine has (generated files, reserved
+names, exempt paths) exists because a blocker met reality; design new
+blockers by running them over accepted history first.
