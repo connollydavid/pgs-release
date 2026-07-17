@@ -5520,6 +5520,26 @@ the ELBG avpriv move, doc/ffmpeg.texi untouched by 5 new CLI options.
 Lesson: series rewrites shed earlier review fixes; the per-patch build
 check needs an --enable-shared leg (it would have caught B1). Remediation
 is plan/0020 (pgs9); pgs8-wip freezes under history/pgs-v8.</p>
+<h2 id="2026-07-17-ffmpeg-commit-rule-checker-designed-as-a-host-lint-pack"><a class="header" href="#2026-07-17-ffmpeg-commit-rule-checker-designed-as-a-host-lint-pack">2026-07-17: ffmpeg commit-rule checker designed as a host-lint pack</a></h2>
+<p>Operator ruled the ffmpeg commit-rule checker ships as a host-lint
+plugin (not standalone), upstream + project rule packs both in v1. Full
+task-by-task design posted as host-lint#22: git-style pack dispatch in
+the core (<code>host-lint ffmpeg ...</code> execs <code>host-lint-ffmpeg</code>, exit codes
+pass through), a workspace crate on the <code>host_lint</code> lib, a rule registry
+keyed to developer.texi anchors (pinned at our a7ffc46 tree; live pages
+fetched today agree) with three honest tiers (mechanical / receipted
+expensive / attested) and a completeness test mapping every texi
+rule to a registry entry. Config never enters the ffmpeg tree (clone-
+local, in git-common-dir); the pgs project pack (branch/tag grammar) is
+data in this repo. Addendum comment maps today's plan/0020 findings to
+rules: three caught by the designed corpus, plus additions it forced
+(series.doc-updated, series.shared-abi, ascii checks) and refinements
+(version-bump covers avpriv moves; build receipts record an
+--enable-shared leg; cosmetic-mix encodes the 2026-03-25 relaxation).
+Frozen pgs8-wip becomes the known-findings regression fixture; live
+acceptance runs on pgs9. Open for operator: pack residence (workspace
+recommended), pgs branch grammar vs <code>-wip</code> suffix, patcheck depth,
+sign-off mode default. Both issue texts pass host-lint naming + prose.</p>
 
                     </main>
 
