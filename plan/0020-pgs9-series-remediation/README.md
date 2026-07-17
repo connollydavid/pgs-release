@@ -173,6 +173,30 @@ the palette move stays lavu-internal after
 
 - verify: bash -c 'cd software/ffmpeg/pgs9 && c=$(git log --format=%H --diff-filter=A $(git merge-base pgs9 upstream/master)..pgs9 -- libavutil/elbg.c) && git show $c --stat | grep -q libavutil/version.h'
 
+### Expose quantize_method on the PGS encoder {#quantize-method-option}
+
+- depends: #cross-lib-symbol-sweep
+
+fftools reads `quantize_method` from encoder private data, but only the
+GIF encoder defines the AVOption, so the PGS path is silently always
+NeuQuant, the same lost-option shape as the `forced_style` defect the
+review found. Operator ruling 2026-07-17 (call/0006): expose the option
+on `pgssubenc` so the existing read becomes functional and a user can
+pick NeuQuant, ELBG, or Median Cut; document it in `doc/encoders.texi`.
+
+- verify: bash -c 'cd software/ffmpeg/pgs9 && git grep -q "quantize_method" -- libavcodec/pgssubenc.c && git grep -q "quantize_method" -- doc/encoders.texi'
+
+### Cap the animation scan {#animation-scan-cap}
+
+The animation-change scan iterates once per millisecond of event
+duration, so one crafted ASS event with a huge duration drives it to
+billions of iterations (CPU exhaustion). Operator ruling 2026-07-17
+(call/0006): bound the scan; beyond the bound, log a warning and treat
+the event as static rather than failing. Pick the bound from HDMV epoch
+practicality and document it in the code.
+
+- verify: attested call/0006
+
 ### Uniform sign-off and trailers {#signoff-and-trailers}
 
 - depends: #trailer-decision, #cut-pgs9
