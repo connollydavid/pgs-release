@@ -138,3 +138,19 @@ host-* tool inspects inside a milestone folder (validate is name-level
 only), so both shapes pass silently. Upstream issue to follow: specify
 the single-document milestone shape, forbid sibling files, fix the
 example, define the 0000 charter kind.
+
+## 2026-07-17: template upgraded to baseline ff04a94 (call/0004)
+
+Case C upgrade through the ledger: entries 67d63e9 (build-sequence band),
+962630c (book-mount sub-path), ff04a94 (adopt verb becomes onboarding; the
+scaffold-and-stamp primitive is `scaffold`) recorded and the baseline
+advanced 7127dc4 -> ff04a94. Tools re-pinned host-lifecycle v0.40.1 and
+host-lint v0.14.2 (submodules, the checksum-verified CI action, the
+installed hook binary — the hook's sibling binary is a copy the installer
+does not refresh; re-copy it on every lint bump). call/0002's /book/
+exception is now the declared `book-mount = "/book/"` stamp key and the
+Site workflow reads `book --print-mount` (kept our assemble shape: the
+reference workflow publishes only the book and would stop republishing
+docs/ at the root). `.host-lint-allow` retired: LEXICON is the one
+allowlist (host-lifecycle#13 landed), gate sync step removed. Verify gate
+green after each change; only pre-existing repro-exempt warns remain.
