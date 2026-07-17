@@ -4,3 +4,10 @@
     evidence = operator ruling 2026-07-17 recorded as call/0005: keep the trailer, normalized, after the sign-off
     tool = host-lifecycle@0.40.1
     recorded = 2026-07-17
+
+[receipt "plan/0020#freeze-v8"]
+    disposition = done
+    verify = git -C software/ffmpeg/pgs8-wip rev-parse --verify history/pgs-v8
+    evidence = history/pgs-v8 tagged at a7ffc46c43 and pushed to origin
+    tool = host-lifecycle@0.40.1
+    recorded = 2026-07-17
