@@ -154,3 +154,20 @@ reference workflow publishes only the book and would stop republishing
 docs/ at the root). `.host-lint-allow` retired: LEXICON is the one
 allowlist (host-lifecycle#13 landed), gate sync step removed. Verify gate
 green after each change; only pre-existing repro-exempt warns remain.
+
+## 2026-07-17: adversarial review of ffmpeg commit rules; plan/0020 cut
+
+Claude-driven adversarial review checked our recorded rules against live
+upstream docs and audited the 29 pgs8-wip commits. Blocking: fftools and
+the api tests call ff_sub_* exported from libavutil (libavutil.v exports
+av* only, so --enable-shared cannot link); sub_util's only consumers are
+fftools+tests, so it moves into fftools on pgs9. Process drift: Forgejo
+PRs are an official submission path (2026-02-26) and review runs on the
+list or code.ffmpeg.org (2026-07-13); no adopted AI policy exists (plan
+0019 wrongly cited one); cosmetic-separation was relaxed 2026-03-25 for
+whitespace-only changes. Regressions from the v7 restructure: sign-off on
+4/29 commits, non-ASCII in 2 messages + 4 comments, missing lavu bump on
+the ELBG avpriv move, doc/ffmpeg.texi untouched by 5 new CLI options.
+Lesson: series rewrites shed earlier review fixes; the per-patch build
+check needs an --enable-shared leg (it would have caught B1). Remediation
+is plan/0020 (pgs9); pgs8-wip freezes under history/pgs-v8.
