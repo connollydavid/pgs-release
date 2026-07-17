@@ -32,6 +32,7 @@ The milestones, in acceptance order; 0001 through 0018 are closed records.
 | [0017](0017-pgs-encoder-features/README.md) | PGS encoder features (v6) |
 | [0018](0018-upstream-submission-restructuring/README.md) | Upstream submission restructuring (v7) |
 | [0019](0019-ffmpeg-devel-submission/README.md) | ffmpeg-devel submission (v8, in progress) |
+| [0020](0020-pgs9-series-remediation/README.md) | pgs9 series remediation |
 
 ## Current Work
 
