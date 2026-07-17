@@ -400,6 +400,28 @@ chains the core naming scan and goes worktree-private for config.
 host-lint#23 stays open for the core defect only. Operator decisions
 now five: residence, pgs branch grammar, patcheck depth, sign-off
 default, and the calibration flag-tier rate. All texts lint clean.</p>
+<h2 id="2026-07-17-pack-build-sequence-underway-seven-commits-on-host-lint-main"><a class="header" href="#2026-07-17-pack-build-sequence-underway-seven-commits-on-host-lint-main">2026-07-17: pack build sequence underway; seven commits on host-lint main</a></h2>
+<p>Implementation of the host-lint#22 revised sequence began upstream-first
+in the tools/host-lint submodule (its worktree now sits on main, ahead
+of the recorded v0.14.2 pin; the pin bump waits for the 0.15.0 release
+per the sequence). Pushed 241a870..e75c6c4: core-fail-closed-file-args
+(the host-lint#23 live bug; explicit unscannable file args exit 2),
+engine-surface (reporting surface + ENGINE_VERSION into the lib),
+pack-dispatch (reserved pack/packs verbs, exit-code passthrough,
+HOST_LINT_VERSION export), workspace-split (host-lint-ffmpeg skeleton
+with strict skew refusal, never exits 0; CI stages both binaries), the
+fixture-licensing policy README, a found-during fix (the repo's own
+--all was red at flag tier at v0.14.2: four lib.rs comments quoted
+tells literally, against the .host-lintignore contract; reworded, not
+muted), and the re-derived kani digest ledger. Gates green locally: 93
+unit/property, 149 integration, --all advisory-only, obligations
+strict-discharge all 51 dispositioned (kani 0.67.0 re-ran both proofs
+after installing rustup user-locally; kani needs rustup, system cargo
+alone cannot drive it). lint-skill.sh fails locally only for missing
+PyYAML; CI covers it. Churn lesson, operator-prompted: after two
+consecutive tooling failures, stop and diagnose the root cause or take
+the escape; and compose commit messages against the trope list up
+front instead of lint-amend loops.</p>
 
                     </main>
 
