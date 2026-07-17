@@ -52,16 +52,6 @@ statically.
 
 - band
 
-### Record the submission venue decision {#venue-decision}
-
-Record a call/ decision (allocate with `host-lifecycle next call/`): submit
-via the ffmpeg-devel mailing list, via a Forgejo pull request on
-code.ffmpeg.org, or list-first with Forgejo as fallback. Both are official;
-review happens in either place; GitHub PRs are ignored. The decision sets the
-mechanics tasks in plan/0019 and the wording fixes here.
-
-- verify: attested operator
-
 ### Record the attribution trailer decision {#trailer-decision}
 
 Record a call/ decision: keep a normalized `Co-Authored-By: Claude
@@ -69,7 +59,22 @@ Record a call/ decision: keep a normalized `Co-Authored-By: Claude
 disclose assistance in the cover letter and RFC prose only. Either way the
 noisy variant descriptor is removed. Upstream has no rule either way and no
 precedent for an AI trailer; disclosure itself stays, per our honest
-attribution rule.
+attribution rule. Decided 2026-07-17: keep, normalized (call/0005).
+
+- verify: attested call/0005
+
+### Record the submission venue decision {#venue-decision}
+
+Record a call/ decision (allocate with `host-lifecycle next call/`): submit
+via the ffmpeg-devel mailing list, via a Forgejo pull request on
+code.ffmpeg.org, or list-first with Forgejo as fallback. Both are official;
+review happens in either place; GitHub PRs are ignored. The decision sets the
+mechanics tasks in plan/0019 and the wording fixes here. Operator ruling
+2026-07-17: deferred. Upstreaming waits on two preconditions the operator
+set: the features are complete, and the encoder output is validated on real
+playback hardware. This task stays pending until both hold and submission
+is imminent; it gates only the wording task below, so the remediation work
+proceeds meanwhile.
 
 - verify: attested operator
 
@@ -78,6 +83,8 @@ attribution rule.
 - band
 
 ### Freeze v8 under its history tag {#freeze-v8}
+
+- depends: #trailer-decision
 
 Tag `history/pgs-v8` at the `pgs8-wip` tip and push the tag. `pgs8-wip` is
 frozen from that point per the branch discipline.
