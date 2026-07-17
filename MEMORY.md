@@ -219,3 +219,24 @@ licensing in an Unlicense repo unresolved. Lesson: measure before
 tiering, and every allowlist the engine has (generated files, reserved
 names, exempt paths) exists because a blocker met reality; design new
 blockers by running them over accepted history first.
+
+## 2026-07-17: review fixes folded into the pack design (host-lint#22, revised)
+
+Consolidated revision posted on host-lint#22 superseding the opening
+post's build sequence and the addendum's deltas; every host-lint#23
+finding absorbed task-by-task with the finding names inline as the
+audit trail. Sequence changes: new root core-fail-closed-file-args (the
+live core fix ships first); pack-dispatch reworked to the reserved
+`pack` verb with a strict version handshake; new tasks
+fixture-licensing (before diff-lane), corpus-calibration (tiers freeze
+only after measuring rules over accepted upstream history; the 46
+ground-truth subjects become must-pass fixtures), and
+upstream-drift-lane (network CI acknowledging live-doc drift per
+rule-bearing section). series-lane gains the generated-header
+allowlist, all registration-table triggers, version_major.h + HEADERS
+parsing, and the new rules; build-receipts gains legs, the common-dir
+receipt home, config digest, and note/warn semantics; hook-installer
+chains the core naming scan and goes worktree-private for config.
+host-lint#23 stays open for the core defect only. Operator decisions
+now five: residence, pgs branch grammar, patcheck depth, sign-off
+default, and the calibration flag-tier rate. All texts lint clean.
