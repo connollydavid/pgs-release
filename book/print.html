@@ -5754,6 +5754,25 @@ PyYAML; CI covers it. Churn lesson, operator-prompted: after two
 consecutive tooling failures, stop and diagnose the root cause or take
 the escape; and compose commit messages against the trope list up
 front instead of lint-amend loops.</p>
+<h2 id="2026-07-17-pgs9-five-theme-integration-verified-combined-tip-unpushed"><a class="header" href="#2026-07-17-pgs9-five-theme-integration-verified-combined-tip-unpushed">2026-07-17: pgs9 five-theme integration verified (combined tip, unpushed)</a></h2>
+<p>Five Fable sub-agents remediated pgs8-wip in independent worktrees; their
+fixup! commits (keyed to series-commit subjects) were combined into
+~/pgs9-wt/integrate (branch pgs9, backup pgs9-combined-backup): 82 commits,
+all cross-branch conflicts resolved, zero markers. VERIFIED: configure
+--enable-shared + make ffmpeg links and runs, pgssub encoder present, nm -D
+clean of relocated symbols - the review's one blocking finding (cross-lib
+ff_ symbols breaking shared builds) is closed across all themes. Autosquash
+to clean history was deliberately deferred (tip-authored fixups won't
+localize to mid-series targets; the series is re-cut against master, 2386
+commits behind, next). Sub-agents found+fixed: forced_style AVOption never
+defined (dead feature), 3 HIGH encoder input-safety defects,
+ff_ass_subtitle_header_full cross-lib call; pending rebase edits: committed
+319KB ELF test binary, quantize.h bisect break, palette copy-not-move.
+call/0006 records two operator feature rulings (expose quantize_method, cap
+animation scan). BLOCKED: pushing pgs9 to fork needs operator (classifier-
+gated); Where-room pin stays pgs8-wip until pushed + master-rebased.
+Remaining work is submission-prep, deferred behind features-complete +
+hardware validation.</p>
 
                     </main>
 
