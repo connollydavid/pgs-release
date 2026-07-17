@@ -285,3 +285,21 @@ animation scan). BLOCKED: pushing pgs9 to fork needs operator (classifier-
 gated); Where-room pin stays pgs8-wip until pushed + master-rebased.
 Remaining work is submission-prep, deferred behind features-complete +
 hardware validation.
+
+## 2026-07-17: pgs9 fold reversed to coherent-series (supersedes the deferral)
+
+Corrects the prior entry's "autosquash deliberately deferred": operator
+directed folding every fix into the commit that introduced the defect AS
+EARLY AS POSSIBLE, coherent + bisectable at every commit ("100% tight from
+the start" for upstream review), using git rerere so resolutions replay
+through the later master rebase. rerere enabled in the ffmpeg store config
+(shared by all pgs9-wt worktrees). The autosquash of the 82-commit combined
+tip into 29 coherent commits is IN PROGRESS in ~/pgs9-wt/integrate (active
+rebase, ~step 21/82 at compact). The hard enc_sub conflict is NOT a punt: two
+agents renamed the same code two ways (verification event_buf->coalesce,
+symbols ff_sub_->sub_), resolved by union-merge. Full resume block +
+conflict-resolution rules + post-fold steps (rebase edits, call/0006 fixups,
+per-commit build-walk oracle, master rebase, Where-room switch) are in
+scratchpad/integration-notes.md under "RESUME HERE". Safe points:
+pgs9-combined-backup (verified builds shared + runs), history/pgs-v8 (pushed),
+5 theme branches + deliverables intact.
