@@ -30,20 +30,35 @@ jobs:
       - name: Build the book
         run: mdbook build
 
-      # call/0002: the Pages root is the authored product site from docs/;
-      # the development book publishes under /book/, never at the root.
+      # call/0002: the Pages root is the authored product site from docs/; the
+      # development book publishes under the declared book-mount (/book/), never
+      # at the root. The tool owns the mount normalisation, so the workflow
+      # reads the value rather than parsing the stamp, and it refuses the root
+      # default outright: a lost declaration must fail here, not republish the
+      # book over the product site.
+      - name: Resolve the book mount
+        id: mount
+        run: |
+          MOUNT="$(host-lifecycle book --print-mount .)"
+          if [ "$MOUNT" = "/" ]; then
+            echo "no book-mount declared in .host: call/0002 requires the book under a sub-path" >&2
+            exit 1
+          fi
+          dir="${MOUNT#/}"
+          echo "dir=${dir%/}" >> "$GITHUB_OUTPUT"
+
       - name: Assemble the site
         run: |
           mkdir site-out
           cp -r docs/. site-out/
-          cp -r mdBook/out site-out/book
+          cp -r mdBook/out 'site-out/${{ steps.mount.outputs.dir }}'
 
       # Machine check of call/0002: fail loudly if a regenerated workflow ever
-      # stops serving the product site at the root or drops the /book/ mount.
+      # stops serving the product site at the root or drops the book mount.
       - name: Assert the call/0002 layout
         run: |
           cmp docs/index.html site-out/index.html
-          test -f site-out/book/index.html
+          test -f 'site-out/${{ steps.mount.outputs.dir }}/index.html'
 
       - name: Publish to gh-pages
         uses: peaceiris/actions-gh-pages@v4

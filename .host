@@ -1,3 +1,5 @@
 template = "https://github.com/connollydavid/host-template"
 revision = "570798099e09a0d9707b01896ace507552ed7090"
 adopted  = "2026-07-05"
+book-mount = "/book/"
+baseline = "ff04a94"

@@ -9,3 +9,9 @@
     reason = adopted at the template head (baseline 7127dc4); the upgrade ledger lists 0 pending entries
     tool = host-lifecycle@0.36.0
     recorded = 2026-07-05
+
+[receipt "upgrade"]
+    disposition = done
+    evidence = ledger entries 67d63e9, 962630c, ff04a94 applied and recorded; baseline advanced 7127dc4 -> ff04a94; tools re-pinned to host-lifecycle v0.40.1 + host-lint v0.14.2; book-mount declared
+    tool = host-lifecycle@0.40.1
+    recorded = 2026-07-17

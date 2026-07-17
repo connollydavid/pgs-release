@@ -19,12 +19,12 @@ runs:
       id: recipe
       shell: bash
       run: |
-        VERSION=v0.36.0
+        VERSION=v0.40.1
         case "$(uname -s)-$(uname -m)" in
-          Linux-x86_64)  ASSET=host-lifecycle-linux-amd64;  SHA=1e2af70d8e0251986b5cd497c1d5b5f8cb0e6ac82c345cd47480dff5865a18ff ;;
-          Linux-aarch64) ASSET=host-lifecycle-linux-arm64;  SHA=bc82d3d35eac2270e1633ec48d94461cc9c4f8bdf4958ba1f331939f6bf55958 ;;
-          Darwin-arm64)  ASSET=host-lifecycle-darwin-arm64; SHA=ffb213437cba1b67b396f4de65274b03cb249fb66765357076f8906329728a44 ;;
-          Darwin-x86_64) ASSET=host-lifecycle-darwin-amd64; SHA=a0c22f1807122ba184f1ca71ba61f91a772bf3d98ebfea230743e0a748996dc6 ;;
+          Linux-x86_64)  ASSET=host-lifecycle-linux-amd64;  SHA=518401c873f93b5b0b2e350206dc9e6507a19cf35e0ed6d5845744757ede3d79 ;;
+          Linux-aarch64) ASSET=host-lifecycle-linux-arm64;  SHA=ec82c571496478ba0a1013a73360e2a25994b0d876c3aa2c01757e2adbb9192c ;;
+          Darwin-arm64)  ASSET=host-lifecycle-darwin-arm64; SHA=9cfe7f8e6edf60be8d724e5215778c5a577da6721fee2aa5f0a5c34c57228bf0 ;;
+          Darwin-x86_64) ASSET=host-lifecycle-darwin-amd64; SHA=02cfd723dec7d7e84ad81e49601feb933c803c3a32b9401035c61abee82c6232 ;;
           *) echo "unsupported runner: $(uname -s)-$(uname -m)" >&2; exit 1 ;;
         esac
         BIN_DIR="$HOME/.local/bin"

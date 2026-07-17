@@ -522,6 +522,32 @@ there, then add the software as the Where room with a `[software "<name>"]`
 stanza in the host's `.host-software` (the repo's URL, a pinned SHA, the worktree
 set) and `software --materialize`. The classify refusal prints these exact steps.
 
+### Onboarding a project: init, adopt, and the two shims
+
+Starting a project is one engine with two purpose-named faces. `host-lifecycle init
+<name>` creates a fresh `agentic-<name>` in a new folder. `host-lifecycle adopt`
+brings a folder under the methodology by one of three routes: a software repository
+is refused in place (above), an empty `agentic-<name>` folder is adopted in place,
+and any other folder is arbitrary, so the tool elicits a name, creates the host at
+`../agentic-<name>`, and leaves the source folder untouched. `host-init` and
+`host-adopt` are the same binary under those two names, the human-facing commands over
+the `init` and `adopt` verbs.
+
+Three invariants hold across the onboarding surface. The **source is read-only** on
+the arbitrary-folder route: the new host lands elsewhere, and the source, even a home
+directory, is never written. A **present, non-empty target refuses** rather than
+overwrite, unless forced. The **name is the one field elicited**, because it carries
+operator intent a folder cannot supply: the verb accepts it by flag or the `HOST_NAME`
+environment variable, else prompts on a controlling terminal, else exits with a
+distinct code and a machine-parseable line naming the missing field, so a scripted or
+agent caller re-invokes with the name supplied. Never invent the name.
+
+The scaffold-and-stamp primitive is `host-lifecycle scaffold <dir> <revision>`, the
+adopt phase's command, which `adopt` and `init` build on. A spawned MCP surface
+(`host-lifecycle mcp`) exposes `init` and `adopt` as tools over stdio, eliciting the
+name through the client when it declares the capability and falling back to the verb's
+backstop otherwise; the MCP tools are an enhancement, never mandatory.
+
 ## Audited plans and append-only memory
 
 Two disciplines keep the host trustworthy across sessions.
@@ -587,6 +613,17 @@ races two workers (a corruption), so the author never answers "what can run at
 once?" A coordinator fans a frontier out to parallel workers **only when they are
 resource-isolated** (separate worktrees), since `depends` orders work, it does not
 lock a shared resource.
+
+**Group a long sequence with a band, never an ordinal.** To divide a build
+sequence into named groups, mark a `### ` heading with a single `- band` bullet:
+it is a **band**, a content-named divider over the tasks that follow, not a task
+node. A band carries no receipt or edge and does not reset the linear default, so
+task-to-task chaining runs straight across it, and ordering stays in the `depends`
+edges rather than in a band's name or position. Give a band a content name and its
+own `{#anchor}`, so it reads as a referenceable divider in the book. Never name a
+group by ordinal position (a work-unit noun ahead of an ordinal); that is the
+position-naming the milestone-naming rule forbids, and the naming gate blocks it
+in both its numeric and its spelled forms.
 
 **Every task emits a receipt, and the gate is mandatory.** `host-lifecycle tasks
 --record` writes a receipt into `.host-task-receipts` (it reads the task's own

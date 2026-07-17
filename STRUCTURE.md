@@ -91,7 +91,12 @@ A migrated or instantiated repo carries a `.host` stamp at its root
 recording the template revision it adopted (`template`/`revision`/`adopted`),
 written by `host-lifecycle adopt`. It is what a later upgrade diffs from. An
 optional `name` line pins the published book's title, so `host-lifecycle book`
-does not derive it from the checkout directory.
+does not derive it from the checkout directory. An optional `book-mount` line
+(default `/`) publishes the generated book under a sub-path of an existing site
+instead of at its root: `host-lifecycle book` emits mdBook's `site-url` only for a
+non-default mount, so a root-published `book.toml` stays byte-identical,
+`book --print-mount` prints the normalized value, and the reference Site workflow
+reads it from the tool to publish under the sub-path with the surrounding site kept.
 
 The methodology lives in `CLAUDE.md`. Read it first. The whole template is
 released into the public domain (Unlicense); see `README.md` for provenance.
