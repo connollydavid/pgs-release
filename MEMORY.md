@@ -303,3 +303,174 @@ per-commit build-walk oracle, master rebase, Where-room switch) are in
 scratchpad/integration-notes.md under "RESUME HERE". Safe points:
 pgs9-combined-backup (verified builds shared + runs), history/pgs-v8 (pushed),
 5 theme branches + deliverables intact.
+
+## 2026-07-19: pgs9 fold + rebase-edits + features done; master rebase remaining
+
+Resumed the coherent fold from the paused step-21 rebase and drove it to
+completion. pgs9 = 3532e2a43e (fold/cp-pre-master), 30 commits (Median Cut
++ region-weighted MERGED to kill a circular forward-reference each had on
+the other's symbol), 0 fixup!, bisectable end-to-end (default build walk
+60/60, zero errors). Messages polished (30/30 sign-off, 4 tests->fate
+rewrites via handover/deliverables/messages/apply.sh). call/0006 features
+in: lavc/pgssubenc quantize_method option (+doc/encoders.texi), fftools
+animation-scan CPU cap (SUB_ANIM_SCAN_MAX_MS). Tip builds + links
+--enable-shared. Structural fixes applied at source: quantize.h typedef
+heal, quantize.c av_quantize_alloc heal, palette copy-not-move at the
+OkLab move with the vf_palettegen/vf_paletteuse migrations corrected, the
+319KB ELF dropped. Checkpoints fold/cp-{muxinit-resolved,pre-edit,render-
+folded,wire-pipeline,pre-merge,pre-master}. REMAINING: the master rebase
+(git rebase --onto upstream/master 6e7c3efe70 pgs9 - NOT plain `rebase
+upstream/master`, which replays 328 commits), then re-derive EVERY
+version.h + APIchanges across the version-bumping commits (lavc 62->63,
+lavu 60->61, cumulative MINOR bumps) + resolve code conflicts from ~2386
+commits of upstream drift; then operator-gated fork push + .host-software
+pin switch. The master rebase is conflict-heavy and non-uniform - it wants
+per-commit resolution, not a bulk script.
+
+Lessons (non-obvious; for the next session):
+- Per-commit vs final-tip: "byte-identical to combined-backup" means at
+  EACH commit, not just the tip. I misdiagnosed enc_sub as event_buf
+  (the tip's state) when the text-to-bitmap intermediate actually used
+  coalesce; event_buf arrives at the lookahead commit. Compare the
+  reference's state AT the commit under review, never the final tip.
+- Blanket take-theirs / take-ours breaks when the two sides carry
+  different FIX-STATES. region-weighted's quantize.c was itself broken
+  (the heal lands at Median Cut/ELBG), so take-theirs silently reverted
+  my NeuQuant heal. Always ask which side holds the correct state and
+  merge: keep the heal, add the new content.
+- Separate fix-application from the build-walk verification. I conflated
+  them; the walk timed out (minutes per commit) and walk-time fixes
+  cascaded. Apply ALL fixes via an interactive rebase FIRST, then run
+  the walk to verify. Run the walk in the background or in CI.
+- rerere records whatever you `git add`, including WRONG resolutions, and
+  replays the bad postimage on the next run. After a botched resolution,
+  override rerere (resolve fresh / drop the recording) or it propagates.
+- Conflict formats VARY; never assume a generic shape for scripted
+  resolution. version.h conflicts were MAJOR+MINOR in some commits and
+  MINOR+MICRO in others; my regex missed the first and left markers
+  (parse failure). Read the actual conflict block before scripting, or
+  resolve by hand.
+- A circular dependency between two commits (each uses a symbol the
+  other defines) is NOT fixed by reordering - reorder just reverses the
+  forward reference. Merge the commits, or re-split so each is self-
+  contained.
+- Checkpoint branches at every milestone (fold/cp-*) recovered me from
+  three botched operations. Keep making them.
+- FFmpeg configure writes ffbuild/config.mak (not ./config.mak), and
+  the build walk's per-commit make is incremental after the first only
+  if config.mak persists (it does - untracked).
+- FFmpeg source comments are terse; rationale belongs in the commit
+  message, not a multi-line block above a constant.
+
+## 2026-07-19: host-reconcile — the version-reconciler generalised to a 4th methodology tool; design filed on connollydavid/host#18
+
+The version-reconciler prototype (tools/host-ffmpeg-version-reconcile/,
+built today: derive/resolve/rewrite, tested against the real pgs9 state)
+surfaced a bigger pattern: reconciling TYPED files (version metadata,
+changelogs, manifests) across a moving base, via git MERGE DRIVERS, is a
+general methodology concern, not an FFmpeg-specific one. The decision:
+don't implement the full tool here. Instead:
+
+- **The design is filed as a complete handover on connollydavid/host#18**
+  (https://github.com/connollydavid/host/issues/18, 22KB body, label
+  `enhancement`). It is drawn entirely from this project's pgs9 friction
+  (the case study) + the prototype's four bug-lessons. Implementation
+  happens on the host repo (the methodology's development home), not here.
+
+- **host-reconcile** (general core: merge-driver framework + declaration
+  system + agent affordances + series lifecycle) + **host-reconcile-ffmpeg**
+  (the FFmpeg articulation: version.h/version_major.h/APIchanges typing +
+  patcheck interop + Makefile.sources/FATE/MAINTAINERS completeness).
+  Future articulations: host-reconcile-rust (Cargo.toml), -node, -python.
+  Mirrors the host-lint + host-lint-ffmpeg pattern. This is a 4th host-*
+  tool joining grammar/lint/lifecycle; the spine grows a reconcile lane.
+
+- **The existing prototype stays in pgs-release as the case-study artifact
+  + the seed of host-reconcile-ffmpeg.** Its resolve/rewrite/derive are
+  tested; the pgs9 rebase can use it directly while host-reconcile is
+  implemented upstream. The prototype's four bugs (LIB-prefix split,
+  placeholder-sha over-consumption, version_major.h empty-guard,
+  conflict-format variance) are the spec's pinned invariants + Kani targets
+  in the filed design.
+
+- **Naming:** "rebase" rejected (merge drivers fire during any merge, not
+  just rebase); "merge-driver" is the mechanism not the name; host-*
+  convention is purpose-named → **host-reconcile** (consistent with the
+  prototype's "...-version-reconcile" seed). Binary `reconcile`.
+
+- **Alignment, not replacement:** FFmpeg documents NO quilt/stgit idiom
+  (doc/ grep is clean; the flow is git format-patch + send-email +
+  patchwork/Forgejo + the in-tree tools/patcheck). host-reconcile-ffmpeg
+  COMPLEMENTS patcheck (style/sanity) on the version-metadata +
+  bisectability + completeness lane; it does not impose a quilt/stgit model
+  FFmpeg never adopted.
+
+- gh auth switched to connollydavid (active) for the filing.
+
+The pgs9 master rebase (onto fast-forwarded origin/master, --onto 6e7c3efe70)
+is **BLOCKED on host-reconcile** (connollydavid/host#18), by operator decision
+(2026-07-19): the rebase is the articulation's acceptance test (Phase 2
+verify in the filed design), so it must run against the real tool, not the
+prototype — running it now with the prototype would consume the test
+informally and mean redoing it. A peer agent implements host-reconcile on
+the host repo; pgs9 waits. Do NOT start the rebase with the prototype alone.
+Also pending (not urgent until the rebase unblocks): fast-forward the fork's
+master from upstream (origin/master is at 482395f830, 2176 behind
+upstream/master 9bc73ba344; `gh repo sync connollydavid/FFmpeg --source
+FFmpeg/FFmpeg --branch master`, then `git fetch origin`). The plan room
+records the block at plan/0020#cut-pgs9.
+
+Uncommitted on-disk state (operator gates commits): the prototype at
+tools/host-ffmpeg-version-reconcile/ (untracked), and edits to MEMORY.md +
+plan/0020-pgs9-series-remediation/README.md (the block note). The
+fold/cp-* checkpoint branches + pgs9 (3532e2a43e) are the safe points.
+
+## 2026-08-21: methodology re-read; verify gate green; the august ledger gap
+
+Operator directed: read and follow connollydavid/host to keep this repo an
+agentic project. Full verify sweep run from WSL with the release binaries
+on PATH (source .env): validate plan+call ok, software --check exit 0
+(only the four known repro-waiver warns), prose clean, reconcile clean,
+book ok, upgrade ledger current at baseline ff04a94. GOTCHA: the applied-
+ledger verify for 4a98d92 shells out to `host-lifecycle` BY NAME; without
+the tools on PATH the gate reports a false HAZARD ("claimed applied but
+its verify no longer holds"). Always run the gate with .env sourced.
+Ledger gap found and reconstructed from the tree (no entries cover it):
+host-lint advanced v0.14.2 -> v0.18.1 with the ffmpeg pack shipped
+(host-lint-ffmpeg workspace: checklist/cosmetic/diff/forge/mail/
+maintainers/msg/receipt modules), host-lifecycle v0.40.1 -> v0.50.0
+(renamed repro-exempt -> repro-waiver; .host-software migrated), libass
+switched to the connollydavid fork at cc83558b, and .env/.host-envhash
+scaffolding added. The hook sibling binary was stale at the v0.14.2
+build; re-copied the v0.18.1 release build over .git/hooks/host-lint
+(smoke test clean; the pre-commit script's skip-gitlinks amendment for
+host-lint#19 is present and was not touched). The CI action pin was
+raised v0.40.1 -> v0.50.0 with re-derived per-asset sha256s (left
+uncommitted to land with the operator's tool-bump batch). Windows-git
+phantom: tools/specula shows "modified content" from Windows git (cannot
+hash scripts/infra/run_model_check.sh) and clean from WSL; the
+submodules and stores are WSL-owned, so read them from WSL only.
+
+## 2026-08-21: overriding goal set — pgs9 onto n9.0.1; WSL2 primary; Fairies vendored
+
+Three operator orders. (1) OVERRIDING GOAL: rebase the pgs9 series onto
+FFmpeg 9.0.1 "Lei" (tag n9.0.1 = bf1b838f2a, released 2026-08-12, latest
+stable of release/9.0, cut from master 2026-06-26) and make it pitch
+perfect for potential upstreaming. This LIFTS the 2026-07-19 block (the
+rebase waiting on host-reconcile, host#18): that issue is still open,
+cut as the design-only plan/0075 in connollydavid/agentic-host, queued
+behind plan/0072. The override is recorded as call/0007. Recon facts:
+the series base 6e7c3efe70 sits on the 8.1 lineage (pgs7-8.1), not
+master; the true merge-base with n9.0.1 is 67c886222f (328 commits of
+pgs history below the series); upstream drift intersects our touched
+files in only ~22 files (Makefiles, registration tables, version
+headers, docs); pgssubenc and the fftools subtitle pipeline files do
+not collide. rerere is enabled in the ffmpeg store, so resolutions from
+this rebase replay on any later master re-cut. (2) WSL2 is the primary
+development environment; win32 is for direct win32 testing only; all
+gates, commits, and builds run from WSL. (3) Fairies
+(code.ffmpeg.org/michaelni/Fairies, GPL-2.0-or-later, michaelni's LLM
+review pipeline for the ffmpeg forge) vendored as tools/fairies at
+cd67a6a. Its intended use for the pitch-perfect pass: the simpast-runs
+offline replay harness runs our series through the same reviewer
+pipeline the forge uses, without touching the live forge.
