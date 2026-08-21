@@ -6,8 +6,8 @@
 
 ## Context and Problem Statement
 
-The pgs9 series (30 commits, folded coherent and bisectable) sits on the
-8.1 lineage; the recorded next step was a rebase onto upstream master,
+The pgs9 series (30 commits, folded coherent and bisectable) sits on an
+older stable-release lineage; the recorded next step was a rebase onto upstream master,
 blocked since 2026-07-19 on host-reconcile (connollydavid/host#18)
 because that rebase was reserved as the new tool's acceptance test.
 host#18 remains open: implementation was cut as a design-only milestone

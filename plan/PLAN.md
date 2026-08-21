@@ -43,8 +43,8 @@ onto FFmpeg 9.0.1 "Lei" (n9.0.1, bf1b838f2a) and bring it to upstream
 submission quality. The 2026-07-19 host-reconcile block is lifted by the
 same ruling; host#18 remains the design record for the eventual tool.
 
-The pgs9 series (30 commits, tip 3532e2a43e) sits on the 8.1 lineage; the
-rebase replays it onto n9.0.1 in a fresh worktree, with rerere recording
+The pgs9 series (30 commits, tip 3532e2a43e) sits on an older
+stable-release lineage; the rebase replays it onto n9.0.1 in a fresh worktree, with rerere recording
 resolutions for any later master re-cut. The quality gates for submission
 readiness: the host-lint-ffmpeg series lane, patcheck, per-commit builds
 with the shared-ABI leg, FATE, and a Fairies offline review pass

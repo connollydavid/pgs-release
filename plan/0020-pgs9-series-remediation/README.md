@@ -128,7 +128,7 @@ in [#apichanges-truth](#apichanges-truth).
 
 Executed 2026-08-21: branch `pgs9-9.0.1` (worktree `~/pgs9-wt/rebase901`),
 30/30 commits applied, tip 964fc5e2d9; versions re-derived lavc 63.2.100
-and lavu 61.2 -> 61.5 (9.0.1 already carries the majors); APIchanges
+and lavu minor 2 through 5 under major 61 (9.0.1 already carries the majors); APIchanges
 context-duplicates and decorative banners folded out at their
 introducing commits; build walk 30/30 green under `--enable-shared`
 with transfer proofs across the folds; encoder, FATE api tests, patcheck
