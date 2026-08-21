@@ -536,3 +536,44 @@ finalization (entries keep 2026-03-xx placeholder dates and xxxxxxxxxx
 hashes by design until submission), the Fairies simpast review pass
 (needs API keys plus the podman review host), full FATE with samples,
 and the plan/0020#cut-pgs9 task receipt (verify: attested operator).
+
+## 2026-08-22: n9.0.1-pgs9.0 released; the 9.0.1 series is the shipped line
+
+Operator order: release binaries and surface them on the project's
+Pages site. Chain executed in order. The branch push to the fork first
+(the pin rule: never record a pin that is not pushed): pgs9-9.0.1 =
+964fc5e2d9192dc24c4459cbc6803ebf079a2c11 on connollydavid/FFmpeg,
+verified by ls-remote. The scratch worktree detached so the branch could
+materialize canonically; host-lifecycle --materialize created
+software/ffmpeg/pgs9-9.0.1 at the pin (embed receipt recorded). The
+where-room switch is DONE: .host-software ffmpeg stanza now pins
+964fc5e / branch pgs9-9.0.1.
+
+The operator's pending tool batch landed with it (it had to: CI runs
+the action, and the migrated .host-software needs the newer tool):
+submodules to host-lifecycle v0.50.0 + host-lint v0.18.1, the CI action
+pin raised to v0.50.0 with re-derived per-asset sha256s, repro-exempt ->
+repro-waiver migration, libass on the connollydavid fork at cc83558b,
+.env/.host-envhash scaffolding, and the prototype ignores.
+
+GOTCHA that reddened the gate: the remap phase recheck counts
+UNDISPOSITIONED TELLS, and my own prose from the rebase session
+introduced dotted-numeral labels ("the 8.1 lineage", "lavu 61.2 ->
+61.5") in call/0007, PLAN.md, and plan/0020 — advisory at commit time
+(hook prints rc-3 warnings), but a gate failure in the recheck. The
+commit hook's advisory and the gate's blocking disposition differ;
+reworded all three (two-part dotted numerals flag, three-part tag forms
+like n9.0.1 pass). Local gate green after reword; pushed; all five CI
+lanes green at c45655a (Verify Gate, FFmpeg FATE — the CI-side FATE
+evidence for the pre-release rule, since the local suite lacks fate
+samples — Build, Site, FFmpeg Release push-validation).
+
+Release cut: gh release create n9.0.1-pgs9.0 (target main) with notes
+matching the previous release shape; the release-created event drives
+ffmpeg-release.yml's packaging path (the push path only validates,
+packaging is conditional on github.event_name == 'release'), building
+six targets x plain/-eng variants from the .host-software pin and
+attaching the twelve assets. The site's download section (docs/
+index.html) moved to n9.0.1-pgs9.0 and the FFmpeg 9.0.1 base link;
+the cards link the releases page generically, so they carry the new
+assets without per-asset URLs to keep updated.
