@@ -6135,6 +6135,25 @@ output open — on BOTH the v7 and v9 release binaries, so an
 over-optimistic site example rather than a v9 regression. The working
 form is -c:s pgssub -s WxH (the encoder needs explicit dimensions;
 without them it fails per-frame). Site usage line corrected.</p>
+<h2 id="2026-08-22-host-reconcile-workaround-codified-host18-updated-with-findings"><a class="header" href="#2026-08-22-host-reconcile-workaround-codified-host18-updated-with-findings">2026-08-22: host-reconcile workaround codified; host#18 updated with findings</a></h2>
+<p>Operator direction: work around host-reconcile as best we can and update
+the bug report. The workaround that carried the n9.0.1 rebase is now
+codified at scripts/reconcile/ — stop.sh (typed-file stop resolver:
+parent-relative version deltas, lineage re-derivation, APIchanges
+insertion at the series slot, makefile union), build-walk.sh (per-commit
+build oracle), transfer-proof.sh (carries a walk verdict across a fold
+by proving tree identity outside the folded files) — with the method
+and the lessons written up in its README. These will carry the master
+re-cut for upstreaming. host#18 received an empirical-findings comment
+(https://github.com/connollydavid/host/issues/18#issuecomment-5376538743):
+the acceptance-scale measurement (30 commits over 2233 of drift, every
+hand stop a typed file, zero code conflicts — the work concentrates
+exactly where the tool aims) plus five findings beyond the design's
+pinned prototype lessons: parent-relative deltas, conflict-block shape
+variance, context-duplicate materialisation by sibling hunks, the need
+for a policy hook on commit-internal inconsistencies (the ELBG
+double-bump), and rerere determinism. The tool's acceptance test stays
+a fresh rebase per call/0007.</p>
 
                     </main>
 
