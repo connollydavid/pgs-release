@@ -308,6 +308,9 @@ jobs:
       - name: Package
         run: |
           TAG="${{ github.event.release.tag_name }}"
+          # actions/upload-artifact does not preserve the executable bit;
+          # restore it so the archives are extract-and-run.
+          chmod +x artifacts/*/ffmpeg artifacts/*/ffprobe artifacts/*/*.exe 2>/dev/null || true
           for dir in artifacts/*/; do
             target=$(basename "$dir")
 
