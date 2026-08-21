@@ -577,3 +577,26 @@ attaching the twelve assets. The site's download section (docs/
 index.html) moved to n9.0.1-pgs9.0 and the FFmpeg 9.0.1 base link;
 the cards link the releases page generically, so they carry the new
 assets without per-asset URLs to keep updated.
+
+## 2026-08-22: release re-cut as n9.0.1-pgs9.1 (executable-bit fix)
+
+The shipped-binary spot check caught a real defect: the release archives
+carried NO executable bit (-rw-r--r--), so "download, extract, run" was
+broken. Root cause: the release workflow's build job passes binaries to
+the packaging job through actions/upload-artifact, which does not
+preserve modes; no chmod existed in the Package step. Long-standing —
+the n8.1-pgs7.0 archives shipped the same stripped modes. Fixed by
+chmod-ing the binaries in the Package step before tarring. Per the tag
+discipline (build-config fix increments .build), the n9.0.1-pgs9.0
+release and tag were deleted with --cleanup-tag and the release re-cut
+as n9.0.1-pgs9.1 from the same pin; the site's version tag follows.
+Verified end to end this time: the downloaded linux-x86_64 archive
+extracts to -rwxr-xr-x, reports version 964fc5e2d9 (the series tip),
+registers pgssub with quantize_method, and encodes SRT to PGS.
+
+Second finding from the same smoke test: the site's plain usage example
+(ffmpeg -i subtitles.srt -s 1920x1080 output.sup, no -c:s) fails at
+output open — on BOTH the v7 and v9 release binaries, so an
+over-optimistic site example rather than a v9 regression. The working
+form is -c:s pgssub -s WxH (the encoder needs explicit dimensions;
+without them it fails per-frame). Site usage line corrected.

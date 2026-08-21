@@ -255,7 +255,7 @@ footer a { color: var(--fg2); }
   <div class="demo">
     <pre>
 # SRT/ASS/WebVTT to Blu-ray PGS
-ffmpeg -i subtitles.srt -s 1920x1080 output.sup
+ffmpeg -i subtitles.srt -c:s pgssub -s 1920x1080 output.sup
 ffmpeg -i input.mkv -c:s pgssub -c:v copy -c:a copy output.mkv
 
 # PGS/DVD/DVB bitmap to SRT via OCR
