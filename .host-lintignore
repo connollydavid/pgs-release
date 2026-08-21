@@ -34,3 +34,8 @@ docs/quantizers/index.html
 # Generated output (host-lifecycle book), never authored:
 mdBook/
 book.toml
+
+# Local prototype (seed of host-reconcile-ffmpeg, connollydavid/host#18).
+# Uses "step" as genuine manifest vocabulary; excluded until the real
+# tool is implemented elsewhere.
+tools/host-ffmpeg-version-reconcile/

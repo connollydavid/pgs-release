@@ -28,3 +28,12 @@ Thumbs.db
 # Generated mdBook output (host-lifecycle book)
 /book.toml
 /mdBook/
+
+# Local prototype (seed of host-reconcile-ffmpeg, connollydavid/host#18)
+/tools/host-ffmpeg-version-reconcile/
+
+# The local environment fingerprint: this machine's state, never shared.
+.host-envhash
+
+# Project-local environment (tool paths); copy from .env.example
+.env
