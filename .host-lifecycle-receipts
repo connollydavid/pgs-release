@@ -69,3 +69,9 @@
     evidence = validate plan/ call/ ok; prose clean; reconcile clean; remap --check clean; book --check renders every room; hook blocks a tell commit (tested); software --check ok
     tool = host-lifecycle@0.36.0
     recorded = 2026-07-05
+
+[receipt "materialize" "ffmpeg"]
+    disposition = done
+    evidence = 1 item(s) realized for ffmpeg at pin 964fc5e2d919 (reference)
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-21
