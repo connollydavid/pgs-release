@@ -38,11 +38,19 @@ The milestones, in acceptance order; 0001 through 0018 are closed records.
 
 _Scratch buffer: what we're doing right now._
 
-The host methodology adoption completed 2026-07-05 (recorded in call/0001
-through call/0003 and MEMORY.md).
+Overriding goal (operator, 2026-08-21, call/0007): rebase the pgs9 series
+onto FFmpeg 9.0.1 "Lei" (n9.0.1, bf1b838f2a) and bring it to upstream
+submission quality. The 2026-07-19 host-reconcile block is lifted by the
+same ruling; host#18 remains the design record for the eventual tool.
 
-Active milestone: plan/0019 (ffmpeg-devel submission, v8). The series lives
-on `pgs8-wip` (master base, off `pgs7`) with two patches: rect bounds
-validation and NeuQuant minimum iterations. Next tasks per the milestone's
-build sequence: SUPer reference validation, then the upstream rebase, then
-the RFC and first series submissions.
+The pgs9 series (30 commits, tip 3532e2a43e) sits on the 8.1 lineage; the
+rebase replays it onto n9.0.1 in a fresh worktree, with rerere recording
+resolutions for any later master re-cut. The quality gates for submission
+readiness: the host-lint-ffmpeg series lane, patcheck, per-commit builds
+with the shared-ABI leg, FATE, and a Fairies offline review pass
+(tools/fairies, the forge reviewer pipeline run through its replay
+harness).
+
+Environment: WSL2 is primary for all development; win32 hosts direct
+win32 testing only. The verify gate runs with .env sourced so the
+applied-ledger rechecks find host-lifecycle on PATH.
