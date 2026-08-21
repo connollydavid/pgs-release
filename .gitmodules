@@ -13,3 +13,6 @@
 [submodule "tools/specula"]
 	path = tools/specula
 	url = https://github.com/specula-org/Specula
+[submodule "tools/fairies"]
+	path = tools/fairies
+	url = https://code.ffmpeg.org/michaelni/Fairies
