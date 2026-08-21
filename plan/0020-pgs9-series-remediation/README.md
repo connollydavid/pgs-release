@@ -108,12 +108,32 @@ frozen from that point per the branch discipline.
 ### Cut pgs9 and rebase onto upstream master {#cut-pgs9}
 
 - depends: #freeze-v8
+- blocked: lifted by operator override 2026-08-21 (call/0007). The
+  rebase proceeds onto n9.0.1 (FFmpeg 9.0.1 "Lei", bf1b838f2a, the
+  stable tip of release/9.0) without waiting for host-reconcile
+  (connollydavid/host#18 remains the design record; when the tool
+  exists, its acceptance test is a fresh rebase). The 2026-07-19
+  reservation of this rebase as the tool's first acceptance run is
+  superseded. The version-reconciliation prototype
+  (`tools/host-ffmpeg-version-reconcile/`) stays the articulation seed.
+  This task supersedes the older `scripts/resolve-version-conflicts.sh`
+  reference below.
 
-Branch `pgs9` from the frozen tip, fetch current upstream master, and rebase
-the 29-commit series onto it with `scripts/resolve-version-conflicts.sh` in
-exec mode. Version-number conflicts in APIchanges and version.h are expected;
-resolve them provisionally here and finish them in
-[#apichanges-truth](#apichanges-truth).
+Branch from the folded pgs9 tip, fetch upstream, and rebase the series
+onto n9.0.1 with per-commit resolution (rerere is enabled in the store,
+so resolutions replay on any later master re-cut; the prototype may
+assist version derivation). Version-number conflicts in APIchanges and
+version.h are expected; resolve them provisionally here and finish them
+in [#apichanges-truth](#apichanges-truth).
+
+Executed 2026-08-21: branch `pgs9-9.0.1` (worktree `~/pgs9-wt/rebase901`),
+30/30 commits applied, tip 964fc5e2d9; versions re-derived lavc 63.2.100
+and lavu 61.2 -> 61.5 (9.0.1 already carries the majors); APIchanges
+context-duplicates and decorative banners folded out at their
+introducing commits; build walk 30/30 green under `--enable-shared`
+with transfer proofs across the folds; encoder, FATE api tests, patcheck
+and message audits verified (MEMORY.md 2026-08-21, third entry). The
+task receipt awaits the attested-operator verify.
 
 - verify: attested operator
 

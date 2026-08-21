@@ -474,3 +474,65 @@ review pipeline for the ffmpeg forge) vendored as tools/fairies at
 cd67a6a. Its intended use for the pitch-perfect pass: the simpast-runs
 offline replay harness runs our series through the same reviewer
 pipeline the forge uses, without touching the live forge.
+
+## 2026-08-21: pgs9 rebased onto n9.0.1; series verified pitch-ready
+
+The rebase ran in ~/pgs9-wt/rebase901 (branch pgs9-9.0.1, worktree of
+software/ffmpeg/.bare). 30/30 commits applied onto n9.0.1 (bf1b838f2a);
+only stops needing hand resolution were the version/APIchanges ones.
+Version re-derivation: n9.0.1 carries lavc 63 / lavu 61 already, so the
+series' major bumps are absorbed and re-derived as minors — lavc ends at
+63.2.100, lavu walks 61.2 -> 61.5. The original ELBG-quantizer commit
+bumped minor +2 while its own APIchanges entry documented one addition;
+resolved provisionally-consistent at +1 (lavu 61.5), shrinking
+#apichanges-truth. Fold-fixes during the rebase: the Median Cut commit's
+three-way merge had materialized its neighbours' OLD-numbered APIchanges
+entries as context duplicates (lavc 62.30 / lavu 60.30 / 60.31 blocks) —
+deleted/renumbered, folded into that commit; decorative section-banner
+comments (upstream ffmpeg carries none, patcheck "empty comment")
+removed from ffmpeg_enc_sub.c and ffmpeg_dec_sub.c at their introducing
+commits.
+
+Verification: per-commit build walk 30/30 green under --enable-shared
+(pre-banner lineage), then TWO transfer proofs (per-commit-pair tree
+identity outside the named changed files) carry the verdict across both
+folds; tip builds, pgssub registers with every series option, cross-lib
+nm -D clean, fate-api-pgs x4 OK, patcheck hints reduced to single-line
+ifs in test code (hint-tier, left for review taste), audits 30/30 clean
+(sign-off, message ASCII, trailing whitespace). The audit's non-ASCII
+findings are all verbatim-upstream content (Bjorn Ottosson / Clement
+Boesch / Kornel Lesinski copyright lines, OkLab math) — legitimate per
+the pack's own calibration (diff-ascii-code is code-scoped, not
+comment-scoped). sub_ocr_init already carried av_cold; patcheck's flag
+was the ENOSYS stub. Checkpoints: cp/901-folded, cp/901-walked,
+cp/901-pre-banner, cp/901-final (= 964fc5e2d9, the tip).
+
+Lessons (non-obvious; for the next session):
+- WSL2 loader: an in-tree ./ffmpeg WITHOUT rpath silently loads the
+  SYSTEM /usr/lib libraries. Always run with LD_LIBRARY_PATH covering
+  ALL in-tree lib dirs (libavcodec, libavutil, libavformat,
+  libavfilter, libavdevice, libswscale, libswresample). A partial path
+  produced a misleading avpriv_elbg_free lookup error (system
+  libavfilter vs our ELBG-moved libavcodec); the empty path made the
+  encoder look unregistered. The "missing encoder" was environmental.
+- A three-way auto-merge can materialize CONTEXT DUPLICATES: when a
+  conflicted region is resolved by hand, the same file's non-conflicting
+  hunks still apply verbatim, re-adding neighbouring old-version
+  entries. The "every added line present" audit cannot catch duplicates;
+  audit per-commit introduced content instead.
+- Editing a file mid-series (banner removal) causes context/rename
+  conflicts in LATER commits touching that file (the lookahead commit
+  renames the coalescing section). Resolve by the original commit's
+  intent expressed in the new idiom (renamed title, banner-free).
+- Transfer-proof technique: proving per-commit-pair tree identity
+  outside the changed file carries a completed build-walk verdict
+  across a fold without re-walking.
+- rerere recorded every hand resolution; the fold cycles replayed them
+  without incident.
+
+Still operator-gated: pushing pgs9-9.0.1 to the fork (classifier),
+.host-software pin + branch switch (after push), #apichanges-truth
+finalization (entries keep 2026-03-xx placeholder dates and xxxxxxxxxx
+hashes by design until submission), the Fairies simpast review pass
+(needs API keys plus the podman review host), full FATE with samples,
+and the plan/0020#cut-pgs9 task receipt (verify: attested operator).
