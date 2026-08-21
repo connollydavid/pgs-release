@@ -3968,7 +3968,7 @@ version.h are expected; resolve them provisionally here and finish them
 in <a href="plan/0020-pgs9-series-remediation/index.html#apichanges-truth">#apichanges-truth</a>.</p>
 <p>Executed 2026-08-21: branch <code>pgs9-9.0.1</code> (worktree <code>~/pgs9-wt/rebase901</code>),
 30/30 commits applied, tip 964fc5e2d9; versions re-derived lavc 63.2.100
-and lavu 61.2 -&gt; 61.5 (9.0.1 already carries the majors); APIchanges
+and lavu minor 2 through 5 under major 61 (9.0.1 already carries the majors); APIchanges
 context-duplicates and decorative banners folded out at their
 introducing commits; build walk 30/30 green under <code>--enable-shared</code>
 with transfer proofs across the folds; encoder, FATE api tests, patcheck
@@ -4263,14 +4263,14 @@ forbidden; the pgs9 cut is recorded here.</p>
 </ul>
 <h2 id="libass"><a class="header" href="#libass">libass</a></h2>
 <ul>
-<li>url: https://github.com/libass/libass.git</li>
-<li>pin: <code>bbb3c7f1570a4a021e52683f3fbdf74fe492ae84</code></li>
+<li>url: https://github.com/connollydavid/libass.git</li>
+<li>pin: <code>cc83558bf1deb6fd16897e75268d31ce460d250b</code></li>
 <li>worktrees: none (single canonical line)</li>
 </ul>
 <h2 id="ffmpeg"><a class="header" href="#ffmpeg">ffmpeg</a></h2>
 <ul>
 <li>url: https://github.com/connollydavid/FFmpeg.git</li>
-<li>pin: <code>a7ffc46c4325a7f3273058fb8f6e5d3186ac711c</code></li>
+<li>pin: <code>964fc5e2d9192dc24c4459cbc6803ebf079a2c11</code></li>
 <li>worktrees: none (single canonical line)</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="use-markdown-decision-records-madr"><a class="header" href="#use-markdown-decision-records-madr">Use Markdown decision records (MADR)</a></h1>
@@ -4535,8 +4535,8 @@ small and self-contained.</li>
 <li>Date: 2026-08-21</li>
 </ul>
 <h2 id="context-and-problem-statement-7"><a class="header" href="#context-and-problem-statement-7">Context and Problem Statement</a></h2>
-<p>The pgs9 series (30 commits, folded coherent and bisectable) sits on the
-8.1 lineage; the recorded next step was a rebase onto upstream master,
+<p>The pgs9 series (30 commits, folded coherent and bisectable) sits on an
+older stable-release lineage; the recorded next step was a rebase onto upstream master,
 blocked since 2026-07-19 on host-reconcile (connollydavid/host#18)
 because that rebase was reserved as the new tool's acceptance test.
 host#18 remains open: implementation was cut as a design-only milestone
