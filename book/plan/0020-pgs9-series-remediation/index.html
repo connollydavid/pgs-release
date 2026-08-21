@@ -273,12 +273,31 @@ frozen from that point per the branch discipline.</p>
 <h3 id="cut-pgs9"><a class="header" href="#cut-pgs9">Cut pgs9 and rebase onto upstream master</a></h3>
 <ul>
 <li>depends: #freeze-v8</li>
+<li>blocked: lifted by operator override 2026-08-21 (call/0007). The
+rebase proceeds onto n9.0.1 (FFmpeg 9.0.1 "Lei", bf1b838f2a, the
+stable tip of release/9.0) without waiting for host-reconcile
+(connollydavid/host#18 remains the design record; when the tool
+exists, its acceptance test is a fresh rebase). The 2026-07-19
+reservation of this rebase as the tool's first acceptance run is
+superseded. The version-reconciliation prototype
+(<code>tools/host-ffmpeg-version-reconcile/</code>) stays the articulation seed.
+This task supersedes the older <code>scripts/resolve-version-conflicts.sh</code>
+reference below.</li>
 </ul>
-<p>Branch <code>pgs9</code> from the frozen tip, fetch current upstream master, and rebase
-the 29-commit series onto it with <code>scripts/resolve-version-conflicts.sh</code> in
-exec mode. Version-number conflicts in APIchanges and version.h are expected;
-resolve them provisionally here and finish them in
-<a href="#apichanges-truth">#apichanges-truth</a>.</p>
+<p>Branch from the folded pgs9 tip, fetch upstream, and rebase the series
+onto n9.0.1 with per-commit resolution (rerere is enabled in the store,
+so resolutions replay on any later master re-cut; the prototype may
+assist version derivation). Version-number conflicts in APIchanges and
+version.h are expected; resolve them provisionally here and finish them
+in <a href="#apichanges-truth">#apichanges-truth</a>.</p>
+<p>Executed 2026-08-21: branch <code>pgs9-9.0.1</code> (worktree <code>~/pgs9-wt/rebase901</code>),
+30/30 commits applied, tip 964fc5e2d9; versions re-derived lavc 63.2.100
+and lavu 61.2 -&gt; 61.5 (9.0.1 already carries the majors); APIchanges
+context-duplicates and decorative banners folded out at their
+introducing commits; build walk 30/30 green under <code>--enable-shared</code>
+with transfer proofs across the folds; encoder, FATE api tests, patcheck
+and message audits verified (MEMORY.md 2026-08-21, third entry). The
+task receipt awaits the attested-operator verify.</p>
 <ul>
 <li>verify: attested operator</li>
 </ul>
