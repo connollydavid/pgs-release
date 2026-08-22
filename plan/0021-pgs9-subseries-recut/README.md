@@ -89,18 +89,18 @@ Assembly (old numbers from the pgs9-9.0.1 order):
 9. pgssubenc core with ALL AVOptions defined up front: old #1 + #9 +
    #10 + the option-definition half of #26 + #29; tests folded in
    (fade, multi-object, ap-interval, forced, rate-control from
-   #1/#5/#6/#7/#8/#9/#10 as they attach to these features;
-   overlap-verify and dts tests go with the supenc DTS commit; palette-delta and
-   palette-reuse with the palette-delta commit). The generic test harness from #1 keeps
+   #1/#5/#7/#8/#9/#10 as they attach to these features;
+   overlap-verify joins the encoder-core item (its epoch logic is encoder behavior); dts goes with the supenc commit; palette-delta and
+   palette-reuse with the palette-delta commit). The generic test harness (pgs-test-util.h, arriving with #6) keeps
    its pgs-test-util.h home.
 10. palette delta: old #2 with its palette-delta and palette-reuse tests.
-11. forced_style, fftools side: the ASS-matching half of old #26 , 
+11. forced_style, fftools side: the ASS-matching half of old #26: 
     option string lives in the fftools context, forwarded to the
     encoder one-way via av_opt_set; no encoder priv_data read.
 
 ### Sub-series four: text<->bitmap conversion {#ss4}
 
-- depends: #ss3
+- depends: #ss1 #ss3
 - verify: build-walk; encoder end-to-end smoke (srt->sup with
   -c:s pgssub -s 1920x1080); fairy scan; audits clean
 
@@ -156,7 +156,7 @@ and submission are OUT of scope (later milestones; rerere replays).
 
 ## Findings (pre-flight appends here)
 
-(filled by #pre-flight)
+
 
 ## Deviations from the verdict (decided, do not re-litigate)
 
@@ -169,3 +169,50 @@ and submission are OUT of scope (later milestones; rerere replays).
   inspection proves it encoder-only.
 - Region-weighted quantization stays public API (small, documented,
   generic enough); the RFC flags it.
+
+## Execution mechanics (how the assembly operations are performed)
+
+- Merges of old commits: `git cherry-pick -n A B...` then one commit with
+  the new message. Conflicts resolve against each old commit's tree state
+  (`git show A:<path>`), never the final tip.
+- Splits (old #26): `git cherry-pick -n <commit>`, then `git restore
+  --staged --worktree <the-half's files-or-hunks>` for the half that moves
+  later, commit the kept half; the other half re-applies at its own item
+  via `git checkout <old> -- <paths>` or an extracted diff.
+- Hunk lifts between commits: extract with
+  `git diff <old>^ <old> -- <path>`, apply at the target item, and
+  re-commit the source item from a tree minus that hunk.
+- The `-x` cherry-pick lines and the GLM trailer ride along during the
+  re-cut for the audit trail; the future submission milestone strips the
+  `-x` lines at format-patch export time (one pass, recorded there).
+
+## Review-fix notes (2026-08-22)
+
+- The overlap-verify test belongs to the encoder core (epoch logic), not
+  the muxer item; source citations corrected.
+- The OkLab palette family takes the same avpriv disposition as
+  palettemap, set by the Median Cut commit (the first item whose
+  adopters consume it cross-library).
+- MAINTAINERS stays consolidated in the final patch (the verdict's
+  shape; no operator ruling to flip it).
+- Sub-series four declares both dependencies.
+
+## Findings (pre-flight, 2026-08-22)
+
+1. Configure wiring: NOT a defect. The n9.0.1 base's configure already
+   carries --enable-libass and --enable-libtesseract (and
+   ocr_filter_deps); the series needs no configure hunks, and the
+   retitled render/OCR items stay as-is. The verdict's concern does not
+   apply to this base.
+2. Changelog: REAL defect confirmed. The series inserts a
+   `version <next>:` block INSIDE the `version 9.0:` block (mid-file,
+   line ~91); it belongs above `version 9.0.1:` at the top. The final
+   patch fixes placement with the single consolidated entry.
+   AV_CODEC_PROP_EXPLICIT_END is real (three uses in codec_desc.h);
+   the verdict missed it inside the big patch.
+3. Trailer census: all 30 commits carry Signed-off-by plus
+   Co-Authored-By: Claude. The re-cut preserves both and appends the
+   GLM trailer per call/0008.
+4. ELBG backend: does NOT touch pgssubenc (five files, all lavu and
+   docs). The verdict's duplicated-hunk claim was wrong; nothing to
+   drop at that item.
