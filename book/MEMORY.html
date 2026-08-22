@@ -1046,6 +1046,26 @@ OkLab family's avpriv disposition); item 6 (old #19 f9f398f1d9) -&gt;
 61.6.100 (one more than the old lineage because the palettemap bump is
 new). APIchanges entries renumber to match. After item 6: build-walk
 the range, msg+series lanes, cp/ss1 checkpoint, ledger.</p>
+<h2 id="2026-08-22-ss1-four-items-landed-resume-at-item-five"><a class="header" href="#2026-08-22-ss1-four-items-landed-resume-at-item-five">2026-08-22: SS1 four items landed; resume at item five</a></h2>
+<p>~/pgs9-wt/recut, checkpoint cp/ss1-four: item 1 OkLab c36910baf8;
+item 2 ELBG move 7317e05af2 (lavu 61.2.100); item 3 quantize+NeuQuant
+a7eedc4585 (61.3.100, APIchanges entry renumbered); item 4 palettemap
+avpriv + paletteuse adopter merged, WITH the missing bump fixed
+(61.4.100), message rewritten to name the merge and the fix, 777a953207.
+All build under the shared config; all carry the GLM trailer. Lessons
+this stretch: a sed renumber that is not STAGED silently misses its
+commit (item 3 briefly carried the old number; fixed by --fixup +
+--autosquash, shas above are post-squash); the old lineage's context
+can drag foreign APIchanges entries through a cherry-pick (the lavc
+63.2.100 entry arrived with item 3 and was removed; it returns with the
+SS3 encoder item, whose old commit carries it). REMAINING SS1: item 5
+(old 0bea5f70cc + 02df61ce86 merged; Median Cut + palettegen adopter;
+renumber to 61.5.100; sets the OkLab avpriv disposition), item 6 (old
+f9f398f1d9 ELBG backend; 61.6.100). Then: build-walk the range, msg +
+series lanes, cp/ss1, ledger. The v0.19.0 lanes are the per-item gates;
+MAINTAINERS hunks ride with their commits (the consolidation in the
+plan's final item narrows to Changelog + tail bumps; adopted at
+execution, record in the plan when closing the milestone).</p>
 
                     </main>
 
