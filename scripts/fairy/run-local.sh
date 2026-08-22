@@ -24,6 +24,7 @@ set -a; . ./.env; set +a
 : "${OPENAI_BASE_URL:?}" ; : "${OPENAI_API_KEY:?}"
 : "${MODEL:=openai:glm-5.2}"
 : "${PODMAN_SSH:=fairylocal}"
+: "${FAIRY_REPO_ROOT:=/home/dconnolly/fairy-run/ffmpeg}"
 
 if ! ss -tln 2>/dev/null | grep -q 15313; then
   echo ">> starting allowlist proxy"
@@ -54,5 +55,5 @@ exec "$PY" scripts/fairy/wrapper.py \
   --podman \
   --shell-host "$PODMAN_SSH" \
   --podman-network fairy-isolated \
-  --repo-root software/ffmpeg/pgs9-9.0.1 \
+  --repo-root "$FAIRY_REPO_ROOT" \
   < "$TICKET" "$@"

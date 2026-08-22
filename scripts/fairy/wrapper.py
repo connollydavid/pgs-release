@@ -17,7 +17,10 @@ import openai_common  # noqa: E402
 
 
 def _no_upload(*args, **kwargs):
-    return ""
+    # Must be None, not "": the reviewer checks `is not None` before
+    # appending an input_file block, and an empty file_id is rejected by
+    # endpoints without a files API all the same.
+    return None
 
 
 def _no_delete(client, file_id, **kwargs):
@@ -32,6 +35,17 @@ import pr_review_wrapper  # noqa: E402
 
 pr_review_wrapper.upload_text_file = _no_upload
 pr_review_wrapper.delete_uploaded_file = _no_delete
+
+# The reviewer appends an input_file block for the source bundle
+# unconditionally once one exists (openai_reviewer source-bundle block),
+# so a None upload is not enough on endpoints without a files API:
+# suppress the bundle itself. The model still reads sources through its
+# container shell.
+def _no_source_bundle(*args, **kwargs):
+    return (None, [], [])
+
+
+pr_review_wrapper.build_source_bundle = _no_source_bundle
 
 if __name__ == "__main__":
     sys.exit(pr_review_wrapper.main())

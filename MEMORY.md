@@ -673,3 +673,73 @@ is the only sanctioned entry point and prints the posture before each
 run. Provisioning was cancelled mid-image-build by the operator before
 this ruling; the review image state on fairylocal and the review ticket
  staging are the remaining bring-up items.
+
+## 2026-08-22: fairy first-run debugging — complete findings ledger (operator: record all, waste nothing)
+
+Goal: perfunctory glm-5.2 structure scan of the 30-patch series, local
+only. Seven runs; each failed differently; every root cause found and
+fixed except the last, whose fix is designed below.
+
+RUN MAP AND ROOT CAUSES:
+- run1: podman cp of the bare mirror died "archive/tar: write too long"
+  — the wrapper's repo push triggered background commit-graph writing
+  in the mirror and cp tarred the mid-write tmp file. FIX (applied):
+  rm -rf objects/info/commit-graphs in the mirror + `git config gc.auto
+  0` + `fetch.writeCommitGraph false`. Mirror pushes are now stable
+  (subsequent runs: sync ~1.7s).
+- run2: openai.APIConnectionError. ROOT CAUSE: venv skew — openai 3.3.1
+  is built on httpx2 (DefaultHttpxClient = httpx2.Client) while my
+  earlier `pip install httpx` layered classic httpx 0.28.1; Fairies
+  passes a classic httpx.HTTPTransport into the httpx2-based client ->
+  AssertionError (surfacing as connection errors deep in retries). FIX
+  (applied): pin openai<3 (2.54.0) + classic httpx 0.28.1 — the pair
+  Fairies is written for. httpx2 and classic coexist fine (different
+  module names); never install openai 3.x for this Fairies checkout.
+- run3: 400 "file inputs are not currently supported". My inline-patch
+  shim's upload no-op returned "" but the reviewer checks
+  `patch_file_id is not None` -> an input_file block with empty file_id
+  still went out. FIX (applied): the no-op returns None.
+- run4: same 400. SECOND upload site: openai_reviewer appends the
+  source-bundle input_file UNCONDITIONALLY once a source bundle exists
+  (the source_file_id append is not None-gated). FIX (applied): the shim
+  also neutralises pr_review_wrapper.build_source_bundle -> (None, [],
+  []) — the model reads sources via its container shell instead.
+- run5: schema JSONDecodeError char 0 (empty final text). The model ran
+  `cd /work/ffmpeg` but the repo staged as /work/pgs9-9.0.1 (the
+  container path is the basename of --repo-root; production stages a dir
+  literally named ffmpeg). FIX (applied): FAIRY_REPO_ROOT env in
+  run-local.sh; a shared clone at ~/fairy-run/ffmpeg (branch
+  pgs9-9.0.1) is the staging source.
+- run6: same empty-text failure with the correct /work/ffmpeg. DEBUG
+  PAYLOAD (--debug-response-dir, jsonl per attempt, each line has
+  request+response+wrapper_request): request1 -> [reasoning,
+  function_call(shell)] good; request2 (tool result fed back) ->
+  status completed, output [message] with content [{type: output_text,
+  text: ""}] — a schema-shaped EMPTY message.
+- SMOKING GUN (run7 dump + minimal repro): request2 carries
+  previous_response_id (resp_705602) and input = ONLY the new
+  function_call_output items — the STATEFUL Responses flavor.
+  Ollama's Responses support is explicitly NON-STATEFUL only, so the
+  follow-up arrives context-stripped (an orphaned tool result) and the
+  model answers empty-conforming. Minimal repro PROVED the stateless
+  shape works on this endpoint: input = [original user content,
+  function_call item, function_call_output item] -> r2 output [message]
+  with the JSON text, no previous_response_id.
+- THE FIX (designed, next to implement): stateless-conversion shim in
+  scripts/fairy/wrapper.py — monkeypatch the SDK
+  openai.resources.responses.Responses.create: cache (input, serialized
+  resp.output) per response id; when a call arrives with
+  previous_response_id, drop it and send input = cached_input +
+  cached_output_items + new_items. This is exactly the repro's working
+  shape. No Fairies-tree changes.
+
+STANDING FACTS (verified): the whole pipeline works up to the final
+turn — repo sync/mirror/cp, isolated container on fairy-isolated, the
+model driving real shell rounds in /work/ffmpeg, schema json_schema
+enforcement accepted by the endpoint (strict pr_review_result), 40k
+max_output_tokens default (not truncation; status completed throughout).
+glmodel effort/verbosity params pass through fine. --debug-response-dir
+is the primary diagnostic (dump lines carry request+response both).
+Ollama cloud model tags have no :cloud suffix (glm-5.2, not
+glm-5.2:cloud); the OpenAI-compat base is https://ollama.com/v1
+(api.ollama.com 301s and breaks POST).
