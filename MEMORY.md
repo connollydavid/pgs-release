@@ -880,3 +880,26 @@ re-cut messages). msg over the range: 30 commits, nothing to report.
 The tool's release versioning note: origin/main's root Cargo.toml is
 aligned with the tag series (0.18.1 -> 0.19.0); the old tag-checkout
 showing 0.14.2 was the stale local view, not a second version space.
+
+## 2026-08-22: plan/0021 execution begun; pre-flight done, recut staged
+
+RESUME POINT. The plan doc carries the review fixes (overlap-verify to
+the encoder core, mechanics recipes, the -x strip-at-export note, both
+deps on the conversion sub-series) and the pre-flight findings
+(commit e395e13): configure wiring is NOT a defect (the n9.0.1 base
+already ships --enable-libass/--enable-libtesseract; no configure hunks
+needed); the Changelog defect is REAL (our version <next>: block sits
+inside the version 9.0 block; the final patch moves it to the top);
+EXPLICIT_END is real (3 uses); ALL 30 commits carry Signed-off-by +
+Co-Authored-By: Claude (preserve both, append GLM per call/0008); the
+ELBG-backend commit does NOT touch pgssubenc (the verdict's duplicated-
+hunk claim was wrong; nothing to drop). The recut worktree is staged:
+~/pgs9-wt/recut, branch pgs9-recut at n9.0.1. NEXT: sub-series one
+assembly per the plan (OkLab move -> ELBG move -> quantize+NeuQuant
+(internal headers only) -> palettemap avpriv merged with its adopter ->
+Median Cut + palettegen adopter (sets the OkLab avpriv disposition too)
+-> ELBG backend), cherry-pick -n mechanics per the plan's recipes, the
+v0.19.0 lanes as per-commit gates (host-lint-ffmpeg msg/series), build
+at each commit, trailers per call/0008. The tasks --record anchor for
+pre-flight was not found by the tool (plan-task discovery refused the
+anchor; backfill the receipt when the mechanism is understood).
