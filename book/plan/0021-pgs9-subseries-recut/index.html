@@ -264,18 +264,18 @@ standing on its own; the old #4 fftools DTS hunk moves to the pipeline wiring co
 <li>pgssubenc core with ALL AVOptions defined up front: old #1 + #9 +
 #10 + the option-definition half of #26 + #29; tests folded in
 (fade, multi-object, ap-interval, forced, rate-control from
-#1/#5/#6/#7/#8/#9/#10 as they attach to these features;
-overlap-verify and dts tests go with the supenc DTS commit; palette-delta and
-palette-reuse with the palette-delta commit). The generic test harness from #1 keeps
+#1/#5/#7/#8/#9/#10 as they attach to these features;
+overlap-verify joins the encoder-core item (its epoch logic is encoder behavior); dts goes with the supenc commit; palette-delta and
+palette-reuse with the palette-delta commit). The generic test harness (pgs-test-util.h, arriving with #6) keeps
 its pgs-test-util.h home.</li>
 <li>palette delta: old #2 with its palette-delta and palette-reuse tests.</li>
-<li>forced_style, fftools side: the ASS-matching half of old #26 ,
+<li>forced_style, fftools side: the ASS-matching half of old #26:
 option string lives in the fftools context, forwarded to the
 encoder one-way via av_opt_set; no encoder priv_data read.</li>
 </ol>
 <h3 id="ss4"><a class="header" href="#ss4">Sub-series four: text&lt;-&gt;bitmap conversion</a></h3>
 <ul>
-<li>depends: #ss3</li>
+<li>depends: #ss1 #ss3</li>
 <li>verify: build-walk; encoder end-to-end smoke (srt-&gt;sup with
 -c:s pgssub -s 1920x1080); fairy scan; audits clean</li>
 </ul>
@@ -332,7 +332,6 @@ same way; verdict recovered from the debug dump per the ledger);</li>
 for the plan/0021 tasks, final memory entry. The master re-cut, RFC,
 and submission are OUT of scope (later milestones; rerere replays).</p>
 <h2 id="findings-pre-flight-appends-here"><a class="header" href="#findings-pre-flight-appends-here">Findings (pre-flight appends here)</a></h2>
-<p>(filled by #pre-flight)</p>
 <h2 id="deviations-from-the-verdict-decided-do-not-re-litigate"><a class="header" href="#deviations-from-the-verdict-decided-do-not-re-litigate">Deviations from the verdict (decided, do not re-litigate)</a></h2>
 <ul>
 <li>#18 folds into the Median Cut commit (the assembly item that adds it), not into the OkLab
@@ -345,6 +344,52 @@ inspection proves it encoder-only.</li>
 <li>Region-weighted quantization stays public API (small, documented,
 generic enough); the RFC flags it.</li>
 </ul>
+<h2 id="execution-mechanics-how-the-assembly-operations-are-performed"><a class="header" href="#execution-mechanics-how-the-assembly-operations-are-performed">Execution mechanics (how the assembly operations are performed)</a></h2>
+<ul>
+<li>Merges of old commits: <code>git cherry-pick -n A B...</code> then one commit with
+the new message. Conflicts resolve against each old commit's tree state
+(<code>git show A:&lt;path&gt;</code>), never the final tip.</li>
+<li>Splits (old #26): <code>git cherry-pick -n &lt;commit&gt;</code>, then <code>git restore --staged --worktree &lt;the-half's files-or-hunks&gt;</code> for the half that moves
+later, commit the kept half; the other half re-applies at its own item
+via <code>git checkout &lt;old&gt; -- &lt;paths&gt;</code> or an extracted diff.</li>
+<li>Hunk lifts between commits: extract with
+<code>git diff &lt;old&gt;^ &lt;old&gt; -- &lt;path&gt;</code>, apply at the target item, and
+re-commit the source item from a tree minus that hunk.</li>
+<li>The <code>-x</code> cherry-pick lines and the GLM trailer ride along during the
+re-cut for the audit trail; the future submission milestone strips the
+<code>-x</code> lines at format-patch export time (one pass, recorded there).</li>
+</ul>
+<h2 id="review-fix-notes-2026-08-22"><a class="header" href="#review-fix-notes-2026-08-22">Review-fix notes (2026-08-22)</a></h2>
+<ul>
+<li>The overlap-verify test belongs to the encoder core (epoch logic), not
+the muxer item; source citations corrected.</li>
+<li>The OkLab palette family takes the same avpriv disposition as
+palettemap, set by the Median Cut commit (the first item whose
+adopters consume it cross-library).</li>
+<li>MAINTAINERS stays consolidated in the final patch (the verdict's
+shape; no operator ruling to flip it).</li>
+<li>Sub-series four declares both dependencies.</li>
+</ul>
+<h2 id="findings-pre-flight-2026-08-22"><a class="header" href="#findings-pre-flight-2026-08-22">Findings (pre-flight, 2026-08-22)</a></h2>
+<ol>
+<li>Configure wiring: NOT a defect. The n9.0.1 base's configure already
+carries --enable-libass and --enable-libtesseract (and
+ocr_filter_deps); the series needs no configure hunks, and the
+retitled render/OCR items stay as-is. The verdict's concern does not
+apply to this base.</li>
+<li>Changelog: REAL defect confirmed. The series inserts a
+<code>version &lt;next&gt;:</code> block INSIDE the <code>version 9.0:</code> block (mid-file,
+line ~91); it belongs above <code>version 9.0.1:</code> at the top. The final
+patch fixes placement with the single consolidated entry.
+AV_CODEC_PROP_EXPLICIT_END is real (three uses in codec_desc.h);
+the verdict missed it inside the big patch.</li>
+<li>Trailer census: all 30 commits carry Signed-off-by plus
+Co-Authored-By: Claude. The re-cut preserves both and appends the
+GLM trailer per call/0008.</li>
+<li>ELBG backend: does NOT touch pgssubenc (five files, all lavu and
+docs). The verdict's duplicated-hunk claim was wrong; nothing to
+drop at that item.</li>
+</ol>
 
                     </main>
 
