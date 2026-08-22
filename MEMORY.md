@@ -648,3 +648,28 @@ python-dotenv, watchdog, blessed, httpx). Key lives in the gitignored
 podman shell host (sshd + containers/provision_remote.py), and staging
 our series as the review ticket (the filedb ticket shape is the next
 thing to read).
+
+## 2026-08-22: fairy comms made inert (operator ruling: nothing reaches real FFmpeg infrastructure)
+
+Belt-and-braces egress posture, all empirically verified: (1) review
+containers run on the fairy-isolated podman network, created by US as
+--internal before fairies ever looks (podman_host only creates a
+network when missing, and its plain create would NAT) — internal=true,
+and a container on it cannot even RESOLVE ollama.com, so the model's
+shell has no route out by construction; the repo reaches the container
+by podman cp, not the network. (2) The wrapper process's HTTP(S) egress
+is forced through scripts/fairy/allowlist-proxy.py (CONNECT-only,
+permitting ollama.com:443 alone): ollama.com tunnels (200),
+code.ffmpeg.org and github.com get logged 403 refusals. (3) Structural:
+gcli is not installed and scripts/fairy/run-local.sh REFUSES to start
+if it ever appears; the posting daemons (agent.py/worker.py/fairy.py)
+are never invoked — only pr_review_wrapper, via the inline-patch shim,
+fed a local stdin ticket; --web-search off is forced; ssh targets
+127.0.0.1:2222 only (the fairylocal alias over user-mode sshd; rootless
+podman 6.1.0 verified). Residual, recorded honestly: the env-proxy is
+advisory for well-behaved HTTP clients (the wrapper's httpx honors it);
+the code audit found no other network path in the wrapper. run-local.sh
+is the only sanctioned entry point and prints the posture before each
+run. Provisioning was cancelled mid-image-build by the operator before
+this ruling; the review image state on fairylocal and the review ticket
+ staging are the remaining bring-up items.
