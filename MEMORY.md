@@ -821,3 +821,42 @@ the verdict artifact is path-excluded as an immutable dated review
 plan references assembly items by content name; prose zero-tropes now
 enforced on the new docs too. plan/0021 is written so a session with no
 other context can execute it end to end.
+
+## 2026-08-22: host-lint-ffmpeg pack recon; the series lane already earns its keep
+
+Installation audit: everything coherent (submodules at exact release tags
+lifecycle v0.50.0 + lint v0.18.1, binaries built from those checkouts,
+pre-commit AND commit-msg hooks installed with the sibling binary
+byte-identical to the v0.18.1 build and the gitlink amendment intact,
+24 skills, CI action v0.50.0, gate green). The pack's bare-invocation
+"only rules is implemented" message is a STALE STUB: the series lane is
+wired and runs on a rev range. On pgs9-9.0.1 it reports 6 flags +
+53 warns, verified by hand:
+
+- REAL DEFECT: the palettemap commit (6d601a9a2) defines five
+  avpriv_palette_map_* exports and touches no version header; the lavu
+  minor bump for them never happened anywhere (the rebase bumped only
+  at the quantize/mediancut/elbg commits). The re-cut's palettemap
+  commit must carry the bump atomically.
+- REAL ARCHITECTURE FINDING: palettegen (02df61ce8) calls
+  avpriv_mediancut_* directly and gif (83720ce94) calls
+  avpriv_palette_map_* directly: adopters BYPASS the public
+  av_quantize_* factory and use the avpriv backend surface. Either the
+  adopters go through the public API or the avpriv backend surface is
+  deliberate, documented, and version-bumped; feeds the RFC and the
+  re-cut assembly.
+- RULE REFINEMENT: the version-bump rule should attribute to the
+  DEFINITION site only (the paletteuse adopter flags as a false
+  attribution: it adds call lines, not definitions).
+- FP CLASS: series-provider-before-consumer flags base-provided files
+  (libavutil/mem.h, avcodec.h, opt.h, roqvideo.c, framesync.c...) — the
+  lane lacks base awareness; ~50 of the 53 warns.
+- series-fate-sample flags sub/pgs_sub.sup with no sample provenance —
+  disposition needed (samples request or generated sample).
+
+Pack improvement tickets (upstream on host-lint, in priority order):
+wire the msg lane over rev ranges (it currently expects a message
+file); base-aware provider exemption (files present in the base tree);
+definition-site attribution for version-bump; replace the stale usage
+stub with real help. Tool development is upstream-first on its main,
+then release + re-pin per the reference discipline.
