@@ -6673,6 +6673,27 @@ v0.19.0 lanes as per-commit gates (host-lint-ffmpeg msg/series), build
 at each commit, trailers per call/0008. The tasks --record anchor for
 pre-flight was not found by the tool (plan-task discovery refused the
 anchor; backfill the receipt when the mechanism is understood).</p>
+<h2 id="2026-08-22-ss1-assembly-begun-two-items-landed-resume-map-recorded"><a class="header" href="#2026-08-22-ss1-assembly-begun-two-items-landed-resume-map-recorded">2026-08-22: SS1 assembly begun; two items landed, resume map recorded</a></h2>
+<p>~/pgs9-wt/recut (pgs9-recut): item 1 (OkLab move) = c36910baf8 clean;
+item 2 (ELBG move) = 7317e05af8 with lavu renumbered to 61.2.100 (it is
+now the FIRST API-touching commit, so it takes the first minor);
+checkpoint cp/ss1-two-items. Both carry the GLM trailer appended per
+call/0008; both build under the shared config. GOTCHA that cost a
+repair: passing "$(git log --format=%B)" through the double-shell
+quoting pulled a message from the WRONG repo into an amend; all
+message-writing now goes through script files only (host-fix-msg.sh
+repaired the ELBG commit from the old sha's %B + the -x line + GLM).</p>
+<p>VERSION RENUMBER MAP for the remaining SS1 items (the new order shifts
+every number; derived, do not re-derive): item 3 (old #13 quantize+NeuQ
+f8f47883a7) -&gt; lavu 61.3.100 (its own 61.2 hunk renumbers); item 4 (old
+#14+#15 merged, 6d601a9a20 + 7da5895ebf) -&gt; 61.4.100 AND this item ADDS
+the missing avpriv palettemap bump + its APIchanges entry (the v0.19.0
+lane's real finding); item 5 (old #16+#18 merged, 0bea5f70cc + 02df61ce86)
+-&gt; 61.5.100 (old #16's 61.3 hunk renumbers; the merged commit sets the
+OkLab family's avpriv disposition); item 6 (old #19 f9f398f1d9) -&gt;
+61.6.100 (one more than the old lineage because the palettemap bump is
+new). APIchanges entries renumber to match. After item 6: build-walk
+the range, msg+series lanes, cp/ss1 checkpoint, ledger.</p>
 
                     </main>
 
