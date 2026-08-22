@@ -779,3 +779,23 @@ possibly-orphaned AV_CODEC_PROP_EXPLICIT_END entry, Co-Authored-By
 trailers on three commits, and tests/api as the home for twelve
 feature tests. Per-patch keep/merge/split/move table in the saved
 review; the re-cut decision is the operator's.
+
+## 2026-08-22: re-cut rulings recorded (call/0008)
+
+Operator ruled: (1) re-cut commits keep existing Co-Authored-By
+trailers and append `Co-Authored-By: GLM 5.3 <no-reply@z.ai>`; (2) the
+lavu API-surface proposal is a SPLIT disposition — quantizer backends
+fully internal (no installed headers, only reachable via the public
+av_quantize_* factory) and palettemap as avpriv_* (the versioned
+cross-library-private mechanism both lavfi and lavc consume), proposed
+in the RFC rather than pre-conceded; (3) the four sub-series re-cut on
+n9.0.1 first, master at submission time via rerere. Rationale for (2):
+ff_ symbols cannot cross library boundaries in shared builds (the
+version scripts export only av*/avpriv* — the exact B1 bug class the
+series already fixed), so "internal ff_ headers shared by lavfi/lavc"
+is not actually buildable; avpriv_* is the established mechanism for
+new cross-lib-private symbols and does not inflate the public API; the
+review's middle-ground objection dissolves because each family gets a
+coherent home. Still open before the re-cut executes: the verification
+checks (libass/tesseract configure wiring, Changelog version-block
+order and the AV_CODEC_PROP_EXPLICIT_END orphan, trailer census).
