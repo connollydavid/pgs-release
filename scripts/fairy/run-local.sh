@@ -29,7 +29,7 @@ if ! ss -tln 2>/dev/null | grep -q 15313; then
   echo ">> starting allowlist proxy"
   "$PY" scripts/fairy/allowlist-proxy.py & PROXY_PID=$!
   trap '[ -n "${PROXY_PID:-}" ] && kill "$PROXY_PID" 2>/dev/null || true' EXIT
-  sleep 0.5
+  sleep 1
 fi
 
 export HTTP_PROXY=http://127.0.0.1:15313
