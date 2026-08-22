@@ -878,6 +878,39 @@ is the primary diagnostic (dump lines carry request+response both).
 Ollama cloud model tags have no :cloud suffix (glm-5.2, not
 glm-5.2:cloud); the OpenAI-compat base is https://ollama.com/v1
 (api.ollama.com 301s and breaks POST).</p>
+<h2 id="2026-08-22-run-eight-succeeded--glm-52-delivered-the-structure-verdict"><a class="header" href="#2026-08-22-run-eight-succeeded--glm-52-delivered-the-structure-verdict">2026-08-22: run eight succeeded — glm-5.2 delivered the structure verdict</a></h2>
+<p>The stateless shim fixed the loop: fourteen agentic rounds (the model
+grepped the diff, the repo, option tables, MAINTAINERS), then a full
+~21k-char structural review. NEW KNOWN ISSUE (last one): the final
+message arrives as MARKDOWN PROSE, not the strict pr_review_result JSON
+envelope — the endpoint accepted the json_schema request but did not
+enforce it, so the wrapper's json.loads fails at char 0 and discards
+the run (exit 3). The CONTENT is intact in the --debug-response-dir
+dump (response.output message text); scripts read it from there. A
+future shim could coerce prose into the envelope, or the extraction
+could be relaxed; not needed for our use.</p>
+<p>The verdict is saved with honest attribution at
+plan/0020-pgs9-series-remediation/fairy-structure-review.md. Its three
+bounce-causes: (1) strand bundling — no maintainer owns lavu+lavc+lavf+
+lavfi+fftools+fate+configure in one series; split into four sub-series
+(lavu quant API; GIF RGBA; PGS encoder; text&lt;-&gt;bitmap conversion), the
+same strand shape our own plan/0002-0008 milestones had. (2) The lavu
+API-surface decisions: ff_neuquant_* exported in an installed public
+header (wrong), fresh avpriv_palette_map_* (worst-of-both middle
+ground), PGS-shaped region knobs in the generic API — resolve with the
+lavu maintainer before resubmitting; highest-risk single objection.
+(3) fftools reading lavc-private state via av_opt_get*(enc-&gt;priv_data)
+in the disposition bridge, the wiring, forced_style, and
+quantize_method — eliminate all; one-way option flow only. It also
+independently rediscovered our own known issues (the dangling
+quantize_method read before its defining commit, the forced_style
+dead-option shape) and flagged candidates needing OUR verification
+before acting: CONFIG_LIBASS / CONFIG_LIBTESSERACT configure wiring
+(may genuinely be missing!), Changelog version-block ordering and the
+possibly-orphaned AV_CODEC_PROP_EXPLICIT_END entry, Co-Authored-By
+trailers on three commits, and tests/api as the home for twelve
+feature tests. Per-patch keep/merge/split/move table in the saved
+review; the re-cut decision is the operator's.</p>
 
                     </main>
 
