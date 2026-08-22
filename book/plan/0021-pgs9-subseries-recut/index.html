@@ -1,0 +1,399 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>pgs9 sub-series re-cut - pgs-release</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../../index.html">pgs-release</a></li><li class="chapter-item expanded affix "><li class="part-title">Cast: who</li><li class="chapter-item expanded "><a href="../../cast/index.html"><strong aria-hidden="true">1.</strong> Cast: the project's Who</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../cast/applying-personas.html"><strong aria-hidden="true">1.1.</strong> Applying personas during planning</a></li><li class="chapter-item expanded "><a href="../../cast/elias.html"><strong aria-hidden="true">1.2.</strong> Elias: the ffmpeg-devel Reviewer</a></li><li class="chapter-item expanded "><a href="../../cast/marcus.html"><strong aria-hidden="true">1.3.</strong> Marcus: the Media-Library Archivist</a></li><li class="chapter-item expanded "><a href="../../cast/noa.html"><strong aria-hidden="true">1.4.</strong> Noa: the Disc Author</a></li><li class="chapter-item expanded "><a href="../../cast/priya.html"><strong aria-hidden="true">1.5.</strong> Priya: the Pipeline Engineer</a></li><li class="chapter-item expanded "><a href="../../cast/sable.html"><strong aria-hidden="true">1.6.</strong> Sable: the Agentic Developer</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Plan: what & when</li><li class="chapter-item expanded "><a href="../../plan-index.html"><strong aria-hidden="true">2.</strong> Plan</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../plan/0001-hdmv-pgs-encoder/index.html"><strong aria-hidden="true">2.1.</strong> Phase 1: HDMV PGS Subtitle Encoder</a></li><li class="chapter-item expanded "><a href="../../plan/0002-color-quantization-api/index.html"><strong aria-hidden="true">2.2.</strong> Phase 2: Color Quantization API and Palette Mapping</a></li><li class="chapter-item expanded "><a href="../../plan/0003-text-to-bitmap-conversion/index.html"><strong aria-hidden="true">2.3.</strong> Phase 3: Text-to-Bitmap Subtitle Conversion</a></li><li class="chapter-item expanded "><a href="../../plan/0004-region-weighted-quantization/index.html"><strong aria-hidden="true">2.4.</strong> Phase 4: Region-Weighted Quantization</a></li><li class="chapter-item expanded "><a href="../../plan/0005-quantizer-algorithm-integration/index.html"><strong aria-hidden="true">2.5.</strong> Phase 5: Algorithm Integration</a></li><li class="chapter-item expanded "><a href="../../plan/0006-gif-encoder-rgba-quantization/index.html"><strong aria-hidden="true">2.6.</strong> Phase 6: GIF Encoder RGBA Quantization</a></li><li class="chapter-item expanded "><a href="../../plan/0007-upstream-review-findings/index.html"><strong aria-hidden="true">2.7.</strong> Upstream Review Findings</a></li><li class="chapter-item expanded "><a href="../../plan/0008-ocr-bitmap-to-text/index.html"><strong aria-hidden="true">2.8.</strong> Phase 7: OCR Bitmap-to-Text Subtitle Conversion</a></li><li class="chapter-item expanded "><a href="../../plan/0009-pgs-decoder-model-compliance/index.html"><strong aria-hidden="true">2.9.</strong> Phase 8: PGS Decoder Model Compliance</a></li><li class="chapter-item expanded "><a href="../../plan/0010-upstream-suitability-audit/index.html"><strong aria-hidden="true">2.10.</strong> Phase 8 Review: Upstream Suitability Audit</a></li><li class="chapter-item expanded "><a href="../../plan/0011-v3-consolidated-claude-review/index.html"><strong aria-hidden="true">2.11.</strong> v3 Expert Panel Review: Consolidated Findings</a></li><li class="chapter-item expanded "><a href="../../plan/0012-v4-review-fixes/index.html"><strong aria-hidden="true">2.12.</strong> Phase 9: v4 Series — Address Expert Panel Review</a></li><li class="chapter-item expanded "><a href="../../plan/0013-subtitle-event-lookahead/index.html"><strong aria-hidden="true">2.13.</strong> Phase 9a-R1: Subtitle Event Lookahead Window</a></li><li class="chapter-item expanded "><a href="../../plan/0014-pgs-encoder-optimizations/index.html"><strong aria-hidden="true">2.14.</strong> Phase 10: PGS Encoder Optimizations (v5)</a></li><li class="chapter-item expanded "><a href="../../plan/0015-website-updates/index.html"><strong aria-hidden="true">2.15.</strong> Phase 11: Website Updates for v4/v5</a></li><li class="chapter-item expanded "><a href="../../plan/0016-fate-ci-website-visibility/index.html"><strong aria-hidden="true">2.16.</strong> Phase 12: FATE CI + Website Test Visibility</a></li><li class="chapter-item expanded "><a href="../../plan/0017-pgs-encoder-features/index.html"><strong aria-hidden="true">2.17.</strong> Phase 13: PGS Encoder Features (v6)</a></li><li class="chapter-item expanded "><a href="../../plan/0018-upstream-submission-restructuring/index.html"><strong aria-hidden="true">2.18.</strong> Phase 14: Upstream Submission Restructuring (v7)</a></li><li class="chapter-item expanded "><a href="../../plan/0019-ffmpeg-devel-submission/index.html"><strong aria-hidden="true">2.19.</strong> ffmpeg-devel submission (v8)</a></li><li class="chapter-item expanded "><a href="../../plan/0020-pgs9-series-remediation/index.html"><strong aria-hidden="true">2.20.</strong> pgs9 series remediation</a></li><li class="chapter-item expanded "><a href="../../plan/0021-pgs9-subseries-recut/index.html" class="active"><strong aria-hidden="true">2.21.</strong> pgs9 sub-series re-cut</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Software: where</li><li class="chapter-item expanded "><a href="../../where.html"><strong aria-hidden="true">3.</strong> Software</a></li><li class="chapter-item expanded affix "><li class="part-title">Call: why</li><li class="chapter-item expanded "><a href="../../call/0000-use-markdown-decision-records.html"><strong aria-hidden="true">4.</strong> Use Markdown decision records (MADR)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../call/0001-adopt-host-template.html"><strong aria-hidden="true">4.1.</strong> Adopt the host-template methodology</a></li><li class="chapter-item expanded "><a href="../../call/0002-mdbook-under-book-subdir.html"><strong aria-hidden="true">4.2.</strong> Publish the development mdBook under /book/, never at the site root</a></li><li class="chapter-item expanded "><a href="../../call/0003-migrated-software-repro-exempt.html"><strong aria-hidden="true">4.3.</strong> Migrated software components are repro-exempt for now</a></li><li class="chapter-item expanded "><a href="../../call/0004-upgrade-template-to-ff04a94.html"><strong aria-hidden="true">4.4.</strong> Upgrade the template baseline to ff04a94</a></li><li class="chapter-item expanded "><a href="../../call/0005-keep-normalized-ai-trailer.html"><strong aria-hidden="true">4.5.</strong> Keep a normalized AI attribution trailer on the upstream series</a></li><li class="chapter-item expanded "><a href="../../call/0006-pgs9-feature-completions.html"><strong aria-hidden="true">4.6.</strong> Expose quantize_method and cap the animation scan on the PGS encoder</a></li><li class="chapter-item expanded "><a href="../../call/0007-pgs9-rebase-onto-stable.html"><strong aria-hidden="true">4.7.</strong> Rebase pgs9 onto the current FFmpeg stable release</a></li><li class="chapter-item expanded "><a href="../../call/0008-recut-trailers-api-base.html"><strong aria-hidden="true">4.8.</strong> Re-cut rulings: trailers, lavu API surface, base order</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Reference: how</li><li class="chapter-item expanded "><a href="../../CLAUDE.html"><strong aria-hidden="true">5.</strong> CLAUDE.md: operating manual for an agentic project</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../STRUCTURE.html"><strong aria-hidden="true">5.1.</strong> Structure</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Memory</li><li class="chapter-item expanded "><a href="../../MEMORY.html"><strong aria-hidden="true">6.</strong> Memory</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">pgs-release</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="pgs9-sub-series-re-cut"><a class="header" href="#pgs9-sub-series-re-cut">pgs9 sub-series re-cut</a></h1>
+<p>Restructure the 30-patch pgs9-9.0.1 series into four coherent,
+independently-submittable sub-series on the n9.0.1 base, per the
+structure review (../0020-pgs9-series-remediation/fairy-structure-review.md)
+and the rulings in call/0007 and call/0008. This milestone is written
+for solo execution: every decision is made below; a session with no
+other context can drive it.</p>
+<p>Inputs: branch <code>pgs9-9.0.1</code> (tip 964fc5e2d9, worktrees of
+<code>software/ffmpeg/.bare</code>); the verdict's per-patch table; the reconcile
+tooling at <code>scripts/reconcile/</code> (stop/build-walk/transfer-proof are not
+needed, the re-cut is a rebuild, not a rebase, but the walk is).</p>
+<p>Standing rules for every new commit:</p>
+<ul>
+<li>build at the commit (<code>make -j</code> under the persisted <code>--enable-shared</code>
+config), sign-off, message ASCII, no trailing whitespace;</li>
+<li>trailers: preserve any existing Co-Authored-By verbatim, append
+<code>Co-Authored-By: GLM 5.3 &lt;no-reply@z.ai&gt;</code>;</li>
+<li>public-API commits bump the exporting library's minor and carry the
+APIchanges entry atomically;</li>
+<li>checkpoints: <code>recut/cp-*</code> branches at every sub-series boundary.</li>
+</ul>
+<h2 id="build-sequence"><a class="header" href="#build-sequence">Build sequence</a></h2>
+<h3 id="pre-flight"><a class="header" href="#pre-flight">Pre-flight verification batch</a></h3>
+<ul>
+<li>verify: all four checks recorded in this README's findings list</li>
+</ul>
+<ol>
+<li>Configure wiring: does our tree define CONFIG_LIBASS and
+CONFIG_LIBTESSERACT (grep configure + ffbuild/config.mak of a real
+build; the shipped binaries render text and OCR, so the deps are
+wired SOMEWHERE, find how, and whether the series carries the
+configure hunks). If the hunks are missing from the series, they
+belong in the retitled render/OCR commits.</li>
+<li>Changelog: the <code>version &lt;next&gt;:</code> block placement against the 9.0.1
+block, and whether AV_CODEC_PROP_EXPLICIT_END is real (it should be
+in libavcodec/codec_desc.h inside the encoder commit), the verdict
+likely missed it inside the big patch.</li>
+<li>Trailer census: which of the 30 commits carry which trailers.</li>
+<li>The ELBG-backend commit: does it touch pgssubenc (the verdict claims
+a duplicated option hunk with the quantize_method commit)?</li>
+</ol>
+<h3 id="stage"><a class="header" href="#stage">Stage the re-cut worktree</a></h3>
+<ul>
+<li>verify: git -C ~/pgs9-wt/recut rev-parse --abbrev-ref HEAD = pgs9-recut</li>
+</ul>
+<p>Worktree <code>~/pgs9-wt/recut</code>, branch <code>pgs9-recut</code> from <code>n9.0.1</code>, rerere
+already on. Old commits are cherry-picked/replayed from <code>pgs9-9.0.1</code>
+with <code>git cherry-pick -x</code> (or <code>format-patch</code> + <code>am</code>) and then amended
+into shape; <code>-x</code> records the source so the audit trail survives.</p>
+<h3 id="ss1"><a class="header" href="#ss1">Sub-series one: lavu quantization API</a></h3>
+<ul>
+<li>verify: build-walk green over the sub-series; audits clean; fairy
+scan of the sub-series diff returns no structural objection</li>
+</ul>
+<p>Assembly (old numbers from the pgs9-9.0.1 order):</p>
+<ol>
+<li>OkLab move: old #12 (lavu/palette from lavfi), keep pure move.</li>
+<li>ELBG move: old #17 with its consumers.</li>
+<li>Quantize API + NeuQuant: old #13, minus any installed
+neuquant/mediancut headers (backends are internal: HEADERS list
+ships quantize.h only; ff_ symbols stay uninstalled).</li>
+<li>Palettemap as avpriv: old #14 + #15 merged (move + paletteuse
+adopter in one commit; no transient dead module).</li>
+<li>Median Cut + palettegen adopter: old #16 + #18 merged (the API plus
+the palettegen switch that retires lavfi/palette; folding here, not
+into the OkLab move, because the adopter consumes Median Cut).
+Region-weighted API stays public (documented, generic enough; the
+RFC notes it).</li>
+<li>ELBG backend: old #19, with any pgssubenc hunk dropped per pre-flight
+finding four.</li>
+</ol>
+<h3 id="ss2"><a class="header" href="#ss2">Sub-series two: GIF RGBA</a></h3>
+<ul>
+<li>depends: #ss1</li>
+<li>verify: fate gifenc-rgba green; audits clean</li>
+</ul>
+<ol start="7">
+<li>old #20 whole, plus the <code>tests/ref/fate/gifenc-rgba</code> hunk lifted
+out of old #24.</li>
+</ol>
+<h3 id="ss3"><a class="header" href="#ss3">Sub-series three: PGS encoder</a></h3>
+<ul>
+<li>depends: #ss1</li>
+<li>verify: build-walk; fate api-pgs set green; audits clean</li>
+</ul>
+<ol start="8">
+<li><code>supenc</code> per-segment DTS: old #3 (existing-muxer behaviour change
+standing on its own; the old #4 fftools DTS hunk moves to the pipeline wiring commit).</li>
+<li>pgssubenc core with ALL AVOptions defined up front: old #1 + #9 +
+#10 + the option-definition half of #26 + #29; tests folded in
+(fade, multi-object, ap-interval, forced, rate-control from
+#1/#5/#6/#7/#8/#9/#10 as they attach to these features;
+overlap-verify and dts tests go with the supenc DTS commit; palette-delta and
+palette-reuse with the palette-delta commit). The generic test harness from #1 keeps
+its pgs-test-util.h home.</li>
+<li>palette delta: old #2 with its palette-delta and palette-reuse tests.</li>
+<li>forced_style, fftools side: the ASS-matching half of old #26 ,
+option string lives in the fftools context, forwarded to the
+encoder one-way via av_opt_set; no encoder priv_data read.</li>
+</ol>
+<h3 id="ss4"><a class="header" href="#ss4">Sub-series four: text&lt;-&gt;bitmap conversion</a></h3>
+<ul>
+<li>depends: #ss3</li>
+<li>verify: build-walk; encoder end-to-end smoke (srt-&gt;sup with
+-c:s pgssub -s 1920x1080); fairy scan; audits clean</li>
+</ul>
+<ol start="12">
+<li>subtitle bitmap utilities: old #21, retitled <code>fftools:</code> (files live
+in fftools; say add, not move, if that is the truth).</li>
+<li>text render wrapper: old #22, retitled <code>fftools:</code>, plus the libass
+configure hunk if pre-flight found it missing.</li>
+<li>OCR wrapper: old #27, retitled <code>fftools:</code>, plus the tesseract
+configure hunk likewise.</li>
+<li>text-to-bitmap with lookahead: old #23 + #25 merged (the coalescer
+is born as the lookahead design; animation/coalesce/rectsplit tests
+from #24 folded here where they belong).</li>
+<li>pipeline wiring: old #24 minus its four test programs (moved to 15)
+minus the GIF ref hunk (moved to 7) plus the old #4 DTS hunk;
+quantize_method flows one-way from the CLI (keep the value in the
+fftools output-stream state, forward with av_opt_set).</li>
+<li>bitmap-to-text via OCR: old #28, with ffmpeg_dec_sub.h in its
+final form (no rewrite-by-later-commit).</li>
+<li>disposition bridge (old #11) belongs here, it wires stream
+disposition into the conversion; strip its priv_data read the same
+one-way way. (If it proves encoder-only after inspection, keep it
+in the encoder-core commit; decide at execution and record which.)</li>
+</ol>
+<h3 id="final"><a class="header" href="#final">Final patch and whole-series gates</a></h3>
+<ul>
+<li>depends: #ss4</li>
+<li>verify: the whole gate list below, then operator review</li>
+</ul>
+<ol start="19">
+<li>Changelog (one entry, correct block placement), MAINTAINERS
+(consolidated), tail version bumps, one commit.</li>
+</ol>
+<p>Whole-series gates, all mandatory before the branch is pushed:</p>
+<ul>
+<li>build-walk the full <code>n9.0.1..pgs9-recut</code> range under the shared
+config (scripts/reconcile/build-walk.sh);</li>
+<li><code>nm -D</code> clean of cross-lib ff_ symbols; encoder registers with every
+option; the four self-contained fate api tests green;</li>
+<li>per-commit audits: sign-off, ASCII, whitespace, trailers (call/0008);</li>
+<li>line-level audit: every old-series added line present in the new
+lineage or consciously dispositioned (the pre-flight findings feed
+this);</li>
+<li>fairy structure re-scan of the full new series (ticket framed the
+same way; verdict recovered from the debug dump per the ledger);</li>
+<li>ledger entries per sub-series as they land; <code>recut/cp-*</code> checkpoints.</li>
+</ul>
+<h3 id="close"><a class="header" href="#close">Close out</a></h3>
+<ul>
+<li>depends: #final</li>
+<li>verify: attested operator</li>
+</ul>
+<p>Push <code>pgs9-recut</code> to the fork, update plan/0020 and PLAN.md, receipts
+for the plan/0021 tasks, final memory entry. The master re-cut, RFC,
+and submission are OUT of scope (later milestones; rerere replays).</p>
+<h2 id="findings-pre-flight-appends-here"><a class="header" href="#findings-pre-flight-appends-here">Findings (pre-flight appends here)</a></h2>
+<p>(filled by #pre-flight)</p>
+<h2 id="deviations-from-the-verdict-decided-do-not-re-litigate"><a class="header" href="#deviations-from-the-verdict-decided-do-not-re-litigate">Deviations from the verdict (decided, do not re-litigate)</a></h2>
+<ul>
+<li>#18 folds into the Median Cut commit (the assembly item that adds it), not into the OkLab
+move: the palettegen adopter consumes Median Cut, so folding it
+earlier would be circular.</li>
+<li>old #4 folds into the pipeline wiring commit, not beside the muxer
+change: it is fftools packet shaping.</li>
+<li>The disposition bridge lands in sub-series four (the disposition-bridge item) unless
+inspection proves it encoder-only.</li>
+<li>Region-weighted quantization stays public API (small, documented,
+generic enough); the RFC flags it.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../plan/0020-pgs9-series-remediation/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../where.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../plan/0020-pgs9-series-remediation/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../where.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
