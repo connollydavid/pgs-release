@@ -33,24 +33,17 @@ The milestones, in acceptance order; 0001 through 0018 are closed records.
 | [0018](0018-upstream-submission-restructuring/README.md) | Upstream submission restructuring (v7) |
 | [0019](0019-ffmpeg-devel-submission/README.md) | ffmpeg-devel submission (v8, in progress) |
 | [0020](0020-pgs9-series-remediation/README.md) | pgs9 series remediation |
+| [0021](0021-pgs9-subseries-recut/README.md) | pgs9 sub-series re-cut |
 
 ## Current Work
 
 _Scratch buffer: what we're doing right now._
 
-Overriding goal (operator, 2026-08-21, call/0007): rebase the pgs9 series
-onto FFmpeg 9.0.1 "Lei" (n9.0.1, bf1b838f2a) and bring it to upstream
-submission quality. The 2026-07-19 host-reconcile block is lifted by the
-same ruling; host#18 remains the design record for the eventual tool.
-
-The pgs9 series (30 commits, tip 3532e2a43e) sits on an older
-stable-release lineage; the rebase replays it onto n9.0.1 in a fresh worktree, with rerere recording
-resolutions for any later master re-cut. The quality gates for submission
-readiness: the host-lint-ffmpeg series lane, patcheck, per-commit builds
-with the shared-ABI leg, FATE, and a Fairies offline review pass
-(tools/fairies, the forge reviewer pipeline run through its replay
-harness).
-
-Environment: WSL2 is primary for all development; win32 hosts direct
-win32 testing only. The verify gate runs with .env sourced so the
-applied-ledger rechecks find host-lifecycle on PATH.
+Active milestone: plan/0021 (pgs9 sub-series re-cut), cut from the
+fairy structure review and the call/0008 rulings. The 30-patch series
+on pgs9-9.0.1 restructures into four sub-series (lavu quantization API,
+GIF RGBA, PGS encoder, text<->bitmap conversion) on the n9.0.1 base,
+with the master re-cut deferred to submission time. The milestone is
+written for solo execution: pre-flight verification batch first, then
+the assembly steps with per-commit and per-sub-series gates, fairy
+structure re-scan per sub-series, whole-series gates, close-out.

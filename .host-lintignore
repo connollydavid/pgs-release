@@ -39,3 +39,8 @@ book.toml
 # Uses "step" as genuine manifest vocabulary; excluded until the real
 # tool is implemented elsewhere.
 tools/host-ffmpeg-version-reconcile/
+
+# Machine-generated review artifact (glm-5.2 via Fairies, 2026-08-22):
+# frozen verdict text, immutable by design; content prose patterns are the
+# model's, not ours. Excluded per the dated-review-artifact rule.
+plan/0020-pgs9-series-remediation/fairy-structure-review.md

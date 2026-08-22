@@ -8,7 +8,7 @@
 
 The fairy structure review (plan/0020/fairy-structure-review.md) set the
 re-cut shape: four sub-series, per-patch merges and splits, and three
-open questions the operator must rule on before execution — the AI
+open questions the operator must rule on before execution, the AI
 attribution trailers, the libavutil API surface disposition
 (avpriv versus ff_ versus av_), and which base the re-cut targets first.
 
@@ -21,7 +21,7 @@ Operator rulings, 2026-08-22:
    `Co-Authored-By: GLM 5.3 <no-reply@z.ai>`. FFmpeg has no adopted AI
    policy; the trailers are honest attribution on both counts.
 2. **API surface**: split disposition, proposed to the lavu maintainer
-   in the RFC rather than pre-conceded — quantizer backends fully
+   in the RFC rather than pre-conceded, quantizer backends fully
    internal to libavutil (no installed header, reachable only through
    the public av_quantize_* factory), and the palettemap family as
    avpriv_* (the versioned cross-library-private mechanism lavfi and

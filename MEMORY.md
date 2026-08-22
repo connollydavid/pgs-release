@@ -799,3 +799,25 @@ review's middle-ground objection dissolves because each family gets a
 coherent home. Still open before the re-cut executes: the verification
 checks (libass/tesseract configure wiring, Changelog version-block
 order and the AV_CODEC_PROP_EXPLICIT_END orphan, trailer census).
+
+## 2026-08-22: plan/0021 cut, the sub-series re-cut milestone (solo-ready)
+
+The durable plan document is plan/0021-pgs9-subseries-recut/README.md:
+four sub-series on the n9.0.1 base in dependency order (lavu
+quantization API, then GIF RGBA and the PGS encoder, then the
+text<->bitmap conversion), a pre-flight verification batch, per-commit
+standing rules (build at commit, sign-off, ASCII, whitespace, the
+call/0008 trailer policy, atomic version bumps), per-sub-series gates
+(build-walk, fate, fairy structure re-scan via the proven local
+pipeline), whole-series gates, and close-out (fork push, receipts,
+ledger). Deviations from the verdict are decided in the plan, not open:
+the palettegen adopter folds into the Median Cut commit (folding it
+into the OkLab move would be circular), the fftools DTS hunk folds into
+the pipeline wiring, the disposition bridge lands in the conversion
+sub-series unless inspection proves it encoder-only, and the
+region-weighted API stays public with the RFC flagging it. Gate notes:
+the verdict artifact is path-excluded as an immutable dated review
+(.host-lintignore); "step" is manifest vocabulary and flags, so the
+plan references assembly items by content name; prose zero-tropes now
+enforced on the new docs too. plan/0021 is written so a session with no
+other context can execute it end to end.
