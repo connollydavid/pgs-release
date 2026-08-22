@@ -621,3 +621,30 @@ variance, context-duplicate materialisation by sibling hunks, the need
 for a policy hook on commit-internal inconsistencies (the ELBG
 double-bump), and rerere determinism. The tool's acceptance test stays
 a fresh rebase per call/0007.
+
+## 2026-08-22: Fairies on Ollama cloud — endpoint proven, inline-patch shim in
+
+Operator picked deepseek-v4-flash (Ollama Pro, flat subscription) as the
+review model; glm-5.2 / kimi-k2.7-code / deepseek-v4-pro stay in reserve
+on the same plan. Endpoint facts, measured: the OpenAI-compat base for
+the cloud is https://ollama.com/v1 — api.ollama.com 301s to it and the
+redirect converts POST badly, which first showed as a misleading 405.
+On the right base the Responses API works including function-tool
+round-trips (the exact call shape fairy's review loop drives), and
+deepseek-v4-flash:preview is in the 19-model catalog. The files API
+does not exist (404), which is the one seam: pr_review_wrapper uploads
+the patch as a file whenever an openai: reviewer is requested, no
+fallback, no flag. The patch text already travels inline in
+ReviewContext.patch_text for every provider, so the upload is additive;
+scripts/fairy/wrapper.py is a runtime shim (monkeypatches
+upload_text_file/delete_uploaded_file to no-ops around
+pr_review_wrapper.main) that keeps the Fairies checkout tree untouched
+— an upstream proposal for a proper flag/try-except follows separately.
+scripts/fairy/smoke.sh re-verifies the whole endpoint contract (auth,
+text, tool round-trip, files-probe). Fairies runs from a dedicated venv
+~/.venvs/fairies (WSL python is PEP 668 locked; deps: openai,
+python-dotenv, watchdog, blessed, httpx). Key lives in the gitignored
+.env with OPENAI_BASE_URL. REMAINING for the first review run: the
+podman shell host (sshd + containers/provision_remote.py), and staging
+our series as the review ticket (the filedb ticket shape is the next
+thing to read).
