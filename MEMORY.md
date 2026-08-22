@@ -860,3 +860,23 @@ file); base-aware provider exemption (files present in the base tree);
 definition-site attribution for version-bump; replace the stale usage
 stub with real help. Tool development is upstream-first on its main,
 then release + re-pin per the reference discipline.
+
+## 2026-08-22: host-lint-ffmpeg v0.19.0 released; the lanes assist the re-cut
+
+The four improvement tickets landed upstream (host-lint main
+1f3bae1..ff0516a, tag v0.19.0, submodule re-pinned, hook sibling binary
+re-copied, gate green): the series lane is base-aware (the provider rule
+exempts files the base tree provides, decided by ls-tree over the
+range's start), the version-bump rule attributes to DEFINITION sites
+(added lines at column zero; indented call sites no longer flag), the
+msg lane accepts a rev range and checks every commit message, and the
+bare invocation prints real usage. All 120 pack tests pass; the rebase
+onto the tool's moved origin/main was clean. Measured on our series:
+53 warns collapse to 5 real findings — the palettemap avpriv-without-
+bump flag (real, feeds the re-cut), the fate-sample provenance warn,
+and three backport-focus warns that the noise had drowned (commits
+citing tickets while carrying formatting changes; actionable in the
+re-cut messages). msg over the range: 30 commits, nothing to report.
+The tool's release versioning note: origin/main's root Cargo.toml is
+aligned with the tag series (0.18.1 -> 0.19.0); the old tag-checkout
+showing 0.14.2 was the stale local view, not a second version space.
