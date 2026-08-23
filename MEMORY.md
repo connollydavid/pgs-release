@@ -1221,3 +1221,18 @@ argument used at the 9.0.1 rebase. IN FLIGHT: the fairy structure
 RE-SCAN on the 18-commit re-cut (ticket 9002, same framing, verdict
 from the debug dump). REMAINING: scan verdict, plan/0021 close-out
 (receipts/PLAN.md/push pgs9-recut to fork).
+
+## 2026-08-23: re-scan verdict one — the reviewer read the WRONG BRANCH
+
+The first re-scan (250 agentic rounds, verdict in
+fairy-tickets/verdict2.md) concluded "the restructure did not land:
+30 commits, encoder first, inverted order" — because it inspected
+n9.0.1..pgs9-9.0.1, the OLD series. Root cause, MY staging mistake:
+the fairy repo root (~/fairy-run/ffmpeg, which the wrapper mirrors
+into the review container) sat on pgs9-9.0.1; the reviewer follows the
+CHECKED-OUT BRANCH, not the ticket's head_sha. (Silver lining: its
+30-commit reading of the old series was perfectly accurate — the
+reviewer is genuinely thorough.) FIX: the repo root now sits on
+pgs9-recut (18 commits verified at staging); re-scan two running.
+LESSON for every future fairy run: the repo root's checked-out branch
+IS what gets reviewed; stage it at the series tip before launching.
