@@ -989,3 +989,27 @@ encoder core + ALL AVOptions + tests merged (old 592efaf419 + 428b6da863
 core is the first lavc API commit -> lavc 63.2.100); palette delta
 (old 3b37c1b91b + its tests); forced_style fftools half (old f295cfa198
 remainder, no priv_data read).
+
+## 2026-08-23: SS3 item 8 landed (pure supenc); test distribution corrected
+
+Item 8 = 9aa16fa005 (lavf/supenc per-segment DTS), checkpoint
+cp/ss3-supenc; lanes clean over eight commits, build green. CORRECTION
+TO THE PLAN'S TEST MAP, discovered by execution: the api-pgs-dts test
+ENCODES, so every api-pgs test is CONFIG_PGSSUB_ENCODER-gated and none
+can exist before the encoder does. ALL the encoder-side tests (dts,
+fade, overlap-verify, multi-object, ap-interval, forced, rate-control,
+plus pgs-test-util.h from old b92f869fd6) therefore return TOGETHER
+with item 9 (encoder core), not distributed to earlier items. NEXT:
+item 9, the big merge: old 592efaf419 (encoder) + 428b6da863 (force_all)
++ 5503aac3f1 (max_cdb) + the option-definition half of f295cfa198
+(pgssubenc.c + its encoders.texi hunk only) + 5722ead41c
+(quantize_method); lavc 63.1.101 -> 63.2.100 with the APIchanges entry
+(lavc 63.2.100 codec_desc.h, removed from SS1) re-added; all tests
+wired in the same commit; then item 10 (palette delta 3b37c1b91b +
+palette-delta/palette-reuse tests) and item 11 (forced_style fftools
+half of f295cfa198, no priv_data read). Mechanics notes: old-lineage
+mak diffs do not apply onto the new base (hand-place the lines: PROGS
+line above the APITESTPROGS aggregation, stanza appended to api.mak);
+NEVER pass makefile \$(...) through inline bash -c (command
+substitution corrupts the file; the broken-line repair is in
+host-fix-makefile.sh).
