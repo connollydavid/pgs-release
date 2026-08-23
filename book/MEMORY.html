@@ -1221,6 +1221,33 @@ stripped), 19 (final patch: Changelog entry moved to the file head +
 tail version bumps; MAINTAINERS stays with its commits), whole-series
 gates, close-out.</li>
 </ul>
+<h2 id="2026-08-23-ss4-item-15-landed--the-conversion-core-with-the-violation-gone"><a class="header" href="#2026-08-23-ss4-item-15-landed--the-conversion-core-with-the-violation-gone">2026-08-23: SS4 item 15 landed — the conversion core with the violation gone</a></h2>
+<p>Item 15 = a1254c3d9c (fftools: add text-to-bitmap subtitle conversion
+with event lookahead; checkpoint cp/ss4-encsub): the old conversion
+commit and its coalescer-rewriting successor MERGED (the lookahead is
+the born-with design, no churn), the forced_style ASS matching folded
+in, and THE LAYERING VIOLATION ELIMINATED — fftools/ffmpeg_enc_sub.c
+now contains ZERO av_opt_get/priv_data reads: get_quantize_algo reads
+the SubtitleEncContext.quantize_method field (validated, NeuQuant
+fallback), forced_style is a borrowed pointer from
+SubtitleEncContext.forced_style, both fields declared on the struct
+with the one-way comment, and the old av_free of the borrowed string
+removed. The CLI wiring that FILLS these fields (and forwards via
+av_opt_set at encoder open) arrives with item 16. All four folded
+tests pass (animation-timing, animation-util, coalesce, rectsplit);
+msg lane clean over fourteen commits; series lane shows only the known
+fate-sample warn. NEXT: item 16 = pipeline wiring (old fa2753b0d MINUS
+its four test programs — already folded into item 15 — MINUS the
+gifenc-rgba ref hunk — already in the GIF item — PLUS the old
+4bedc5a3ce DTS hunk PLUS the CLI wiring that sets the two new
+SubtitleEncContext fields and av_opt_set-forwards them at open);
+item 17 = bitmap-to-text (old 40f023c496, dec_sub.h final form);
+item 18 = disposition bridge (old 03e8e4cfb0, its priv read stripped
+the same one-way way); item 19 = final patch (Changelog entry at the
+file head, tail version bumps; MAINTAINERS stays with its commits);
+then whole-series gates: full configure-per-step walk, lanes, fate
+family 15/15 (7 encoder + 2 palette + 4 animation + gifenc-rgba +
+quantize), nm -D, line-level audit, fairy re-scan, plan close-out.</p>
 
                     </main>
 
