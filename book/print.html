@@ -6922,6 +6922,32 @@ item 19 (final patch: single Changelog entry at the FILE HEAD, tail
 version bumps), then the whole-series gates (configure-per-step walk
 with --enable-libass, lanes, fate family, nm -D, line-level audit,
 fairy re-scan) and the plan/0021 close-out.</p>
+<h2 id="2026-08-23-the-re-cut-is-assembled--eighteen-commits-four-sub-series"><a class="header" href="#2026-08-23-the-re-cut-is-assembled--eighteen-commits-four-sub-series">2026-08-23: THE RE-CUT IS ASSEMBLED — eighteen commits, four sub-series</a></h2>
+<p>pgs9-recut complete per plan/0021 (checkpoint cp/ss4-final, tip
+4771132478): SS1 lavu quantization (six commits, lavu 61.6.100);
+SS2 GIF RGBA (187c861272); SS3 PGS encoder (supenc 9aa16fa005,
+encoder core + all options + seven tests 212f317265, palette delta
+10822ee32f); SS4 conversion (three retitled wrappers, text-to-bitmap
+with lookahead a1254c3d9c, wiring with the one-way circuit a4f5bc9305
+[smoke-verified end to end], bitmap-to-text 25495caa5b, disposition
+bridge cfa6f2f164 with the force_all read ALSO converted one-way
+[-sub_force_all CLI option -&gt; ost -&gt; ctx -&gt; av_opt_set forward; ZERO
+av_opt_get left in the touched fftools files]); item 19 the final
+Changelog patch (4771132478) with the single entry at the FILE HEAD
+(the old mid-file misplacement gone). The 30-&gt;18 collapse: merges
+(kit + adopters, encoder + options, conversion + lookahead), splits
+(forced_style option vs matching), retitles (three lavfi:/lavu: -&gt;
+fftools:), folds (tests with features, DTS hunk into wiring, GIF ref
+with GIF), and the APIchanges/version story renumbered atomically
+throughout. msg lane clean over all 18 with --signoff; series lane
+standing warns: the fate-sample provenance (dispositioned) and one
+backport-focus heuristic on item 17's message (dispositioned note).
+IN FLIGHT: the full configure-per-step walk (18 steps, --enable-libass,
+count-verified loop in host-walk-all.sh) running in background.
+REMAINING after walk: fate family full run, nm -D shared check,
+line-level audit vs the old series, fairy structure re-scan, plan/0021
+close-out (receipts, PLAN.md, push pgs9-recut to the fork per the
+close task, master re-cut stays out of scope).</p>
 
                     </main>
 
