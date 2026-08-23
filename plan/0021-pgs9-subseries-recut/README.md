@@ -100,7 +100,8 @@ Assembly (old numbers from the pgs9-9.0.1 order):
 
 ### Sub-series four: text<->bitmap conversion {#ss4}
 
-- depends: #ss1 #ss3
+- depends: #ss1
+- depends: #ss3
 - verify: build-walk; encoder end-to-end smoke (srt->sup with
   -c:s pgssub -s 1920x1080); fairy scan; audits clean
 
