@@ -1040,3 +1040,22 @@ names (grep fate-api-pgs tests/fate/api.mak); (b) STALE TEST BINARIES
 reconfigure; (c) whether the util header's find is compiled with a
 stale TEST define. Checkpoint cp/ss3-encoder. Items 10 (palette delta
 + tests) and 11 (forced_style fftools half) remain after, then SS4.
+
+## 2026-08-23: SS3 item 9 VERIFIED COMPLETE — fate family seven of seven
+
+RESOLVED: the 1/7 fate mystery was ONE wiring defect plus stale
+artifacts — only rate-control ever had an api.mak stanza (a buggy
+dedupe pass in an earlier script had dropped the other six), and the
+"PGS encoder not found" signatures were STALE .err files from the
+first loader-less run (rm tests/data/fate/api-pgs-*.err before
+believing any signature). With the six stanzas written and the tests
+run under the in-tree LD_LIBRARY_PATH: fade, dts, overlap-verify,
+multi-object, ap-interval, forced, rate-control ALL PASS. Item 9 =
+212f317265 (checkpoint cp/ss3-encoder), build green, msg lane clean
+over nine commits, series lane shows only the known fate-sample warn.
+LESSON: a failing diagnostic file outlives the failure that wrote it;
+delete the artifact before re-reading a signature. NEXT: item 10
+(palette delta: old 3b37c1b91b + palette-delta and palette-reuse tests
+from old 4e2ada3e4b/b92f869fd6 + their stanzas), item 11 (forced_style
+fftools half of old f295cfa198, no priv_data read), then SS4 per the
+plan, the final patch, whole-series gates, close-out.
