@@ -44,3 +44,7 @@ tools/host-ffmpeg-version-reconcile/
 # frozen verdict text, immutable by design; content prose patterns are the
 # model's, not ours. Excluded per the dated-review-artifact rule.
 plan/0020-pgs9-series-remediation/fairy-structure-review.md
+
+# Dated, frozen handover snapshot (2026-08-23): point-in-time session
+# survival document, superseded by MEMORY.md as living record.
+HANDOVER.md
