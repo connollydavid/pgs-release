@@ -6845,6 +6845,30 @@ fold in), pipeline wiring (+ the old DTS hunk + one-way
 quantize_method), bitmap-to-text, disposition bridge; then the final
 patch and the whole-series gates.</li>
 </ul>
+<h2 id="2026-08-23-ss4-items-12-14-landed-the-three-retitled-wrappers"><a class="header" href="#2026-08-23-ss4-items-12-14-landed-the-three-retitled-wrappers">2026-08-23: SS4 items 12-14 landed (the three retitled wrappers)</a></h2>
+<p>f568106b42 (fftools: add subtitle bitmap utility; old 8e1db6b4ac
+retitled — the files live in fftools, so the old "lavu:" prefix was
+wrong), fd281751aa (fftools: add text subtitle rendering wrapper via
+libass; old adfaebc913 retitled), 02d705ee6f (fftools: add bitmap
+subtitle OCR wrapper via Tesseract; old cfba38bc24 retitled). All
+build; msg lane clean over thirteen commits; series lane shows only
+the known fate-sample warn; checkpoint cp/ss4-wrappers. NEXT, the two
+intricate items: item 15 = text-to-bitmap WITH lookahead (old d154ff1415</p>
+<ul>
+<li>2cc6ba2d68 cherry-picked -n together; the forced_style fftools half
+from old f295cfa198's ffmpeg_enc_sub.c hunks via extracted diff with
+the priv_data read replaced by one-way flow — the CLI value lives in
+SubtitleEncContext and is forwarded with av_opt_set; the animation/
+coalesce/rectsplit tests from old fa2753b0d checked out and wired with
+stanzas) and item 16 = pipeline wiring (old fa2753b0d MINUS its four
+test programs and MINUS the gifenc-rgba ref hunk — both already
+dispositioned — PLUS the old 4bedc5a3ce DTS hunk, with the
+quantize_method priv read likewise made one-way). Then 17 (old
+40f023c496), 18 (disposition bridge old 03e8e4cfb0, priv read
+stripped), 19 (final patch: Changelog entry moved to the file head +
+tail version bumps; MAINTAINERS stays with its commits), whole-series
+gates, close-out.</li>
+</ul>
 
                     </main>
 
