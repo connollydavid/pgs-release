@@ -1066,6 +1066,27 @@ series lanes, cp/ss1, ledger. The v0.19.0 lanes are the per-item gates;
 MAINTAINERS hunks ride with their commits (the consolidation in the
 plan's final item narrows to Changelog + tail bumps; adopted at
 execution, record in the plan when closing the milestone).</p>
+<h2 id="2026-08-23-sub-series-one-complete-all-gates-green"><a class="header" href="#2026-08-23-sub-series-one-complete-all-gates-green">2026-08-23: SUB-SERIES ONE COMPLETE (all gates green)</a></h2>
+<p>~/pgs9-wt/recut, branch pgs9-recut, checkpoint cp/ss1-complete. Six
+commits: c36910baf8 OkLab move; 7317e05af2 ELBG move (lavu 61.2.100);
+a7eedc4585 quantize API + NeuQuant (61.3.100); 016d857168 palettemap
+avpriv + paletteuse adopter merged, carrying the previously-missing
+version bump (61.4.100); 29e2f614c9 Median Cut + palettegen adopter
+merged (61.5.100); b90a35e73b ELBG backend (61.6.100). GATES ALL
+GREEN: build-walk six of six under the shared config; msg lane clean
+over the range with --signoff; series lane "nothing to report" (the
+v0.19.0 base-aware rules); every commit carries Signed-off-by,
+Co-Authored-By: Claude where the original did, and the GLM trailer.
+The signoff fixes took three passes because two amend-during-rebase
+attempts were replayed over; the reliable mechanic (ledgered): mark the
+target by todo POSITION (sed 1s/^pick/edit), amend, continue, then
+VERIFY with the lane before moving on. lavu ends 61.6.100, one minor
+ahead of the old lineage exactly because the palettemap bump is new.
+NEXT per plan/0021: sub-series two (GIF RGBA, old 83720ce94c + the ref
+hunk from old #24), then the PGS encoder sub-series, then conversion.
+The MAINTAINERS-hunks-ride-along decision stands (record at milestone
+close). The lavc 63.2.100 APIchanges entry was removed from SS1 and
+returns with the SS3 encoder item whose old commit carries it.</p>
 
                     </main>
 
