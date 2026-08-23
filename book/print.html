@@ -4462,6 +4462,28 @@ GLM trailer per call/0008.</li>
 docs). The verdict's duplicated-hunk claim was wrong; nothing to
 drop at that item.</li>
 </ol>
+<h2 id="completion-record-2026-08-23"><a class="header" href="#completion-record-2026-08-23">Completion record (2026-08-23)</a></h2>
+<p>Executed end to end: 18 commits on pgs9-recut (tip cff4e4008e,
+pushed to the fork and ls-remote verified), the four sub-series in
+dependency order per the assembly map with the execution-proved
+corrections recorded in MEMORY.md (all encoder-gated tests return
+with the encoder commit; the forced_style half folds into the
+text-to-bitmap item; the animation cap — missed by the assembly map —
+caught by the line audit and folded into the same item; the
+disposition bridge's force_all read converted one-way like the rest).
+Gates: configure-per-step walk 18/18 count-verified with
+--enable-libass; fate 14/14 (thirteen api-pgs plus the lavu quantize
+test); nm -D cross-lib clean; encoder registers with every option;
+end-to-end smoke (srt -&gt; .sup with -sub_quantize_method) verified;
+msg lane clean over all 18 with --signoff; series lane at two
+dispositioned heuristic warns. The fairy structure re-scan ran three
+times (verdict one reviewed the old branch due to a staging mistake,
+since fixed and ledgered; verdict two hit the tool-round cap; verdict
+three hit the Ollama session usage limit) — the scan verdict remains
+OPEN pending quota, an operator decision; every mechanical gate is
+green without it. MAINTAINERS entries ride with their introducing
+commits (execution decision, recorded); the Changelog consolidates at
+the head in the final patch as planned.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="software-where"><a class="header" href="#software-where">Software: where</a></h1>
 <p>The action this project produces. Each component is a bare object store with worktrees, not committed into this repo; the recipe below is the reproducibility anchor. Materialize the worktrees locally with:</p>
 <pre><code>host-lifecycle software --materialize .
@@ -6987,6 +7009,20 @@ reviewer is genuinely thorough.) FIX: the repo root now sits on
 pgs9-recut (18 commits verified at staging); re-scan two running.
 LESSON for every future fairy run: the repo root's checked-out branch
 IS what gets reviewed; stage it at the series tip before launching.</p>
+<h2 id="2026-08-23-plan0021-executed--the-re-cut-is-complete-and-pushed"><a class="header" href="#2026-08-23-plan0021-executed--the-re-cut-is-complete-and-pushed">2026-08-23: plan/0021 EXECUTED — the re-cut is complete and pushed</a></h2>
+<p>pgs9-recut = 18 commits, tip cff4e4008e, PUSHED to the fork
+(connollydavid/FFmpeg, ls-remote verified). Every mechanical gate
+green: walk 18/18, fate 14/14, nm -D clean, lanes clean, smoke
+verified, line audit fully accounted (39 non-verbatim lines all
+intended rework). The fairy re-scan VERDICT is the one open item:
+blocked by the Ollama PRO SESSION USAGE LIMIT (429; three deep scans
+burned it — scan one 250 rounds on the wrong branch [staging mistake,
+fixed], scan two 232 rounds to the tool cap, scan three 429). The
+completion record sits in plan/0021's README; the re-cut itself needs
+nothing further mechanically. OPERATOR DECISIONS remaining: the
+fairy verdict (wait for the quota reset / add usage / accept the
+mechanical gates as sufficient), then the master re-cut + RFC +
+submission milestone whenever called.</p>
 
                     </main>
 
