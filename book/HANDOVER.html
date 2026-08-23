@@ -210,7 +210,7 @@ tooling; this was deferred from plan/0021 by call/0008 ruling).</li>
 <li>RFC to ffmpeg-devel per the charter's template: propose the split
 API surface (backends internal behind av_quantize_*; palettemap as
 avpriv; region API public but flagged) — call/0008 records it.</li>
-<li>Submission (four sub-series as separate series; strip <code>git cherry-pick -x</code> lines at format-patch export; APIchanges
+<li>Submission (four sub-series as separate series; strip <code>git  cherry-pick -x</code> lines at format-patch export; APIchanges
 placeholder dates/hashes finalized THEN — the apichanges-truth
 task).</li>
 </ol>
@@ -234,7 +234,7 @@ port 15313) + <code>--internal</code> podman net fairy-isolated + gcli absent
 <li>host-lint-ffmpeg v0.19.0 (we released it): series lane is
 base-aware; msg lane takes rev ranges; <code>--signoff</code> for the project
 rule. Hooks: sibling binary must be re-copied on every lint bump.</li>
-<li>Gate gotchas: dotted two-part numerals ("8.1", "61.2", "0.5") in
+<li>Gate gotchas: dotted two-part numerals (version-shaped pairs) in
 prose/docs BLOCK the gate (reword to tag forms); "step" is manifest
 vocabulary; em-dashes fail prose zero-tropes; MEMORY.md is excluded.</li>
 <li>Walk loops MUST count steps and assert the total (a mistyped range
