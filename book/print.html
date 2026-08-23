@@ -4347,7 +4347,8 @@ encoder one-way via av_opt_set; no encoder priv_data read.</li>
 </ol>
 <h3 id="ss4"><a class="header" href="#ss4">Sub-series four: text&lt;-&gt;bitmap conversion</a></h3>
 <ul>
-<li>depends: #ss1 #ss3</li>
+<li>depends: #ss1</li>
+<li>depends: #ss3</li>
 <li>verify: build-walk; encoder end-to-end smoke (srt-&gt;sup with
 -c:s pgssub -s 1920x1080); fairy scan; audits clean</li>
 </ul>
