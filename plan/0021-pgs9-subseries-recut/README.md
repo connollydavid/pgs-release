@@ -91,8 +91,8 @@ Assembly (old numbers from the pgs9-9.0.1 order):
    (fade, multi-object, ap-interval, forced, rate-control from
    #1/#5/#7/#8/#9/#10 as they attach to these features;
    overlap-verify joins the encoder-core item (its epoch logic is encoder behavior); dts goes with the supenc commit; palette-delta and
-   palette-reuse with the palette-delta commit). The generic test harness (pgs-test-util.h, arriving with #6) keeps
-   its pgs-test-util.h home.
+   palette-reuse with the palette-delta commit). The generic test harness (pgs-test-util.h, which arrives with #6) keeps
+   its home.
 10. palette delta: old #2 with its palette-delta and palette-reuse tests.
 11. forced_style, fftools side: the ASS-matching half of old #26: 
     option string lives in the fftools context, forwarded to the
