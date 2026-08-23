@@ -972,3 +972,20 @@ hunk from old #24), then the PGS encoder sub-series, then conversion.
 The MAINTAINERS-hunks-ride-along decision stands (record at milestone
 close). The lavc 63.2.100 APIchanges entry was removed from SS1 and
 returns with the SS3 encoder item whose old commit carries it.
+
+## 2026-08-23: SUB-SERIES TWO COMPLETE (all gates green)
+
+Item 7 = 187c861272 (lavc/gif: RGBA input with built-in quantization)
+on pgs9-recut, checkpoint cp/ss2-complete: the old GIF commit whole
+plus the gifenc-rgba ref hunk lifted from the old wiring commit, so the
+ref lands in its final state with the feature it belongs to. Verified:
+the committed ref is byte-identical to the old lineage's final ref
+(sha 219cb9d6a8e9). Build green; msg lane clean over seven commits
+with --signoff; series lane clean. NEXT per plan/0021: sub-series
+three (PGS encoder): supenc DTS (old 2bc57a256e; dts test with it);
+encoder core + ALL AVOptions + tests merged (old 592efaf419 + 428b6da863
++ 5503aac3f1 + option half of f295cfa198 + 5722ead41c; the lavc
+63.2.100 APIchanges entry returns HERE; lavc bumps re-derive: encoder
+core is the first lavc API commit -> lavc 63.2.100); palette delta
+(old 3b37c1b91b + its tests); forced_style fftools half (old f295cfa198
+remainder, no priv_data read).
