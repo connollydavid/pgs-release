@@ -1300,6 +1300,32 @@ REMAINING after walk: fate family full run, nm -D shared check,
 line-level audit vs the old series, fairy structure re-scan, plan/0021
 close-out (receipts, PLAN.md, push pgs9-recut to the fork per the
 close task, master re-cut stays out of scope).</p>
+<h2 id="2026-08-23-whole-series-gates-run-the-line-audit-caught-a-real-omission"><a class="header" href="#2026-08-23-whole-series-gates-run-the-line-audit-caught-a-real-omission">2026-08-23: whole-series gates run; the line audit caught a real omission</a></h2>
+<p>GATES on the assembled re-cut: full configure-per-step walk EIGHTEEN
+of EIGHTEEN count-verified (--enable-libass); fate family FOURTEEN of
+FOURTEEN (13 api-pgs + lavu quantize); nm -D cross-lib CLEAN; encoder
+registers with all six option families; the end-to-end smoke (srt -&gt;
+sup with -sub_quantize_method) verified earlier at item 16. The
+line-level audit (10986 old lines checked) caught a REAL OMISSION the
+plan had made: old #30 (the animation-scan CPU cap, the DoS fix) never
+received an assembly item. FOLDED into the text-to-bitmap commit (its
+natural home; three SUB_ANIM_SCAN_MAX_MS matches; animation tests
+four of four after) — the item-15 message rewritten cleanly in the
+same pass after a splice error put the addition on the subject line
+(the msg lane caught it; the lane catches everything eventually).
+Post-fold shas: item 15 = the edited commit; tip cff4e4008e (Changelog
+patch); msg lane clean over 18; series lane at one standing
+backport-focus warn (item 17's message cites a ticket; heuristic,
+dispositioned). The remaining 38 non-verbatim audit lines are ALL
+intended rework: the force_all/quantize/forced_style priv-read blocks
+(one-way replacements), the Makefile continuation layout (canonical
+single lines now), and one api.mak stanza line. Walk transfer after
+the cap fold: item 15 built at fold time, 16-18 trees identical to the
+walked pre-cap versions, tip built — sound by the same transfer
+argument used at the 9.0.1 rebase. IN FLIGHT: the fairy structure
+RE-SCAN on the 18-commit re-cut (ticket 9002, same framing, verdict
+from the debug dump). REMAINING: scan verdict, plan/0021 close-out
+(receipts/PLAN.md/push pgs9-recut to fork).</p>
 
                     </main>
 
