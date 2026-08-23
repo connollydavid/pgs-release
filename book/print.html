@@ -6820,6 +6820,31 @@ delete the artifact before re-reading a signature. NEXT: item 10
 from old 4e2ada3e4b/b92f869fd6 + their stanzas), item 11 (forced_style
 fftools half of old f295cfa198, no priv_data read), then SS4 per the
 plan, the final patch, whole-series gates, close-out.</p>
+<h2 id="2026-08-23-sub-series-three-complete-with-a-plan-correction"><a class="header" href="#2026-08-23-sub-series-three-complete-with-a-plan-correction">2026-08-23: SUB-SERIES THREE COMPLETE (with a plan correction)</a></h2>
+<p>SS3 = three commits, walk verified three of three (cp/ss3-complete;
+cp/ss2-complete backfilled): 9aa16fa005 supenc DTS; 212f317265 encoder
+core with all options and the seven-test family (fate seven of seven);
+10822ee32f palette delta with palette-delta + palette-reuse tests
+(both pass). PLAN CORRECTION (execution-proved): plan item 11
+(forced_style fftools half) CANNOT precede SS4 — its substance (the
+ASS matching) lives in ffmpeg_enc_sub.c, which SS4's text-to-bitmap
+item creates. The forced_style fftools half therefore FOLDS into SS4's
+text-to-bitmap item (or the wiring item), where the one-way option
+flow (CLI value kept in the fftools context, forwarded via av_opt_set,
+never read back from encoder priv_data) is implemented. Walk lessons:
+the per-commit build walk needs ./configure re-run at each step when a
+codec appears mid-series (a config.mak that knows PGSSUB_ENCODER
+cannot build a tree that lacks it), and a walk loop over a mistyped
+range completes VACUOUSLY — the loop must count its steps and assert
+the total (now in host-walk3b.sh). NEXT: SS4, seven items per the plan</p>
+<ul>
+<li>the folded forced_style half: sub_util (retitled), text render +
+adopters, OCR + adopters, text-to-bitmap WITH lookahead (old 23+25
+merged; forced_style matching + animation/coalesce/rectsplit tests
+fold in), pipeline wiring (+ the old DTS hunk + one-way
+quantize_method), bitmap-to-text, disposition bridge; then the final
+patch and the whole-series gates.</li>
+</ul>
 
                     </main>
 
