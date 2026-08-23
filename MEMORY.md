@@ -1236,3 +1236,19 @@ reviewer is genuinely thorough.) FIX: the repo root now sits on
 pgs9-recut (18 commits verified at staging); re-scan two running.
 LESSON for every future fairy run: the repo root's checked-out branch
 IS what gets reviewed; stage it at the series tip before launching.
+
+## 2026-08-23: plan/0021 EXECUTED — the re-cut is complete and pushed
+
+pgs9-recut = 18 commits, tip cff4e4008e, PUSHED to the fork
+(connollydavid/FFmpeg, ls-remote verified). Every mechanical gate
+green: walk 18/18, fate 14/14, nm -D clean, lanes clean, smoke
+verified, line audit fully accounted (39 non-verbatim lines all
+intended rework). The fairy re-scan VERDICT is the one open item:
+blocked by the Ollama PRO SESSION USAGE LIMIT (429; three deep scans
+burned it — scan one 250 rounds on the wrong branch [staging mistake,
+fixed], scan two 232 rounds to the tool cap, scan three 429). The
+completion record sits in plan/0021's README; the re-cut itself needs
+nothing further mechanically. OPERATOR DECISIONS remaining: the
+fairy verdict (wait for the quota reset / add usage / accept the
+mechanical gates as sufficient), then the master re-cut + RFC +
+submission milestone whenever called.

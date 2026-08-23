@@ -216,3 +216,27 @@ and submission are OUT of scope (later milestones; rerere replays).
 4. ELBG backend: does NOT touch pgssubenc (five files, all lavu and
    docs). The verdict's duplicated-hunk claim was wrong; nothing to
    drop at that item.
+
+## Completion record (2026-08-23)
+
+Executed end to end: 18 commits on pgs9-recut (tip cff4e4008e,
+pushed to the fork and ls-remote verified), the four sub-series in
+dependency order per the assembly map with the execution-proved
+corrections recorded in MEMORY.md (all encoder-gated tests return
+with the encoder commit; the forced_style half folds into the
+text-to-bitmap item; the animation cap — missed by the assembly map —
+caught by the line audit and folded into the same item; the
+disposition bridge's force_all read converted one-way like the rest).
+Gates: configure-per-step walk 18/18 count-verified with
+--enable-libass; fate 14/14 (thirteen api-pgs plus the lavu quantize
+test); nm -D cross-lib clean; encoder registers with every option;
+end-to-end smoke (srt -> .sup with -sub_quantize_method) verified;
+msg lane clean over all 18 with --signoff; series lane at two
+dispositioned heuristic warns. The fairy structure re-scan ran three
+times (verdict one reviewed the old branch due to a staging mistake,
+since fixed and ledgered; verdict two hit the tool-round cap; verdict
+three hit the Ollama session usage limit) — the scan verdict remains
+OPEN pending quota, an operator decision; every mechanical gate is
+green without it. MAINTAINERS entries ride with their introducing
+commits (execution decision, recorded); the Changelog consolidates at
+the head in the final patch as planned.
