@@ -62,7 +62,7 @@ message item (model answers prose, not the JSON envelope; see ledger).
 - host-lint-ffmpeg v0.19.0 (we released it): series lane is
   base-aware; msg lane takes rev ranges; `--signoff` for the project
   rule. Hooks: sibling binary must be re-copied on every lint bump.
-- Gate gotchas: dotted two-part numerals ("8.1", "61.2", "0.5") in
+- Gate gotchas: dotted two-part numerals (version-shaped pairs) in
   prose/docs BLOCK the gate (reword to tag forms); "step" is manifest
   vocabulary; em-dashes fail prose zero-tropes; MEMORY.md is excluded.
 - Walk loops MUST count steps and assert the total (a mistyped range
