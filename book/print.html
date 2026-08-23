@@ -6896,6 +6896,32 @@ file head, tail version bumps; MAINTAINERS stays with its commits);
 then whole-series gates: full configure-per-step walk, lanes, fate
 family 15/15 (7 encoder + 2 palette + 4 animation + gifenc-rgba +
 quantize), nm -D, line-level audit, fairy re-scan, plan close-out.</p>
+<h2 id="2026-08-23-ss4-item-16-landed--the-one-way-circuit-is-live"><a class="header" href="#2026-08-23-ss4-item-16-landed--the-one-way-circuit-is-live">2026-08-23: SS4 item 16 landed — the one-way circuit is LIVE</a></h2>
+<p>Item 16 = a4f5bc9305 (fftools: wire subtitle conversion into the
+encoding pipeline; checkpoint cp/ss4-wiring): the old wiring minus its
+already-dispositioned test/ref hunks, plus the old DTS hunk, plus the
+NEW one-way option circuit — -sub_quantize_method and -sub_forced_style
+are ffmpeg_opt options (OPT_SUBTITLE|OPT_PERSTREAM|OPT_OUTPUT),
+extracted per-stream in mux_init, stored on OutputStream, copied into
+SubtitleEncContext by enc_sub_set_options, and forwarded ONCE to the
+encoder via av_opt_set at the convert_text_to_bitmap entry (guard
+flag). VERIFIED END TO END under the in-tree loader: srt -&gt; .sup with
+-sub_quantize_method 1 produces a real PGS file. The CONFIG_LIBASS
+gating was incidentally proven live: without libass the conversion
+refuses with the clean configure hint (a good error, not a crash).
+msg lane clean over fifteen commits; series lane at the standing
+fate-sample warn. Mechanics notes: the finalizer scripts must be
+idempotent (a re-run re-inserted the forward block; the dedupe pattern
+is in host-ss4-realfin16.sh), and the LD_LIBRARY_PATH smoke MUST go
+through a script file — inline env through the double shell silently
+loads /usr/lib and produces phantom "encoder not found" (twice now).
+NEXT: item 17 (bitmap-to-text, old 40f023c496, dec_sub.h final form),
+item 18 (disposition bridge, old 03e8e4cfb0, priv read stripped the
+same way — its read is of the forced flag, likely ost-level already),
+item 19 (final patch: single Changelog entry at the FILE HEAD, tail
+version bumps), then the whole-series gates (configure-per-step walk
+with --enable-libass, lanes, fate family, nm -D, line-level audit,
+fairy re-scan) and the plan/0021 close-out.</p>
 
                     </main>
 
