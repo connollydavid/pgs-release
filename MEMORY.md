@@ -1013,3 +1013,30 @@ line above the APITESTPROGS aggregation, stanza appended to api.mak);
 NEVER pass makefile \$(...) through inline bash -c (command
 substitution corrupts the file; the broken-line repair is in
 host-fix-makefile.sh).
+
+## 2026-08-23: SS3 item 9 committed; fate-family debugging is the resume task
+
+Item 9 = d84b67052c (lavc/pgssubenc: add HDMV PGS subtitle encoder) —
+the merged core (old 592efaf419 + 428b6da863 + 5503aac3f1 +
+5722ead41c + the option-definition half of f295cfa198 via extracted
+diff + --3way, markers resolved keeping ours), lavc 63.2.100, the
+APIchanges entry at the series head, all seven encoder tests + the
+util header wired (canonical PROGS line at tests/api/Makefile above
+the aggregation; stanzas in tests/fate/api.mak — beware: the item-8
+attempts left stale duplicate lines there; the deterministic rewriter
+is host-fate4.sh's python). Build green after reconfigure; msg lane
+clean over nine commits; series lane shows only the KNOWN fate-sample
+warn. UNRESOLVED (resume here): the fate family runs 1/7 —
+rate-control PASSES; fade+dts "No rule to make target" (their api.mak
+stanzas are missing or malformed — the item-9 stanza-adder's
+deduplication check may have skipped them); overlap-verify,
+multi-object, ap-interval print "PGS encoder not found" (from
+pgs-test-util.h's avcodec_find_encoder, DESPITE LD_LIBRARY_PATH set
+and the encoder demonstrably registered — rate-control's identical
+lookup works); forced prints "Test A: failed to open encoder".
+Suspects to check first: (a) the api.mak stanza inventory vs the seven
+names (grep fate-api-pgs tests/fate/api.mak); (b) STALE TEST BINARIES
+— make tests/api-clean or touch the sources, the binaries predate the
+reconfigure; (c) whether the util header's find is compiled with a
+stale TEST define. Checkpoint cp/ss3-encoder. Items 10 (palette delta
++ tests) and 11 (forced_style fftools half) remain after, then SS4.
