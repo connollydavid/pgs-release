@@ -252,7 +252,7 @@ committed test ELF removed and gitignored, the borrowed forced_style
 pointer no longer freed on the fail path (UAF), the sub_forced_style
 allocation freed in the mux teardown, the option help text reconciled
 to the enum order, MAINTAINERS style normalized, the version.h blank
-line removed, the Changelog 9.0 block restored, and the fate api.mak
+line removed, the stable-release Changelog block restored, and the fate api.mak
 completed (base aggregation plus every stanza). Final branch:
 pgs9-recut2 tip 4558bebf96, force-pushed to the fork as pgs9-recut.
 Gates: build, FATE 14/14, nm -D clean, lanes clean, srt->sup smoke,
