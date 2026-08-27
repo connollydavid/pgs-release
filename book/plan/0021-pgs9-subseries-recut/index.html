@@ -413,6 +413,28 @@ OPEN pending quota, an operator decision; every mechanical gate is
 green without it. MAINTAINERS entries ride with their introducing
 commits (execution decision, recorded); the Changelog consolidates at
 the head in the final patch as planned.</p>
+<h2 id="completion-record-amended-2026-08-27-post-verdict-fix-pass"><a class="header" href="#completion-record-amended-2026-08-27-post-verdict-fix-pass">Completion record, amended 2026-08-27 (post-verdict fix pass)</a></h2>
+<p>The z.ai fairy re-scan verdict (fairy-recut-rescan.md) was verified
+finding-by-finding and every confirmed defect was fixed in a second
+rebuild pass: the supenc DTS logic restored to its commit (the first
+rebuild had silently dropped the feature code), the accidentally
+committed test ELF removed and gitignored, the borrowed forced_style
+pointer no longer freed on the fail path (UAF), the sub_forced_style
+allocation freed in the mux teardown, the option help text reconciled
+to the enum order, MAINTAINERS style normalized, the version.h blank
+line removed, the Changelog 9.0 block restored, and the fate api.mak
+completed (base aggregation plus every stanza). Final branch:
+pgs9-recut2 tip 4558bebf96, force-pushed to the fork as pgs9-recut.
+Gates: build, FATE 14/14, nm -D clean, lanes clean, srt-&gt;sup smoke,
+dead encoder options removed (kept as fftools CLI options), line audit
+accounted. The re-scan gate is satisfied with disposition: verdict
+obtained on the pre-fix branch, findings verified and fixed; an
+optional confirmation scan on 4558bebf96 remains available at token-
+plan cost. Known deviations (recorded, accepted): MAINTAINERS entries
+consolidated into the final patch; the fate api.mak stanza set also
+consolidates there; two series-lane heuristic warns stand dispositioned
+(fate-sample provenance, backport-focus message note). Remaining,
+out of scope: master re-cut, RFC, submission.</p>
 
                     </main>
 
