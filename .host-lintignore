@@ -48,3 +48,6 @@ plan/0020-pgs9-series-remediation/fairy-structure-review.md
 # Dated, frozen handover snapshot (2026-08-23): point-in-time session
 # survival document, superseded by MEMORY.md as living record.
 HANDOVER.md
+
+# Second frozen machine-review artifact (re-scan of the re-cut).
+plan/0021-pgs9-subseries-recut/fairy-recut-rescan.md
