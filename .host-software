@@ -21,6 +21,6 @@
 
 [software "ffmpeg"]
     url          = https://github.com/connollydavid/FFmpeg.git
-    pin          = 964fc5e2d9192dc24c4459cbc6803ebf079a2c11
-    branch       = pgs9-9.0.1
+    pin          = 4558bebf96453ff801be6d92d4ae9af5fe805684
+    branch       = pgs9-recut
     repro-waiver = call/0003
