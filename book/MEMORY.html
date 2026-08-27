@@ -1500,6 +1500,30 @@ re-cut is done and the operator is happy; do not draft RFC mail.
 Next milestone on call: master re-cut (rerere replay + sub-series
 structure localizes conflicts; coordinate with the ~/pgs9-wt/handover
 session first).</p>
+<h2 id="2026-08-27-final-5-master-re-cut-complete--19-commits-one-flaky-test-documented"><a class="header" href="#2026-08-27-final-5-master-re-cut-complete--19-commits-one-flaky-test-documented">2026-08-27 (final-5): master re-cut complete — 19 commits, one flaky test documented</a></h2>
+<p>The master re-cut ran cleanly: upstream/master @ 0bffa4a84d (2026-08-25,
+999 commits past the stable base) replayed with the 18 fixed commits as
+branch pgs9-master, ffmpeg_enc.c merged honestly (master refactored
+enc_reopen/EncoderPriv into the file; our conversion changes 3-way
+applied with the set_ass_subtitle_header helper re-anchored and an
+orphaned enc_open signature fragment removed — commit 62966eff01).
+Versions re-derived on master: lavu 61.7..61.11 sequential, lavc 63.9,
+lavf micro 102, APIchanges entries at the series head. Gates at tip
+62966eff01 (19 commits = 18 + the enc.c reconciliation): build OK,
+FATE 13/14, nm -D clean, lanes clean, srt-&gt;sup smoke OK.
+THE ONE FAILURE: fate-api-pgs-animation-timing "First frame empty" —
+the test samples the libass render at EXACTLY the event start
+timestamp; a fade-in at its exact start can render fully transparent.
+Isolation: it fails IDENTICALLY on the 9.0.1-based branch in this
+environment → NOT a master regression; a test-boundary flake (libass
+rounding at t=start) or environment-dependent rendering. Next session:
+sample at start_ms+1 (or assert non-empty within the fade window) in
+the test, then the count-verified build walk on master + force-push
+pgs9-master to the fork. NOTE: an unregistered ~/pgs9-wt/handover
+directory (stale July-17 artifacts, not a repo) was deleted after a
+lost-work check confirmed everything derivable from intact branches;
+git misbehaviours during the session traced to wsl.exe command
+truncation — script files only, always cd-verify.</p>
 
                     </main>
 
