@@ -1353,6 +1353,42 @@ nothing further mechanically. OPERATOR DECISIONS remaining: the
 fairy verdict (wait for the quota reset / add usage / accept the
 mechanical gates as sufficient), then the master re-cut + RFC +
 submission milestone whenever called.</p>
+<h2 id="2026-08-27-verdict-verified-fix-replay-in-progress--resume-here"><a class="header" href="#2026-08-27-verdict-verified-fix-replay-in-progress--resume-here">2026-08-27: verdict verified; fix replay in progress — RESUME HERE</a></h2>
+<p>The fairy re-scan verdict (plan/0021/fairy-recut-rescan.md) was
+mechanically verified: ALL blocking findings REAL. Root causes traced
+to my own mechanics: the supenc cherry-pick deleted the whole base
+api.mak (destroying the FATE aggregation — our explicit-target fate
+runs masked it), my item-19 Changelog regex ate the 9.0 feature block,
+an unstaged-sed version fix struck again (NeuQuant commit carries
+APIchanges 61.3 without the bump), a dup MINOR define, and the -x
+trailers multiplied. Also verified: pgssubenc declares
+quantize_method/forced_style but never reads them (dead options —
+remove from encoder+docs, keep fftools CLI options; superseding
+call/0006's mechanism, intent preserved), gif option max=0 broken,
+fftools bound excluded ELBG, force_all IS read internally (kept+one-way
+forwarded), sub-ocr-roundtrip.srt missing on BOTH branches (add sample),
+bridge force_all priv read (convert one-way like the rest).
+The 18-commit rebuild branch pgs9-recut2 went through multiple
+corruptions during in-place fix attempts (interactive rebase and
+tree-assignment squash both proven unsafe here). CURRENT SAFE POINTS:
+pgs9-recut (old 18, pre-fix) untouched at cff4e4008e (pushed to fork);
+pgs9-recut2 @ ee72481bff (24 = 18 replayed + 6 fixups, ALL FIX CONTENT
+present at tip: circuit, MAINTAINERS, APIchanges dedupe; missing only
+the pgssubenc fragment fix + needs fixup-squash); 26943e0c61 (squashed
+18, INCOMPLETE — later commits overwrote encsub circuit via whole-tree
+assignment; do NOT use). NEXT (resume): rebuild branch replay-v3 =
+cherry-pick all 18 originals from n9.0.1 with EVERY fix baked at the
+right step (the phase-2 script patterns CORRECTED: strip the two dead
+pgssubenc options INCLUDING their table tails via full-entry regex,
+the one-way edits must match the ORIGINAL enc_ctx-&gt;priv_data shapes,
+insert ctx fields, MAINTAINERS beside the ffmpeg_dec_sub anchor which
+DOES exist at that point, api.mak = base+pgs at encoder, ocr sample
+added, gif range, lavf micro, NOPTS guard, APIchanges final exact set
+[61.3 once, 61.4 palettemap, 61.5+region, 61.6 ELBG-only, lavc 63.2],
+no 61.2 entry, trailer dedupe everywhere). Then full gates + force-push
+pgs9-recut2 to the fork as pgs9-recut + HANDOVER/plan updates. The
+gutted-state lesson: NEVER tree-assign squash when later commits touch
+the same files; never trust --continue after swallowed conflicts.</p>
 
                     </main>
 
