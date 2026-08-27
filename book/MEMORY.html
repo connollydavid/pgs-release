@@ -1524,6 +1524,26 @@ directory (stale July-17 artifacts, not a repo) was deleted after a
 lost-work check confirmed everything derivable from intact branches;
 git misbehaviours during the session traced to wsl.exe command
 truncation — script files only, always cd-verify.</p>
+<h2 id="2026-08-28-submission-path-corrected--no-forge-until-hardware-validated-and-feature-complete"><a class="header" href="#2026-08-28-submission-path-corrected--no-forge-until-hardware-validated-and-feature-complete">2026-08-28: SUBMISSION PATH CORRECTED — no forge until hardware-validated and feature-complete</a></h2>
+<p>Operator correction: the master re-cut (pgs9-master) is an INTEGRATION
+branch only. Nothing goes to the forge/upstream until (1) the pgs
+encoder/decoder is fully finished in all aspects and (2) validated on
+real hardware. The "straight to forge" framing is NAKed. What remains
+before any upstream contact, concretely: full FATE with the fate-suite
+samples (sub-pgs et al need FATE_SAMPLES), quantizer benchmarks
+(plan/0020#quantizer-benchmarks), edge-case matrix (huge palettes,
+overlapping events, long events, animation-cap degradation, forced +
+rate-control interactions), decoder-side review (pgssubdec compliance
+against the HDMV spec, model compliance in decode, not just encode),
+API/docs completeness review, patcheck + series-lane clean pass, and
+hardware validation: authored BD-R/BD-RE discs or USB playback of our
+SUP output on real BD devices (Samsung/Panasonic/Sony/Oppo players,
+PS3/PS4/PS5, LG/Panasonic TVs) verifying sync, forced subtitles,
+fade/animation, acquisition points, and decoder tolerance. The
+operator knows what hardware is available: ASK before planning.
+Handover workspace (~/pgs9-wt/handover) deleted 2026-08-27 after
+lost-work check (all derivable); stale theme worktrees in ~/pgs9-wt/
+remain, prunable on request.</p>
 
                     </main>
 
