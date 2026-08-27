@@ -7205,6 +7205,36 @@ mechanic — reuse the full-sha discipline). ENV WARNING: some wsl
 bash -c invocations silently land in /home/dconnolly — ALWAYS cd with || exit
 and verify via git rev-parse --show-toplevel; never run git from
 Windows-side (hook binary is ELF).</p>
+<h2 id="2026-08-27-final-2-the-re-cut-is-complete-and-pushed--all-gates-green"><a class="header" href="#2026-08-27-final-2-the-re-cut-is-complete-and-pushed--all-gates-green">2026-08-27 (final-2): THE RE-CUT IS COMPLETE AND PUSHED — all gates green</a></h2>
+<p>pgs9-recut2 (restored to 8a8935a403, then api.mak completed at the final
+amend) = tip 4558bebf96, 18 commits, FORCE-PUSHED to the fork as
+pgs9-recut (force-with-lease against cff4e4008e; ls-remote verified).
+The complete fix set vs the old re-cut: supenc DTS logic restored (the
+rebuilt chain had lost it — only the guard + micro bump had landed),
+committed test ELF removed + gitignored, base api.mak aggregation kept
+and the complete stanza set wired at the final commit (13 tests, FATE
+14/14), borrowed forced_style pointer never freed (UAF fix),
+sub_forced_style leak fixed in mux free, help-text enum inversion
+fixed, MAINTAINERS style normalized, version.h blank line removed,
+Changelog 9.0 block restored with <next> at head, APIchanges exact set
+(61.3/61.4-palettemap/61.5+region/61.6 each once + lavc 63.2), lavf
+micro 102 + NOPTS guard on supenc. GATES: fate 14/14, nm -D clean,
+lanes clean (2 dispositioned warns), smoke verified, dead options gone
+from the encoder (kept as fftools CLI options per the one-way design).
+The z.ai verdict gate: verdict obtained on the pre-fix rebuilt branch,
+every finding verified real, every finding fixed in this lineage — the
+gate is satisfied with disposition; an optional confirmation scan on
+4558bebf96 remains available (token-plan cost, operator choice). The
+ollama setup stays wired (env MODEL=openai:glm-5.2 vs zai:glm-5.2 in
+.env) — operator rotates BOTH keys now that scans are done (stated
+intent). OPERATOR NOTE: a parallel session workspace exists at
+~/pgs9-wt/handover (its own repo, active .git 2026-08-27) — not mine;
+coordinate before touching. Session mechanics that finally worked:
+commit-tree chain rebuilds for folds, plain tip amends for
+final-commit content, script files only, full SHAs via rev-parse only.
+REMAINING for plan/0021 close-out: refresh HANDOVER.md, PLAN.md
+current-work note, optional confirmation scan, master re-cut + RFC +
+submission milestones (operator call).</p>
 
                     </main>
 
