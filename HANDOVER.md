@@ -92,3 +92,21 @@ pgs9-9.0.1/964fc5e2d9 — the Where-room pin still points at the OLD
 branch (the re-cut is on the fork but NOT pinned; pin switch is part
 of the next release/submission flow, operator-gated). Release
 n9.0.1-pgs9.1 assets remain the shipped binaries.
+
+## RESUME STATE UPDATE (2026-08-27, latest — supersedes older sections above)
+
+THE RE-CUT IS DONE AND PUSHED. pgs9-recut on connollydavid/FFmpeg =
+4558bebf96 (18 commits, force-pushed from pgs9-recut2). Every verdict
+finding fixed and gated: FATE 14/14, nm -D clean, lanes clean, smoke
+verified, dead encoder options removed, supenc DTS logic restored,
+api.mak aggregation + all stanzas complete, Changelog 9.0 block
+restored, MAINTAINERS wrapper entries in. plan/0021 close-out amended.
+LLM setup: .env now has ZAI_API_KEY (z.ai native, MODEL=zai:glm-5.2)
+plus the old ollama lines (inert). OPERATOR TO-DOS: rotate both keys
+(z.ai + ollama) — stated intent; optional confirmation fairy scan on
+4558bebf96 (token-plan cost); master re-cut + RFC + submission
+milestones on call. NOTE: a parallel session workspace exists at
+~/pgs9-wt/handover (its own repo, active) — not ours; coordinate.
+The walk/gate scripts: host-gates-final.sh, host-foldct.py +
+host-squash.py (commit-tree rebuilds — the ONLY safe fold/squash
+mechanic here), host-rescan-zai.sh (scan runner).
