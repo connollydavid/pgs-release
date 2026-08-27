@@ -7178,6 +7178,33 @@ re-scan per the operator disposition) + force-push pgs9-recut2 to the
 fork as pgs9-recut + HANDOVER/plan/ledger updates. All scripts in
 %TEMP%/host-</em>.sh; the replay lib (pick/resolve/dedupe/norm_lavu) is in
 host-replay-v3a.sh — REUSE IT.</p>
+<h2 id="2026-08-27-final-fix-replay-paused-at-a-good-state-exact-resume"><a class="header" href="#2026-08-27-final-fix-replay-paused-at-a-good-state-exact-resume">2026-08-27 (final): fix-replay paused at a good state; exact resume</a></h2>
+<p>pgs9-recut2 restored to v3/pre-fold (8 commits, build-OK, no conflict
+markers): OkLab, ELBG-move(61.2), NeuQuant(61.3), palettemap-avpriv
+(61.4+entry), 337d370a86 Median-Cut-original, 00dabd643d
+MedianCut-adopter, ELBG-backend(61.6), gif(range already ELBG in this
+lineage). REMAINING (in order): (1) fold 337d+00dabd into one
+[mechanic that WORKS: git checkout -B pgs9-recut2 v3/pre-fold; git
+reset --soft 337d370a86^; git commit -F msg; then
+re-pick f9f398f1d9 (norm_lavu 6) and 83720ce94c (gif range) with full
+SHAs via rev-parse — abbreviated shas and position-based todo edits
+are BANNED (three corruption incidents)]; (2) APIchanges exact-set
+enforcement at tip (61.3 once, 61.4, 61.5+region, 61.6 ELBG-only; dup
+61.3 present now); (3) phase B per the 2026-08-27 resume entry
+(supenc+base api.mak+lavf micro+NOPTS; encoder+base api.mak+7
+stanzas+dead-option strip incl. tails+lavc 63.2; delta+tests; 3
+wrappers retitled+MAINTAINERS-in-final-patch; encsub one-way circuit
+[original-shape anchors]; wiring circuit; ocr sample; bridge one-way;
+final Changelog with 9.0 block INTACT); (4) gates: walk 18
+count-verified, fate 14/14, nm -D, lanes, line audit; (5) fairy
+re-scan re-run (quota reset confirmed working); (6) force-push
+pgs9-recut2 to the fork as pgs9-recut; (7) plan/0021 close-out +
+HANDOVER refresh. REUSABLE SCRIPTS: host-replay-v3a.sh (the working
+replay lib), host-gate3.sh (gate check), host-fold-mc3.sh (the fold
+mechanic — reuse the full-sha discipline). ENV WARNING: some wsl
+bash -c invocations silently land in /home/dconnolly — ALWAYS cd with || exit
+and verify via git rev-parse --show-toplevel; never run git from
+Windows-side (hook binary is ELF).</p>
 
                     </main>
 
