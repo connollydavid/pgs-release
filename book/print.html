@@ -7148,6 +7148,36 @@ no 61.2 entry, trailer dedupe everywhere). Then full gates + force-push
 pgs9-recut2 to the fork as pgs9-recut + HANDOVER/plan updates. The
 gutted-state lesson: NEVER tree-assign squash when later commits touch
 the same files; never trust --continue after swallowed conflicts.</p>
+<h2 id="2026-08-27-replay-v3-status--ss1-rebuilt-with-all-fixes-one-split-to-fold-resume"><a class="header" href="#2026-08-27-replay-v3-status--ss1-rebuilt-with-all-fixes-one-split-to-fold-resume">2026-08-27: replay-v3 status — SS1 rebuilt with all fixes; one split to fold; RESUME</a></h2>
+<p>pgs9-recut2 checkpoint v3/split-state = 8 commits (SS1 + gif), build
+green, single MINOR line, gif range fixed, dead-export kept (RFC note),
+APIchanges exact set enforced EXCEPT a duplicate 61.3 entry remains
+(enforce the 4-entry exact set at the final patch). ONE DEFECT vs plan:
+the Median Cut step split into TWO commits (337d370a86 "add Median Cut
+quantizer and region-weighted palette generation" = original pick, and
+00dabd643d "add Median Cut quantization and adopt it in vf_palettegen"
+= the palettegen adopter). Fold them into one (soft-reset the second,
+re-commit with the merged message + trailers) OR accept the split and
+retitle both clearly — operator-neutral, folding preferred. THEN:
+phase B replay (supenc with base api.mak restored + lavf micro + NOPTS
+guard; encoder with base api.mak + 7 pgs stanzas + dead
+quantize_method/forced_style options REMOVED from pgssubenc table,
+struct, encoders.texi [full-entry regex incl. tails; the naive strip
+left fragment "SE }, 0, 0, SE }, 0, 2, SE }," on the max_cdb line —
+the fragment fix must be re-applied] + force_all kept + lavc 63.2 +
+entry; delta + tests; 3 wrappers retitled; encsub merged with cap +
+one-way [original-shape anchors: get_quantize_algo(const
+AVCodecContext <em>enc_ctx) full-body replace, forced_style av_opt_get
+block replace, av_free(forced_style_str) removal, ELBG bound, ctx
+fields via exact-string insert] + animation tests; wiring with circuit
+[options/fields/extraction/setter/forward]; ocr sample added; bridge
+one-way; final patch = Changelog (<next> at head, 9.0 block INTACT) +
+MAINTAINERS consolidated entries + APIchanges exact-set enforcement).
+Then full gates (walk 18, fate 14/14, nm, lanes, line audit, fairy
+re-scan per the operator disposition) + force-push pgs9-recut2 to the
+fork as pgs9-recut + HANDOVER/plan/ledger updates. All scripts in
+%TEMP%/host-</em>.sh; the replay lib (pick/resolve/dedupe/norm_lavu) is in
+host-replay-v3a.sh — REUSE IT.</p>
 
                     </main>
 
