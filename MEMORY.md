@@ -1844,3 +1844,25 @@ so the superseded block had to be removed by hand; and the remap
 message could name the allow file it honours (.host-lint-allow).
 The project ledger is now green with only the deliberately-open
 submission-prep tasks outstanding.
+
+## 2026-08-28 (final-19): ASAN+UBSAN pass clean, one library UB found and fixed
+
+Operator directive: an ASAN/UBSAN pass before the hardware sweep.
+Built the tip with clang 22 (-fsanitize=address,undefined,
+fail-stop UB, leak detection) in a scratch worktree. The gate
+found one real library bug: the NeuQuant OkLab conversion shifted
+the signed a and b channels left, undefined for negatives (cool
+and warm hues); fixed by multiplying by the shift width, which
+yields the identical two's-complement result. The pass also
+caught the fade test packing alpha into the sign bit
+(140 << 24) and three tests leaking sub.rects on fall-through
+paths. All fixed at pgs9-master 33a8b290d1 (27 commits now, pin
+and in-tree handle updated). Gate after fixes: fifteen api-pgs
+fates, fate-quantize, fate-sub-pgs, and the CLI conversion smokes
+all clean under the sanitizers. Operational notes: fate-sub-pgs
+needs FATE_SAMPLES on the make line (export alone failed once via
+env loss), and the inline wsl.exe bash -lc quoting dropped
+LD_LIBRARY_PATH entirely, so the binary silently resolved system
+libraries and misreported the encoder as missing — the standing
+script-file rule caught it. Sanitizer task recorded in plan/0022
+(#sanitizer-pass); asan scratch worktree removed.

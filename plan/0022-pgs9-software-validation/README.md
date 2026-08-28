@@ -106,6 +106,22 @@ strip, APIchanges truth pass).
 
 - verify: attested operator
 
+### Sanitizer pass {#sanitizer-pass}
+
+- depends: #out-of-scope
+- verify: the api-pgs set, quantize, and fate-sub-pgs green under
+  address and undefined sanitization with leak detection; the CLI
+  conversion smokes clean
+
+Operator directive, 2026-08-28: run the whole PGS gate under
+AddressSanitizer and UndefinedBehaviorSanitizer (fail-stop,
+leak detection on) before the hardware sweep. Findings, all fixed
+at pgs9-master 33a8b290d1: the NeuQuant OkLab conversion shifted
+the signed a and b channels, undefined for negatives; the fade
+test packed alpha into the sign bit; three tests leaked the rect
+array on fall-through paths. The gate is clean after the fixes
+and folds into the owning commits at submission prep.
+
 ## Findings
 
 (appended by each task as it runs)

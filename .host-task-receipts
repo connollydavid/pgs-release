@@ -298,3 +298,10 @@
     evidence = the ffmpeg stanza switched to pgs9-master at d854c88265 with the in-tree handle software/ffmpeg/pgs9-master at the pin; host-lifecycle software --check green
     tool = host-lifecycle@0.50.0
     recorded = 2026-08-28
+
+[receipt "plan/0022#sanitizer-pass"]
+    disposition = done
+    verify = the api-pgs set, quantize, and fate-sub-pgs green under
+    evidence = clang 22 build with -fsanitize=address,undefined, fail-stop UB and leak detection: the fifteen api-pgs fates, fate-quantize, fate-sub-pgs and the CLI conversion smokes all pass after the fixes at pgs9-master 33a8b290d1 (signed shift UB in the NeuQuant OkLab conversion, sign-bit palette packing in the fade test, rect-array leaks in three tests)
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
