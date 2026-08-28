@@ -1755,3 +1755,27 @@ abb82b5b17, which the fork had been missing (remote tip was
 b258be4ce6). Boundary call: palettemap.c/h hold code extracted from
 vf_paletteuse; the ruling applied file-level, so the claim stands
 there, recorded in plan/0023 findings for review.
+
+## 2026-08-28 (final-15): plan/0023 executed, three gates landed, one walk running
+
+Epoch palette-cache hole fixed at pgs9-master 4801ab8c08, red
+confirmed pre-fix: the test drives an entry opaque in epoch one,
+transparent at the epoch-two boundary, restored later; the stale
+cache suppressed the delta write and the fixed tree passes. The
+api-pgs fate set is green at 15 targets. The edge test record no
+longer claims an open encoder segfault (a58e6f9c12). Per-stream
+option forwarding proven at run time: duplicate-mapped pgssub
+streams in one mkv, byte-identical SUPs under the same method,
+decisively different under NeuQuant vs Median Cut (105872 vs 63765
+bytes); NeuQuant vs ELBG coincide on that content, so the Median Cut
+pairs carry the proof. UHD smoke green: 3840x2160 srt-to-sup encodes
+(217933 bytes) and decodes through pgssubdec, proven by a DVB
+transcode; the null muxer is not a subtitle sink. The count-verified
+walk (per-step configure, upstream/master..pgs9-master, now 25
+commits) runs in the background. Notes for submission prep:
+pgs-test-util.h unused-function warnings would fall to a static
+inline pass; the av_opt_set forward in convert_text_to_bitmap writes
+quantize_method into pgssubenc priv_data, which defines no such
+option (the conversion picks the algorithm via the fftools context,
+so the forward is only meaningful for encoders that quantize
+internally, like gif); worth a disposition at submission prep.
