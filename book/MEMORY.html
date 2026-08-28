@@ -1753,6 +1753,20 @@ LD_LIBRARY_PATH for every fate run, stale .err deletion before
 trusting a signature, per-step configure in walks, count-verified
 walks. plan/0022 receipts are recorded manually in the plan README
 (host-lifecycle limitation with manually-created milestones).</p>
+<h2 id="2026-08-28-final-12-plan0022-delivered-per-commit-bisectability-restored-on-master"><a class="header" href="#2026-08-28-final-12-plan0022-delivered-per-commit-bisectability-restored-on-master">2026-08-28 (final-12): plan/0022 DELIVERED, per-commit bisectability restored on master</a></h2>
+<p>The count-verified walk completed 21/21 on the FINAL lineage: every
+commit on pgs9-master builds per-commit on upstream/master. The
+reconciliation distributed into position 15 via interactive rebase
+(edit at the wiring commit, the proven master-base + 3-way enc.c
+recipe), the tail replayed clean. FATE 15/15 with in-tree libs; nm
+clean; lanes clean; smoke OK. pgs9-master force-pushed to the fork @
+b258be4ce6 (ls-remote verified). plan/0022 DELIVERED. Remaining:
+hardware pass (operator device list), submission prep (per-series
+export, -x strip, APIchanges truth pass), 256-colour edge case now
+passing live. The interactive-rebase driver lesson: run the rebase to
+a STOP, resolve in a SEPARATE script invocation, continue, the
+in-driver loop with --continue chained inside one script kept
+dropping commits (three incidents).</p>
 
                     </main>
 
