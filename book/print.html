@@ -4618,6 +4618,9 @@ blocking findings; the two standing warns resolved or re-dispositioned</li>
 <p>Hardware validation plan (device matrix, authoring pipeline, test
 discs) and the master-re-cut submission prep (per-series export, -x
 strip, APIchanges truth pass).</p>
+<ul>
+<li>verify: attested operator</li>
+</ul>
 <h2 id="findings"><a class="header" href="#findings">Findings</a></h2>
 <p>(appended by each task as it runs)</p>
 <p>The dated session log (progress records, completion records, and gate
@@ -4849,7 +4852,7 @@ content-level reading would drop it too.</p>
 api-pgs-epoch-cache drives an entry opaque in epoch one,
 transparent at the epoch-two boundary (opened by a height change),
 then restored to the epoch-one value; the pre-fix tree failed on
-step 3 exactly as the analysis predicted (stale cache suppressed
+the restore step exactly as the analysis predicted (stale cache suppressed
 the delta write), and the fixed tree passes. The whole api-pgs
 fate set stayed green, 15 targets including the new one. A build
 warning note for submission prep: pgs-test-util.h emits
@@ -4937,7 +4940,7 @@ receipts, index, this record).</p>
 <h2 id="ffmpeg"><a class="header" href="#ffmpeg">ffmpeg</a></h2>
 <ul>
 <li>url: https://github.com/connollydavid/FFmpeg.git</li>
-<li>pin: <code>4558bebf96453ff801be6d92d4ae9af5fe805684</code></li>
+<li>pin: <code>d854c88265786a19f9574e9f8f2e959c95e0b722</code></li>
 <li>worktrees: none (single canonical line)</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="use-markdown-decision-records-madr"><a class="header" href="#use-markdown-decision-records-madr">Use Markdown decision records (MADR)</a></h1>
@@ -6168,7 +6171,10 @@ Patch 2 refactors the consumer (FATE must be bit-for-bit). The
 library/header patch always comes before its consumer.</li>
 <li><strong>Verification:</strong> after building a series, run
 <code>git rebase upstream/master --exec 'make -j$(nproc)'</code> to confirm every
-patch compiles. This is not optional. Do it before pushing.</li>
+patch compiles, and run the same walk a second time under
+<code>./configure --enable-shared --disable-doc --enable-libass</code> (the shared
+build catches cross-library symbol mistakes the default configuration
+hides). This is not optional. Do it before pushing.</li>
 </ul>
 <h3 id="merge-provenance"><a class="header" href="#merge-provenance">Merge provenance</a></h3>
 <p>This file merged the pre-methodology CLAUDE.md (last at commit fe72149's
