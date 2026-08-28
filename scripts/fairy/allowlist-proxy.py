@@ -10,7 +10,7 @@ podman network the review containers run on.
 import socket
 import threading
 
-ALLOW = {("ollama.com", 443)}
+ALLOW = {("ollama.com", 443), ("api.z.ai", 443)}
 LISTEN = ("127.0.0.1", 15313)
 
 

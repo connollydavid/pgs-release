@@ -20,7 +20,7 @@ static double psnr_rgb(const uint8_t *a, const uint8_t *b, size_t n)
     }
     if (sse <= 0.0)
         return 99;
-    return 10 * log10(255.0 * 255.0 * n / sse);
+    return 10 * log10((double)255 * 255 * n / sse);
 }
 
 int main(void)

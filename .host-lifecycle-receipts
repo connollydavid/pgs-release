@@ -75,3 +75,9 @@
     evidence = 1 item(s) realized for ffmpeg at pin 964fc5e2d919 (reference)
     tool = host-lifecycle@0.50.0
     recorded = 2026-08-21
+
+[receipt "materialize" "ffmpeg"]
+    disposition = done
+    evidence = 1 item(s) realized for ffmpeg at pin 4558bebf9645 (reference)
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-27

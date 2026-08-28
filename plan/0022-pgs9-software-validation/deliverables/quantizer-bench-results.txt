@@ -1,0 +1,34 @@
+# Quantizer benchmark results
+
+Machine: WSL2 Arch (gcc 16, -O2), deterministic PRNG input (random RGB = worst
+case for quantization, hence the low absolute PSNR values). Timing covers
+av_quantize_apply only; palette generation is separate. Speed in Mpixels/s.
+
+algo       res    pal     Mpix/s     PSNR
+NeuQuant   SD     16       3.17    11.41
+MedianCut  SD     16       3.42    11.63
+ELBG       SD     16      15.52    10.92
+NeuQuant   SD     64       2.71    11.22
+MedianCut  SD     64       2.12    11.19
+ELBG       SD     64       3.94    10.84
+NeuQuant   SD    256       1.79    11.24
+MedianCut  SD    256       0.80    10.97
+ELBG       SD    256       0.99    10.78
+NeuQuant   HD     16       3.32    11.56
+MedianCut  HD     16       3.44    11.63
+ELBG       HD     16      15.31    10.90
+NeuQuant   HD     64       2.74    11.26
+MedianCut  HD     64       2.10    11.18
+ELBG       HD     64       3.81    10.83
+NeuQuant   HD    256       1.93    11.07
+MedianCut  HD    256       0.81    10.96
+ELBG       HD    256       0.99    10.78
+NeuQuant   UHD    16       3.26    11.56
+MedianCut  UHD    16       3.44    11.63
+ELBG       UHD    16      15.33    10.91
+NeuQuant   UHD    64       2.76    11.22
+MedianCut  UHD    64       2.07    11.18
+ELBG       UHD    64       3.78    10.83
+NeuQuant   UHD   256       1.97    11.03
+MedianCut  UHD   256       0.81    10.97
+ELBG       UHD   256       0.97    10.79

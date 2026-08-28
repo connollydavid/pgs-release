@@ -35,8 +35,8 @@ assert non-empty across the first frames; make the test deterministic.
 ### Decoder-side compliance review {#decoder-review}
 
 - depends: #fate-samples
-- verify: findings list dispositioned (fixed, deferred with reason, or
-  upstream-scope noted)
+- verify: findings list dispositioned as fixed, as deferred with a
+  reason, or as upstream-scope noted
 
 Audit pgssubdec against the HDMV spec (docs/pgs-specification.md):
 window handling, CLUT/palette sequencing, acquisition-point and epoch

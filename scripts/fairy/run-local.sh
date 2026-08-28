@@ -6,7 +6,7 @@
 #   - the review containers run on an --internal podman network: no NAT
 #     gateway, no route out, by construction (created by ensure-inert.sh);
 #   - this process's HTTP(S) egress is forced through the allowlist proxy
-#     (scripts/fairy/allowlist-proxy.py), which permits ollama.com only;
+#     (scripts/fairy/allowlist-proxy.py), which permits the LLM endpoint only (ollama.com, api.z.ai);
 #   - ssh targets 127.0.0.1:2222 only (the fairylocal alias);
 #   - gcli must NOT be installed (refuses to start otherwise);
 #   - the posting daemons (agent.py / worker.py / fairy.py) are never
@@ -36,7 +36,7 @@ fi
 export HTTP_PROXY=http://127.0.0.1:15313
 export HTTPS_PROXY=http://127.0.0.1:15313
 export ALL_PROXY=http://127.0.0.1:15313
-export NO_PROXY=localhost,127.0.0.1
+export NO_PROXY=localhost,127.0.0.1,api.z.ai
 export GIT_TERMINAL_PROMPT=0
 
 echo ">> local-only fairy review"
