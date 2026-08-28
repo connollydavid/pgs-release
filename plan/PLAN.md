@@ -31,7 +31,7 @@ The milestones, in acceptance order; 0001 through 0018 are closed records.
 | [0016](0016-fate-ci-website-visibility/README.md) | FATE CI and website test visibility |
 | [0017](0017-pgs-encoder-features/README.md) | PGS encoder features (v6) |
 | [0018](0018-upstream-submission-restructuring/README.md) | Upstream submission restructuring (v7) |
-| [0019](0019-ffmpeg-devel-submission/README.md) | ffmpeg-devel submission (v8, in progress) |
+| [0019](0019-ffmpeg-devel-submission/README.md) | ffmpeg-devel submission (v8, deferred: gated by the venue decision) |
 | [0020](0020-pgs9-series-remediation/README.md) | pgs9 series remediation |
 | [0021](0021-pgs9-subseries-recut/README.md) | pgs9 sub-series re-cut |
 | [0022](0022-pgs9-software-validation/README.md) | pgs9 software validation |
@@ -42,10 +42,11 @@ The milestones, in acceptance order; 0001 through 0018 are closed records.
 _Scratch buffer: what we're doing right now._
 
 Active milestone: none. plan/0023 (pgs9 encoder completion) closed
-2026-08-28 with all seven task receipts recorded: the epoch
-palette-cache fix, the corrected edge record, the per-stream
-forwarding proof, the UHD smoke, the MAINTAINERS ruling, the
-zero-warning sweep, and the 25/25 count-verified walk. pgs9-master
-is 26 commits on upstream/master, tip d854c88265, pushed to the
-fork. Next: the hardware pass, then submission prep; the venue
-decision (plan/0020) unblocks when both are done.
+2026-08-28 with all seven task receipts recorded; the sanitizer pass
+(plan/0022 addendum) and the dead-forward removal (call/0009) landed
+after the close. The receipt ledger is swept across
+plan/0020-0023. pgs9-master is 28 commits on upstream/master, tip
+bc3272d081, pushed to the fork; HANDOVER.md is the fresh-session
+map. Next: the hardware pass, then submission prep (it owns the
+five open plan/0020 tasks); the venue decision unblocks when the
+hardware pass is done.
