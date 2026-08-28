@@ -7469,6 +7469,22 @@ unregistered ~/pgs9-wt/handover directory (stale July-17 artifacts,
 not a repo, nothing unique — verified derivable from intact branches)
 was deleted; the wsl.exe intermittent long-command truncation was the
 root cause of most session "corruptions" — script files only, always.</p>
+<h2 id="2026-08-28-pause-plan0022-mid-flight--animation-timing-flake-deepens"><a class="header" href="#2026-08-28-pause-plan0022-mid-flight--animation-timing-flake-deepens">2026-08-28 (pause): plan/0022 mid-flight — animation-timing flake deepens</a></h2>
+<p>The animation-timing boundary fix (sample at start_ms+frame_ms instead
+of exactly start_ms) did NOT resolve the empty render, the event
+produces NO bitmap at any early offset in this environment NOW, while
+the same test passed 14/14 in this worktree on Aug 23. libass version
+unchanged (0.17.5, installed Jul 17). Suspects for next session:
+libass fontconfig cache state (the font resolves but glyph output may
+differ), the sub_render wrapper's event-add path (check
+sub_render_event return), or an LD_LIBRARY_PATH mix. The fix commit
+(51551aaae6, branch pgs9-flake-investigation = pgs9-master + boundary
+fix) is kept: sampling inside the fade window is more correct. ALL
+OTHER GATES at this tip: build, FATE 13/14, nm clean, lanes clean,
+smoke srt-&gt;sup OK, sample fates 25/25. plan/0022 remaining:
+#anim-flake root cause, #decoder-review, #benchmarks, #edge-cases,
+#software-playback, #docs-api, #lanes-clean. All recorded in
+HANDOVER.md (top section), a fresh session continues from there.</p>
 
                     </main>
 
