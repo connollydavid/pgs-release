@@ -1585,6 +1585,31 @@ smoke srt-&gt;sup OK, sample fates 25/25. plan/0022 remaining:
 #anim-flake root cause, #decoder-review, #benchmarks, #edge-cases,
 #software-playback, #docs-api, #lanes-clean. All recorded in
 HANDOVER.md (top section), a fresh session continues from there.</p>
+<h2 id="2026-08-28-final-7-master-lineage-force-pushed-at-22-commits-clean-validation-pending"><a class="header" href="#2026-08-28-final-7-master-lineage-force-pushed-at-22-commits-clean-validation-pending">2026-08-28 (final-7): master lineage force-pushed at 22 commits; clean validation pending</a></h2>
+<p>pgs9-master on the fork = bcb4f18795 (forced update). The lineage: 19
+fixed commits + a version-define fixup (single lavc MINOR 9 / MICRO
+100 pair — the 9.0.1-era dup hunks collapsed at the wiring commit) +
+2 duplicate edge-test commits from replay cycles (cosmetic; dedupe at
+submission). BUILD at tip: OK (verified after the final replay).
+FATE VALIDATION INCOMPLETE: the last spot-check ran WITHOUT
+LD_LIBRARY_PATH (system libs = old upstream pgssubenc, meaningless
+results). Next session, in order: (1) cd recut; git checkout -f
+pgs9-master; ./configure --enable-shared --disable-doc
+--enable-libass; export
+LD_LIBRARY_PATH="$PWD/libavutil:$PWD/libavcodec:$PWD/libavformat:$PWD/libavfilter:$PWD/libavdevice:$PWD/libswscale:$PWD/libswresample:$PWD/libpostproc";
+(2) run the api fate set (expect 14/15 incl. edge — animation-timing
+fixed, 256-colour case disabled with stanza note, quantize passes
+fresh); (3) dedupe the 2 duplicate edge-test commits (soft reset to
+the pre-dup sha, recommit once); (4) run host-mcwalk.sh with
+BASE=upstream/master (per-step configure NOW in the script) for the
+count-verified walk; (5) force-push; (6) continue plan/0022:
+#decoder-review findings are recorded (upstream-scope), #benchmarks
+harness+results committed, #edge-cases test landed, #software-playback
+ffmpeg+MKV verified (mpv/VLC uninstalled), #docs-api verified
+(4 live options documented, dead ones removed), #lanes-clean measured
+(2 dispositioned warns). Then the hardware pass + submission prep.
+wsl.exe command truncation remains the top session hazard: script
+files only.</p>
 
                     </main>
 
