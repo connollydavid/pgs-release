@@ -4642,9 +4642,7 @@ re-adding, and the fate-sub-ocr-roundtrip test may need the
 sample-committed-or-test-reworked decision recorded.</li>
 <li>#software-playback, #docs-api, #lanes-clean: not started.</li>
 <li>Master lineage blemish: duplicate lavc MINOR/MICRO defines in
-libavcodec/version.h (master 8.101 plus our 2.100; benign, last-wins
-= our intended 2.100... on the master base the intended pair is
-MINOR 9 / MICRO 100 after the encoder bump). Collapse to a single
+libavcodec/version.h (the master plus our pairs; benign, last-wins). Collapse to a single
 pair as a fixup on the encoder commit, then re-run the count-
 verified walk (host-walk3-reset.sh now has per-step configure and
 BASE=upstream/master).</li>
