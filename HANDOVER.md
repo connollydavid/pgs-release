@@ -1,4 +1,4 @@
-# HANDOVER — read this first (2026-08-28)
+# HANDOVER: read this first (2026-08-28)
 
 Everything a fresh session needs. MEMORY.md has the full append-only
 ledger; this is the map.
@@ -62,10 +62,9 @@ plan/0020 through plan/0023 carries a recorded receipt.
   base-aware; msg lane takes rev ranges; `--signoff` for the project
   rule. Hooks: sibling binary must be re-copied on every lint bump.
 - Gate gotchas: dotted two-part numerals (version-shaped pairs) in
-  prose and docs BLOCK the gate (genuine version strings get declared
-  in .host-lint-allow, everything else is reworded); "step" is
-  manifest vocabulary; em-dashes fail prose zero-tropes; MEMORY.md is
-  excluded.
+  prose and docs BLOCK the gate (declare genuine version tokens in
+  .host-lint-allow; reword the rest); "step" is manifest vocabulary;
+  em-dashes fail prose zero-tropes; MEMORY.md is excluded.
 - Walk loops MUST count steps and assert the total (a mistyped range
   completes vacuously); reconfigure at each step when a codec appears
   mid-series.

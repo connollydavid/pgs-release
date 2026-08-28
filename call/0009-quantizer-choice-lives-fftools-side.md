@@ -11,7 +11,7 @@ fftools read would become functional. The delivered series settled
 the architecture the other way around: the encoder receives
 already-indexed bitmaps with a finished palette and never
 quantizes, so the choice moved to the conversion stage that owns
-the work, flowing one way from the CLI through
+the work; it flows one way from the CLI through
 `enc_sub_set_options` into the conversion context. What remained
 in `convert_text_to_bitmap` was a forward that wrote
 `quantize_method` and `forced_style` into the output encoder's
