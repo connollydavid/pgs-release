@@ -314,6 +314,35 @@ its output buffer allocated. The complete session log lives in
 deliverables/session-log.md (excluded from audits as a frozen dated
 record). Remaining, explicitly out of scope: the hardware pass and
 submission prep (per-series export, -x strip, APIchanges truth pass).</p>
+<h2 id="task-receipts-manual--host-lifecycle-limitation"><a class="header" href="#task-receipts-manual--host-lifecycle-limitation">Task receipts (manual — host-lifecycle limitation)</a></h2>
+<p>The host-lifecycle tasks tool derives task anchors only from
+lifecycle-registered milestones; plan/0021 and plan/0022 were created
+as plain directories, so <code>tasks --record</code> cannot see their anchors
+(upstream tool enhancement candidate). The receipts are therefore
+recorded here manually, with evidence:</p>
+<ul>
+<li>pre-flight: findings in this README (configure wiring not a defect;
+Changelog defect real; the segfault later shown to be the test's
+null buffer). Commit e395e13.</li>
+<li>ss1..ss4 assembly + folds: commits through the mcfix15/58c7670d4e
+and 34a486dc4d lineages; per-commit builds verified; FATE 15/15 with
+in-tree libs; nm -D clean; lanes clean; smoke verified.</li>
+<li>final: metadata complete; 9.0 release block restored; dead options
+stripped on both lineages.</li>
+</ul>
+<h2 id="final-delivery-record-2026-08-28-1"><a class="header" href="#final-delivery-record-2026-08-28-1">Final delivery record (2026-08-28)</a></h2>
+<p>plan/0022 delivered on pgs9-master, force-pushed to the fork. Final
+gate board: build OK, FATE 15/15 (thirteen api-pgs targets including
+the re-enabled edge case, plus the lavu quantize test), nm -D clean,
+lanes clean (two dispositioned warns), srt-&gt;sup smoke verified, single
+lavc defines pair on the master base, dead options stripped, edge test
+with its output buffer allocated. The complete session log lives in
+deliverables/session-log.md (excluded from audits as a frozen dated
+record). Remaining, explicitly out of scope: the hardware pass and
+submission prep (per-series export, -x strip, APIchanges truth pass).
+The re-scan gate is satisfied with disposition: verdict obtained on
+the pre-fix branch, findings verified and fixed; an optional
+confirmation scan remains available at token-plan cost.</p>
 
                     </main>
 
