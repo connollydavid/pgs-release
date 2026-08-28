@@ -1834,6 +1834,27 @@ quantize_method into pgssubenc priv_data, which defines no such
 option (the conversion picks the algorithm via the fftools context,
 so the forward is only meaningful for encoders that quantize
 internally, like gif); worth a disposition at submission prep.</p>
+<h2 id="2026-08-28-final-16-zero-warning-ruling-executed-walk-2525-gates-closed"><a class="header" href="#2026-08-28-final-16-zero-warning-ruling-executed-walk-2525-gates-closed">2026-08-28 (final-16): zero-warning ruling executed, walk 25/25, gates closed</a></h2>
+<p>Operator ruling: every warning new to our code is unacceptable. The
+census ran in a scratch worktree at the tip (the walk owned the
+canonical one): five shapes in our files, namely dead Encoder/enc
+locals in render_active_set, seven unused-function warnings from
+pgs-test-util.h across its includers, a dead local in the edge
+test's encode_rect, and 1 MB encode buffers on the stack in the
+fade, coalesce, and animation-timing tests (Windows default stacks
+are 1 MB). Files the series only modifies carry zero warnings at
+the tip, so nothing new hides there. Fixed at pgs9-master
+d854c88265: header helpers static inline, buffers heap-allocated,
+dead locals dropped. Every file the series adds or modifies now
+compiles warning-free; the affected fates and fate-sub-pgs stayed
+green. Gotcha worth keeping: the same two-line declaration pair
+(Encoder + enc_ctx) exists in several fftools functions, so the
+removal had to be scoped to render_active_set, not a global
+replace. The count-verified walk (per-step configure) finished
+25/25 over the range through a58e6f9c12; d854c88265 is build- and
+warning-verified at its own commit. Scratch worktree removed; the
+four session commits carry signoff + GLM trailers with clean
+whitespace.</p>
 
                     </main>
 
