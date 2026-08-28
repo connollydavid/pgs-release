@@ -191,3 +191,17 @@ submission prep (per-series export, -x strip, APIchanges truth pass).
 The re-scan gate is satisfied with disposition: verdict obtained on
 the pre-fix branch, findings verified and fixed; an optional
 confirmation scan remains available at token-plan cost.
+
+## Delivery record, final (2026-08-28)
+
+The count-verified build-walk completed on the FINAL lineage: 21 of 21
+commits build per-commit on upstream/master (the per-step configure
+fixed the generated codec_list.c leak that broke the earlier walk
+attempts). The distribution into position 15 landed via interactive
+rebase: the enc.c reconciliation folded at the wiring commit (take
+master's refactored enc.c, 3-way our series diff, keep-ours at the
+enc_sub.h/enc.c one-way conflicts), and the tail replayed clean.
+Final: pgs9-master force-pushed to the fork @ b258be4ce6 (ls-remote
+verified). FATE 15/15 with in-tree libs; lanes clean; nm -D clean;
+smoke verified. plan/0022 DELIVERED. Remaining, explicitly out of
+scope: hardware pass, submission prep.
