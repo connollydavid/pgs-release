@@ -136,3 +136,13 @@ lineage bisectability: unverified beyond the tip build (the
 intermediate-commit states carry the recorded benign defines and the
 pre-fix enc.c history); the count-verified walk on this lineage is
 deferred to submission prep with BASE=upstream/master.
+
+## Correction record (2026-08-28)
+
+The "256-colour pgs_write_pcs segfault" recorded earlier was a FALSE
+alarm: the edge test never allocated its output buffer, so
+avcodec_encode_subtitle wrote through NULL. With buf allocated the
+edge test passes fully, including the 256-colour case, and the fate
+stanza is re-enabled (FATE api set 14/15 + quantize = 15/15 with
+in-tree libs on pgs9-master). The ASAN run (LD_PRELOAD=libasan) gave
+the exact diagnosis: WRITE through NULL at the *pq deref.
