@@ -1631,3 +1631,37 @@ a fresh walk of the final lineage can be re-run any time via
 host-mcwalk2.sh (BASE=upstream/master, per-step configure,
 count-verified). Remaining: hardware pass (operator device list),
 submission prep. Keys: rotate when convenient.
+
+## 2026-08-28 (final-10): located undone encoder work, the complete list
+
+Audit result on the master lineage (pgs9-recut2, positions 1-15 of 22
+landed; the tail replay paused at the bridge conflict):
+
+LOCATED UNDONE (software-completable):
+1. CLI srt->pgs smoke FAILS at position 15 (HD and UHD: "Invalid
+   argument" / "text to text or bitmap to bitmap") while the SAME
+   command PASSED at tip 34a486dc4d (position 22, post-bridge). The
+   bridge commit carries the conversion-completion pieces (the
+   disposition filter and the final encode wiring) that positions
+   1-15 lack. RESOLUTION = land positions 16-19 (the paused tail
+   replay, recipe in final-8 addendum), then re-smoke.
+2. -sub_quantize_method/-sub_force_all/-sub_forced_style/-sub_ocr_*
+   options are implemented but UNDOCUMENTED in doc/ffmpeg.texi
+   (plan/0020#cli-docs).
+3. Security pass never run on pgssubenc/supenc/enc_sub
+   (plan/0020#security-pass): bounds review of the RLE decoder,
+   PDS/PCS/OOD segment parsers, and the CDB allocator.
+4. Master-lineage positions 16-22 walk-unverified (the walk stopped
+   at 14 + repaired 15; host-mcwalk2.sh re-runs the full range once
+   the tail lands).
+5. plan/0020 task receipts pending in the tool (milestones created
+   manually; receipts documented manually in plan/0022 README).
+6. Dithering: palettemap.c HAS dither support (64 refs), verify the
+   PGS encode path engages it (banding check on gradients).
+
+NOT UNDONE (verified complete): spec compliance (per-segment DTS,
+APs, epochs, WDS, PDS delta, forced, CDB), quantize API + 3 methods,
+benchmarks, FATE api 15/15, samples 25/25, docs for the 4 live
+encoder options, decoder untouched (upstream compliance reference),
+no TODO/FIXME in encoder files, MAINTAINERS complete, Changelog
+complete. The re-scan verdict findings all fixed.
