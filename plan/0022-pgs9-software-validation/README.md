@@ -146,7 +146,7 @@ In progress / next session:
   sample-committed-or-test-reworked decision recorded.
 - #software-playback, #docs-api, #lanes-clean: not started.
 - Master lineage blemish: duplicate lavc MINOR/MICRO defines in
-  libavcodec/version.h (master's 8.101 + our 2.100; benign, last-wins
+  libavcodec/version.h (master 8.101 plus our 2.100; benign, last-wins
   = our intended 2.100... on the master base the intended pair is
   MINOR 9 / MICRO 100 after the encoder bump). Collapse to a single
   pair as a fixup on the encoder commit, then re-run the count-
