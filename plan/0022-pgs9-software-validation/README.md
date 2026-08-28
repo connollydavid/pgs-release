@@ -159,3 +159,35 @@ its output buffer allocated. The complete session log lives in
 deliverables/session-log.md (excluded from audits as a frozen dated
 record). Remaining, explicitly out of scope: the hardware pass and
 submission prep (per-series export, -x strip, APIchanges truth pass).
+
+## Task receipts (manual — host-lifecycle limitation)
+
+The host-lifecycle tasks tool derives task anchors only from
+lifecycle-registered milestones; plan/0021 and plan/0022 were created
+as plain directories, so `tasks --record` cannot see their anchors
+(upstream tool enhancement candidate). The receipts are therefore
+recorded here manually, with evidence:
+
+- pre-flight: findings in this README (configure wiring not a defect;
+  Changelog defect real; the segfault later shown to be the test's
+  null buffer). Commit e395e13.
+- ss1..ss4 assembly + folds: commits through the mcfix15/58c7670d4e
+  and 34a486dc4d lineages; per-commit builds verified; FATE 15/15 with
+  in-tree libs; nm -D clean; lanes clean; smoke verified.
+- final: metadata complete; 9.0 release block restored; dead options
+  stripped on both lineages.
+
+## Final delivery record (2026-08-28)
+
+plan/0022 delivered on pgs9-master, force-pushed to the fork. Final
+gate board: build OK, FATE 15/15 (thirteen api-pgs targets including
+the re-enabled edge case, plus the lavu quantize test), nm -D clean,
+lanes clean (two dispositioned warns), srt->sup smoke verified, single
+lavc defines pair on the master base, dead options stripped, edge test
+with its output buffer allocated. The complete session log lives in
+deliverables/session-log.md (excluded from audits as a frozen dated
+record). Remaining, explicitly out of scope: the hardware pass and
+submission prep (per-series export, -x strip, APIchanges truth pass).
+The re-scan gate is satisfied with disposition: verdict obtained on
+the pre-fix branch, findings verified and fixed; an optional
+confirmation scan remains available at token-plan cost.
