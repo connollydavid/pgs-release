@@ -1006,7 +1006,10 @@ This is non-negotiable for upstream submission and bisectability.
   library/header patch always comes before its consumer.
 - **Verification:** after building a series, run
   `git rebase upstream/master --exec 'make -j$(nproc)'` to confirm every
-  patch compiles. This is not optional. Do it before pushing.
+  patch compiles, and run the same walk a second time under
+  `./configure --enable-shared --disable-doc --enable-libass` (the shared
+  build catches cross-library symbol mistakes the default configuration
+  hides). This is not optional. Do it before pushing.
 
 ### Merge provenance
 
