@@ -101,18 +101,23 @@ The encoder takes width and height from the frame, and no smoke has
 run at 3840x2160 on this lineage. Convert an srt sample to sup at
 UHD, then decode the sup back and confirm the display sets.
 
-### Complete the MAINTAINERS entries {#maintainers-entries}
+### List the maintainer for every series-added file {#maintainers-entries}
 
-- verify: every new fftools file pair appears in MAINTAINERS in the
-  style the neighbours use
+- verify: every file the series adds wholesale carries
+  David Connolly <david@connol.ly> in MAINTAINERS, the moved elbg
+  and palette entries are gone, and the commit is pushed to the fork
 
-Applications, ffmpeg lists ffmpeg_dec_sub.c, ffmpeg_dec_sub.h,
-ffmpeg_enc_sub.c, ffmpeg_enc_sub.h. The conversion work added
-ffmpeg_sub_util.c, ffmpeg_sub_util.h, ffmpeg_sub_render.c,
-ffmpeg_sub_render.h, ffmpeg_sub_ocr.c, ffmpeg_sub_ocr.h with no
-entry at all. Add the three pairs beside the existing two, bare
-filenames as the neighbours use. This commit lands standalone and
-folds into the series metadata commit at submission prep.
+Operator ruling, 2026-08-28: MAINTAINERS is a duty roster, and the
+developer docs document self-listing through the reviewed patch as
+the normal path. Every file the series adds wholesale carries the
+full RFC form beside it: the five fftools pairs (the three
+ffmpeg_sub_* pairs had no entry at all), quantize, mediancut,
+neuquant, palettemap (a family glob that covers the internal
+header), and pgssubenc. The elbg and palette entries are dropped:
+rename detection shows both are moves of upstream code with no
+upstream maintainer, so the move claims nothing. Landed standalone
+on pgs9-master (d6b6a7b4ff) and folds into the series metadata
+commit at submission prep.
 
 ### Walk and gate the series {#series-gates}
 
@@ -135,4 +140,13 @@ PLAN.md, write the memory entry.
 
 ## Findings (execution appends here)
 
-(filled as the tasks run)
+- MAINTAINERS (2026-08-28): done at pgs9-master d6b6a7b4ff, pushed.
+  The three ffmpeg_sub_* fftools pairs had no entry at all; the
+  delivered series also claimed the moved elbg and palette files,
+  which upstream maintains under no name, so those lines are gone.
+  The push carried abb82b5b17 as well, which the fork had been
+  missing (its tip was b258be4ce6). One boundary call, recorded for
+  review: palettemap.c and palettemap.h hold code extracted from
+  vf_paletteuse, and the ruling was applied file-level (the files
+  are added wholesale by the series), so the claim stands there; a
+  content-level reading would drop it too.

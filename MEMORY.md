@@ -1739,3 +1739,19 @@ host-lifecycle next as plan/0023, committed 6adf311, pushed.
 Execution order: epoch-cache fix (test first, red then green), edge
 record correction, two-stream forwarding smoke, UHD smoke,
 MAINTAINERS, walk + gates.
+
+## 2026-08-28 (final-14): MAINTAINERS ruling executed on pgs9-master
+
+Operator ruling: David Connolly <david@connol.ly> beside every file
+the series adds wholesale; MAINTAINERS is a duty roster and the
+developer docs document self-listing through the reviewed patch.
+Executed at pgs9-master d6b6a7b4ff: the five fftools pairs
+(ffmpeg_sub_util/render/ocr had no entry at all), quantize,
+mediancut, neuquant, palettemap as a family glob covering
+palettemap_internal.h, and pgssubenc. Rename detection (R099/R098)
+shows elbg and palette are moves of unmaintained upstream code, so
+their David lines are dropped. The push to the fork also carried
+abb82b5b17, which the fork had been missing (remote tip was
+b258be4ce6). Boundary call: palettemap.c/h hold code extracted from
+vf_paletteuse; the ruling applied file-level, so the claim stands
+there, recorded in plan/0023 findings for review.
