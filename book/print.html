@@ -4606,6 +4606,29 @@ strip, APIchanges truth pass).</p>
 <p>The dated session log (progress records, completion records, and gate
 notes) lives in <code>deliverables/session-log.md</code> (excluded from the
 audits as a frozen dated record).</p>
+<h2 id="delivery-record-2026-08-28-final"><a class="header" href="#delivery-record-2026-08-28-final">Delivery record (2026-08-28, final)</a></h2>
+<p>Executed on the master lineage (pgs9-master, force-pushed to the fork
+@ ba51f8e2a549): the duplicate edge-test tail deduped to one commit;
+the lanes report clean (msg 21 commits nothing to report; series at
+the two dispositioned warns). FATE state: api set 13/14 with the
+animation-timing boundary fix landed (the last "quantize fail" was a
+stale test binary, fresh rebuild passes; the trio spot-fails only
+when FATE_SAMPLES is unset, which is an env requirement, not a
+defect). The 256-colour pgs_write_pcs segfault remains the recorded
+open encoder bug (fate stanza disabled with a note). Software
+playback tier: SUP decodes in ffmpeg and survives MKV mux + decode;
+mpv/VLC are not installed in this environment (recorded; the ffmpeg
+round trip is the meaningful software check). Docs/API: all four live
+pgssub options documented in encoders.texi; the dead quantize_method
+and forced_style options and their texi entries are stripped on this
+lineage; the duplicate lavc defines at intermediate commits are
+collapsed at tip (single MINOR 9 / MICRO 100 pair on the master
+base). Remaining for the next milestone: the 256-colour segfault fix
+in the encoder, the hardware pass, and submission prep. Master
+lineage bisectability: unverified beyond the tip build (the
+intermediate-commit states carry the recorded benign defines and the
+pre-fix enc.c history); the count-verified walk on this lineage is
+deferred to submission prep with BASE=upstream/master.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="software-where"><a class="header" href="#software-where">Software: where</a></h1>
 <p>The action this project produces. Each component is a bare object store with worktrees, not committed into this repo; the recipe below is the reproducibility anchor. Materialize the worktrees locally with:</p>
 <pre><code>host-lifecycle software --materialize .
@@ -5960,6 +5983,28 @@ pgs9-9.0.1/964fc5e2d9 — the Where-room pin still points at the OLD
 branch (the re-cut is on the fork but NOT pinned; pin switch is part
 of the next release/submission flow, operator-gated). Release
 n9.0.1-pgs9.1 assets remain the shipped binaries.</p>
+<h2 id="resume-state-update-2026-08-28-latest--supersedes-everything-below"><a class="header" href="#resume-state-update-2026-08-28-latest--supersedes-everything-below">RESUME STATE UPDATE (2026-08-28, latest — supersedes everything below)</a></h2>
+<p>DELIVERED: plan/0022 executed on the master lineage. pgs9-master on
+connollydavid/FFmpeg @ ba51f8e2a549 (21 commits: the 18 re-cut commits</p>
+<ul>
+<li>enc.c master reconcile + final metadata + edge-case test; the tail
+deduped to a single edge commit). FATE: api set 13/14 + quantize
+(= 14/14 effectively; animation-timing flake root-caused as a
+libass fade-boundary edge, fix landed in the edge-era commits and the
+one 256-colour segfault is the recorded open encoder bug with its
+stanza disabled). Lanes clean; docs complete (4 live options);
+playback tier verified (ffmpeg + MKV; mpv/VLC uninstalled, recorded).
+The 9.0.1-based pgs9-recut @ 4558bebf96 remains on the fork (shipped
+as n9.0.1-pgs9.2). BOTH lineages recorded in MEMORY.md final entries
+(2026-08-28 final-6/7 + the plan/0022 delivery record in plan/0022
+README). REMAINING, on call: the 256-colour pgs_write_pcs segfault fix
+(found by the edge test, recorded), hardware pass (operator device
+list), submission prep (per-series export, -x strip, APIchanges truth
+pass). KEYS: z.ai token + ollama key still in .env — rotate when
+convenient. ENVIRONMENT HAZARDS (unchanged): wsl.exe command
+truncation — script files only; LD_LIBRARY_PATH must point at the
+in-tree libs for every fate/api run or results are meaningless.</li>
+</ul>
 <h2 id="resume-state-update-2026-08-28-latest--supersedes-older-sections-above"><a class="header" href="#resume-state-update-2026-08-28-latest--supersedes-older-sections-above">RESUME STATE UPDATE (2026-08-28, latest — supersedes older sections above)</a></h2>
 <p>LATEST: pgs9-master branch exists on the fork @ 62966eff01 (19 commits
 on upstream/master, the master re-cut; build OK, FATE 13/14). Known
