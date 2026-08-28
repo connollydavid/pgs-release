@@ -34,6 +34,8 @@ The milestones, in acceptance order; 0001 through 0018 are closed records.
 | [0019](0019-ffmpeg-devel-submission/README.md) | ffmpeg-devel submission (v8, in progress) |
 | [0020](0020-pgs9-series-remediation/README.md) | pgs9 series remediation |
 | [0021](0021-pgs9-subseries-recut/README.md) | pgs9 sub-series re-cut |
+| [0022](0022-pgs9-software-validation/README.md) | pgs9 software validation |
+| [0021](0021-pgs9-subseries-recut/README.md) | pgs9 sub-series re-cut |
 
 ## Current Work
 
