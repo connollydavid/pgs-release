@@ -1905,3 +1905,13 @@ and base and credits both assistants; .env.example documents the
 fairy-pipeline keys it actually reads; PLAN.md's current work
 follows the branch and the 0019 row no longer claims in-progress.
 Commits f5976c4, dcf9d5e, 78ecf8e and the prose-fix commit.
+
+## 2026-08-29 (final-22): HANDOVER.md deleted, operator-only sessions
+
+Operator call: the folder hosts operator sessions only now, so the
+fresh-session handover document has no audience to hand over to. The
+file is deleted along with its lint exclusion, which had been
+retired the day before; plan/PLAN.md's current-work section and
+MEMORY.md carry the session map between them (the gotchas live in
+the ledger entries, most recently final-19 through final-21). The
+frozen session-log mention of a HANDOVER refresh stays as record.

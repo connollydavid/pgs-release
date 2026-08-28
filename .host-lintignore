@@ -45,10 +45,9 @@ tools/host-ffmpeg-version-reconcile/
 # model's, not ours. Excluded per the dated-review-artifact rule.
 plan/0020-pgs9-series-remediation/fairy-structure-review.md
 
-# Dated, frozen handover snapshot (2026-08-23): point-in-time session
-# survival document, superseded by MEMORY.md as living record.
-# RE-LINTED as of 2026-08-28: HANDOVER.md is rewritten as the living
-# fresh-session map and passes the lanes, so the exclusion is retired.
+# (A HANDOVER.md exclusion was retired on 2026-08-28 when the file was
+# re-linted; the file was deleted outright on 2026-08-29, operator call:
+# operator-only sessions, MEMORY.md and plan/PLAN.md carry the map.)
 
 # Second frozen machine-review artifact (re-scan of the re-cut).
 plan/0021-pgs9-subseries-recut/fairy-recut-rescan.md

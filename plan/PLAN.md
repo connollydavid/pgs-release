@@ -46,7 +46,7 @@ Active milestone: none. plan/0023 (pgs9 encoder completion) closed
 (plan/0022 addendum) and the dead-forward removal (call/0009) landed
 after the close. The receipt ledger is swept across
 plan/0020-0023. pgs9-master is 28 commits on upstream/master, tip
-bc3272d081, pushed to the fork; HANDOVER.md is the fresh-session
-map. Next: the hardware pass, then submission prep (it owns the
+bc3272d081, pushed to the fork; MEMORY.md is the session map. Next:
+the hardware pass, then submission prep (it owns the
 five open plan/0020 tasks); the venue decision unblocks when the
 hardware pass is done.
