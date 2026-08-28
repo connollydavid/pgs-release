@@ -1569,3 +1569,21 @@ through position 15 before the bridge). After the tail lands: fate
 15/15 + the count-verified walk on the final 21-22 commits
 (host-mcwalk2.sh, BASE=upstream/master, per-step configure),
 force-push pgs9-master to the fork, plan/0022 receipts + HANDOVER.
+
+## 2026-08-28 (final-9): master lineage settled at 34a486dc4d; edge fate stanza live
+
+The 256-colour edge case now PASSES: root cause was the edge test's
+own never-allocated output buffer (avcodec_encode_subtitle wrote
+through NULL); with buf allocated via av_mallocz the full 15-target
+FATE set passes 15/15 (14 api-pgs incl. the re-enabled edge stanza +
+quantize). The buf-alloc commit (34a486dc4d) also carries its
+signoff. The message-rebuild mechanic that works: parse %B, keep the
+subject, drop old trailers, emit subject + blank + body + trailers
+(host-msgfix.sh). The count-verified walk on the final lineage is the
+last open validation; after it: force-push pgs9-master to the fork
+and plan/0022 close-out. FORK NOTE: pgs9-master on the fork is at
+34a486dc4d-era (pushed during the fixups); the final force-push after
+the walk updates it to the walk-verified tip. Remaining known items:
+the 256-colour case itself has NOT been re-tested post-buf-fix (the
+stanza is live; the full set run will show it); mpv/VLC uninstalled
+(playback tier recorded as ffmpeg+MKV only).
