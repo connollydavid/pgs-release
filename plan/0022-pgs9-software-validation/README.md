@@ -139,8 +139,8 @@ deferred to submission prep with BASE=upstream/master.
 
 ## Correction record (2026-08-28)
 
-The pgs_write_pcs segfault recorded earlier was a false alarm: the
-edge test had never allocated its output buffer. The subsequent
+The pgs_write_pcs segfault recorded earlier came from the edge test
+itself. Its output buffer had never been allocated. The subsequent
 avcodec_encode_subtitle call then wrote through that NULL pointer. With buf allocated the
 edge test passes fully, including the 256-colour case, and the fate
 stanza is re-enabled (FATE api set 14/15 + quantize = 15/15 with
