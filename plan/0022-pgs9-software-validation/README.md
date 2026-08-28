@@ -146,3 +146,16 @@ edge test passes fully, including the 256-colour case, and the fate
 stanza is re-enabled (FATE api set 14/15 + quantize = 15/15 with
 in-tree libs on pgs9-master). The ASAN run (LD_PRELOAD=libasan) gave
 the exact diagnosis: WRITE through NULL at the *pq deref.
+
+## Final delivery record (2026-08-28)
+
+plan/0022 delivered on pgs9-master @ 34a486dc4d, force-pushed to the
+fork (ls-remote verified). Final gate board: build OK, FATE 15/15
+(thirteen api-pgs targets including the re-enabled edge case, plus the
+lavu quantize test), nm -D clean, lanes clean (two dispositioned
+warns), srt->sup smoke verified, single lavc defines pair (MINOR 9 /
+MICRO 100 on the master base), dead options stripped, edge test with
+its output buffer allocated. The complete session log lives in
+deliverables/session-log.md (excluded from audits as a frozen dated
+record). Remaining, explicitly out of scope: the hardware pass and
+submission prep (per-series export, -x strip, APIchanges truth pass).
