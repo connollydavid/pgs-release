@@ -4629,6 +4629,14 @@ lineage bisectability: unverified beyond the tip build (the
 intermediate-commit states carry the recorded benign defines and the
 pre-fix enc.c history); the count-verified walk on this lineage is
 deferred to submission prep with BASE=upstream/master.</p>
+<h2 id="correction-record-2026-08-28"><a class="header" href="#correction-record-2026-08-28">Correction record (2026-08-28)</a></h2>
+<p>The "256-colour pgs_write_pcs segfault" recorded earlier was a FALSE
+alarm: the edge test never allocated its output buffer, so
+avcodec_encode_subtitle wrote through NULL. With buf allocated the
+edge test passes fully, including the 256-colour case, and the fate
+stanza is re-enabled (FATE api set 14/15 + quantize = 15/15 with
+in-tree libs on pgs9-master). The ASAN run (LD_PRELOAD=libasan) gave
+the exact diagnosis: WRITE through NULL at the *pq deref.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="software-where"><a class="header" href="#software-where">Software: where</a></h1>
 <p>The action this project produces. Each component is a bare object store with worktrees, not committed into this repo; the recipe below is the reproducibility anchor. Materialize the worktrees locally with:</p>
 <pre><code>host-lifecycle software --materialize .
