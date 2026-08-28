@@ -98,7 +98,7 @@ substitute for the hardware pass and often predicts device behaviour.
   dispositioned warns; patcheck on the full series diff reports no
   blocking findings; the two standing warns resolved or re-dispositioned
 
-### Out of scope (next milestone)
+### Out of scope (next milestone) {#out-of-scope}
 
 Hardware validation plan (device matrix, authoring pipeline, test
 discs) and the master-re-cut submission prep (per-series export, -x
