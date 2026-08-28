@@ -35,17 +35,17 @@ The milestones, in acceptance order; 0001 through 0018 are closed records.
 | [0020](0020-pgs9-series-remediation/README.md) | pgs9 series remediation |
 | [0021](0021-pgs9-subseries-recut/README.md) | pgs9 sub-series re-cut |
 | [0022](0022-pgs9-software-validation/README.md) | pgs9 software validation |
-| [0021](0021-pgs9-subseries-recut/README.md) | pgs9 sub-series re-cut |
+| [0023](0023-pgs9-encoder-completion/README.md) | pgs9 encoder completion |
 
 ## Current Work
 
 _Scratch buffer: what we're doing right now._
 
-Active milestone: plan/0021 (pgs9 sub-series re-cut), cut from the
-fairy structure review and the call/0008 rulings. The 30-patch series
-on pgs9-9.0.1 restructures into four sub-series (lavu quantization API,
-GIF RGBA, PGS encoder, text<->bitmap conversion) on the n9.0.1 base,
-with the master re-cut deferred to submission time. The milestone is
-written for solo execution: pre-flight verification batch first, then
-the assembly steps with per-commit and per-sub-series gates, fairy
-structure re-scan per sub-series, whole-series gates, close-out.
+Active milestone: plan/0023 (pgs9 encoder completion), the located
+undone work on the delivered pgs9-master lineage, written for solo
+execution before the hardware sweep. One real defect (the epoch
+palette-cache reset), three run-time proofs (full-palette edge,
+per-stream option forwarding, UHD smoke), the missing MAINTAINERS
+entries, then the whole-series walk and gates. plan/0022 (software
+validation) is delivered: the 22-commit series sits on
+upstream/master at pgs9-master, tip abb82b5b17, pushed to the fork.
