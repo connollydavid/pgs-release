@@ -7437,6 +7437,31 @@ operator knows what hardware is available: ASK before planning.
 Handover workspace (~/pgs9-wt/handover) deleted 2026-08-27 after
 lost-work check (all derivable); stale theme worktrees in ~/pgs9-wt/
 remain, prunable on request.</p>
+<h2 id="2026-08-28-final-6-pgs9-master-pushed-to-fork-known-blemishes-listed-pause-point"><a class="header" href="#2026-08-28-final-6-pgs9-master-pushed-to-fork-known-blemishes-listed-pause-point">2026-08-28 (final-6): pgs9-master pushed to fork; known blemishes listed; pause point</a></h2>
+<p>pgs9-master force-pushed to connollydavid/FFmpeg @ 62966eff01 (19
+commits: the 18-commit re-cut + the ffmpeg_enc.c master-reconcile).
+State at tip: builds and links; FATE 13/14 (only animation-timing
+fails, the documented boundary flake); sample fates 25/25 (measured
+earlier at this tip; a later "fate spot FAIL" was my script missing
+FATE_SAMPLES for sub-pgs-remux). KNOWN BLEMISHES on the master
+lineage, recorded honestly: (1) duplicate lavc MINOR/MICRO defines
+(master's 8.101 + our 2.100 lines both present; benign at compile,
+last-wins = 100 which is the intended value); (2) per-commit
+bisectability on the master lineage unverified — the walk needs
+re-running with BASE=upstream/master AND per-step configure (both now
+fixed in host-walk3-reset.sh) AFTER the defines fix; (3) the
+animation-timing boundary flake. The in-place fixup attempts on this
+lineage kept regenerating breakage (fixup diffs computed at tip
+conflict mid-history); the reliable completion path for next session:
+(1) on pgs9-master, collapse the lavc defines to a single MINOR 9 /
+MICRO 100 pair (host-verfix2.sh does this), commit as a fixup on the
+ENCODER commit, autosquash onto upstream/master; (2) full gates +
+walk; (3) force-push. Then continue plan/0022 (decoder review,
+benchmarks, edge cases, playback tier, docs, lanes). Also: an
+unregistered ~/pgs9-wt/handover directory (stale July-17 artifacts,
+not a repo, nothing unique — verified derivable from intact branches)
+was deleted; the wsl.exe intermittent long-command truncation was the
+root cause of most session "corruptions" — script files only, always.</p>
 
                     </main>
 
