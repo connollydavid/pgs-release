@@ -1885,3 +1885,23 @@ mechanism half of call/0006 while the scan-cap ruling stands.
 The struct line that jammed options_forwarded beside the render
 pointer is un-mangled by the field removal. Pin follows the
 branch at bc3272d081; the series now stands at 28 commits.
+
+## 2026-08-28 (final-21): documentation cleanup across the host repo
+
+HANDOVER.md rewritten as the single living fresh-session map: the
+four accreted supersession snapshots (2026-08-23 base plus three
+contradictory updates, including the long-disproven 256-colour
+segfault claim) collapsed into one current section, and the
+evergreen gotchas kept with three new lessons (the LD_LIBRARY_PATH
+inline-quoting incident, FATE_SAMPLES on the make line, the
+tasks --record append-only receipt behaviour). The 2026-08-23 lint
+exclusion is retired: HANDOVER is linted again, and the prose audit
+immediately earned its keep by catching a title em-dash and two
+ing-tail constructions across HANDOVER and call/0009, all reworded.
+Other refreshes: CLAUDE.md's FFmpeg build stanza names the pgs9
+worktree and the house configure line (was the retired pgs8-wip
+path with the bare configure); README states the real series size
+and base and credits both assistants; .env.example documents the
+fairy-pipeline keys it actually reads; PLAN.md's current work
+follows the branch and the 0019 row no longer claims in-progress.
+Commits f5976c4, dcf9d5e, 78ecf8e and the prose-fix commit.
