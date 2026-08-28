@@ -93,7 +93,16 @@ branch (the re-cut is on the fork but NOT pinned; pin switch is part
 of the next release/submission flow, operator-gated). Release
 n9.0.1-pgs9.1 assets remain the shipped binaries.
 
-## RESUME STATE UPDATE (2026-08-27, latest — supersedes older sections above)
+## RESUME STATE UPDATE (2026-08-28, latest — supersedes older sections above)
+
+LATEST: pgs9-master branch exists on the fork @ 62966eff01 (19 commits
+on upstream/master, the master re-cut; build OK, FATE 13/14). Known
+blemishes + the exact completion path are the last MEMORY.md entry
+(2026-08-28 final-6): collapse the lavc defines, fixup on the encoder
+commit, autosquash, walk (BASE=upstream/master + per-step configure),
+then plan/0022 continuation. The 9.0.1-based pgs9-recut = 4558bebf96
+also on the fork (shipped as n9.0.1-pgs9.2). Superseded details below.
+
 
 THE RE-CUT IS DONE AND PUSHED. pgs9-recut on connollydavid/FFmpeg =
 4558bebf96 (18 commits, force-pushed from pgs9-recut2). Every verdict
