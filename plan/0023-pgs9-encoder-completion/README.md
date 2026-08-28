@@ -156,7 +156,7 @@ PLAN.md, write the memory entry.
   api-pgs-epoch-cache drives an entry opaque in epoch one,
   transparent at the epoch-two boundary (opened by a height change),
   then restored to the epoch-one value; the pre-fix tree failed on
-  step 3 exactly as the analysis predicted (stale cache suppressed
+  the restore step exactly as the analysis predicted (stale cache suppressed
   the delta write), and the fixed tree passes. The whole api-pgs
   fate set stayed green, 15 targets including the new one. A build
   warning note for submission prep: pgs-test-util.h emits

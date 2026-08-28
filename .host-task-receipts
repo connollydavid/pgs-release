@@ -12,13 +12,6 @@
     tool = host-lifecycle@0.40.1
     recorded = 2026-07-17
 
-[receipt "plan/0023#epoch-cache-reset"]
-    disposition = done
-    verify = api-pgs-epoch-cache red on the pre-fix tree, green on the
-    evidence = api-pgs-epoch-cache failed on the pre-fix tree (step 3: stale cache dropped entry 1 from the delta PDS) and passes after the reset memset at pgs9-master 4801ab8c08; the api-pgs fate set is green at 15 targets
-    tool = host-lifecycle@0.50.0
-    recorded = 2026-08-28
-
 [receipt "plan/0023#full-palette-proof"]
     disposition = done
     verify = api-pgs-edge green on the fixed tree; the header names the
@@ -58,5 +51,250 @@
     disposition = done
     verify = attested operator
     evidence = operator-directed close-out 2026-08-28: pgs9-master pushed to the fork at d854c88265, the seven milestone receipts recorded, the plan/0020 completion record appended, PLAN.md and the memory updated
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0023#epoch-cache-reset"]
+    disposition = done
+    verify = api-pgs-epoch-cache red on the pre-fix tree, green on the
+    evidence = api-pgs-epoch-cache failed on the pre-fix tree (the restore step: stale cache dropped entry 1 from the delta PDS) and passes after the reset memset at pgs9-master 4801ab8c08; the api-pgs fate set is green at 15 targets
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0021#pre-flight"]
+    disposition = done
+    verify = all four checks recorded in this README's findings list
+    evidence = the pre-flight findings recorded in plan/0021 (configure wiring, changelog block placement, the codec_desc property in the encoder commit, the trailer census, the ELBG duplication ruled out); the re-cut proceeded on them
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0021#stage"]
+    disposition = done
+    verify = git -C ~/pgs9-wt/recut rev-parse --abbrev-ref HEAD = pgs9-recut
+    evidence = the re-cut worktree stood up from the n9.0.1 base and later superseded by the master-base re-cut; the canonical worktree is ~/pgs9-wt/recut on pgs9-master
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0021#ss1"]
+    disposition = done
+    verify = build-walk green over the sub-series; audits clean; fairy
+    evidence = the lavu quantization sub-series landed and build-walked: OkLab move, ELBG move, the quantize API with NeuQuant, the avpriv palettemap move, Median Cut with the palettegen adopter, and the ELBG backend (surviving on pgs9-master as a318681ce9..7c0654d6d8)
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0021#ss2"]
+    disposition = done
+    verify = fate gifenc-rgba green; audits clean
+    evidence = the gif RGBA sub-series landed with its fate reference (12f545ed53 on pgs9-master); fate gifenc-rgba green
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0021#ss3"]
+    disposition = done
+    verify = build-walk; fate api-pgs set green; audits clean
+    evidence = the encoder sub-series landed: the supenc DTS model, the pgssubenc core with all options up front, and the palette-delta commit; the api-pgs fate set green (a4a13d1c99, a37b3f68e1, 35c83b8c8d on pgs9-master)
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0021#ss4"]
+    disposition = done
+    verify = build-walk; encoder end-to-end smoke (srt->sup with
+    evidence = the conversion sub-series landed: the bitmap utilities, the libass render wrapper, the OCR wrapper, the lookahead conversion, the pipeline wiring, and the bitmap-to-text path (35fba7cc78..b418738275 on pgs9-master); the srt-to-sup smoke green
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0021#final"]
+    disposition = done
+    verify = the whole gate list below, then operator review
+    evidence = the series metadata commit landed and the whole-series gates ran: build-walk, nm -D clean, the four self-contained fate tests, per-commit audits, and the fairy structure re-scan dispositioned (10c26cb661 and successors on pgs9-master)
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0021#close"]
+    disposition = done
+    verify = attested operator
+    evidence = the re-cut pushed to the fork, plan/0020 and PLAN.md updated, and the memory entries written; the lineage was later superseded by the master re-cut pgs9-master at d854c88265
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0022#fate-samples"]
+    disposition = done
+    verify = fate-api-pgs-*, fate-sub-pgs, and the two lane warns cleared
+    evidence = the local fate samples integrated and the sample-based fate set green (25/25 at the delivery record in plan/0022)
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0022#anim-flake"]
+    disposition = done
+    verify = fate-api-pgs-animation-timing green on repeated runs
+    evidence = the animation-timing boundary fix landed; fate-api-pgs-animation-timing green on repeated runs, confirmed again in the plan/0023 gates
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0022#decoder-review"]
+    disposition = done
+    verify = findings list dispositioned as fixed, as deferred with a
+    evidence = the decoder-side compliance review completed with upstream-scope findings only, recorded in the plan/0022 findings
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0022#benchmarks"]
+    disposition = done
+    verify = results table committed under plan/0021 deliverables or
+    evidence = the quantizer benchmark table committed under plan/0022-pgs9-software-validation/deliverables (quantizer-bench.c, quantizer-bench-results.txt)
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0022#edge-cases"]
+    disposition = done
+    verify = new api/fate tests green; findings dispositioned
+    evidence = the edge-case matrix landed as api-pgs-edge; the one defect it surfaced was the harness's own missing output allocation, fixed in-series (b258be4ce6) and the record corrected in plan/0023
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0022#software-playback"]
+    disposition = done
+    verify = our SUP decodes byte-clean in ffmpeg, mpv, and VLC; a
+    evidence = the software playback tier executed and recorded in plan/0022's delivery records; the UHD round-trip in plan/0023 extended it
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0022#docs-api"]
+    disposition = done
+    verify = doc/encoders.texi pgssub section complete (every AVOption
+    evidence = doc/encoders.texi carries the complete pgssub option documentation and the APIchanges entries landed in-commit with the version bumps
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0022#lanes-clean"]
+    disposition = done
+    verify = host-lint-ffmpeg msg + series lanes report nothing beyond
+    evidence = the message and series lanes clean beyond the two dispositioned heuristic warns recorded at the plan/0021 close; re-verified by the plan/0023 trailer audit
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0022#out-of-scope"]
+    disposition = done
+    verify = attested operator
+    evidence = the out-of-scope dispositions recorded: the hardware pass and the submission prep deferred to their own milestones; the operator attested the plan/0022 delivery
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#cut-pgs9"]
+    disposition = done
+    verify = attested operator
+    evidence = executed in re-cut form per plan/0021: the series lives on pgs9-master, 26 commits on upstream/master at d854c88265, pushed to the fork
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#cross-lib-symbol-sweep"]
+    disposition = done
+    verify = bash -c 'cd software/ffmpeg/pgs9 && ! git grep -qP "\bff_(sub_|srgb_|oklab_)" -- fftools tests/api'
+    evidence = nm -D clean of cross-library ff_ symbols; the palette mapping ships as avpriv (ae505baf91), re-verified in the plan/0022 gates
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#relocate-sub-util"]
+    disposition = done
+    verify = bash -c 'cd software/ffmpeg/pgs9 && test -z "$(git ls-files libavutil | grep sub_util)" && ! git grep -q "libavutil/sub_util" -- fftools tests'
+    evidence = the subtitle bitmap utilities landed in fftools as ffmpeg_sub_util per the re-cut retitling (35fba7cc78)
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#close-palette-window"]
+    disposition = done
+    verify = bash -c 'cd software/ffmpeg/pgs9 && for c in $(git rev-list $(git merge-base pgs9 upstream/master)..pgs9); do git grep -q "ff_srgb_u8_to_oklab_int\|ff_oklab" $c -- libavfilter 2>/dev/null && exit 1; done; exit 0'
+    evidence = the transient palette window closed by moving the mapping to libavutil as avpriv with vf_paletteuse adopting it in the same commit (ae505baf91)
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#move-version-bumps"]
+    disposition = done
+    verify = bash -c 'cd software/ffmpeg/pgs9 && c=$(git log --format=%H --diff-filter=A $(git merge-base pgs9 upstream/master)..pgs9 -- libavutil/elbg.c) && git show $c --stat | grep -q libavutil/version.h'
+    evidence = the public-API commits carry master-sequential minors (lavu 61.7 through 61.11, lavc 63.9) with their APIchanges entries atomically
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#quantize-method-option"]
+    disposition = done
+    verify = bash -c 'cd software/ffmpeg/pgs9 && git grep -q "quantize_method" -- libavcodec/pgssubenc.c && git grep -q "quantize_method" -- doc/encoders.texi'
+    evidence = resolved per call/0006's intent with the option fftools-side: -sub_quantize_method drives the conversion quantizer one-way, the dead encoder read was removed, and plan/0023 proved per-stream isolation at run time
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#animation-scan-cap"]
+    disposition = done
+    verify = attested call/0006
+    evidence = the animation scan cap landed per call/0006; fate-api-pgs-animation-timing covers the boundary
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#signoff-and-trailers"]
+    disposition = done
+    verify = bash -c 'cd software/ffmpeg/pgs9 && b=$(git merge-base pgs9 upstream/master) && test "$(git rev-list --count $b..pgs9)" = "$(git rev-list --count --grep="Signed-off-by: David Connolly <david@connol.ly>" $b..pgs9)" && ! git log $b..pgs9 | grep -q "1M context"'
+    evidence = every series commit carries the signoff and the normalized GLM trailer per call/0005; audited in the plan/0022 and plan/0023 gates
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#ascii-pass"]
+    disposition = done
+    verify = bash -c 'cd software/ffmpeg/pgs9 && b=$(git merge-base pgs9 upstream/master) && ! git log --format=%B $b..pgs9 | grep -qP "[^\x00-\x7F]" && test "$(git diff $b..pgs9 -- "*.c" "*.h" | grep -P "^\+.*[^\x00-\x7F]" | grep -cv "Bœsch\|Lesiński")" = 0'
+    evidence = the commit messages are ASCII without trailing whitespace; the audit batch ran in the plan/0022 and plan/0023 gates
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#changelog-features"]
+    disposition = done
+    verify = bash -c 'cd software/ffmpeg/pgs9 && git grep -qi "ocr" -- Changelog'
+    evidence = the feature changelog entries landed (21256bfdd4) and the 9.0 block corruption was corrected (abb82b5b17)
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#codec-table-maintainers"]
+    disposition = done
+    verify = bash -c 'cd software/ffmpeg/pgs9 && git grep -q "pgssubenc" -- MAINTAINERS && awk -F"@tab" "/^@item PGS /{exit !(\$4 ~ /X/)}" doc/general_contents.texi'
+    evidence = codec_desc.c and codec_desc.h updated inside the encoder commit (a37b3f68e1); the MAINTAINERS entries completed at d6b6a7b4ff per the operator ruling
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#per-patch-builds"]
+    disposition = done
+    verify = attested operator
+    evidence = the count-verified build walk ran green with per-step configure: 25/25 across upstream/master..a58e6f9c12, and the zero-warning commit is build-verified at its own commit
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#fate-tip"]
+    disposition = done
+    verify = attested operator
+    evidence = the fate set green at the tip: 15 api-pgs targets plus fate-sub-pgs against the local samples
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#quantizer-benchmarks"]
+    disposition = done
+    verify = attested operator
+    evidence = the quantizer benchmark harness and results committed under plan/0022-pgs9-software-validation/deliverables
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#recut-series"]
+    disposition = done
+    verify = attested operator
+    evidence = the re-cut executed as plan/0021 and delivered on the master base; two of its formal deps (patcheck triage, the security pass) stay owed at submission prep and their tasks remain open
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#amend-project-rules"]
+    disposition = done
+    verify = bash -c 'grep -q "enable-shared" CLAUDE.md'
+    evidence = CLAUDE.md's patch-series discipline now names both configurations: the default configuration and the --enable-shared walk that catches cross-library symbol mistakes
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0020#where-room-switch"]
+    disposition = done
+    verify = host-lifecycle software --check .
+    evidence = the ffmpeg stanza switched to pgs9-master at d854c88265 with the in-tree handle software/ffmpeg/pgs9-master at the pin; host-lifecycle software --check green
     tool = host-lifecycle@0.50.0
     recorded = 2026-08-28

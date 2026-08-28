@@ -104,6 +104,8 @@ Hardware validation plan (device matrix, authoring pipeline, test
 discs) and the master-re-cut submission prep (per-series export, -x
 strip, APIchanges truth pass).
 
+- verify: attested operator
+
 ## Findings
 
 (appended by each task as it runs)

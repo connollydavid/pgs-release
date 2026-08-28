@@ -1,0 +1,7 @@
+# .host-lint-allow — sanctioned vocabulary (host-lint LEXICON; honoured by the
+# remap recheck). Each entry is the full contextual phrase carrying a legitimate
+# tell-shaped token: FFmpeg library version minors and a release-block name.
+# Provenance: the series commits themselves (a37b3f68e1..d854c88265 on
+# pgs9-master) and the FFmpeg 9.0 release block in the Changelog.
+lavu 61.7 through 61.11, lavc 63.9
+the 9.0 block
