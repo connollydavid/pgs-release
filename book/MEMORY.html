@@ -1624,6 +1624,26 @@ now has 22 commits (the tail replay included the flake fixup and two
 cosmetic duplicate edge-test commits from earlier cycles — dedupe at
 submission prep). LESSON: walk scripts must (a) restrict the range to
 our commits, (b) reconfigure at every step, (c) count-verify the total.</p>
+<h2 id="2026-08-28-final-8-addendum-tail-replay-paused--the-exact-remaining-surgery"><a class="header" href="#2026-08-28-final-8-addendum-tail-replay-paused--the-exact-remaining-surgery">2026-08-28 (final-8, addendum): tail replay paused — the exact remaining surgery</a></h2>
+<p>The tail replay (positions 16-19 onto the repaired wiring commit)
+hit conflicts at the BRIDGE commit (one-way force_all conversion):
+its enc.c hunk + the ffmpeg_enc_sub.h 4-arg setter change conflict
+with position 15 now carrying the full 4-arg circuit. CHERRY-PICK
+ABORTED; pgs9-master restored to the verified 21-commit state
+(ba51f8e2a5, builds, single defines pair, FATE was green at this
+state before the tail attempt). REMAINING SURGERY (one focused
+session): at the BRIDGE cherry-pick stop, resolve ffmpeg_enc_sub.h
+by taking the INCOMING 4-arg setter declaration (it supersedes), keep
+enc.c incoming (the one-way disposition), and the edge-test wiring
+rides along; then positions 17-19 replay cleanly (ocr-convert, final
+metadata, edge test). The bridge pick also needs its
+enc_sub_set_options call kept at 4 args. Nothing else in the lineage
+needs changes: SS1, gif, supenc, encoder, delta, wrappers, encsub,
+wiring all verified built at their positions (the 15-stop walk passed
+through position 15 before the bridge). After the tail lands: fate
+15/15 + the count-verified walk on the final 21-22 commits
+(host-mcwalk2.sh, BASE=upstream/master, per-step configure),
+force-push pgs9-master to the fork, plan/0022 receipts + HANDOVER.</p>
 
                     </main>
 
