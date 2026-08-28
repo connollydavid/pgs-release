@@ -7905,6 +7905,27 @@ api.mak complete with aggregation + all stanzas, fate-api-flac
 restored, Changelog correct, version defines exact. The force-push
 of pgs9-master to the fork completes the delivery. Remaining:
 hardware pass + submission prep.</p>
+<h2 id="2026-08-28-final-13-plan0023-opened-six-items-re-grounded-one-real-bug-found"><a class="header" href="#2026-08-28-final-13-plan0023-opened-six-items-re-grounded-one-real-bug-found">2026-08-28 (final-13): plan/0023 opened, six items re-grounded, one real bug found</a></h2>
+<p>The completion review's six items were re-grounded against the
+delivered pgs9-master lineage (tip abb82b5b17, 22 commits, at
+~/pgs9-wt/recut). Changes: the PDS worst-case size is already
+guarded (<code>buf_end - q &lt; 3 + 2 + nc * 5</code>, pgssubenc.c), and
+enc_sub_alloc is per output stream, so both items downgraded to
+run-time proofs. The MAINTAINERS item grew: ffmpeg_sub_util/render/
+ocr .c+.h have no entry at all (not a path-style nit). One genuine
+defect: the Epoch Start reset clears pds_cache_valid but never the
+pds_cache contents, so an entry transparent at epoch start keeps
+stale pre-epoch cache bytes and a later delta can wrongly omit it
+(decoder renders the wrong colour). Fix is a memset of the cache in
+the same branch; a zeroed entry can never falsely match because only
+alpha &gt; 0 entries are transmitted. Also found: the api-pgs-edge
+header still records the 256-colour segfault as an open encoder
+issue, though it was the test's own null buffer (fixed b258be4ce6)
+and the case now runs as the first test. Plan allocated by
+host-lifecycle next as plan/0023, committed 6adf311, pushed.
+Execution order: epoch-cache fix (test first, red then green), edge
+record correction, two-stream forwarding smoke, UHD smoke,
+MAINTAINERS, walk + gates.</p>
 
                     </main>
 
