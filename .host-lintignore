@@ -56,3 +56,6 @@ plan/0021-pgs9-subseries-recut/fairy-recut-rescan.md
 # measurement rows are pure numerals by nature; the harness source is
 # tracked alongside as quantizer-bench.c.
 plan/0022-pgs9-software-validation/deliverables/quantizer-bench-results.txt
+
+# Frozen dated session log (see plan/0022 README pointer).
+plan/0022-pgs9-software-validation/deliverables/session-log.md
