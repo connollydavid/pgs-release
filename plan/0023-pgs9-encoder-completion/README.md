@@ -212,3 +212,11 @@ PLAN.md, write the memory entry.
   samples. The four session commits carry the sign-off and the GLM
   trailer with clean whitespace. Remaining: close out (push done,
   receipts, index, this record).
+
+- Dead forward dispositioned (2026-08-28): the quantize_method and
+  forced_style forward in convert_text_to_bitmap, recorded above as
+  a submission-prep note, is removed at pgs9-master bc3272d081.
+  Both writes targeted options pgssubenc does not define and always
+  failed; the real one-way circuit reaches the conversion directly.
+  call/0009 records the disposition and the reviewer-facing answer
+  for why pgssub has no quantize_method where gif does.

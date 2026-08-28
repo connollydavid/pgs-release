@@ -1866,3 +1866,22 @@ LD_LIBRARY_PATH entirely, so the binary silently resolved system
 libraries and misreported the encoder as missing — the standing
 script-file rule caught it. Sanitizer task recorded in plan/0022
 (#sanitizer-pass); asan scratch worktree removed.
+
+## 2026-08-28 (final-20): dead forward removed, call/0009 records the disposition
+
+The convert_text_to_bitmap forward recorded in final-15 as a wart
+is gone at pgs9-master bc3272d081 (net minus eleven lines): both
+writes targeted options pgssubenc does not define and always
+failed with AVERROR_OPTION_NOT_FOUND. The conversion consumes the
+CLI choices directly from the fftools context, so behaviour is
+unchanged; the sixteen-fate gate and the two-stream forwarding
+smoke (control identical, isolate differs) re-verified the real
+circuit after removal. pgssubenc deliberately gains no
+quantize_method: it receives indexed bitmaps and never quantizes,
+and gif (the only encoder with the option) is a video codec that
+is never a subtitle output target. call/0009 records the
+disposition and the reviewer-facing answer; it disposes of the
+mechanism half of call/0006 while the scan-cap ruling stands.
+The struct line that jammed options_forwarded beside the render
+pointer is un-mangled by the field removal. Pin follows the
+branch at bc3272d081; the series now stands at 28 commits.
