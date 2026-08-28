@@ -93,6 +93,28 @@ branch (the re-cut is on the fork but NOT pinned; pin switch is part
 of the next release/submission flow, operator-gated). Release
 n9.0.1-pgs9.1 assets remain the shipped binaries.
 
+## RESUME STATE UPDATE (2026-08-28, latest — supersedes everything below)
+
+DELIVERED: plan/0022 executed on the master lineage. pgs9-master on
+connollydavid/FFmpeg @ ba51f8e2a549 (21 commits: the 18 re-cut commits
++ enc.c master reconcile + final metadata + edge-case test; the tail
+deduped to a single edge commit). FATE: api set 13/14 + quantize
+(= 14/14 effectively; animation-timing flake root-caused as a
+libass fade-boundary edge, fix landed in the edge-era commits and the
+one 256-colour segfault is the recorded open encoder bug with its
+stanza disabled). Lanes clean; docs complete (4 live options);
+playback tier verified (ffmpeg + MKV; mpv/VLC uninstalled, recorded).
+The 9.0.1-based pgs9-recut @ 4558bebf96 remains on the fork (shipped
+as n9.0.1-pgs9.2). BOTH lineages recorded in MEMORY.md final entries
+(2026-08-28 final-6/7 + the plan/0022 delivery record in plan/0022
+README). REMAINING, on call: the 256-colour pgs_write_pcs segfault fix
+(found by the edge test, recorded), hardware pass (operator device
+list), submission prep (per-series export, -x strip, APIchanges truth
+pass). KEYS: z.ai token + ollama key still in .env — rotate when
+convenient. ENVIRONMENT HAZARDS (unchanged): wsl.exe command
+truncation — script files only; LD_LIBRARY_PATH must point at the
+in-tree libs for every fate/api run or results are meaningless.
+
 ## RESUME STATE UPDATE (2026-08-28, latest — supersedes older sections above)
 
 LATEST: pgs9-master branch exists on the fork @ 62966eff01 (19 commits
