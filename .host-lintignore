@@ -51,3 +51,8 @@ HANDOVER.md
 
 # Second frozen machine-review artifact (re-scan of the re-cut).
 plan/0021-pgs9-subseries-recut/fairy-recut-rescan.md
+
+# Machine-generated benchmark output (quantizer bench, 2026-08-28):
+# measurement rows are pure numerals by nature; the harness source is
+# tracked alongside as quantizer-bench.c.
+plan/0022-pgs9-software-validation/deliverables/quantizer-bench-results.txt
