@@ -174,7 +174,7 @@ recorded here manually, with evidence:
 - ss1..ss4 assembly + folds: commits through the mcfix15/58c7670d4e
   and 34a486dc4d lineages; per-commit builds verified; FATE 15/15 with
   in-tree libs; nm -D clean; lanes clean; smoke verified.
-- final: metadata complete; 9.0 release block restored; dead options
+- final: metadata complete; the stable release block restored; dead options
   stripped on both lineages.
 
 ## Final delivery record (2026-08-28)
