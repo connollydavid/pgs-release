@@ -7728,6 +7728,27 @@ benchmarks, FATE api 15/15, samples 25/25, docs for the 4 live
 encoder options, decoder untouched (upstream compliance reference),
 no TODO/FIXME in encoder files, MAINTAINERS complete, Changelog
 complete. The re-scan verdict findings all fixed.</p>
+<h2 id="2026-08-28-final-11-per-commit-bisectability-on-master-the-one-recorded-gap-session-closed"><a class="header" href="#2026-08-28-final-11-per-commit-bisectability-on-master-the-one-recorded-gap-session-closed">2026-08-28 (final-11): per-commit bisectability on master, the one recorded gap; session closed</a></h2>
+<p>The attempt to distribute the ffmpeg_enc.c reconciliation into
+position 15 via interactive rebase FAILED and dropped the tail
+commits (count collapsed to 15); RECOVERED cleanly to the verified
+34a486dc4d lineage (FATE 15/15 re-confirmed, build OK). FINAL HONEST
+STATE of pgs9-master (22 commits): the TIP is complete and correct
+(all fixes, FATE 15/15, nm clean, lanes clean, smoke OK), but
+per-commit bisectability BREAKS at positions 15-18: the wiring
+commit (15) and positions 16-18 carry the pre-reconciliation
+ffmpeg_enc.c (the glued enc_reopen + version dup), fixed only by the
+reconciliation at position 19 and the later fixups. Making 15-18
+per-commit-buildable requires re-splitting the enc.c reconciliation
+across the wiring/bridge boundaries, genuine re-engineering reserved
+for submission prep (the per-series export will re-cut per sub-series
+anyway, and each sub-series re-cut gets its own honest conflict
+resolutions). THIS IS THE LAST RECORDED GAP before the hardware pass.
+Session mechanics proven: commit-tree rebuilds, script files only,
+LD_LIBRARY_PATH for every fate run, stale .err deletion before
+trusting a signature, per-step configure in walks, count-verified
+walks. plan/0022 receipts are recorded manually in the plan README
+(host-lifecycle limitation with manually-created milestones).</p>
 
                     </main>
 
