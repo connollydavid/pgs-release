@@ -23,6 +23,6 @@ Static binaries for 6 platforms on the [releases page](https://github.com/connol
 
 ## Development
 
-23 patches on FFmpeg, currently in its sixth iteration. See the [development page](https://connollydavid.github.io/pgs-release/development.html) for patch structure, series history, and data.
+A 28-patch FFmpeg series (pgs9), currently on the master base. See the [development page](https://connollydavid.github.io/pgs-release/development.html) for patch structure, series history, and data.
 
-Grew out of [PunkGraphicStream](https://github.com/connollydavid/punkgraphicstream). Developed with assistance from [Claude](https://claude.ai) (Anthropic).
+Grew out of [PunkGraphicStream](https://github.com/connollydavid/punkgraphicstream). Developed with assistance from [Claude](https://claude.ai) (Anthropic) and [GLM](https://z.ai) (Z.ai).

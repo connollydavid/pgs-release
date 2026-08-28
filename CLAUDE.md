@@ -827,11 +827,12 @@ mvn clean                # Clean build artifacts
 
 Compiler warnings (`-Xlint:unchecked`, `-Xlint:deprecation`) are enabled.
 
-FFmpeg, from `software/ffmpeg/pgs8-wip/`:
+FFmpeg, from the pgs9 worktree (`software/ffmpeg/pgs9-master/`; the
+canonical build tree is `~/pgs9-wt/recut` in WSL):
 
 ```bash
-./configure --disable-doc && make -j$(nproc)      # Build
-FATE_SAMPLES=/tmp/fate-samples make fate-sub-pgs  # Run PGS FATE test
+./configure --enable-shared --disable-doc --enable-libass && make -j$(nproc)  # Build
+FATE_SAMPLES=~/fate-suite make fate-sub-pgs                                   # Run PGS FATE test
 ```
 
 FFmpeg style: 4-space indent, no tabs, 80-char lines, K&R braces, and
