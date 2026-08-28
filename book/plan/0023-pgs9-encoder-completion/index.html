@@ -298,7 +298,8 @@ trailers, and the message lane.</p>
 PLAN.md, write the memory entry.</p>
 <h2 id="findings-execution-appends-here"><a class="header" href="#findings-execution-appends-here">Findings (execution appends here)</a></h2>
 <ul>
-<li>MAINTAINERS (2026-08-28): done at pgs9-master d6b6a7b4ff, pushed.
+<li>
+<p>MAINTAINERS (2026-08-28): done at pgs9-master d6b6a7b4ff, pushed.
 The three ffmpeg_sub_* fftools pairs had no entry at all; the
 delivered series also claimed the moved elbg and palette files,
 which upstream maintains under no name, so those lines are gone.
@@ -307,7 +308,48 @@ missing (its tip was b258be4ce6). One boundary call, recorded for
 review: palettemap.c and palettemap.h hold code extracted from
 vf_paletteuse, and the ruling was applied file-level (the files
 are added wholesale by the series), so the claim stands there; a
-content-level reading would drop it too.</li>
+content-level reading would drop it too.</p>
+</li>
+<li>
+<p>Epoch palette-cache hole (2026-08-28): fixed at pgs9-master
+4801ab8c08, red confirmed before the fix. The regression test
+api-pgs-epoch-cache drives an entry opaque in epoch one,
+transparent at the epoch-two boundary (opened by a height change),
+then restored to the epoch-one value; the pre-fix tree failed on
+step 3 exactly as the analysis predicted (stale cache suppressed
+the delta write), and the fixed tree passes. The whole api-pgs
+fate set stayed green, 15 targets including the new one. A build
+warning note for submission prep: pgs-test-util.h emits
+unused-function warnings for helpers a given test does not take;
+the edge test carries the same shape, and a <code>static inline</code> pass
+over the header would silence the family.</p>
+</li>
+<li>
+<p>Full-palette edge record (2026-08-28): corrected at a58e6f9c12.
+The header no longer claims an open encoder segfault and the case
+label no longer calls the distinct-entry palette duplicate;
+api-pgs-edge runs green.</p>
+</li>
+<li>
+<p>Per-stream option forwarding (2026-08-28): proven at run time.
+One srt, duplicate-mapped into two pgssub streams in one mkv,
+with -sub_quantize_method differing per stream. With the same
+method on both streams the extracted SUP files are byte-identical;
+with NeuQuant against Median Cut they differ decisively (105872
+against 63765 bytes), so each stream ran its own value through its
+own conversion context. Median Cut against ELBG differs likewise.
+NeuQuant against ELBG is byte-identical for this content, the
+algorithms coinciding, which is why the Median Cut cases carry the
+proof. Side observation: Median Cut's entry ordering RLE-compresses
+this content a third smaller than NeuQuant's.</p>
+</li>
+<li>
+<p>UHD smoke (2026-08-28): srt to sup at 3840x2160 encodes clean
+(217933 bytes, 24 packets, epoch and delta structure intact) and
+decodes cleanly through pgssubdec, proven by a DVB transcode of
+the decoded bitmaps. The null-muxer decode attempt is not a valid
+subtitle sink; the transcode is the decoder proof.</p>
+</li>
 </ul>
 
                     </main>
