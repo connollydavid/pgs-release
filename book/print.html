@@ -4603,6 +4603,56 @@ discs) and the master-re-cut submission prep (per-series export, -x
 strip, APIchanges truth pass).</p>
 <h2 id="findings"><a class="header" href="#findings">Findings</a></h2>
 <p>(appended by each task as it runs)</p>
+<h2 id="progress-record-2026-08-2728-session"><a class="header" href="#progress-record-2026-08-2728-session">Progress record (2026-08-27/28 session)</a></h2>
+<p>Completed:</p>
+<ul>
+<li>#fate-samples: fate-suite sub/ fetched (35 files, 3.2 MB,
+~/fate-suite/sub). Sample-based subtitle fates pass 25/25, including
+fate-sub-pgs-remux (decoder vs real PGS sample). Api+quantize set at
+tip: 13/14 (see flake below); quantize failure was a stale binary,
+fresh rebuild passes. The two standing lane warns are now resolved
+facts (sample provenance real, tested).</li>
+<li>#anim-flake: ROOT-CAUSED with a standalone probe
+(Temp/host-probe.c): libass renders fully transparent (empty bitmap)
+at exactly the fade boundary t=0 and t=end; non-empty from +42 ms on.
+Deterministic, environment-independent, reproduces on the 9.0.1
+branch too. Fix landed: the test now samples at start_ms + frame_ms
+(commit on pgs9-flake-investigation, folded toward pgs9-master).</li>
+<li>#decoder-review: pgssubdec is upstream's decoder carried unchanged.
+Windows parsed as advisory (objects carry absolute x/y), epoch
+flush on state != 0, forced-only option honored, tolerant
+missing-object/palette handling with EXPLODE opt-in. Findings are
+upstream-scope (record, not fix): no WDS-based clipping, no
+end-timestamp model (next-PTS clearing), clamp-to-2 on object
+overflow. No issues in paths our series depends on.</li>
+<li>#benchmarks: harness (deliverables/quantizer-bench.c) + results
+(deliverables/quantizer-bench-results.txt). NEUQUANT/MedianCut/ELBG
+across SD/HD/UHD and 16/64/256 palettes; ELBG fastest at small
+palettes (~15 Mpix/s), MedianCut strongest on quality at 64+,
+NeuQuant most stable across palette sizes.</li>
+</ul>
+<p>In progress / next session:</p>
+<ul>
+<li>#edge-cases: api-pgs-edge test draft exists in session temp
+(256-colour palette + zero-dim rect + duplicate-entry palette); the
+draft needs a clean rewrite against the encode_large_subtitle
+pattern from api-pgs-rate-control-test.c. NOTE: tests/data is
+gitignored - force-add the sub-ocr-roundtrip.srt sample if
+re-adding, and the fate-sub-ocr-roundtrip test may need the
+sample-committed-or-test-reworked decision recorded.</li>
+<li>#software-playback, #docs-api, #lanes-clean: not started.</li>
+<li>Master lineage blemish: duplicate lavc MINOR/MICRO defines in
+libavcodec/version.h (master's 8.101 + our 2.100; benign, last-wins
+= our intended 2.100... on the master base the intended pair is
+MINOR 9 / MICRO 100 after the encoder bump). Collapse to a single
+pair as a fixup on the encoder commit, then re-run the count-
+verified walk (host-walk3-reset.sh now has per-step configure and
+BASE=upstream/master).</li>
+<li>Branches: pgs9-master @ 62966eff01 + flake fixup 51551aaae6 (local);
+pgs9-recut2 (local) = 4558bebf96; fork pgs9-recut = 4558bebf96.</li>
+<li>Close-out: receipts for the plan/0022 tasks, findings appended above
+this section, HANDOVER final refresh.</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="software-where"><a class="header" href="#software-where">Software: where</a></h1>
 <p>The action this project produces. Each component is a bare object store with worktrees, not committed into this repo; the recipe below is the reproducibility anchor. Materialize the worktrees locally with:</p>
 <pre><code>host-lifecycle software --materialize .
