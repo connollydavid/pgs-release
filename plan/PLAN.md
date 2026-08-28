@@ -42,10 +42,10 @@ The milestones, in acceptance order; 0001 through 0018 are closed records.
 _Scratch buffer: what we're doing right now._
 
 Active milestone: plan/0023 (pgs9 encoder completion), the located
-undone work on the delivered pgs9-master lineage, written for solo
-execution before the hardware sweep. One real defect (the epoch
-palette-cache reset), three run-time proofs (full-palette edge,
-per-stream option forwarding, UHD smoke), the missing MAINTAINERS
-entries, then the whole-series walk and gates. plan/0022 (software
-validation) is delivered: the 22-commit series sits on
-upstream/master at pgs9-master, tip abb82b5b17, pushed to the fork.
+undone work on the delivered pgs9-master lineage. Executed: the
+epoch palette-cache fix (red then green), the corrected edge-test
+record, the per-stream forwarding proof, the UHD smoke, the
+MAINTAINERS ruling, the zero-warning sweep and fix, and the 25/25
+count-verified walk. Close-out remains: receipts and the final
+memory entry. pgs9-master is 26 commits on upstream/master, tip
+d854c88265, pushed to the fork.

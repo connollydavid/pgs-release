@@ -186,3 +186,29 @@ PLAN.md, write the memory entry.
   decodes cleanly through pgssubdec, proven by a DVB transcode of
   the decoded bitmaps. The null-muxer decode attempt is not a valid
   subtitle sink; the transcode is the decoder proof.
+
+- Zero-warning ruling (2026-08-28, operator): every warning new to
+  our code is unacceptable, so the census was swept in a scratch
+  worktree. The tip build showed five shapes in our files: dead
+  Encoder and encoder-context locals in render_active_set
+  (fftools/ffmpeg_enc_sub.c), seven unused-function warnings from
+  the shared test header across its includers, a dead local in the
+  edge test's encode_rect, and 1 MB encode buffers on the stack in
+  the fade, coalesce, and animation-timing tests. The files the
+  series only modifies (gif, supenc, ffmpeg.c, ffmpeg_mux_init.c,
+  ffmpeg_opt.c, vf_elbg, vf_palettegen, vf_paletteuse) carry zero
+  warnings at the tip, so nothing new hides there. Fixed at
+  pgs9-master d854c88265: the dead locals are gone, the header
+  helpers are static inline, and the big buffers are heap-allocated
+  (a Windows default stack is 1 MB). Every file the series adds or
+  modifies now compiles with zero warnings, and the affected fates
+  stayed green. This supersedes the submission-prep note above that
+  deferred the header warnings.
+
+- Series gates (2026-08-28): the count-verified build walk ran
+  upstream/master..pgs9-master with per-step configure, 25/25 green
+  (the range before the warning-fix commit, which is build-verified
+  at its own commit). fate-sub-pgs passes against the local fate
+  samples. The four session commits carry the sign-off and the GLM
+  trailer with clean whitespace. Remaining: close out (push done,
+  receipts, index, this record).
