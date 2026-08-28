@@ -420,3 +420,23 @@ Sending the RFC and the submissions themselves stay in plan/0019, which
 resumes once this milestone closes; its rebase task is subsumed by
 [#cut-pgs9](#cut-pgs9). Editing plan/0018's recorded v7 manifests is
 forbidden; the pgs9 cut is recorded here.
+
+## Resolution (2026-08-28)
+
+The remediation resolved through its successor milestones. plan/0021
+re-cut the series into four coherent sub-series and rebuilt it on the
+master base; plan/0022 delivered the software validation (the fate
+set, the sample integration, the review-fix sweeps); plan/0023
+completed the located undone encoder work: the epoch palette-cache
+fix, the full-palette and per-stream forwarding proofs, the UHD
+smoke, the MAINTAINERS ruling, and the zero-warning sweep. The
+lineage is pgs9-master, 26 commits on upstream/master, tip
+d854c88265, pushed to the fork.
+
+The submission venue decision stays pending by its own terms: the
+features-complete precondition now holds, and the hardware pass is
+outstanding. This milestone's build-sequence receipts remain
+unrecorded in the tool ledger because the work executed in re-cut
+form under plan/0021's sequence; a dedicated ledger pass can
+discharge them against the plan/0021-0023 records if the operator
+wants the ready frontier quiet.

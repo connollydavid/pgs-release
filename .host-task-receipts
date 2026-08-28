@@ -11,3 +11,52 @@
     evidence = history/pgs-v8 tagged at a7ffc46c43 and pushed to origin
     tool = host-lifecycle@0.40.1
     recorded = 2026-07-17
+
+[receipt "plan/0023#epoch-cache-reset"]
+    disposition = done
+    verify = api-pgs-epoch-cache red on the pre-fix tree, green on the
+    evidence = api-pgs-epoch-cache failed on the pre-fix tree (step 3: stale cache dropped entry 1 from the delta PDS) and passes after the reset memset at pgs9-master 4801ab8c08; the api-pgs fate set is green at 15 targets
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0023#full-palette-proof"]
+    disposition = done
+    verify = api-pgs-edge green on the fixed tree; the header names the
+    evidence = the edge-test header no longer claims an open encoder segfault and the case label names the full 256-entry palette, corrected at a58e6f9c12; api-pgs-edge runs green
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0023#per-stream-forward"]
+    disposition = done
+    verify = the two-stream smoke shows each SUP carrying its own
+    evidence = one srt duplicate-mapped into two pgssub streams in one mkv: with the same method the extracted SUPs are byte-identical, with NeuQuant vs Median Cut they differ (105872 vs 63765 bytes), proving each stream ran its own option through its own conversion context
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0023#uhd-smoke"]
+    disposition = done
+    verify = srt to sup at 3840x2160 round-trips clean through pgssubdec
+    evidence = srt to sup at 3840x2160 encodes 217933 bytes across 24 well-structured packets and decodes cleanly through pgssubdec, proven by a DVB transcode of the decoded bitmaps
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0023#maintainers-entries"]
+    disposition = done
+    verify = every file the series adds wholesale carries
+    evidence = MAINTAINERS at pgs9-master d6b6a7b4ff carries David Connolly <david@connol.ly> beside every wholesale addition (five fftools pairs, quantize, mediancut, neuquant, palettemap glob, pgssubenc) and drops the moved elbg and palette claims; pushed to the fork
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0023#series-gates"]
+    disposition = done
+    verify = the count-verified build walk green across
+    evidence = count-verified build walk with per-step configure: 25/25 across upstream/master..a58e6f9c12; commit d854c88265 (zero-warning fix) build- and warning-verified at its own commit with every series file compiling warning-free; fate-sub-pgs passes against local samples; the four session commits carry signoff and GLM trailers with clean whitespace
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
+
+[receipt "plan/0023#close-out"]
+    disposition = done
+    verify = attested operator
+    evidence = operator-directed close-out 2026-08-28: pgs9-master pushed to the fork at d854c88265, the seven milestone receipts recorded, the plan/0020 completion record appended, PLAN.md and the memory updated
+    tool = host-lifecycle@0.50.0
+    recorded = 2026-08-28
