@@ -7616,6 +7616,27 @@ the walk updates it to the walk-verified tip. Remaining known items:
 the 256-colour case itself has NOT been re-tested post-buf-fix (the
 stanza is live; the full set run will show it); mpv/VLC uninstalled
 (playback tier recorded as ffmpeg+MKV only).</p>
+<h2 id="2026-08-28-final-9-correction-master-tail-replay-not-landed--exact-state"><a class="header" href="#2026-08-28-final-9-correction-master-tail-replay-not-landed--exact-state">2026-08-28 (final-9, correction): master tail replay NOT landed — exact state</a></h2>
+<p>CORRECTION to the implied state: pgs9-recut2 = 58c7670d4e (15 commits,
+positions 1-15 of the master lineage, wiring repaired, build OK) — the
+tail22b replay of positions 16-22 BROKE the build and was rolled back
+by finalreset; the replayed commits live only in the mcfix15 reflog.
+The tail22b replay errors (enc_sub.h 4-arg declaration vs 3-arg hunk,
+enc.c glue at 4 lines) came from replaying commits whose diffs were
+computed against the OLD lineage: the correct resumption is NOT
+cherry-pick but manual application of the tail22b reflog trees, OR
+simply cherry-pick positions 16-19 from pgs9-recut (the 9.0.1 fixed
+lineage: 4778447c0e Changelog-final, cfa6f2f164 bridge,
+25495caa5b ocr-convert, 91991f9a7b bridge2...) and re-apply the
+one-way circuit edits per the recorded recipes (the 9.0.1 lineage
+commits carry the final intended content; conflicts resolve keep-
+incoming for the one-way circuit). The edge test .c + stanza live in
+pgs9-recut2? NO — the edge test .c and stanza were lost with the tail
+aborts; they must be re-landed (host-edge2.c draft + wiring are in
+Temp scripts). ALSO: pgs9-recut2 @ 58c7670d4e = the CURRENT verified
+state (15 commits, FATE api set was 13/14 + quantize at this content
+pre-position-15-repair; re-run after). HANDOVER.md top section is the
+authoritative resume point.</p>
 
                     </main>
 
