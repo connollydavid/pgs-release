@@ -1,11 +1,11 @@
-# MEMORY.md — append-only working memory
+# MEMORY.md, append-only working memory
 
-## 2026-07-05 — Adopted the host methodology (case b, Shallow PR)
+## 2026-07-05, Adopted the host methodology (case b, Shallow PR)
 
 - Template: connollydavid/host-template @ 5707980, stamped in `.host`;
   adoption recorded in call/0001, rename dictionary boxed there.
 - Case b: the pre-methodology CLAUDE.md merged with the spine. The merged
-  file sits at `CLAUDE.md.proposed` — installing it over CLAUDE.md was left
+  file sits at `CLAUDE.md.proposed`, installing it over CLAUDE.md was left
   as an explicit operator action because the session's permission layer
   (rightly) refuses agent self-modification of standing instructions.
 - Durable exception (operator ruling): the Pages root is the content-full
@@ -25,10 +25,10 @@
   --apply` substitutes inside `host-lint:ignore` fenced blocks (the fence
   guards the lint scan only), so the boxed durable copy in call/0001 had to
   be restored from the archive commit afterwards; the standalone host-lint
-  binary reads LEXICON while `remap --check` reads `.host-lint-allow` — keep
+  binary reads LEXICON while `remap --check` reads `.host-lint-allow`, keep
   both in sync.
 
-## 2026-07-05 — Adoption PR opened (#1); tool findings
+## 2026-07-05, Adoption PR opened (#1); tool findings
 
 - PR: https://github.com/connollydavid/pgs-release/pull/1. Verify receipt
   deliberately unrecorded until the CLAUDE.md swap (its recheck runs the
@@ -44,7 +44,7 @@
   native sub-path option in the publish phase would let call/0002's
   exception retire; considering raising as an enhancement.
 
-## 2026-07-05 — Review fixes landed; adoption completed on the branch
+## 2026-07-05, Review fixes landed; adoption completed on the branch
 
 - Claude-driven multi-angle review of PR #1 (the advisor tool was
   unavailable); confirmed findings fixed on the branch: rebase-script
@@ -68,7 +68,7 @@
   (session permission layer refuses third-party repos in auto mode) and
   flipping the Pages source to gh-pages after the first Site publish.
 
-## 2026-07-05 — Merged; site serving per call/0002
+## 2026-07-05, Merged; site serving per call/0002
 
 - PR #1 merged to main (all lanes green: gate, build, FATE, six release
   legs, Site). Operator authorized the Pages source flip; done under the
@@ -84,12 +84,12 @@
 - Still open: allium/specula submodule adds (operator command, in the PR
   body) and the cast/ personas discussion.
 
-## 2026-07-05 — All four verification tools wired
+## 2026-07-05, All four verification tools wired
 
 - Operator authorized the allium and specula submodule adds; wired at the
   template's pins (b86dba9), every lane green on that commit.
 - Gotcha with a correction: the first wiring attempt was reported pushed
-  but had been silently blocked — the host-lint pre-commit hook fails
+  but had been silently blocked, the host-lint pre-commit hook fails
   closed on staged gitlinks (git show ":path" exits 128 for mode 160000),
   so every git submodule add commit is rejected once the hook is live.
   Filed as connollydavid/host-lint#19; the installed hook copies carry a
@@ -98,7 +98,7 @@
 - The only remaining spine obligation is authoring cast/ personas by
   discussion before planning new work.
 
-## 2026-07-05 — Cast built; the adoption's last spine obligation closed
+## 2026-07-05, Cast built; the adoption's last spine obligation closed
 
 - Personas by operator discussion: Elias (ffmpeg-devel reviewer, primary),
   Marcus (archivist), Noa (disc author), Priya (pipeline engineer), Sable
@@ -146,7 +146,7 @@ Case C upgrade through the ledger: entries 67d63e9 (build-sequence band),
 scaffold-and-stamp primitive is `scaffold`) recorded and the baseline
 advanced 7127dc4 -> ff04a94. Tools re-pinned host-lifecycle v0.40.1 and
 host-lint v0.14.2 (submodules, the checksum-verified CI action, the
-installed hook binary — the hook's sibling binary is a copy the installer
+installed hook binary, the hook's sibling binary is a copy the installer
 does not refresh; re-copy it on every lint bump). call/0002's /book/
 exception is now the declared `book-mount = "/book/"` stamp key and the
 Site workflow reads `book --print-mount` (kept our assemble shape: the
@@ -362,7 +362,7 @@ Lessons (non-obvious; for the next session):
 - FFmpeg source comments are terse; rationale belongs in the commit
   message, not a multi-line block above a constant.
 
-## 2026-07-19: host-reconcile — the version-reconciler generalised to a 4th methodology tool; design filed on connollydavid/host#18
+## 2026-07-19: host-reconcile, the version-reconciler generalised to a 4th methodology tool; design filed on connollydavid/host#18
 
 The version-reconciler prototype (tools/host-ffmpeg-version-reconcile/,
 built today: derive/resolve/rewrite, tested against the real pgs9 state)
@@ -411,7 +411,7 @@ The pgs9 master rebase (onto fast-forwarded origin/master, --onto 6e7c3efe70)
 is **BLOCKED on host-reconcile** (connollydavid/host#18), by operator decision
 (2026-07-19): the rebase is the articulation's acceptance test (Phase 2
 verify in the filed design), so it must run against the real tool, not the
-prototype — running it now with the prototype would consume the test
+prototype, running it now with the prototype would consume the test
 informally and mean redoing it. A peer agent implements host-reconcile on
 the host repo; pgs9 waits. Do NOT start the rebase with the prototype alone.
 Also pending (not urgent until the rebase unblocks): fast-forward the fork's
@@ -451,7 +451,7 @@ phantom: tools/specula shows "modified content" from Windows git (cannot
 hash scripts/infra/run_model_check.sh) and clean from WSL; the
 submodules and stores are WSL-owned, so read them from WSL only.
 
-## 2026-08-21: overriding goal set — pgs9 onto n9.0.1; WSL2 primary; Fairies vendored
+## 2026-08-21: overriding goal set, pgs9 onto n9.0.1; WSL2 primary; Fairies vendored
 
 Three operator orders. (1) OVERRIDING GOAL: rebase the pgs9 series onto
 FFmpeg 9.0.1 "Lei" (tag n9.0.1 = bf1b838f2a, released 2026-08-12, latest
@@ -481,7 +481,7 @@ The rebase ran in ~/pgs9-wt/rebase901 (branch pgs9-9.0.1, worktree of
 software/ffmpeg/.bare). 30/30 commits applied onto n9.0.1 (bf1b838f2a);
 only stops needing hand resolution were the version/APIchanges ones.
 Version re-derivation: n9.0.1 carries lavc 63 / lavu 61 already, so the
-series' major bumps are absorbed and re-derived as minors — lavc ends at
+series' major bumps are absorbed and re-derived as minors, lavc ends at
 63.2.100, lavu walks 61.2 -> 61.5. The original ELBG-quantizer commit
 bumped minor +2 while its own APIchanges entry documented one addition;
 resolved provisionally-consistent at +1 (lavu 61.5), shrinking
@@ -501,7 +501,7 @@ nm -D clean, fate-api-pgs x4 OK, patcheck hints reduced to single-line
 ifs in test code (hint-tier, left for review taste), audits 30/30 clean
 (sign-off, message ASCII, trailing whitespace). The audit's non-ASCII
 findings are all verbatim-upstream content (Bjorn Ottosson / Clement
-Boesch / Kornel Lesinski copyright lines, OkLab math) — legitimate per
+Boesch / Kornel Lesinski copyright lines, OkLab math), legitimate per
 the pack's own calibration (diff-ascii-code is code-scoped, not
 comment-scoped). sub_ocr_init already carried av_cold; patcheck's flag
 was the ENOSYS stub. Checkpoints: cp/901-folded, cp/901-walked,
@@ -559,14 +559,14 @@ repro-waiver migration, libass on the connollydavid fork at cc83558b,
 GOTCHA that reddened the gate: the remap phase recheck counts
 UNDISPOSITIONED TELLS, and my own prose from the rebase session
 introduced dotted-numeral labels ("the 8.1 lineage", "lavu 61.2 ->
-61.5") in call/0007, PLAN.md, and plan/0020 — advisory at commit time
+61.5") in call/0007, PLAN.md, and plan/0020, advisory at commit time
 (hook prints rc-3 warnings), but a gate failure in the recheck. The
 commit hook's advisory and the gate's blocking disposition differ;
 reworded all three (two-part dotted numerals flag, three-part tag forms
 like n9.0.1 pass). Local gate green after reword; pushed; all five CI
-lanes green at c45655a (Verify Gate, FFmpeg FATE — the CI-side FATE
+lanes green at c45655a (Verify Gate, FFmpeg FATE, the CI-side FATE
 evidence for the pre-release rule, since the local suite lacks fate
-samples — Build, Site, FFmpeg Release push-validation).
+samples, Build, Site, FFmpeg Release push-validation).
 
 Release cut: gh release create n9.0.1-pgs9.0 (target main) with notes
 matching the previous release shape; the release-created event drives
@@ -596,7 +596,7 @@ registers pgssub with quantize_method, and encodes SRT to PGS.
 
 Second finding from the same smoke test: the site's plain usage example
 (ffmpeg -i subtitles.srt -s 1920x1080 output.sup, no -c:s) fails at
-output open — on BOTH the v7 and v9 release binaries, so an
+output open, on BOTH the v7 and v9 release binaries, so an
 over-optimistic site example rather than a v9 regression. The working
 form is -c:s pgssub -s WxH (the encoder needs explicit dimensions;
 without them it fails per-frame). Site usage line corrected.
@@ -605,16 +605,16 @@ without them it fails per-frame). Site usage line corrected.
 
 Operator direction: work around host-reconcile as best we can and update
 the bug report. The workaround that carried the n9.0.1 rebase is now
-codified at scripts/reconcile/ — stop.sh (typed-file stop resolver:
+codified at scripts/reconcile/, stop.sh (typed-file stop resolver:
 parent-relative version deltas, lineage re-derivation, APIchanges
 insertion at the series slot, makefile union), build-walk.sh (per-commit
 build oracle), transfer-proof.sh (carries a walk verdict across a fold
-by proving tree identity outside the folded files) — with the method
+by proving tree identity outside the folded files), with the method
 and the lessons written up in its README. These will carry the master
 re-cut for upstreaming. host#18 received an empirical-findings comment
 (https://github.com/connollydavid/host/issues/18#issuecomment-5376538743):
 the acceptance-scale measurement (30 commits over 2233 of drift, every
-hand stop a typed file, zero code conflicts — the work concentrates
+hand stop a typed file, zero code conflicts, the work concentrates
 exactly where the tool aims) plus five findings beyond the design's
 pinned prototype lessons: parent-relative deltas, conflict-block shape
 variance, context-duplicate materialisation by sibling hunks, the need
@@ -622,12 +622,12 @@ for a policy hook on commit-internal inconsistencies (the ELBG
 double-bump), and rerere determinism. The tool's acceptance test stays
 a fresh rebase per call/0007.
 
-## 2026-08-22: Fairies on Ollama cloud — endpoint proven, inline-patch shim in
+## 2026-08-22: Fairies on Ollama cloud, endpoint proven, inline-patch shim in
 
 Operator picked deepseek-v4-flash (Ollama Pro, flat subscription) as the
 review model; glm-5.2 / kimi-k2.7-code / deepseek-v4-pro stay in reserve
 on the same plan. Endpoint facts, measured: the OpenAI-compat base for
-the cloud is https://ollama.com/v1 — api.ollama.com 301s to it and the
+the cloud is https://ollama.com/v1, api.ollama.com 301s to it and the
 redirect converts POST badly, which first showed as a misleading 405.
 On the right base the Responses API works including function-tool
 round-trips (the exact call shape fairy's review loop drives), and
@@ -654,7 +654,7 @@ thing to read).
 Belt-and-braces egress posture, all empirically verified: (1) review
 containers run on the fairy-isolated podman network, created by US as
 --internal before fairies ever looks (podman_host only creates a
-network when missing, and its plain create would NAT) — internal=true,
+network when missing, and its plain create would NAT), internal=true,
 and a container on it cannot even RESOLVE ollama.com, so the model's
 shell has no route out by construction; the repo reaches the container
 by podman cp, not the network. (2) The wrapper process's HTTP(S) egress
@@ -663,7 +663,7 @@ permitting ollama.com:443 alone): ollama.com tunnels (200),
 code.ffmpeg.org and github.com get logged 403 refusals. (3) Structural:
 gcli is not installed and scripts/fairy/run-local.sh REFUSES to start
 if it ever appears; the posting daemons (agent.py/worker.py/fairy.py)
-are never invoked — only pr_review_wrapper, via the inline-patch shim,
+are never invoked, only pr_review_wrapper, via the inline-patch shim,
 fed a local stdin ticket; --web-search off is forced; ssh targets
 127.0.0.1:2222 only (the fairylocal alias over user-mode sshd; rootless
 podman 6.1.0 verified). Residual, recorded honestly: the env-proxy is
@@ -674,7 +674,7 @@ run. Provisioning was cancelled mid-image-build by the operator before
 this ruling; the review image state on fairylocal and the review ticket
  staging are the remaining bring-up items.
 
-## 2026-08-22: fairy first-run debugging — complete findings ledger (operator: record all, waste nothing)
+## 2026-08-22: fairy first-run debugging, complete findings ledger (operator: record all, waste nothing)
 
 Goal: perfunctory glm-5.2 structure scan of the 30-patch series, local
 only. Seven runs; each failed differently; every root cause found and
@@ -682,17 +682,17 @@ fixed except the last, whose fix is designed below.
 
 RUN MAP AND ROOT CAUSES:
 - run1: podman cp of the bare mirror died "archive/tar: write too long"
-  — the wrapper's repo push triggered background commit-graph writing
+ , the wrapper's repo push triggered background commit-graph writing
   in the mirror and cp tarred the mid-write tmp file. FIX (applied):
   rm -rf objects/info/commit-graphs in the mirror + `git config gc.auto
   0` + `fetch.writeCommitGraph false`. Mirror pushes are now stable
   (subsequent runs: sync ~1.7s).
-- run2: openai.APIConnectionError. ROOT CAUSE: venv skew — openai 3.3.1
+- run2: openai.APIConnectionError. ROOT CAUSE: venv skew, openai 3.3.1
   is built on httpx2 (DefaultHttpxClient = httpx2.Client) while my
   earlier `pip install httpx` layered classic httpx 0.28.1; Fairies
   passes a classic httpx.HTTPTransport into the httpx2-based client ->
   AssertionError (surfacing as connection errors deep in retries). FIX
-  (applied): pin openai<3 (2.54.0) + classic httpx 0.28.1 — the pair
+  (applied): pin openai<3 (2.54.0) + classic httpx 0.28.1, the pair
   Fairies is written for. httpx2 and classic coexist fine (different
   module names); never install openai 3.x for this Fairies checkout.
 - run3: 400 "file inputs are not currently supported". My inline-patch
@@ -703,7 +703,7 @@ RUN MAP AND ROOT CAUSES:
   source-bundle input_file UNCONDITIONALLY once a source bundle exists
   (the source_file_id append is not None-gated). FIX (applied): the shim
   also neutralises pr_review_wrapper.build_source_bundle -> (None, [],
-  []) — the model reads sources via its container shell instead.
+  []), the model reads sources via its container shell instead.
 - run5: schema JSONDecodeError char 0 (empty final text). The model ran
   `cd /work/ffmpeg` but the repo staged as /work/pgs9-9.0.1 (the
   container path is the basename of --repo-root; production stages a dir
@@ -715,10 +715,10 @@ RUN MAP AND ROOT CAUSES:
   request+response+wrapper_request): request1 -> [reasoning,
   function_call(shell)] good; request2 (tool result fed back) ->
   status completed, output [message] with content [{type: output_text,
-  text: ""}] — a schema-shaped EMPTY message.
+  text: ""}], a schema-shaped EMPTY message.
 - SMOKING GUN (run7 dump + minimal repro): request2 carries
   previous_response_id (resp_705602) and input = ONLY the new
-  function_call_output items — the STATEFUL Responses flavor.
+  function_call_output items, the STATEFUL Responses flavor.
   Ollama's Responses support is explicitly NON-STATEFUL only, so the
   follow-up arrives context-stripped (an orphaned tool result) and the
   model answers empty-conforming. Minimal repro PROVED the stateless
@@ -726,7 +726,7 @@ RUN MAP AND ROOT CAUSES:
   function_call item, function_call_output item] -> r2 output [message]
   with the JSON text, no previous_response_id.
 - THE FIX (designed, next to implement): stateless-conversion shim in
-  scripts/fairy/wrapper.py — monkeypatch the SDK
+  scripts/fairy/wrapper.py, monkeypatch the SDK
   openai.resources.responses.Responses.create: cache (input, serialized
   resp.output) per response id; when a call arrives with
   previous_response_id, drop it and send input = cached_input +
@@ -734,7 +734,7 @@ RUN MAP AND ROOT CAUSES:
   shape. No Fairies-tree changes.
 
 STANDING FACTS (verified): the whole pipeline works up to the final
-turn — repo sync/mirror/cp, isolated container on fairy-isolated, the
+turn, repo sync/mirror/cp, isolated container on fairy-isolated, the
 model driving real shell rounds in /work/ffmpeg, schema json_schema
 enforcement accepted by the endpoint (strict pr_review_result), 40k
 max_output_tokens default (not truncation; status completed throughout).
@@ -744,13 +744,13 @@ Ollama cloud model tags have no :cloud suffix (glm-5.2, not
 glm-5.2:cloud); the OpenAI-compat base is https://ollama.com/v1
 (api.ollama.com 301s and breaks POST).
 
-## 2026-08-22: run eight succeeded — glm-5.2 delivered the structure verdict
+## 2026-08-22: run eight succeeded, glm-5.2 delivered the structure verdict
 
 The stateless shim fixed the loop: fourteen agentic rounds (the model
 grepped the diff, the repo, option tables, MAINTAINERS), then a full
 ~21k-char structural review. NEW KNOWN ISSUE (last one): the final
 message arrives as MARKDOWN PROSE, not the strict pr_review_result JSON
-envelope — the endpoint accepted the json_schema request but did not
+envelope, the endpoint accepted the json_schema request but did not
 enforce it, so the wrapper's json.loads fails at char 0 and discards
 the run (exit 3). The CONTENT is intact in the --debug-response-dir
 dump (response.output message text); scripts read it from there. A
@@ -759,17 +759,17 @@ could be relaxed; not needed for our use.
 
 The verdict is saved with honest attribution at
 plan/0020-pgs9-series-remediation/fairy-structure-review.md. Its three
-bounce-causes: (1) strand bundling — no maintainer owns lavu+lavc+lavf+
+bounce-causes: (1) strand bundling, no maintainer owns lavu+lavc+lavf+
 lavfi+fftools+fate+configure in one series; split into four sub-series
 (lavu quant API; GIF RGBA; PGS encoder; text<->bitmap conversion), the
 same strand shape our own plan/0002-0008 milestones had. (2) The lavu
 API-surface decisions: ff_neuquant_* exported in an installed public
 header (wrong), fresh avpriv_palette_map_* (worst-of-both middle
-ground), PGS-shaped region knobs in the generic API — resolve with the
+ground), PGS-shaped region knobs in the generic API, resolve with the
 lavu maintainer before resubmitting; highest-risk single objection.
 (3) fftools reading lavc-private state via av_opt_get*(enc->priv_data)
 in the disposition bridge, the wiring, forced_style, and
-quantize_method — eliminate all; one-way option flow only. It also
+quantize_method, eliminate all; one-way option flow only. It also
 independently rediscovered our own known issues (the dangling
 quantize_method read before its defining commit, the forced_style
 dead-option shape) and flagged candidates needing OUR verification
@@ -784,14 +784,14 @@ review; the re-cut decision is the operator's.
 
 Operator ruled: (1) re-cut commits keep existing Co-Authored-By
 trailers and append `Co-Authored-By: GLM 5.3 <no-reply@z.ai>`; (2) the
-lavu API-surface proposal is a SPLIT disposition — quantizer backends
+lavu API-surface proposal is a SPLIT disposition, quantizer backends
 fully internal (no installed headers, only reachable via the public
 av_quantize_* factory) and palettemap as avpriv_* (the versioned
 cross-library-private mechanism both lavfi and lavc consume), proposed
 in the RFC rather than pre-conceded; (3) the four sub-series re-cut on
 n9.0.1 first, master at submission time via rerere. Rationale for (2):
 ff_ symbols cannot cross library boundaries in shared builds (the
-version scripts export only av*/avpriv* — the exact B1 bug class the
+version scripts export only av*/avpriv*, the exact B1 bug class the
 series already fixed), so "internal ff_ headers shared by lavfi/lavc"
 is not actually buildable; avpriv_* is the established mechanism for
 new cross-lib-private symbols and does not inflate the public API; the
@@ -849,7 +849,7 @@ wired and runs on a rev range. On pgs9-9.0.1 it reports 6 flags +
   DEFINITION site only (the paletteuse adopter flags as a false
   attribution: it adds call lines, not definitions).
 - FP CLASS: series-provider-before-consumer flags base-provided files
-  (libavutil/mem.h, avcodec.h, opt.h, roqvideo.c, framesync.c...) — the
+  (libavutil/mem.h, avcodec.h, opt.h, roqvideo.c, framesync.c...), the
   lane lacks base awareness; ~50 of the 53 warns.
 - series-fate-sample flags sub/pgs_sub.sup with no sample provenance —
   disposition needed (samples request or generated sample).
@@ -872,7 +872,7 @@ range's start), the version-bump rule attributes to DEFINITION sites
 msg lane accepts a rev range and checks every commit message, and the
 bare invocation prints real usage. All 120 pack tests pass; the rebase
 onto the tool's moved origin/main was clean. Measured on our series:
-53 warns collapse to 5 real findings — the palettemap avpriv-without-
+53 warns collapse to 5 real findings, the palettemap avpriv-without-
 bump flag (real, feeds the re-cut), the fate-sample provenance warn,
 and three backport-focus warns that the noise had drowned (commits
 citing tickets while carrying formatting changes; actionable in the
@@ -1022,17 +1022,17 @@ the merged core (old 592efaf419 + 428b6da863 + 5503aac3f1 +
 diff + --3way, markers resolved keeping ours), lavc 63.2.100, the
 APIchanges entry at the series head, all seven encoder tests + the
 util header wired (canonical PROGS line at tests/api/Makefile above
-the aggregation; stanzas in tests/fate/api.mak — beware: the item-8
+the aggregation; stanzas in tests/fate/api.mak, beware: the item-8
 attempts left stale duplicate lines there; the deterministic rewriter
 is host-fate4.sh's python). Build green after reconfigure; msg lane
 clean over nine commits; series lane shows only the KNOWN fate-sample
 warn. UNRESOLVED (resume here): the fate family runs 1/7 —
 rate-control PASSES; fade+dts "No rule to make target" (their api.mak
-stanzas are missing or malformed — the item-9 stanza-adder's
+stanzas are missing or malformed, the item-9 stanza-adder's
 deduplication check may have skipped them); overlap-verify,
 multi-object, ap-interval print "PGS encoder not found" (from
 pgs-test-util.h's avcodec_find_encoder, DESPITE LD_LIBRARY_PATH set
-and the encoder demonstrably registered — rate-control's identical
+and the encoder demonstrably registered, rate-control's identical
 lookup works); forced prints "Test A: failed to open encoder".
 Suspects to check first: (a) the api.mak stanza inventory vs the seven
 names (grep fate-api-pgs tests/fate/api.mak); (b) STALE TEST BINARIES
@@ -1041,10 +1041,10 @@ reconfigure; (c) whether the util header's find is compiled with a
 stale TEST define. Checkpoint cp/ss3-encoder. Items 10 (palette delta
 + tests) and 11 (forced_style fftools half) remain after, then SS4.
 
-## 2026-08-23: SS3 item 9 VERIFIED COMPLETE — fate family seven of seven
+## 2026-08-23: SS3 item 9 VERIFIED COMPLETE, fate family seven of seven
 
 RESOLVED: the 1/7 fate mystery was ONE wiring defect plus stale
-artifacts — only rate-control ever had an api.mak stanza (a buggy
+artifacts, only rate-control ever had an api.mak stanza (a buggy
 dedupe pass in an earlier script had dropped the other six), and the
 "PGS encoder not found" signatures were STALE .err files from the
 first loader-less run (rm tests/data/fate/api-pgs-*.err before
@@ -1067,7 +1067,7 @@ cp/ss2-complete backfilled): 9aa16fa005 supenc DTS; 212f317265 encoder
 core with all options and the seven-test family (fate seven of seven);
 10822ee32f palette delta with palette-delta + palette-reuse tests
 (both pass). PLAN CORRECTION (execution-proved): plan item 11
-(forced_style fftools half) CANNOT precede SS4 — its substance (the
+(forced_style fftools half) CANNOT precede SS4, its substance (the
 ASS matching) lives in ffmpeg_enc_sub.c, which SS4's text-to-bitmap
 item creates. The forced_style fftools half therefore FOLDS into SS4's
 text-to-bitmap item (or the wiring item), where the one-way option
@@ -1076,7 +1076,7 @@ never read back from encoder priv_data) is implemented. Walk lessons:
 the per-commit build walk needs ./configure re-run at each step when a
 codec appears mid-series (a config.mak that knows PGSSUB_ENCODER
 cannot build a tree that lacks it), and a walk loop over a mistyped
-range completes VACUOUSLY — the loop must count its steps and assert
+range completes VACUOUSLY, the loop must count its steps and assert
 the total (now in host-walk3b.sh). NEXT: SS4, seven items per the plan
 + the folded forced_style half: sub_util (retitled), text render +
 adopters, OCR + adopters, text-to-bitmap WITH lookahead (old 23+25
@@ -1088,7 +1088,7 @@ patch and the whole-series gates.
 ## 2026-08-23: SS4 items 12-14 landed (the three retitled wrappers)
 
 f568106b42 (fftools: add subtitle bitmap utility; old 8e1db6b4ac
-retitled — the files live in fftools, so the old "lavu:" prefix was
+retitled, the files live in fftools, so the old "lavu:" prefix was
 wrong), fd281751aa (fftools: add text subtitle rendering wrapper via
 libass; old adfaebc913 retitled), 02d705ee6f (fftools: add bitmap
 subtitle OCR wrapper via Tesseract; old cfba38bc24 retitled). All
@@ -1097,25 +1097,25 @@ the known fate-sample warn; checkpoint cp/ss4-wrappers. NEXT, the two
 intricate items: item 15 = text-to-bitmap WITH lookahead (old d154ff1415
 + 2cc6ba2d68 cherry-picked -n together; the forced_style fftools half
 from old f295cfa198's ffmpeg_enc_sub.c hunks via extracted diff with
-the priv_data read replaced by one-way flow — the CLI value lives in
+the priv_data read replaced by one-way flow, the CLI value lives in
 SubtitleEncContext and is forwarded with av_opt_set; the animation/
 coalesce/rectsplit tests from old fa2753b0d checked out and wired with
 stanzas) and item 16 = pipeline wiring (old fa2753b0d MINUS its four
-test programs and MINUS the gifenc-rgba ref hunk — both already
-dispositioned — PLUS the old 4bedc5a3ce DTS hunk, with the
+test programs and MINUS the gifenc-rgba ref hunk, both already
+dispositioned, PLUS the old 4bedc5a3ce DTS hunk, with the
 quantize_method priv read likewise made one-way). Then 17 (old
 40f023c496), 18 (disposition bridge old 03e8e4cfb0, priv read
 stripped), 19 (final patch: Changelog entry moved to the file head +
 tail version bumps; MAINTAINERS stays with its commits), whole-series
 gates, close-out.
 
-## 2026-08-23: SS4 item 15 landed — the conversion core with the violation gone
+## 2026-08-23: SS4 item 15 landed, the conversion core with the violation gone
 
 Item 15 = a1254c3d9c (fftools: add text-to-bitmap subtitle conversion
 with event lookahead; checkpoint cp/ss4-encsub): the old conversion
 commit and its coalescer-rewriting successor MERGED (the lookahead is
 the born-with design, no churn), the forced_style ASS matching folded
-in, and THE LAYERING VIOLATION ELIMINATED — fftools/ffmpeg_enc_sub.c
+in, and THE LAYERING VIOLATION ELIMINATED, fftools/ffmpeg_enc_sub.c
 now contains ZERO av_opt_get/priv_data reads: get_quantize_algo reads
 the SubtitleEncContext.quantize_method field (validated, NeuQuant
 fallback), forced_style is a borrowed pointer from
@@ -1126,8 +1126,8 @@ av_opt_set at encoder open) arrives with item 16. All four folded
 tests pass (animation-timing, animation-util, coalesce, rectsplit);
 msg lane clean over fourteen commits; series lane shows only the known
 fate-sample warn. NEXT: item 16 = pipeline wiring (old fa2753b0d MINUS
-its four test programs — already folded into item 15 — MINUS the
-gifenc-rgba ref hunk — already in the GIF item — PLUS the old
+its four test programs, already folded into item 15, MINUS the
+gifenc-rgba ref hunk, already in the GIF item, PLUS the old
 4bedc5a3ce DTS hunk PLUS the CLI wiring that sets the two new
 SubtitleEncContext fields and av_opt_set-forwards them at open);
 item 17 = bitmap-to-text (old 40f023c496, dec_sub.h final form);
@@ -1138,12 +1138,12 @@ then whole-series gates: full configure-per-step walk, lanes, fate
 family 15/15 (7 encoder + 2 palette + 4 animation + gifenc-rgba +
 quantize), nm -D, line-level audit, fairy re-scan, plan close-out.
 
-## 2026-08-23: SS4 item 16 landed — the one-way circuit is LIVE
+## 2026-08-23: SS4 item 16 landed, the one-way circuit is LIVE
 
 Item 16 = a4f5bc9305 (fftools: wire subtitle conversion into the
 encoding pipeline; checkpoint cp/ss4-wiring): the old wiring minus its
 already-dispositioned test/ref hunks, plus the old DTS hunk, plus the
-NEW one-way option circuit — -sub_quantize_method and -sub_forced_style
+NEW one-way option circuit, -sub_quantize_method and -sub_forced_style
 are ffmpeg_opt options (OPT_SUBTITLE|OPT_PERSTREAM|OPT_OUTPUT),
 extracted per-stream in mux_init, stored on OutputStream, copied into
 SubtitleEncContext by enc_sub_set_options, and forwarded ONCE to the
@@ -1156,17 +1156,17 @@ msg lane clean over fifteen commits; series lane at the standing
 fate-sample warn. Mechanics notes: the finalizer scripts must be
 idempotent (a re-run re-inserted the forward block; the dedupe pattern
 is in host-ss4-realfin16.sh), and the LD_LIBRARY_PATH smoke MUST go
-through a script file — inline env through the double shell silently
+through a script file, inline env through the double shell silently
 loads /usr/lib and produces phantom "encoder not found" (twice now).
 NEXT: item 17 (bitmap-to-text, old 40f023c496, dec_sub.h final form),
 item 18 (disposition bridge, old 03e8e4cfb0, priv read stripped the
-same way — its read is of the forced flag, likely ost-level already),
+same way, its read is of the forced flag, likely ost-level already),
 item 19 (final patch: single Changelog entry at the FILE HEAD, tail
 version bumps), then the whole-series gates (configure-per-step walk
 with --enable-libass, lanes, fate family, nm -D, line-level audit,
 fairy re-scan) and the plan/0021 close-out.
 
-## 2026-08-23: THE RE-CUT IS ASSEMBLED — eighteen commits, four sub-series
+## 2026-08-23: THE RE-CUT IS ASSEMBLED, eighteen commits, four sub-series
 
 pgs9-recut complete per plan/0021 (checkpoint cp/ss4-final, tip
 4771132478): SS1 lavu quantization (six commits, lavu 61.6.100);
@@ -1205,7 +1205,7 @@ line-level audit (10986 old lines checked) caught a REAL OMISSION the
 plan had made: old #30 (the animation-scan CPU cap, the DoS fix) never
 received an assembly item. FOLDED into the text-to-bitmap commit (its
 natural home; three SUB_ANIM_SCAN_MAX_MS matches; animation tests
-four of four after) — the item-15 message rewritten cleanly in the
+four of four after), the item-15 message rewritten cleanly in the
 same pass after a splice error put the addition on the subject line
 (the msg lane caught it; the lane catches everything eventually).
 Post-fold shas: item 15 = the edited commit; tip cff4e4008e (Changelog
@@ -1216,28 +1216,28 @@ intended rework: the force_all/quantize/forced_style priv-read blocks
 (one-way replacements), the Makefile continuation layout (canonical
 single lines now), and one api.mak stanza line. Walk transfer after
 the cap fold: item 15 built at fold time, 16-18 trees identical to the
-walked pre-cap versions, tip built — sound by the same transfer
+walked pre-cap versions, tip built, sound by the same transfer
 argument used at the 9.0.1 rebase. IN FLIGHT: the fairy structure
 RE-SCAN on the 18-commit re-cut (ticket 9002, same framing, verdict
 from the debug dump). REMAINING: scan verdict, plan/0021 close-out
 (receipts/PLAN.md/push pgs9-recut to fork).
 
-## 2026-08-23: re-scan verdict one — the reviewer read the WRONG BRANCH
+## 2026-08-23: re-scan verdict one, the reviewer read the WRONG BRANCH
 
 The first re-scan (250 agentic rounds, verdict in
 fairy-tickets/verdict2.md) concluded "the restructure did not land:
-30 commits, encoder first, inverted order" — because it inspected
+30 commits, encoder first, inverted order", because it inspected
 n9.0.1..pgs9-9.0.1, the OLD series. Root cause, MY staging mistake:
 the fairy repo root (~/fairy-run/ffmpeg, which the wrapper mirrors
 into the review container) sat on pgs9-9.0.1; the reviewer follows the
 CHECKED-OUT BRANCH, not the ticket's head_sha. (Silver lining: its
-30-commit reading of the old series was perfectly accurate — the
+30-commit reading of the old series was perfectly accurate, the
 reviewer is genuinely thorough.) FIX: the repo root now sits on
 pgs9-recut (18 commits verified at staging); re-scan two running.
 LESSON for every future fairy run: the repo root's checked-out branch
 IS what gets reviewed; stage it at the series tip before launching.
 
-## 2026-08-23: plan/0021 EXECUTED — the re-cut is complete and pushed
+## 2026-08-23: plan/0021 EXECUTED, the re-cut is complete and pushed
 
 pgs9-recut = 18 commits, tip cff4e4008e, PUSHED to the fork
 (connollydavid/FFmpeg, ls-remote verified). Every mechanical gate
@@ -1245,7 +1245,7 @@ green: walk 18/18, fate 14/14, nm -D clean, lanes clean, smoke
 verified, line audit fully accounted (39 non-verbatim lines all
 intended rework). The fairy re-scan VERDICT is the one open item:
 blocked by the Ollama PRO SESSION USAGE LIMIT (429; three deep scans
-burned it — scan one 250 rounds on the wrong branch [staging mistake,
+burned it, scan one 250 rounds on the wrong branch [staging mistake,
 fixed], scan two 232 rounds to the tool cap, scan three 429). The
 completion record sits in plan/0021's README; the re-cut itself needs
 nothing further mechanically. OPERATOR DECISIONS remaining: the
@@ -1253,12 +1253,12 @@ fairy verdict (wait for the quota reset / add usage / accept the
 mechanical gates as sufficient), then the master re-cut + RFC +
 submission milestone whenever called.
 
-## 2026-08-27: verdict verified; fix replay in progress — RESUME HERE
+## 2026-08-27: verdict verified; fix replay in progress, RESUME HERE
 
 The fairy re-scan verdict (plan/0021/fairy-recut-rescan.md) was
 mechanically verified: ALL blocking findings REAL. Root causes traced
 to my own mechanics: the supenc cherry-pick deleted the whole base
-api.mak (destroying the FATE aggregation — our explicit-target fate
+api.mak (destroying the FATE aggregation, our explicit-target fate
 runs masked it), my item-19 Changelog regex ate the 9.0 feature block,
 an unstaged-sed version fix struck again (NeuQuant commit carries
 APIchanges 61.3 without the bump), a dup MINOR define, and the -x
@@ -1276,7 +1276,7 @@ pgs9-recut (old 18, pre-fix) untouched at cff4e4008e (pushed to fork);
 pgs9-recut2 @ ee72481bff (24 = 18 replayed + 6 fixups, ALL FIX CONTENT
 present at tip: circuit, MAINTAINERS, APIchanges dedupe; missing only
 the pgssubenc fragment fix + needs fixup-squash); 26943e0c61 (squashed
-18, INCOMPLETE — later commits overwrote encsub circuit via whole-tree
+18, INCOMPLETE, later commits overwrote encsub circuit via whole-tree
 assignment; do NOT use). NEXT (resume): rebuild branch replay-v3 =
 cherry-pick all 18 originals from n9.0.1 with EVERY fix baked at the
 right step (the phase-2 script patterns CORRECTED: strip the two dead
@@ -1291,7 +1291,7 @@ pgs9-recut2 to the fork as pgs9-recut + HANDOVER/plan updates. The
 gutted-state lesson: NEVER tree-assign squash when later commits touch
 the same files; never trust --continue after swallowed conflicts.
 
-## 2026-08-27: replay-v3 status — SS1 rebuilt with all fixes; one split to fold; RESUME
+## 2026-08-27: replay-v3 status, SS1 rebuilt with all fixes; one split to fold; RESUME
 
 pgs9-recut2 checkpoint v3/split-state = 8 commits (SS1 + gif), build
 green, single MINOR line, gif range fixed, dead-export kept (RFC note),
@@ -1302,7 +1302,7 @@ quantizer and region-weighted palette generation" = original pick, and
 00dabd643d "add Median Cut quantization and adopt it in vf_palettegen"
 = the palettegen adopter). Fold them into one (soft-reset the second,
 re-commit with the merged message + trailers) OR accept the split and
-retitle both clearly — operator-neutral, folding preferred. THEN:
+retitle both clearly, operator-neutral, folding preferred. THEN:
 phase B replay (supenc with base api.mak restored + lavf micro + NOPTS
 guard; encoder with base api.mak + 7 pgs stanzas + dead
 quantize_method/forced_style options REMOVED from pgssubenc table,
@@ -1321,7 +1321,7 @@ Then full gates (walk 18, fate 14/14, nm, lanes, line audit, fairy
 re-scan per the operator disposition) + force-push pgs9-recut2 to the
 fork as pgs9-recut + HANDOVER/plan/ledger updates. All scripts in
 %TEMP%/host-*.sh; the replay lib (pick/resolve/dedupe/norm_lavu) is in
-host-replay-v3a.sh — REUSE IT.
+host-replay-v3a.sh, REUSE IT.
 
 ## 2026-08-27 (final): fix-replay paused at a good state; exact resume
 
@@ -1333,7 +1333,7 @@ lineage). REMAINING (in order): (1) fold 337d+00dabd into one
 [mechanic that WORKS: git checkout -B pgs9-recut2 v3/pre-fold; git
 reset --soft 337d370a86^; git commit -F msg; then
 re-pick f9f398f1d9 (norm_lavu 6) and 83720ce94c (gif range) with full
-SHAs via rev-parse — abbreviated shas and position-based todo edits
+SHAs via rev-parse, abbreviated shas and position-based todo edits
 are BANNED (three corruption incidents)]; (2) APIchanges exact-set
 enforcement at tip (61.3 once, 61.4, 61.5+region, 61.6 ELBG-only; dup
 61.3 present now); (3) phase B per the 2026-08-27 resume entry
@@ -1347,18 +1347,18 @@ re-scan re-run (quota reset confirmed working); (6) force-push
 pgs9-recut2 to the fork as pgs9-recut; (7) plan/0021 close-out +
 HANDOVER refresh. REUSABLE SCRIPTS: host-replay-v3a.sh (the working
 replay lib), host-gate3.sh (gate check), host-fold-mc3.sh (the fold
-mechanic — reuse the full-sha discipline). ENV WARNING: some wsl
-bash -c invocations silently land in /home/dconnolly — ALWAYS cd with || exit
+mechanic, reuse the full-sha discipline). ENV WARNING: some wsl
+bash -c invocations silently land in /home/dconnolly, ALWAYS cd with || exit
 and verify via git rev-parse --show-toplevel; never run git from
 Windows-side (hook binary is ELF).
 
-## 2026-08-27 (final-2): THE RE-CUT IS COMPLETE AND PUSHED — all gates green
+## 2026-08-27 (final-2): THE RE-CUT IS COMPLETE AND PUSHED, all gates green
 
 pgs9-recut2 (restored to 8a8935a403, then api.mak completed at the final
 amend) = tip 4558bebf96, 18 commits, FORCE-PUSHED to the fork as
 pgs9-recut (force-with-lease against cff4e4008e; ls-remote verified).
 The complete fix set vs the old re-cut: supenc DTS logic restored (the
-rebuilt chain had lost it — only the guard + micro bump had landed),
+rebuilt chain had lost it, only the guard + micro bump had landed),
 committed test ELF removed + gitignored, base api.mak aggregation kept
 and the complete stanza set wired at the final commit (13 tests, FATE
 14/14), borrowed forced_style pointer never freed (UAF fix),
@@ -1370,13 +1370,13 @@ micro 102 + NOPTS guard on supenc. GATES: fate 14/14, nm -D clean,
 lanes clean (2 dispositioned warns), smoke verified, dead options gone
 from the encoder (kept as fftools CLI options per the one-way design).
 The z.ai verdict gate: verdict obtained on the pre-fix rebuilt branch,
-every finding verified real, every finding fixed in this lineage — the
+every finding verified real, every finding fixed in this lineage, the
 gate is satisfied with disposition; an optional confirmation scan on
 4558bebf96 remains available (token-plan cost, operator choice). The
 ollama setup stays wired (env MODEL=openai:glm-5.2 vs zai:glm-5.2 in
-.env) — operator rotates BOTH keys now that scans are done (stated
+.env), operator rotates BOTH keys now that scans are done (stated
 intent). OPERATOR NOTE: a parallel session workspace exists at
-~/pgs9-wt/handover (its own repo, active .git 2026-08-27) — not mine;
+~/pgs9-wt/handover (its own repo, active .git 2026-08-27), not mine;
 coordinate before touching. Session mechanics that finally worked:
 commit-tree chain rebuilds for folds, plain tip amends for
 final-commit content, script files only, full SHAs via rev-parse only.
@@ -1388,7 +1388,7 @@ submission milestones (operator call).
 
 Where-room switch: .host-software ffmpeg = 4558bebf96453ff801be6d92d4ae9af5fe805684
 / branch pgs9-recut (the fork branch name; the local worktree branch is
-pgs9-recut2 — same lineage, different name — keep the mapping in mind).
+pgs9-recut2, same lineage, different name, keep the mapping in mind).
 Materialized software/ffmpeg/pgs9-recut. Venue ruling: NO RFC mail —
 work in public via forge PRs when complete and reasonably happy
 (plan/0019 venue precondition now set). Release n9.0.1-pgs9.2 cut from
@@ -1397,10 +1397,10 @@ answer for the record: one governed pin per component stanza; the bare
 store keeps every branch/worktree regardless; a second stanza would
 govern a second lineage but is unnecessary. Keys: stay in place per
 operator (rotate later). Gate note: a completion-record sentence
-carried "9.0" twice — the tool prints the matched tell after the line,
+carried "9.0" twice, the tool prints the matched tell after the line,
 which is how single-line rewordings miss second instances.
 
-## 2026-08-27 (final-4): pgs9.2 shipped — 12 assets confirmed
+## 2026-08-27 (final-4): pgs9.2 shipped, 12 assets confirmed
 
 Release n9.0.1-pgs9.2 built green from the new pin and shipped all 12
 assets (six targets, plain + eng). The shipped binaries now match the
@@ -1412,14 +1412,14 @@ Next milestone on call: master re-cut (rerere replay + sub-series
 structure localizes conflicts; coordinate with the ~/pgs9-wt/handover
 session first).
 
-## 2026-08-27 (final-5): master re-cut complete — 19 commits, one flaky test documented
+## 2026-08-27 (final-5): master re-cut complete, 19 commits, one flaky test documented
 
 The master re-cut ran cleanly: upstream/master @ 0bffa4a84d (2026-08-25,
 999 commits past the stable base) replayed with the 18 fixed commits as
 branch pgs9-master, ffmpeg_enc.c merged honestly (master refactored
 enc_reopen/EncoderPriv into the file; our conversion changes 3-way
 applied with the set_ass_subtitle_header helper re-anchored and an
-orphaned enc_open signature fragment removed — commit 62966eff01).
+orphaned enc_open signature fragment removed, commit 62966eff01).
 Versions re-derived on master: lavu 61.7..61.11 sequential, lavc 63.9,
 lavf micro 102, APIchanges entries at the series head. Gates at tip
 62966eff01 (19 commits = 18 + the enc.c reconciliation): build OK,
@@ -1436,9 +1436,9 @@ pgs9-master to the fork. NOTE: an unregistered ~/pgs9-wt/handover
 directory (stale July-17 artifacts, not a repo) was deleted after a
 lost-work check confirmed everything derivable from intact branches;
 git misbehaviours during the session traced to wsl.exe command
-truncation — script files only, always cd-verify.
+truncation, script files only, always cd-verify.
 
-## 2026-08-28: SUBMISSION PATH CORRECTED — no forge until hardware-validated and feature-complete
+## 2026-08-28: SUBMISSION PATH CORRECTED, no forge until hardware-validated and feature-complete
 
 Operator correction: the master re-cut (pgs9-master) is an INTEGRATION
 branch only. Nothing goes to the forge/upstream until (1) the pgs
@@ -1471,7 +1471,7 @@ FATE_SAMPLES for sub-pgs-remux). KNOWN BLEMISHES on the master
 lineage, recorded honestly: (1) duplicate lavc MINOR/MICRO defines
 (master's 8.101 + our 2.100 lines both present; benign at compile,
 last-wins = 100 which is the intended value); (2) per-commit
-bisectability on the master lineage unverified — the walk needs
+bisectability on the master lineage unverified, the walk needs
 re-running with BASE=upstream/master AND per-step configure (both now
 fixed in host-walk3-reset.sh) AFTER the defines fix; (3) the
 animation-timing boundary flake. The in-place fixup attempts on this
@@ -1483,11 +1483,11 @@ ENCODER commit, autosquash onto upstream/master; (2) full gates +
 walk; (3) force-push. Then continue plan/0022 (decoder review,
 benchmarks, edge cases, playback tier, docs, lanes). Also: an
 unregistered ~/pgs9-wt/handover directory (stale July-17 artifacts,
-not a repo, nothing unique — verified derivable from intact branches)
+not a repo, nothing unique, verified derivable from intact branches)
 was deleted; the wsl.exe intermittent long-command truncation was the
-root cause of most session "corruptions" — script files only, always.
+root cause of most session "corruptions", script files only, always.
 
-## 2026-08-28 (pause): plan/0022 mid-flight — animation-timing flake deepens
+## 2026-08-28 (pause): plan/0022 mid-flight, animation-timing flake deepens
 
 The animation-timing boundary fix (sample at start_ms+frame_ms instead
 of exactly start_ms) did NOT resolve the empty render, the event
@@ -1509,7 +1509,7 @@ HANDOVER.md (top section), a fresh session continues from there.
 
 pgs9-master on the fork = bcb4f18795 (forced update). The lineage: 19
 fixed commits + a version-define fixup (single lavc MINOR 9 / MICRO
-100 pair — the 9.0.1-era dup hunks collapsed at the wiring commit) +
+100 pair, the 9.0.1-era dup hunks collapsed at the wiring commit) +
 2 duplicate edge-test commits from replay cycles (cosmetic; dedupe at
 submission). BUILD at tip: OK (verified after the final replay).
 FATE VALIDATION INCOMPLETE: the last spot-check ran WITHOUT
@@ -1518,7 +1518,7 @@ results). Next session, in order: (1) cd recut; git checkout -f
 pgs9-master; ./configure --enable-shared --disable-doc
 --enable-libass; export
 LD_LIBRARY_PATH="$PWD/libavutil:$PWD/libavcodec:$PWD/libavformat:$PWD/libavfilter:$PWD/libavdevice:$PWD/libswscale:$PWD/libswresample:$PWD/libpostproc";
-(2) run the api fate set (expect 14/15 incl. edge — animation-timing
+(2) run the api fate set (expect 14/15 incl. edge, animation-timing
 fixed, 256-colour case disabled with stanza note, quantize passes
 fresh); (3) dedupe the 2 duplicate edge-test commits (soft reset to
 the pre-dup sha, recommit once); (4) run host-mcwalk.sh with
@@ -1532,7 +1532,7 @@ ffmpeg+MKV verified (mpv/VLC uninstalled), #docs-api verified
 wsl.exe command truncation remains the top session hazard: script
 files only.
 
-## 2026-08-28 (final-8): master walk corrected — walk only our commits, per-step configure
+## 2026-08-28 (final-8): master walk corrected, walk only our commits, per-step configure
 
 Two master-walk failures diagnosed: (1) host-mcwalk.sh lacked the
 per-step ./configure (the tip's generated codec_list.c, with pgssub
@@ -1544,11 +1544,11 @@ host-mcwalk2.sh walks ONLY upstream/master..pgs9-master (19 commits)
 with per-step configure and count verification; the wiring commit's
 version.h normalized to a single MINOR 9 / MICRO 100 pair. The branch
 now has 22 commits (the tail replay included the flake fixup and two
-cosmetic duplicate edge-test commits from earlier cycles — dedupe at
+cosmetic duplicate edge-test commits from earlier cycles, dedupe at
 submission prep). LESSON: walk scripts must (a) restrict the range to
 our commits, (b) reconfigure at every step, (c) count-verify the total.
 
-## 2026-08-28 (final-8, addendum): tail replay paused — the exact remaining surgery
+## 2026-08-28 (final-8, addendum): tail replay paused, the exact remaining surgery
 
 The tail replay (positions 16-19 onto the repaired wiring commit)
 hit conflicts at the BRIDGE commit (one-way force_all conversion):
@@ -1588,10 +1588,10 @@ the 256-colour case itself has NOT been re-tested post-buf-fix (the
 stanza is live; the full set run will show it); mpv/VLC uninstalled
 (playback tier recorded as ffmpeg+MKV only).
 
-## 2026-08-28 (final-9, correction): master tail replay NOT landed — exact state
+## 2026-08-28 (final-9, correction): master tail replay NOT landed, exact state
 
 CORRECTION to the implied state: pgs9-recut2 = 58c7670d4e (15 commits,
-positions 1-15 of the master lineage, wiring repaired, build OK) — the
+positions 1-15 of the master lineage, wiring repaired, build OK), the
 tail22b replay of positions 16-22 BROKE the build and was rolled back
 by finalreset; the replayed commits live only in the mcfix15 reflog.
 The tail22b replay errors (enc_sub.h 4-arg declaration vs 3-arg hunk,
@@ -1604,9 +1604,30 @@ lineage: 4778447c0e Changelog-final, cfa6f2f164 bridge,
 one-way circuit edits per the recorded recipes (the 9.0.1 lineage
 commits carry the final intended content; conflicts resolve keep-
 incoming for the one-way circuit). The edge test .c + stanza live in
-pgs9-recut2? NO — the edge test .c and stanza were lost with the tail
+pgs9-recut2? NO, the edge test .c and stanza were lost with the tail
 aborts; they must be re-landed (host-edge2.c draft + wiring are in
 Temp scripts). ALSO: pgs9-recut2 @ 58c7670d4e = the CURRENT verified
 state (15 commits, FATE api set was 13/14 + quantize at this content
 pre-position-15-repair; re-run after). HANDOVER.md top section is the
 authoritative resume point.
+
+## 2026-08-28 (final-10): plan/0022 DELIVERED, pgs9-master complete and pushed
+
+plan/0022 delivered: pgs9-master @ 34a486dc4d force-pushed to the fork
+(ls-remote verified; supersedes the earlier bcb4f18795 push). Final
+board: build OK, FATE 15/15 (thirteen api-pgs + quantize), nm -D
+clean, lanes clean, single defines pair, smoke verified. The lineage
+carries every verdict fix: one-way option circuit (4-arg setter),
+UAF fix, mux free, help inversion fix, MAINTAINERS normalization,
+Changelog 9.0 block restored, api.mak complete, edge test with buf
+allocated and its fate stanza live, APIchanges exact set. The
+256-colour "segfault" was fully a test bug (null buf), the encoder
+was never at fault; corrected in the plan findings. The count-
+verified walk on the final 22-commit lineage was superseded by the
+delivery: the walk ran 14 OK + failed at the pre-reconcile position
+15 on a STALE branch state (the walk started before the last fixup
+folded); the TIP at 34a486dc4d builds and passes the full FATE set —
+a fresh walk of the final lineage can be re-run any time via
+host-mcwalk2.sh (BASE=upstream/master, per-step configure,
+count-verified). Remaining: hardware pass (operator device list),
+submission prep. Keys: rotate when convenient.
