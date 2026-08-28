@@ -160,7 +160,7 @@ deliverables/session-log.md (excluded from audits as a frozen dated
 record). Remaining, explicitly out of scope: the hardware pass and
 submission prep (per-series export, -x strip, APIchanges truth pass).
 
-## Task receipts (manual — host-lifecycle limitation)
+## Task receipts (manual, host-lifecycle limitation)
 
 The host-lifecycle tasks tool derives task anchors only from
 lifecycle-registered milestones; plan/0021 and plan/0022 were created
