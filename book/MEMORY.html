@@ -1767,6 +1767,16 @@ passing live. The interactive-rebase driver lesson: run the rebase to
 a STOP, resolve in a SEPARATE script invocation, continue, the
 in-driver loop with --continue chained inside one script kept
 dropping commits (three incidents).</p>
+<h2 id="2026-08-28-final-12-plan0022-delivered-all-fixes-verified-1515-fate"><a class="header" href="#2026-08-28-final-12-plan0022-delivered-all-fixes-verified-1515-fate">2026-08-28 (final-12): plan/0022 DELIVERED, all fixes verified, 15/15 FATE</a></h2>
+<p>The quantize binary rebuild resolved the last failure: FATE 15/15
+(fourteen api-pgs targets + quantize) all pass with in-tree libs.
+The clean rebuild resolved the stale-binary issue. nm -D clean,
+lanes clean. The lineage carries every verdict fix: one-way option
+circuit, UAF fix, sub_forced_style leak fix, dead option strip,
+api.mak complete with aggregation + all stanzas, fate-api-flac
+restored, Changelog correct, version defines exact. The force-push
+of pgs9-master to the fork completes the delivery. Remaining:
+hardware pass + submission prep.</p>
 
                     </main>
 
