@@ -7566,6 +7566,20 @@ ffmpeg+MKV verified (mpv/VLC uninstalled), #docs-api verified
 (2 dispositioned warns). Then the hardware pass + submission prep.
 wsl.exe command truncation remains the top session hazard: script
 files only.</p>
+<h2 id="2026-08-28-final-8-master-walk-corrected--walk-only-our-commits-per-step-configure"><a class="header" href="#2026-08-28-final-8-master-walk-corrected--walk-only-our-commits-per-step-configure">2026-08-28 (final-8): master walk corrected — walk only our commits, per-step configure</a></h2>
+<p>Two master-walk failures diagnosed: (1) host-mcwalk.sh lacked the
+per-step ./configure (the tip's generated codec_list.c, with pgssub
+registered, leaked into early commits where the codec does not exist —
+the OkLab commit then fails with ff_pgssub_encoder undeclared);
+(2) an intermediate commit (wiring, position 15) carried a duplicate
+LIBAVCODEC_VERSION_MICRO (9.0.1-era hunk on the master base). Fixed:
+host-mcwalk2.sh walks ONLY upstream/master..pgs9-master (19 commits)
+with per-step configure and count verification; the wiring commit's
+version.h normalized to a single MINOR 9 / MICRO 100 pair. The branch
+now has 22 commits (the tail replay included the flake fixup and two
+cosmetic duplicate edge-test commits from earlier cycles — dedupe at
+submission prep). LESSON: walk scripts must (a) restrict the range to
+our commits, (b) reconfigure at every step, (c) count-verify the total.</p>
 
                     </main>
 
