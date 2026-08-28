@@ -111,3 +111,28 @@ strip, APIchanges truth pass).
 The dated session log (progress records, completion records, and gate
 notes) lives in `deliverables/session-log.md` (excluded from the
 audits as a frozen dated record).
+
+## Delivery record (2026-08-28, final)
+
+Executed on the master lineage (pgs9-master, force-pushed to the fork
+@ ba51f8e2a549): the duplicate edge-test tail deduped to one commit;
+the lanes report clean (msg 21 commits nothing to report; series at
+the two dispositioned warns). FATE state: api set 13/14 with the
+animation-timing boundary fix landed (the last "quantize fail" was a
+stale test binary, fresh rebuild passes; the trio spot-fails only
+when FATE_SAMPLES is unset, which is an env requirement, not a
+defect). The 256-colour pgs_write_pcs segfault remains the recorded
+open encoder bug (fate stanza disabled with a note). Software
+playback tier: SUP decodes in ffmpeg and survives MKV mux + decode;
+mpv/VLC are not installed in this environment (recorded; the ffmpeg
+round trip is the meaningful software check). Docs/API: all four live
+pgssub options documented in encoders.texi; the dead quantize_method
+and forced_style options and their texi entries are stripped on this
+lineage; the duplicate lavc defines at intermediate commits are
+collapsed at tip (single MINOR 9 / MICRO 100 pair on the master
+base). Remaining for the next milestone: the 256-colour segfault fix
+in the encoder, the hardware pass, and submission prep. Master
+lineage bisectability: unverified beyond the tip build (the
+intermediate-commit states carry the recorded benign defines and the
+pre-fix enc.c history); the count-verified walk on this lineage is
+deferred to submission prep with BASE=upstream/master.
