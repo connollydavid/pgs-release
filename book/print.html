@@ -4621,6 +4621,21 @@ strip, APIchanges truth pass).</p>
 <ul>
 <li>verify: attested operator</li>
 </ul>
+<h3 id="sanitizer-pass"><a class="header" href="#sanitizer-pass">Sanitizer pass</a></h3>
+<ul>
+<li>depends: #out-of-scope</li>
+<li>verify: the api-pgs set, quantize, and fate-sub-pgs green under
+address and undefined sanitization with leak detection; the CLI
+conversion smokes clean</li>
+</ul>
+<p>Operator directive, 2026-08-28: run the whole PGS gate under
+AddressSanitizer and UndefinedBehaviorSanitizer (fail-stop,
+leak detection on) before the hardware sweep. Findings, all fixed
+at pgs9-master 33a8b290d1: the NeuQuant OkLab conversion shifted
+the signed a and b channels, undefined for negatives; the fade
+test packed alpha into the sign bit; three tests leaked the rect
+array on fall-through paths. The gate is clean after the fixes
+and folds into the owning commits at submission prep.</p>
 <h2 id="findings"><a class="header" href="#findings">Findings</a></h2>
 <p>(appended by each task as it runs)</p>
 <p>The dated session log (progress records, completion records, and gate
@@ -4940,7 +4955,7 @@ receipts, index, this record).</p>
 <h2 id="ffmpeg"><a class="header" href="#ffmpeg">ffmpeg</a></h2>
 <ul>
 <li>url: https://github.com/connollydavid/FFmpeg.git</li>
-<li>pin: <code>d854c88265786a19f9574e9f8f2e959c95e0b722</code></li>
+<li>pin: <code>33a8b290d12cfbe05cf96f0cf37f2d09e34c0c7b</code></li>
 <li>worktrees: none (single canonical line)</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="use-markdown-decision-records-madr"><a class="header" href="#use-markdown-decision-records-madr">Use Markdown decision records (MADR)</a></h1>
@@ -8130,6 +8145,26 @@ so the superseded block had to be removed by hand; and the remap
 message could name the allow file it honours (.host-lint-allow).
 The project ledger is now green with only the deliberately-open
 submission-prep tasks outstanding.</p>
+<h2 id="2026-08-28-final-19-asanubsan-pass-clean-one-library-ub-found-and-fixed"><a class="header" href="#2026-08-28-final-19-asanubsan-pass-clean-one-library-ub-found-and-fixed">2026-08-28 (final-19): ASAN+UBSAN pass clean, one library UB found and fixed</a></h2>
+<p>Operator directive: an ASAN/UBSAN pass before the hardware sweep.
+Built the tip with clang 22 (-fsanitize=address,undefined,
+fail-stop UB, leak detection) in a scratch worktree. The gate
+found one real library bug: the NeuQuant OkLab conversion shifted
+the signed a and b channels left, undefined for negatives (cool
+and warm hues); fixed by multiplying by the shift width, which
+yields the identical two's-complement result. The pass also
+caught the fade test packing alpha into the sign bit
+(140 &lt;&lt; 24) and three tests leaking sub.rects on fall-through
+paths. All fixed at pgs9-master 33a8b290d1 (27 commits now, pin
+and in-tree handle updated). Gate after fixes: fifteen api-pgs
+fates, fate-quantize, fate-sub-pgs, and the CLI conversion smokes
+all clean under the sanitizers. Operational notes: fate-sub-pgs
+needs FATE_SAMPLES on the make line (export alone failed once via
+env loss), and the inline wsl.exe bash -lc quoting dropped
+LD_LIBRARY_PATH entirely, so the binary silently resolved system
+libraries and misreported the encoder as missing — the standing
+script-file rule caught it. Sanitizer task recorded in plan/0022
+(#sanitizer-pass); asan scratch worktree removed.</p>
 
                     </main>
 
